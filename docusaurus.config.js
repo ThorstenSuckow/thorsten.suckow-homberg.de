@@ -63,6 +63,11 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
       navbar: {
         title: 'Home',
         /*logo: {
@@ -79,7 +84,7 @@ const config = {
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/thorstensuckow',
-            label: 'GitHub',
+            className: "header-github-link",
             position: 'right',
           },
         ],
