@@ -1,0 +1,64 @@
+---
+sidebar_position: 2
+title: "Use Case 1 - Adding a new employee"
+slug: Use-Case-1-Adding-a-new-employee
+---
+
+# Use Case 1 - Adding a new employee.
+
+:::info Use Case 1 - Adding a new employee
+_A new employee is added by the receipt of an `AddEmp` transaction. This transaction contains the employee's name, addess, and assigned employee number. The transaction has the following three forms:_
+
+`AddEmp <EmpId> "<name>" "<address>" "<address>" H <hourly-rate>`
+`AddEmp <EmpId> "<name>" "<address>" "<address>" S <monthly-salary>`
+`AddEmp <EmpId> "<name>" "<address>" "<address>" C <hourly-rate> <commission-rate>`
+
+The employee's record is created with its field assigned appropriately.
+
+**Alternative:<br />
+An error in the transaction structure**<br />
+If the transaction structure is inappropriate, it is printed out in an error message, and no action is taken.
+:::
+
+## Requirement Analysis 
+The Use Case describes various ways how _Employee_-data can be added to the system.
+`AddEmp` could be implemented as a polyadic function that receives 6 to 7 arguments, 
+describing an _Employee_'s personal information and the salary the _Employee_receives, and
+the type of _salary_ (`H`, `S` or `C`). If the salary type is `C`, an _Employee_ requires an additional `commission-rate`. 
+Obviously, errors happening during transactions must be treated with care, appropriate error messages should be displayed. This is particularly important for the input provided by the client, e.g. salary types must be validated as well as the rates; also, check if `empId`s already exist and prevent multiple occurences of the same `empId`.
+
+### Actors 
+**Accountant**: This actor adds a new _Employee_ to the system.
+
+
+import ThemedImage from '@theme/ThemedImage';
+import actorsLight from './img/usecase1/actors_light.png';
+import actorsDark from './img/usecase1/actors_dark.png';
+<ThemedImage
+    alt="Use Case 1 - Actors"
+    sources={{
+        light: actorsLight,
+        dark: actorsDark,
+    }}
+/>
+
+
+## Design
+From my understanding, the system needs I'm seeing at least 2 essential parts the design should consist of: A **repository**
+and an **entity**: The **repository** would be the `EmployeeRepository`, the **entity** would be the `Employee` itself.
+
+
+
+
+```php
+namespace Tests/Payroll;
+
+use PHPUnit\Framework\TestCase;
+
+class EmployeeRepositoryTest extends TestCase
+```
+
+
+```php
+
+```
