@@ -31,7 +31,6 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
   presets: [
     [
       'classic',
@@ -93,7 +92,7 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Community',
+            title: 'Social',
             items: [
               {
                 label: 'Twitter',
@@ -102,20 +101,16 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: 'Github',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
+                label: 'github.com/thorstensuckow',
                 href: 'https://github.com/thorstensuckow',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} thorsten.suckow-homberg.de; Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} thorsten suckow-homberg`,
       },
       prism: {
         theme: lightCodeTheme,

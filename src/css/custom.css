@@ -29,31 +29,51 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.hero--primary {
-  --ifm-color-primary: #a2ff00;
-  --ifm-hero-background-color: #000000;
-  --ifm-hero-text-color: var( --ifm-color-primary);
+[data-theme='dark']  .main-wrapper {
+  background-color:#000000;
 }
+
+.hero--primary {
+  --ifm-hero-background-color: #ffffff;
+  --ifm-hero-text-color: #000000;
+}
+
+[data-theme='dark'] .hero--primary {
+  --ifm-hero-text-color: var( --ifm-color-primary);
+  --ifm-hero-background-color: #000000;
+}
+
 .hero__title {
   font-size: 1rem;
 }
-
-.hero__subtitle {
+ .hero__subtitle {
   font-size: 0.9rem;
-  color:#a2ff00b0;
 }
 
 .hero__subsubtitle {
   font-size: 0.8rem;
+}
+[data-theme='dark'] .hero__subtitle {
+  font-size: 0.9rem;
+  color:#a2ff00b0;
+}
+
+[data-theme='dark'] .hero__subsubtitle {
+  font-size: 0.8rem;
   color:#a2ff0075;
+}
+
+[data-theme='dark'] .umlImg {
+  filter:invert(1);
 }
 
 
 
-.footer--dark {
+
+[data-theme='dark'] .footer--dark {
   --ifm-footer-link-color:#888888;
   --ifm-footer-title-color:#888888;
-  --ifm-footer-background-color: #2a2a2a;
+  --ifm-footer-background-color: #141414;
 }
 
 .header-github-link::before {
