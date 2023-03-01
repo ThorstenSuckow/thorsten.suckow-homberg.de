@@ -35,10 +35,10 @@ rates; also, check if `empId`s already exist and prevent multiple occurences of 
 
 #### Takeaways
  - validate user input:
-    - empId: existing? valid format?
-    - salary type: is it one of H, C, S?
-    - should probably be greater than 0
- - display error messages if transaction failed
+    - `empId`: existing? valid format?
+    - `salaryType`: is it one of `H`, `C`, `S`?
+    - `salary` should probably be greater than `0`
+ - display error messages if a transaction failed
 
 ### Actors 
 **Accountant** - adds a new _Employee_ to the system.
@@ -52,8 +52,13 @@ any other "role" would be eligible, but since the system exists in a [Domain](..
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
 
 ## Design
-From my understanding, the system needs I'm seeing at least 2 essential parts the design should consist of: A **repository**
-and an **entity**: The **repository** would be the `EmployeeRepository`, the **entity** would be the `Employee` itself.
+The initial design should consist of 3 parts: An **Application Layer**, a **Repository** for managing transaction-calls
+and an `Employee`-[**Entity**](../Glossary/softwaredesign.entity).
+ - `Payroll` exists in the **Application Layer** and is the main entry point for interacting with the system, in the form
+    of a traditional [**Facade**](../Glossary/softwaredesign.facade).
+ - The [**Repository**](../Glossary/softwaredesign.repository) would be the `EmployeeRepository` and encapsulates the
+    required infrastructure for persisting `Employee`-**Entity**s.
+ - The **Entity** would be the `Employee` itself.
 
 
 
