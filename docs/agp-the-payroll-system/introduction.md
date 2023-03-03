@@ -29,9 +29,11 @@ Since we're implementing a Payroll System, the system will be part of an **Accou
 ## The rules
 I stick to the following rules while implementing my solution with the knowledge I have from the brief introduction of the system
 
-1. Implement the Use case given only the information the Use Case provide. A Use Case represents a Story that has to be implemented in _this_ sprint. There is no knowledge of the requirements given _future_ Use Cases.
-2. Establish a healthy code base with a test-first approach. 
-3. Prevent Over-Engineering by strictly following Rules 2 and 3.
+1. One Use Case equals one sprint.
+2. [Pragmatism over Dogmatism.](https://twitter.com/home)
+3. Implement the Use case given only the information the Use Case provide. A Use Case represents a Story that has to be implemented in _this_ sprint. There is no knowledge of the requirements given _future_ Use Cases.
+3. Establish a healthy code base with a test-first approach. 
+4. Prevent Over-Engineering by strictly following Rules 2, 3 and 4.
 
 ### A note on testing 
 1. I did not write a scripting system for the acceptance tests: The acceptance tests described with the Use Cases are written with PHPUnit
