@@ -13,7 +13,7 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="text--right container">
         <p className="hero__title">Thorsten Suckow-Homberg</p>
-        <p className="hero__subtitle">sofware craftsmanship</p>
+        <p className="hero__subtitle">software craftsmanship</p>
           <p className="hero__subsubtitle">php, javascript & beyond</p>
         <div className={styles.buttons}>
             {/*<Link
