@@ -4,7 +4,7 @@ title: "Introduction"
 slug: introduction
 ---
 
-The Payroll System was introduced in Robert C. Martins Book **Agile Software Development**  and describes a batch Payroll System.
+The Payroll System was introduced in Robert C. Martins Book **Agile Software Development** [**[ASD]**](/docs/bibliography#asd)  and describes a batch Payroll System.
 
 In preparation of Section 3 and its subsequent chapters of the book, I decided to implement the Use Cases following agile principles and compare then later on with the solution provided by Robert.
 
