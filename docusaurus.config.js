@@ -88,7 +88,7 @@ const config = {
           },
         ],
       },
-      footer: {
+      /*footer: {
         style: 'dark',
         links: [
           {
@@ -111,7 +111,7 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} thorsten suckow-homberg`,
-      },
+      },*/
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
