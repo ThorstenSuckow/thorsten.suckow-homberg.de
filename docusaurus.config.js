@@ -88,9 +88,9 @@ const config = {
           },
         ],
       },
-      /*footer: {
+      footer: {
         style: 'dark',
-        links: [
+        links: [/*
           {
             title: 'Social',
             items: [
@@ -109,9 +109,9 @@ const config = {
               },
             ],
           },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} thorsten suckow-homberg`,
-      },*/
+        */],
+        copyright: `copyright © ${new Date().getFullYear()} Thorsten Suckow-Homberg. Except where otherwise <a href="license">noted</a>, the content on this page is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`,
+      },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
