@@ -79,6 +79,11 @@ const config = {
             docId: 'intro',
             position: 'left',
             label: 'Articles',
+          },{
+            type: "docSidebar",
+            sidebarId: "addendum",
+            position: "left",
+            label: "Addendum"
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
