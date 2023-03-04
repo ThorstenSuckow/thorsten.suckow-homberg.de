@@ -3,6 +3,9 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const {sortSidebarItems} = require("./src/Util");
+
+
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -14,7 +17,7 @@ const config = {
   url: 'https://thorsten.suckow-homberg.de',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/thorsten.suckow-homberg.de',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -37,6 +40,16 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
+          async sidebarItemsGenerator({
+                                        defaultSidebarItemsGenerator,
+                                        ...args
+                                      }) {
+            // Use the provided data to generate a custom sidebar slice
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            return sortSidebarItems(sidebarItems);
+          },
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
