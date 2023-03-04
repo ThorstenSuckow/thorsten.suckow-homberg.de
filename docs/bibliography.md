@@ -11,6 +11,10 @@
 
  - **Patterns of Enterprise Application Architecture**, Addison & Wesley, 2003 <a name="poeaa"></a>
 
+**Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)**
+
+ - **Design Patterns**, Addison & Wesley, 1995 <a name="ddd"></a>
+
 **Martin, Robert C.**
 
 - **Agile Software Development**, Prentice Hall, 2003 <a name="asd"></a>
