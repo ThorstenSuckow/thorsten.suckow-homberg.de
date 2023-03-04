@@ -1,5 +1,11 @@
-# Bibliography
+---
+title: "Bibliography"
+---
 
+import {BackButton} from "../src/components/BackButton.js";
+
+
+# Bibliography
 
 **Evans, Eric**
 
@@ -18,3 +24,5 @@
 **Martin, Robert C.**
 
 - **Agile Software Development**, Prentice Hall, 2003 <a name="asd"></a>
+  
+<BackButton />
