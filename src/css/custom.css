@@ -74,6 +74,9 @@
   filter:invert(1);
 }
 
+[data-theme='light'] .header-github-link {
+  filter:invert(1);
+}
 
 
 
