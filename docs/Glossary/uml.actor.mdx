@@ -9,10 +9,18 @@ import {BackButton} from "../../src/components/BackButton.js";
 An **Actor** is an entity that interacts with a system.
 An **Actor** can be a person, or another system.
 
-import ActorsUml from './img/actor.uml.svg';
-
-<ActorsUml className="umlImg" />
-
 > "**Actors** carry out [Use Cases](uml.usecase)." [**[UML]**](/docs/bibliography#umldistilled)
+
+import ActorsUml from './img/actor.uml.svg';
+import {UmlImg} from "../../src/components/UmlImg";
+
+<UmlImg
+    width={640}
+    figure={1}
+    title={"The UML-notation for an Actor."}
+>
+    <ActorsUml />
+</UmlImg>
+
 
 <BackButton />

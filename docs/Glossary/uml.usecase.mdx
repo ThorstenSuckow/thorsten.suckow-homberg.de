@@ -16,7 +16,14 @@ usually not part of them.
 
 
 import UseCaseUml from './img/usecase.uml.svg';
+import {UmlImg} from "../../src/components/UmlImg";
 
-<UseCaseUml className="umlImg" />
+<UmlImg
+    width={640}
+    figure={1}
+    title={"The UML-notation for a Use-Case."}
+>
+    <UseCaseUml />
+</UmlImg>
 
 <BackButton />
