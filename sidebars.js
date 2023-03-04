@@ -13,6 +13,7 @@ const sidebars = {
 
       ],
     },
+    "a-fluent-interface-for-javascript-promises/article"
   ],
   addendum: [
       'bibliography',
