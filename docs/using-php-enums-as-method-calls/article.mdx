@@ -1,0 +1,323 @@
+---
+title: "Using PHP enums as method calls"
+---
+
+import Gist from "react-gist";
+import {Embed} from "../../src/components/Embed";
+
+_Dynamically mapping method calls to existing typed values._
+
+
+:::info
+This article was originally published in October 2022 at [medium.com](https://medium.com/@thorstensuckow/using-php-enums-as-method-calls-2d6b95fa8347
+).
+:::
+
+## Motivation
+
+Large parts of the [conjoon](https://conjoon.org) backend are currently being reworked to meet compliance with the [**JSON:API](https://jsonapi.org/format/)**. This is so the webmail’s RESTful API provides consistency between requests and responses across various endpoints and provides a familiar environment for developers already using the JSON:API (or similar [HATEOAS ](https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven)driven APIs) with other projects.
+
+One challenge in adopting parts of the specification was not only the exclusion of fields (which ultimately culminated in the [RFC for the **relfield**-extension](https://github.com/ThorstenSuckow/relfield) ), but also in finding a way to pass meaningful filter-configurations from the client to the server.
+
+Right now, the client can pass filter options in query parameters. Those query parameters need to be validated and get translated into their OOP representation, so that string-representations of the **Filter**-objects can be passed to connected IMAP servers in a format [the protocol understands](https://www.rfc-editor.org/rfc/rfc3501#page-49).
+
+## What are filters, anyway? (Spoiler: Expressions, of course)
+
+A filter (or *search query*) consists of **logical**, **functional **and **relational expressions**, and an expression in turn has **operands** and **operators (**hint: ****an operator can also be an expressions).
+
+The following represents a request for all emails that have a date set to the *9th of October 2022* or before (missing percent-encoded characters in favor of readability):
+
+```http
+    GET /MessageItems?filter={"<":{"date":1665375431}} HTTP/1.1
+```
+
+The above example has a *relational *operator (<, *less than*), and has two *operands*: A name representing the name of the field the filter applies to (date), and an integer value representing the timestamp for comparison (1665375431).
+
+## The OOP modelling approach
+
+Mathematical expressions are fairly easy to model. Their symbols can be abstracted into the following **UML **diagram:
+
+![A simplified UML diagram for an expression. Note how an expression is also an operand.](https://cdn-images-1.medium.com/max/2000/1*dZJ6ccRLqaoDZC3Up_hPcA.png)
+
+An expression can be a
+
+* a **Relational Expression** providing relational operators: <, >, <=, >=, ==, !=
+
+* a **Logical Expression** providing logical operators: &&, ||, !
+
+* a **Functional Expression** providing arbitrary function names, such as IN
+
+Furthermore, each expression is associated with one or more **Operands**: An expression using a logical operator representing a negation (!) has only one operand, while a logical *disjunction *or *conjunction *must have two or more operands:
+
+```
+    ! 5 // logical negation operator has one operand
+
+    // a logical conjunction can have an arbitrary
+    // number of operands:
+    true && false && true
+
+    // logical disjunction with two operands
+    true || false
+```
+
+Further implementation details of how [php-lib-conjoon](https://github.com/conjoon/php-lib-conjoon) models Expressions would go beyond the scope of this article. We’ll focus on how to use them in the code. Here’s an example for an expression that represents date < 1665375431. Note how the order of parameters for the constructor is in accordance with the [**Polish Notation](https://en.wikipedia.org/wiki/Polish_notation)**, starting with the operator, then followed by the operands (< date 1665375431):
+
+```php
+    $expression = new RelationalExpression(
+        RelationalExpression::LESS_THAN,
+        new VariableName("date"),
+        new Value(1665375431)
+    );
+    $expression->toString() // produces "date < 1665375431"
+```
+
+### Silence is golden: Refactoring into a factory
+
+The above example is — while still readable and maintainable — too verbose. Code readability is king (see also my article about [fluent interfaces](https://medium.com/@thorstensuckow/a-fluent-interface-for-javascript-promises-372ffc40e051)) so let’s pour some syntactical sugar into the code:
+
+```php
+    $expression = RelationalExpression::lessThan(
+        VariableName::make("date"),
+        Value::make(1665375431)
+    );
+```
+
+This would allow us to omit calls to the constructor of the **RelationalExpression**, while still getting an expression as a return value from the factory method .
+
+However, this would make it also necessary to implement static methods matching available operators used by the Expression-specific we’re currently using. Given six relational operators >, <, >=, <=,=, != , we’d have to add six factory methods to our class (while prototyping, without refactoring and code optimizations):
+
+```php
+    class RelationalExpression extends Expression {
+
+        /**
+         * Constructor.
+         */
+        public function __construct(
+            RelationalOperator $operator,
+            OperandList $operands
+        ) {
+
+           // ...
+        }
+
+
+        /**
+         * Builds a RelationalExpression for the
+         * RelationalOperator::LESS_THAN
+         *
+         * @param Operand $lft
+         * @param Operand $rt
+         *
+         * @return RelationalExpression
+         */
+        public static function lessThan(
+            Operand $lft,
+            Operand $rt
+        ): RelationalExpression
+        {
+           $operands = OperandList::make($lft, $rt);
+           return new self(RelationalOperator::LESS_THAN, $operands);
+        }
+
+
+        // ... additional implementations for the remaining operators
+    }
+```
+
+However, adding a new operator would require us to also add another function to the **RelationalExpression** —dependencies pop up where they shouldn’t and the code base grows unnecessarily, containing redundant code.
+
+## Using enums for method calls
+
+Since we already have **enums** representing Operators, we’re looking for a way to reuse them — not only as a closed set for typed values, but also for method calls. Here’s how the **enum **definition for **RelationalOperator **looks like (similar implementations are available for **LogicalOperator **and **FunctionalOperator)**:
+
+<Embed
+    modeAware={false}
+    figure={"Source 1"}
+>
+    <Gist id="a52254400a069aeb3dba466af316c1a6" />
+</Embed>
+
+… and here’s what we want to achieve since we already have an existing list of operators given the **enum**-definition:
+
+```php
+    RelationalExpression::LESS_THAN(
+        VariableName::make("date"),
+        Value::make(1665375431)
+    );
+```
+
+Note how we statically call the **enum**’s name on the **Expression**(!) class — not the operator enum itself. It’s the only line of code where the operator is mentioned. We know from the UML diagram above that an expression has an operator — we should be able to implement some kind of process looking up the association (our expression knows at least what type of operator it is *associated *with). The **Expression**’s implementation needs to check if the **enum **exists, and if that is the case, build the expression. Here’s the [PHPUnit](https://phpunit.de/) test case for this implementation:
+
+```php
+    $lft = VariableName::make("date");
+    $rt  = Value::make(1665375431);
+
+    $expression = RelationalExpression::LESS_THAN($lft, $rt);
+
+    $this->assertInstanceOf(RelationalExpression::class, $expression);
+    $this->assertSame(
+        RelationalOperator::LESS_THAN,
+        $expression->getOperator()
+    );
+    $this->assertSame($lft, $expression->getOperands()[0]);
+    $this->assertSame($rt, $expression->getOperands()[1]);
+```
+
+Furthermore, we expect calls to non-existing operators to throw exceptions of the type BadMethodCallException:
+
+```php
+    $this->expectException(BadMethodCallException::class);
+    RelationalExpression::MISSING();
+```
+
+### Stargazing __callStatic()
+
+PHP provides [magic methods](https://www.php.net/manual/en/language.oop5.magic.php) that allow for intercepting calls to methods or members which are not explicitly defined in a target-class or -object, and then invoke specific logic if available and applicable. One example for a magic method would be [__call()](https://www.php.net/manual/en/language.oop5.overloading.php#object.call) — it is often used with DTOs where a large number of properties would require a lot of effort for writing matching *getters *and *setters*. It’s lesser known (righteous because: testability of static methods [is lacking](https://github.com/sebastianbergmann/phpunit-documentation/issues/77)) pendant for calls for static methods is [__callStatic()](https://www.php.net/manual/en/language.oop5.overloading.php#object.callstatic).
+
+Since we want to use a [static factory method](https://medium.com/javarevisited/static-factory-methods-an-alternative-to-public-constructors-73cbe8b9fda) in our **Expression-specific **(e.g. **RelationalExpression**)** **target class, let’s see how we can map calls to all of the existing **RelationalOperator**s with a single method:
+
+```php
+    public static function __callStatic(
+        string $methodName,
+        array $arguments
+    ) {
+
+        $operator = null;
+
+        switch ($methodName) {
+           case "LESS_THAN":
+               $operator = RelationalOperator::LESS_THAN;
+           break;
+
+           case "GREATER_THAN":
+               $operator = RelationalOperator::LESS_THAN;
+           break;
+
+           case "LESS_THAN_OR_EQUAL":
+               $operator = RelationalOperator::LESS_THAN_OR_EQUAL;
+           break;
+
+           case "GREATER_THAN_OR_EQUAL":
+               $operator = RelationalOperator::GREATER_THAN_OR_EQUAL;
+           break;
+
+           case "IS":
+               $operator = RelationalOperator::IS;
+           break;
+
+           case "IS_NOT":
+               $operator = RelationalOperator::IS_NOT;
+           break;
+       }
+
+       if (!$operator) {
+           throw new BadMethodCallException(
+               "{$methodName} not found in RelationalExpression"
+
+           );
+      }
+
+      return new self($operator, OperandList::*make*(...$arguments));
+
+    }
+```
+
+The method signature (including the parameter list) for __callStatic() should be self explanatory. We are actively mapping the *name* of the method that is statically called on the **RelationalExpression** with the list of existing **RelationalOperators** in the *switch *statement.
+
+While we have code in one function here (and therefor reduce code complexity), adding operators to the **RelationalOperators**-enum would still mean that we’d have to adjust the *switch *statement — we’re still maintaining two files for one small change. Let’s finalize the implementation with the help of constant().
+
+### Dynamically resolving members with constant()
+
+Our current implementation already fulfills most of the requirements, yet fails with dynamically resolving the typed value represented by the called method. Let’s remove the problematic code and revert to a basic function template which we will adjust shortly:
+
+```php
+    public static function __callStatic(
+        string $method,
+        array $arguments
+    )
+    {
+        $method = strtoupper($method);
+
+        // ... resolve $method to $operator
+
+        return new static(
+            $operator,
+            OperandList::make(...$arguments)
+        );
+    }
+```
+
+The goal is to resolve $method to an existing Operator represented by the available **RelationalOperator**. We already know that $method is (optimistically) one of the values defined within the associated **enum**. However, it’s of the type *string*, and we have to look up if this string represents an enum value. Here’s all the information we have:
+
+* RelationalOperator::class — the class name of **RelationalOperator** as the [fqn](https://en.wikipedia.org/wiki/Fully_qualified_name)
+
+* $method — the name of the static method being called on **RelationalExpression**; it’s intercepted by __callStatic() and its value has to be mapped to an enum-value in **RelationalOperator**
+
+One approach would be to to use *string concatenation* and hope for a value that resolves to an existing enum value:
+
+```php
+    $operator = RelationalOperator::class . "::$method";
+
+    gettype($operator); // "string"
+    operator instanceof RelationalOperator; // false
+```
+
+While this does not throw an error, $operator is in it’s current form not usable: The value is a string in the form of fqn::enum_value, e.g. Statement\Expression\RelationalOperator::LESS_THAN . However, with the help of a specific function, we can produce the result we’re looking for.
+>  _*constant()* is useful if you need to retrieve the value of a constant, but do not know its name. I.e. it is stored in a variable or returned by a function. ([php.net](https://www.php.net/manual/en/function.constant.php))_
+
+We know that the string available with $operator holds the *fqn *of an existing *typed value*; we just need to make use of PHP’s [constant()](https://www.php.net/manual/en/function.constant.php) to be able to access the enum value this string represents.
+>  _Because cases are represented as constants on the enum itself, they may be used as static values in most constant expressions: property defaults, static variable defaults, parameter defaults, global and class constant values. [(enum RFC)](https://wiki.php.net/rfc/enumerations)_
+
+We just have to pass the value of the right-hand operand as the argument to constant() , then assign its return value to the left-hand operand:
+
+```php
+    $operator = constant(RelationalOperator::class . "::$method");
+
+    gettype($operator); // "object"
+    operator instanceof RelationalOperator; // true
+```
+
+Here’s the final, working implementation for the __callStatic()-method. It includes re-throwing any occurring **Error **as a **BadMethodCallException**:
+
+```php
+    public static function __callStatic(
+        string $method,
+        array $arguments
+    )
+    {
+        $method = strtoupper($method);
+
+        $operator = self::*getOperatorClass*() . "::$method";
+
+        try {
+            $operator = constant(
+                RelationalOperator::class . "::$method"
+            );
+        } catch (Error $error) {
+            throw new BadMethodCallException(
+                "{$method} does not exist: " . $error->getMessage()
+            );
+        }
+
+        return new self(
+            $operator,
+            OperandList::*make*(...$arguments)
+        );
+    }
+```
+
+## Final implementation
+
+Since the functionality is also used with **LogicalExpression **and **FunctionalExpression**, the method above was refactored into a [trait](https://www.php.net/manual/en/language.oop5.traits.php). Traits also allow for defining abstract methods so there’s a contract added to make sure implementing classes provide information about the **Operator**’s type.
+
+<Embed
+    modeAware={false}
+    figure={"Source 2"}
+>
+    <Gist id="65396b1f1912dac56a4c705395401f85" />
+</Embed>
+
+
+Note:
+
+In its current form, the functionality could also be implemented in the **Expression**-class. I would not treat this kind of functionality as existential for the **Expression**-type, this is why it’s decoupled into a trait.

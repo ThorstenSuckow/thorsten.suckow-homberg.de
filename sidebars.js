@@ -13,6 +13,7 @@ const sidebars = {
 
       ],
     },
+   "using-php-enums-as-method-calls/article",
     "a-fluent-interface-for-javascript-promises/article"
   ],
   addendum: [
