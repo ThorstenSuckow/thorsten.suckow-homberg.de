@@ -1,8 +1,9 @@
 ---
-sidebar_position: 2
 title: "Use Case 1 - Adding a new employee"
 slug: Use-Case-1-Adding-a-new-employee
 ---
+
+import {GlosRef} from "../../src/components/References";
 
 # Use Case 1 - Adding a new employee.
 
@@ -44,23 +45,28 @@ rates; also, check if `empId`s already exist and prevent multiple occurences of 
 **Accountant** - adds a new _Employee_ to the system.
 
 import Actor from './img/usecase1/actor.svg';
+import {Embed} from "../../src/components/Embed";
 
-<Actor className="umlImg" />
+<Embed
+    title={"Actor \"Accountant\" carries out the \"Add Employee\"-Use Case."}
+>
+    <Actor />
+</Embed>
 
-The [Actor](../Glossary/uml.actor) carrying out the [Use Case](../Glossary/uml.usecase) is an **Accountant**. Of course,
-any other "role" would be eligible, but since the system exists in a [Domain](../Glossary/sd.domain) dealing with
+The <GlosRef name="Actor" file="uml.actor" /> carrying out the <GlosRef name="Use Case" file="uml.usecase" /> is an **Accountant**. Of course,
+any other "role" would be eligible, but since the system exists in a [Domain](../Glossary/softwaredesign.domain) dealing with
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
 
 ## Design
 The initial design should consist of 3 parts: An **Application Layer**, a **Repository** for managing transaction-calls
-and an `Employee`-[**Entity**](../Glossary/softwaredesign.entity).
+and an `Employee`-<GlosRef name="Entity" file="sd.entity" />.
  - `Payroll` exists in the **Application Layer** and is the main entry point for interacting with the system, in the form
-    of a traditional [**Facade**](../Glossary/softwaredesign.facade).
- - The [**Repository**](../Glossary/softwaredesign.repository) would be the `EmployeeRepository` and encapsulates the
+    of a traditional <GlosRef name="Facade" file="sd.facade" />.
+ - The <GlosRef name="Repository" file="sd.repository" /> would be the `EmployeeRepository` and encapsulates the
     required infrastructure for persisting `Employee`-**Entity**s.
  - The **Entity** would be the `Employee` itself.
 
-
+[DDD, page 107, Partioning Servicesinto layers]
 
 
 ```php
