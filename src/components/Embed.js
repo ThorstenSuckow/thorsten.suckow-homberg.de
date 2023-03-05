@@ -27,4 +27,25 @@ function Embed ({width, children, title, figure, modeAware}) {
 
 }
 
-export {Embed};
+function ImgEmbed ({url, figure, title}) {
+    return (<Embed
+        modeAware={false}
+        figure={figure}
+        title={title}
+    >
+        <img src={url}  />
+    </Embed>);
+}
+
+function MigrationNotice({when, where}) {
+
+    const [name, url] = where;
+    return (<div>
+        This article was originally published in {when} at <a target="_blank" href={url}>{name}</a>.
+        Some formatting might have get lost during the migration to this site:
+        If you think you spotted an issue caused by malformed formatting, please <a href="mailto:thorsten@suckow-homberg.de">let me know</a>.
+    </div>);
+
+}
+
+export {Embed, ImgEmbed, MigrationNotice};
