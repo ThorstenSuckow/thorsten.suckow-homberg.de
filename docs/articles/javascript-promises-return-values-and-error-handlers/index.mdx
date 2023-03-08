@@ -1,0 +1,132 @@
+---
+title: "JavaScript Promises — Return Values and Error Handlers"
+description: Handling Errors and return values with JavaScript Promises
+---
+
+import {GitCode} from "../../../src/components/Embed";
+import {MigrationNotice} from "../../../src/components/Embed";
+
+:::info
+<MigrationNotice
+    when={"October 2021"}
+    where={["medium.com", "https://medium.com/@thorstensuckow/javascript-promises-return-values-and-errors-handlers-19b6de4320ff"]}
+/>
+:::
+
+_A clear rejection is better than a fake Promise._
+
+Handling errors in JavaScript-Promises might seem confusing at first: Not only are there different ways to make an asynchronous Function work by either using the *duo infernale* async*/*await or chaining [Higher Order](https://en.wikipedia.org/wiki/Higher-order_function) functions in the form of then() and passing callback functions for processing a Promise’s outcome — no, you also have to take care of proper exception handling or else cryptic errors will start to bubble up if something goes wrong (and it will, [no matter what](https://softwareengineering.stackexchange.com/questions/195571/is-it-possible-to-reach-absolute-zero-bug-state-for-large-scale-software)!).
+
+![No one likes the looks of these.](https://cdn-images-1.medium.com/max/2000/1*B5VUiFT9KenPSFQ9dNXHNQ.png)
+
+Actually, Promises provide a pretty smart approach to error handling, and it’s easy once you get the hang of it.
+
+*If you need to catch up on Promises and *async*/*await*, head up to the [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)!*
+
+## The Loader
+
+This is the class we’re using for our asynchronous showcases. There is nothing fancy going on here — quite the opposite, we’re using a traditional [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) (instead of the *en vogue* [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/fetch)) to demonstrate the process of *promisifying *an API that does not provide native Promise-support.
+
+The implementation will **resolve** to the responseText-property of the object available with the response, if, and only if no error occurred — anything else (including an [HTTP status](https://datatracker.ietf.org/doc/html/rfc7231#section-6.1) other than 200) will **reject** the Promise.
+
+An error is thrown if the argument passed to load() is not of the type string.
+
+Take your time and go through the source, notice the lines where reject/ throw is used and then continue with the following paragraphs.
+
+<GitCode id={"325f319f82fb73ecdc564ab98cf16eac"} source={1} />
+
+
+## Successful file loading
+
+The following shows two different approaches to utilize the Promise-interface given with the load()-method. Both examples are doing the same, although a different syntax is used.
+
+### async/ await
+
+We are using await to make sure we are properly waiting for the Promise to resolve.
+
+<GitCode id={"655cd833d28fe6bf85034d988c74c2f6"} source={2} />
+
+### then()
+
+We are using then() to chain method calls on Promise-objects. As soon as the Promise is resolved, the function resolve is called. If this looks familiar to you: It is a similar approach comparable to all the wiring we can do when using traditional [callbacks](https://medium.com/free-code-camp/javascript-from-callbacks-to-async-await-1cc090ddad99).
+
+
+<GitCode id={"9408b42868ddffc8dc795ea5f2072e49"} source={3} />
+
+## Exception Handling
+
+Let’s have a look at how we can catch errors when using Promises — again, by looking at async/await and then(). Again, both examples fulfill the same purpose.
+>  _Using the async-keyword in front of a function magically turns it into an asynchronous function._
+
+### Calling load() w/o an argument — async/await
+
+Although the location where the exception is thrown is not part of the Promise we’re explicitly creating in load(), **the async keyword makes sure that the method returns a Promise** (yes, you’ve read this right. We’ll refer to this later). We’re wrapping the call in a try/catch-block, making sure we’re not letting the error slip.
+
+
+<GitCode id={"7854e3e540b85841843c19deb64e3c77"} source={4} />
+
+### Calling load() w/o an argument —then()
+
+Let this one soak in , one more time: Methods marked as async return a Promise Object, no matter the return value that was originally used for the implementation. This in turn means that then() can be used on the return-value of the async method, and we can conveniently pass a onFulfilled- or onReject-callback to it.
+
+<GitCode id={"31079a63ed691c60e5b53a9433b63f7a"} source={5} />
+
+### … when you say nothing at all
+
+Here’s what happens when we’re neither using async/await nor then(). The exception won’t be caught and bubbles all the way up, no matter the try/catch-block. Why’s that so? It’s because load() spawns an asynchronous process that’ll be doing its work (in this case: won’t) sitting somewhere in the [Heap](https://felixgerschau.com/javascript-memory-management/) before catch is even aware of itself (I might be exaggerating with this for the dramatic purpose).
+>  _“You can’t get away from yourself by moving from one place to another.”_
+>  _(The Promise reflecting the abundance of the async-keyword. Originally a quote from Ernest Hemingway’s “[The Sun also rises](https://en.wikipedia.org/wiki/The_Sun_Also_Rises)”.)_
+
+<GitCode id={"282ea6e15ed11d0f7723afbd110c0af8"} source={6} />
+
+## Treatment of asynchronous return values
+
+Once more: Using the async-keyword in front of a function magically turns this function into an asynchronous function. It does not matter how the function is implemented, the return value will (almost always — see below) be a Promise! Understanding this will make working with Promises much, much easier.
+
+<GitCode id={"fc7668c12a11f0b94d2685b1b9c92399"} source={7} />
+
+In our example, the not-so-familiar-with-Promises developer might assume that the value returned by load() is already the responseText of the XMLHttpRequest. But, this is not how async [does it job](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await). General rule of thumb:
+
+If
+
+* you come across a method tagged with the async-keyword
+
+AND
+
+* you’re not using await when calling it
+
+then treat the return value like a Promise.
+
+<GitCode id={"6291980d502a448363479e152af93457"} source={8} />
+
+<GitCode id={"79d027c69981a614f8184bb438a6f8d5"} source={9} />
+
+### Rejected Promises
+
+Likewise, an async method not called with the await-keyword will *always* wrap an exception thrown in a Promise, and this Promise’s state will be set to rejected.
+>  _Half the promises people say were never kept, were never made._
+>  _(Edgar Watson Howe)_
+
+Without using await, we’re not able to catch (read: try/catch) an exception that was thrown by the async function. In this case, we need to write an error handler: An onReject-callback, passed to then() as the second argument and chain it to the Promise that may or may not get rejected:
+
+<GitCode id={"395451fc3e5695859da9fc86b234aae4"} source={10} />
+
+## An elegant weapon for a more civilized age
+
+If you still feel like you’re more into chaining your Promises by using then(), a more subtle approach towards defining error handlers would be to be using catch() , that behaves just like then() with an onReject -callback defined:
+
+<GitCode id={"02672144b3a994b4f81282ec6e15ebff"} source={11} />
+
+The first catch() (or then()using an onReject-callback as its second argument) makes sure that errors are handled and not bubble up. Just like you would process resolved Promises with your onFulfilled-callbacks, a Promise chain would branch into the error-handlers as soon as the first Promise gets rejected.
+
+<GitCode id={"e7f154ac118aa236cee12233d9193053"} source={12} />
+
+A Promise chain makes sure that the very first catch() or onReject-callback found is used for the most recent error being thrown. Just because we define an error-handler at the very bottom of the chain does not mean we’re creating a direct association exclusively to the Promise object we’re expecting from this call. More exactly, this behavior is the same for onFulfilled -callbacks.
+
+<GitCode id={"fb2ec47943b47c8d60fc9001b1445c68"} source={13} />
+
+### Closing Notes
+
+Similar to the [onerror](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror)-handler defined with the [GlobalEventHandlers](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers) mixin, there is the onunhandledrejection-handler that will take care of unhandled Promise rejections. It is part of the [WindowEventHandlers](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers) mixin, and you can read more about it at [MDN](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onunhandledrejection); here’s an [article](https://medium.com/@petermikitsh/logging-client-side-javascript-stack-traces-86921532589) by [Peter Mikitsh](undefined), showcasing its usage.
+
+
