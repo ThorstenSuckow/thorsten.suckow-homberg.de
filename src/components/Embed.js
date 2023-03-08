@@ -2,6 +2,8 @@
 
 import React from 'react';
 import l8 from "@l8js/l8";
+import Gist from "react-gist";
+
 
 function Embed ({width, children, title, figure, modeAware}) {
 
@@ -27,6 +29,16 @@ function Embed ({width, children, title, figure, modeAware}) {
 
 }
 
+function GitCode ({id, source, title}) {
+    return (<Embed
+        modeAware={false}
+        title={title}
+        figure={`Source ${source}`}
+    >
+        <Gist id={id} />
+    </Embed>);
+}
+
 function ImgEmbed ({url, figure, title}) {
     return (<Embed
         modeAware={false}
@@ -48,4 +60,4 @@ function MigrationNotice({when, where}) {
 
 }
 
-export {Embed, ImgEmbed, MigrationNotice};
+export {GitCode, Embed, ImgEmbed, MigrationNotice};
