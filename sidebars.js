@@ -2,21 +2,42 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-    docs: [
-        "intro",
-        {
+    docs: [{
             type: 'category',
-            label: 'AGS - The Payroll System',
+            label: 'Articles',
+            link: {type: 'doc', id: 'articles/index'},
             items: [
-                'agp-the-payroll-system/introduction',
-                'agp-the-payroll-system/use-case-1-adding-a-new-employee'
+                {
+                    type: 'category',
+                    label: 'The Payroll System',
+                    link: {type: 'doc', id: 'agp-the-payroll-system/index'},
+                    items: [
+                        'agp-the-payroll-system/use-case-1-adding-a-new-employee'
+                    ],
+                    "collapsed": false
+                },
+                "dependency-injection-in-javascript/article",
+                "articles/sencha-extjs-beyond-es5/index",
+                "using-php-enums-as-method-calls/article",
+                "articles/downloadable-assets-with-github-actions/index",
+                {
+                    type: 'category',
+                    label: 'Creating ExtJS applications with coon.js',
 
+                    link: {type: 'doc', id: 'articles/creating-extjs-applications-with-coon-js/index'},
+                    items: [
+                        'articles/creating-extjs-applications-with-coon-js/introduction',
+                        'articles/creating-extjs-applications-with-coon-js/packages-and-configuration-options',
+                        'articles/creating-extjs-applications-with-coon-js/configuration-details-and-plugins',
+                        'articles/creating-extjs-applications-with-coon-js/registering-services-and-using-the-service-locator',
+
+                    ],
+                    "collapsed": false
+                },
+                "articles/javascript-promises-return-values-and-error-handlers/index",
+                "a-fluent-interface-for-javascript-promises/article"
             ],
-        },
-        "dependency-injection-in-javascript/article",
-        "using-php-enums-as-method-calls/article",
-        "a-fluent-interface-for-javascript-promises/article"
-    ],
+    }],
     addendum: [
         'bibliography',
         {

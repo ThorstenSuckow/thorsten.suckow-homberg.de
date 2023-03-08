@@ -57,6 +57,8 @@ const config = {
             'https://github.com/thorstensuckow/thorsten.suckow-homberg.de/tree/main/',
         },
         blog: {
+          blogSidebarTitle: 'Recent Posts',
+          blogSidebarCount: 'ALL',
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -89,7 +91,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'articles/index',
             position: 'left',
             label: 'Articles',
           },{
@@ -98,7 +100,9 @@ const config = {
             position: "left",
             label: "Addendum"
           },
+          {to: '/projects', label: 'Projects', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/about', label: 'About', position: 'right'},
           {
             href: 'https://github.com/thorstensuckow',
             className: "header-github-link",
@@ -128,12 +132,12 @@ const config = {
             ],
           },
         */],
-        copyright: `copyright © ${new Date().getFullYear()} Thorsten Suckow-Homberg. Except where otherwise <a href="license">noted</a>, the content on this page is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`,
+        copyright: `copyright © ${new Date().getFullYear()} <a href="/imprint">Thorsten Suckow-Homberg</a>. Except where otherwise noted, the content on this page is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`,
       },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['php', 'http']
+        additionalLanguages: ['php', 'http', "diff"]
       },
     }),
 };
