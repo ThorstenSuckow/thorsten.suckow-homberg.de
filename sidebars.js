@@ -10,15 +10,15 @@ const sidebars = {
                 {
                     type: 'category',
                     label: 'The Payroll System',
-                    link: {type: 'doc', id: 'agp-the-payroll-system/index'},
+                    link: {type: 'doc', id: 'articles/agp-the-payroll-system/index'},
                     items: [
-                        'agp-the-payroll-system/use-case-1-adding-a-new-employee'
+                        'articles/agp-the-payroll-system/use-case-1-adding-a-new-employee'
                     ],
                     "collapsed": false
                 },
-                "dependency-injection-in-javascript/article",
+                "articles/dependency-injection-in-javascript/article",
                 "articles/sencha-extjs-beyond-es5/index",
-                "using-php-enums-as-method-calls/article",
+                "articles/using-php-enums-as-method-calls/article",
                 "articles/downloadable-assets-with-github-actions/index",
                 {
                     type: 'category',
@@ -35,7 +35,7 @@ const sidebars = {
                     "collapsed": false
                 },
                 "articles/javascript-promises-return-values-and-error-handlers/index",
-                "a-fluent-interface-for-javascript-promises/article"
+                "articles/a-fluent-interface-for-javascript-promises/article"
             ],
     }],
     addendum: [
