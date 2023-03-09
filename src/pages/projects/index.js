@@ -61,7 +61,7 @@ const projects = [{
     name: "JSON:API ",
     description: "Extension for sparse fieldsets to exclude fields",
     repository: {
-        url: "https://github.com/ThorstenSuckow/relfied",
+        url: "https://github.com/ThorstenSuckow/relfield",
         title: "@ThorstenSuckow/relfield"
     },
     home: {
