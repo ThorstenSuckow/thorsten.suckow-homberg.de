@@ -167,7 +167,7 @@ main .projectHeader {
 }
 
 .col.projectCol .tile {
-  min-height: 350px;
+  min-height: 340px;
   border: 1px solid #bdbdbd57;
   border-radius: 20px;
   margin:10px;
@@ -179,7 +179,6 @@ main .projectHeader {
 .col.projectCol .tile .header {
   height: 60%;
   display: flex;
-  background: linear-gradient(360deg, #03034f59, #35baf6);
 }
 
 [data-theme="light"] .col.projectCol .tile .header {
@@ -210,6 +209,7 @@ main .projectHeader {
 
 .col.projectCol .tile .body .title  {
   display:flex;
+  padding-top:20px;
 }
 
 .col.projectCol .tile .body .title h4  {
