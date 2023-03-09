@@ -5,6 +5,8 @@ slug: introduction
 description: Agile Software Development Workshop
 ---
 
+import {GlosRef} from "../../../src/components/References";
+
 The Payroll System was introduced in Robert C. Martins Book **Agile Software Development** [**[ASD]**](/docs/bibliography#asd)  and describes a batch Payroll System.
 
 In preparation of Section 3 and its subsequent chapters of the book, I decided to implement the Use Cases following agile principles and compare then later on with the solution provided by Robert.
@@ -21,11 +23,11 @@ The following technical- and (non)-functional-criteria can be observed from this
 A **functional criteria** would be correct payment considering various deductions, and a **non-functional criteria** would be the fact that _Employees_ must be paid on time: It involves functional criteria in the form of "the system must compute the date **when** an _Employee_ gets paid", but it also includes non-functional criteria: The system must be stable and highly available to make sure transactions (i.e. money transfer) are executed on time.
 
 ### Domain keywords
-To get a better understanding of the domain we're dealing with, let's extract and guess a few domain keywords that we're probably using throughout the project and which should become terms of the [**Ubiquitous Language**](../Glossary/ddd.ubiquitouslanguage) we're establishing for the project:
+To get a better understanding of the domain we're dealing with, let's extract and guess a few domain keywords that we're probably using throughout the project and which should become terms of the <GlosRef name="Ubiquitous Language" file="ddd.ubiquitouslanguage" /> we're establishing for the project:
 
  - Payroll, Employee, Payment, Salary, Deduction, Accounting
 
-Since we're implementing a Payroll System, the system will be part of an **Accounting Domain**. Let's see if we can get a grasp of a more specific [**Core Domain**](../Glossary/ddd.coredomain) during the course of the implementation.
+Since we're implementing a Payroll System, the system will be part of an **Accounting Domain**. Let's see if we can get a grasp of a more specific <GlosRef name="Core Domain" file="ddd.coredomain" /> during the course of the implementation.
 
 ## The rules
 I stick to the following rules while implementing my solution with the knowledge I have from the brief introduction of the system

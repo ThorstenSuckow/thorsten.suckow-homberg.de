@@ -16,9 +16,9 @@ const sidebars = {
                     ],
                     "collapsed": false
                 },
-                "articles/dependency-injection-in-javascript/article",
+                "articles/dependency-injection-in-javascript/index",
                 "articles/sencha-extjs-beyond-es5/index",
-                "articles/using-php-enums-as-method-calls/article",
+                "articles/using-php-enums-as-method-calls/index",
                 "articles/downloadable-assets-with-github-actions/index",
                 {
                     type: 'category',
@@ -35,7 +35,7 @@ const sidebars = {
                     "collapsed": false
                 },
                 "articles/javascript-promises-return-values-and-error-handlers/index",
-                "articles/a-fluent-interface-for-javascript-promises/article"
+                "articles/a-fluent-interface-for-javascript-promises/index"
             ],
     }],
     addendum: [
