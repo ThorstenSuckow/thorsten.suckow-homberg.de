@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-function Bibliography ({name}) {
+function Bibliography ({name, pp}) {
     const href = `/docs/bibliography#${name.toLowerCase()}`;
     return (
-        <a href={href} className="bibRef">[📖{name}]</a>
+        <a href={href}>[<span className="bibRef">📖{name.toUpperCase()}</span>{pp ? `, pp.${pp}` : ""}]</a>
     );
 
 }
