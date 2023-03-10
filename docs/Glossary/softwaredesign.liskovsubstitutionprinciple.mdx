@@ -1,0 +1,120 @@
+---
+title: "Liskov Substitution Principle"
+---
+
+import {BibRef, GlosRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import Contravariance from "./img/contravariance.svg";
+import Covariance from "./img/covariance.svg.png";
+
+# The Liskov Substitution Principle (Software Design)
+
+The **Liskov Substitution Principle** (**LSP**) governs design rules for object oriented languages and states that _"subtypes must be substitutable for their base types."_ <BibRef name="ASD" pp="111" />:
+
+> _If for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2, then S is a subtype of T."_ [Barbara Liskov](https://en.wikipedia.org/wiki/Barbara_Liskov), [Data Abstraction and Hierarchy](https://dl.acm.org/doi/pdf/10.1145/62139.62141)
+
+The **Liskov Substitution Principle** is one of the <GlosRef name="SOLID" file="sd.solid" />-principles.
+
+## Example
+
+In languages that conform to the **LSP**, the effects of this principle can easily be reproduced:
+
+```php
+    class A
+    {
+        public function itsName()
+        {
+        	echo static::class;
+        }
+    }
+
+    class B extends A{}
+
+    class C extends B {}
+
+	class Client
+    {
+    	public function process(A $a): B
+    	{
+    		$a->itsName();
+    		return new B();
+    	}
+    }
+```
+
+Here, the `process`-function of **Client** digests an instance of `A`, calls a method on it and returns `B`.
+
+```php
+    $client = new Client();
+    $client->process(new A()); // A
+```
+
+According to the **LSP**, the code must also work if we pass any subtype of `A`.
+
+
+```php
+    $client = new Client();
+    $client->process(new A()); // A
+    $client->process(new B()); // B
+    $client->process(new C()); // C
+```
+
+Once we create a specification of **Client**, let's say **ConcreteClient**, we must be careful when overwriting `process()`:
+
+```php
+class ConcreteClient extends Client
+{
+    public function process(A $a): B {}
+}
+```
+
+Here, the argument type and the return type do not change. Any **ConcreteClient** can be used as a substitute for
+**Client**. However, if we narrow the type of the argument down to `B`, PHP quits with an error message befoe running the
+script:
+
+```php
+class ConcreteClient extends Client
+{
+    public function process(B $a): B {}
+}
+```
+
+```
+Fatal error: Declaration of ConcreteClient::process(B $a): B must be compatible with Client::process(A $a): B
+```
+
+### Implications
+The implications are as follows:
+
+ - **Argument-Types may be widened, and must not be narrowed down (_Contravariance_)**
+
+    **Contravariance**: `B < A (B subtype A), A:T, B:T argument types; if A:T < B:T, then T is Contravariant`
+
+    At this point, we are not allowed to narrow the argument-type passed to `process()` down. This is because the
+    parent implementation `Client::process()` sets up an interface all subtypes have to conform to: It seems logical at first
+    to be allowed to pass an `B` for an `A`, since `B` is an `A`, but any program doing so would break as soon as
+    `ConcreteClient::process()` accesses a field only known to `B`, and an `A` is passed instead. Thus, narrowing down
+    is not allowed with the given example.
+
+<UmlEmbed
+    figure={1}
+    title="With Contravariance, the inheritance hierarchy of argument types must be in opposite direction to the inheritance of the method's classes they're used in."
+><Contravariance /></UmlEmbed>
+
+ - **Return-Types may be narrowed down, and must not be widened (_Covariance_)**
+
+    **Covariance**: `B < A (B subtype A), B:T, A:T return types; if B:T < A:T, then T is Covariant`
+
+    Conversely, return types must not be widened. Given our example, any program querying `Client::process()` expects an
+    `B`. If that return type would be widened to `A` in `ConcreteClient::process()`, any program that tries to access a field
+    specific to `B` would break if `ConcreteClient::process()` instead returns an `A` - which is in fact unaware of `B`.
+
+<Embed
+    figure={2}
+    modeAware={true}
+    title="With Covariance, the inheritance hierarchy of return types must be in the same direction to the inheritance of the method's classes they're used for."
+><img src={Covariance} /></Embed>
+
+<BackButton />
+
