@@ -1,0 +1,107 @@
+---
+title: "Dependency Inversion Principle"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed,ImgEmbed, Embed} from "../../src/components/Embed";
+
+
+
+# Dependency Inversion Principle (Software Design)
+
+The **Dependency Inversion Principle** (**DIP**) is a principle in Agile Software Development that helps with
+decoupling dependencies.
+
+> _"a. High-level modules should not depend on low-level modules. Both should depend on abstractions.<br />
+   b. Abstractions should not depend on details. Details should depend on abstractions."_ <BibRef name="asd" pp="127"/>
+
+The **Dependency Inversion Principle** is one of the <GlosRef name="SOLID" file="sd.solid" />-principles.
+
+**DIP** suggests that high-level modules should not depend on implementation details of low-level modules. Instead,
+**Clients** provide interfaces representing _contracts_ **Servers** need to implement so the **Client** can use their work.
+
+In the following example, **EmployeeRepository** is responsible for fetching the data out of an underlying data storage.
+
+Here, **EmployeeRepository** is the **Client** in the high-level module.
+
+The naive approach is to hardwire the **Server** - the **DBConnection**-class - with the **EmployeeRepository**'s
+`fetchEmployee()`-method. This not only creates unwanted coupling, it also exposes the infrastructure
+to a layer in the software system that should not be aware of such details.
+
+import Coupling from "./img/dependencyinversionprinciple/employeerepository-coupling.svg";
+
+<UmlEmbed figure={1} title="Information of the underlying infrastructure is available to a high-level module"><Coupling /></UmlEmbed>
+
+
+```php title="Coupling EmployeeRepository (Client) with DBConnection (Server)"
+
+class EmployeeRepository
+{
+    public function fetchEmployee(int $id): array
+    {
+        $db = new DBConnection($this->user, $this->password);
+        $row = $db->query("SELECT * FROM employee WHERE id=$id");
+        return $row;
+    }
+}
+```
+
+The coupling between **EmployeeRepository** and **DBConnection** now necessitate that every change to the underlying
+infrastructure leaks into **EmployeeRepository**. This effectively violates the **DIP** Principle and several other <GlosRef name="SOLID" file="sd.SOLID" />-principles.
+
+To apply the **DIP** to the given example, the **Client** needs to provide a contract for the **Server**: The server's
+responsibility now is to comply to the interface by implementing it.
+
+> _"The lower-level modules provide the implementation for interfaces that are declared within, and called by, the upper level modules."_ <BibRef name="ASD" pp="129" />
+
+import Decoupled from "./img/dependencyinversionprinciple/employeerepository-decoupled.svg.png";
+
+<Embed
+    figure={2}
+    modeAware={true}
+    title={"The Client provides an interface that the Server has to conform to."}
+><img src={Decoupled} /></Embed>
+
+```php title="EmployeeRepository declares the interface, and DBConnection serves the implementation"
+
+class EmployeeRepository
+{
+    public function __construct(EmployeeTableGateway $gateway)
+    {
+        $this->gateway = $gateway;
+    }
+
+    public function fetchEmployee(int $id): array
+    {
+        return $this->gateway->getEmployeeData($id);
+    }
+}
+
+interface EmployeeTableGateway()
+{
+    public function getEmployeeData(int $id);
+}
+
+class DBConnection implements EmployeeTableGateway
+{
+    public function getEmployeeData(int $id)
+    {
+        $row = $this->query("SELECT * FROM employee WHERE id=$id");
+        return $row;
+    }
+}
+```
+
+Changes made to **DBConnection** in the _infrastructure layer_ don't affect the **EmployeeRepository** now.
+Additionally, **EmployeeRepository** can be reused with any **Server** that conforms to the **EmployeeTableGateway**-interface.
+
+In the example above, the **Client** is unaware of the specific of **EmployeeTableGateway**. This information is provided
+by configuring the **Client** with an instance of this type. This instance can be determined during runtime, or during compile-time.
+**DIP** is often realized with the help of <GlosRef name="Dependency Injection" file="sd.dependencyinjection" />.
+
+
+> _"The modules that contain the high-level business rules should take precedence over, and be independent of, the modules that contain the implementation details."_ <BibRef name="ASD" pp="128"/>
+
+
+<BackButton />
