@@ -45,9 +45,19 @@ function ImgEmbed ({url, figure, title}) {
         figure={figure}
         title={title}
     >
-        <img src={url}  />
+        <img alt="{title}" src={url}  />
     </Embed>);
 }
+
+
+function UmlEmbed ({children, figure, title}) {
+    return (<Embed
+        modeAware={true}
+        figure={figure}
+        title={title}
+        children={children}
+    / >);
+};
 
 function MigrationNotice({when, where}) {
 
@@ -60,4 +70,4 @@ function MigrationNotice({when, where}) {
 
 }
 
-export {GitCode, Embed, ImgEmbed, MigrationNotice};
+export {GitCode, Embed, ImgEmbed, UmlEmbed, MigrationNotice};
