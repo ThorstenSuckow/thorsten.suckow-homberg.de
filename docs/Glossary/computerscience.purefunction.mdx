@@ -1,0 +1,59 @@
+---
+title: "Pure Function"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../src/components/References";
+
+# Pure Function (Computer Science)
+
+A function is considered a **Pure Function** if
+
+ 1. for identical arguments, it produces identical return values
+ 2. it is <GlosRef name="side effect free" file="refactoring.separatequeryfrommodifier" />
+
+In this context, a **Pure Function** is similiar to a mathematical function.
+
+The following function $f$
+
+ $f:\R \rightarrow \R, x \mapsto x*x$
+
+translates to JavaScript
+
+```javascript
+    const f = x => x * x;
+```
+
+The function conforms to the definition of a **Pure Function**:
+
+ 1. for each input $x$ it **always** returns $x*x$.
+ 2. It is side effect free (i.e. it does not change the state of any other variable)
+
+Whereas the following functions are considered **impure**:
+
+```javascript
+    function f (x) {
+        return this.x * x;
+    }
+```
+
+The method violates `1.` of the above definition for a **Pure Function**: It produces variants because of the non-local-variable
+`this.x`. The state of `this.x` is unclear to `f`, the result is _nondeterministic_.
+
+
+```javascript
+    function f (x) {
+        this.x = x;
+    }
+
+```
+The method violates `2.` of the above definition for a **Pure Function**: Although it always produces `undefined` for the
+given input `x`, it is not side effect free since it changes the non-local variable `this.x`.
+
+
+
+<BackButton />
+
+---
+see also
+ - [Pure Function (Wikipedia)](https://en.wikipedia.org/wiki/Pure_function)
