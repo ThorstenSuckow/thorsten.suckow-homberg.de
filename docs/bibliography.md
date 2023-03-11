@@ -9,11 +9,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Brooks, Frederic P., Jr.**
 
- - **The Mythical Man-Month**, Anniversary Edition, Addison & Wesley, 1995 <a name="mm"></a>
+ - **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
 
 **Evans, Eric**
 
-- **Domain Driven Design**, Addison & Wesley, 2004 <a name="ddd"></a>
+- **Domain Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
 
 **Dijkstra, Edsger W.**
 
@@ -21,13 +21,16 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Fowler, Martin**
 
- - **UML Distilled**, Third Edition, Addison & Wesley, 2004 <a name="umldistilled"></a>
+ - **Patterns of Enterprise Application Architecture**, Addison-Wesley, 2003 <a name="poeaa"></a>
 
- - **Patterns of Enterprise Application Architecture**, Addison & Wesley, 2003 <a name="poeaa"></a>
+ - **Refactoring - Improving the design of existing Code**, Addison-Wesley, 1999 <a name="ref"></a>
+
+ - **UML Distilled**, Third Edition, Addison-Wesley, 2004 <a name="umldistilled"></a>
+
 
 **Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)**
 
- - **Design Patterns**, Addison & Wesley, 1995 <a name="ddd"></a>
+ - **Design Patterns**, Addison-Wesley, 1995 <a name="ddd"></a>
 
 **Martin, Robert C.**
 
