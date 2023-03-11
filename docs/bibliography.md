@@ -15,6 +15,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - **Domain Driven Design**, Addison & Wesley, 2004 <a name="ddd"></a>
 
+**Dijkstra, Edsger W.**
+
+- **Selected Writings on Computing: A personal Perspective**, Springer-Verlag, 1982 <a name="DIJ"></a>
+
 **Fowler, Martin**
 
  - **UML Distilled**, Third Edition, Addison & Wesley, 2004 <a name="umldistilled"></a>

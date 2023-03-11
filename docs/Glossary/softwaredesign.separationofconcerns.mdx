@@ -1,0 +1,23 @@
+---
+title: "Separation of Concerns"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+
+# Separation of Concerns (Software Design)
+
+**Separation of Concerns** is a design principle in software development and can be considered fundamental for creating
+maintainable and clear structured software systems.
+
+A **Concern** represents a (functional) task in a system: It can be a single unit responsible for a simple calculation,
+or a conglomerate of functionality providing a service with a given interface.
+
+Once it's identified and clear-cut and refined into boundaries facilitating physical or semantic (or both) tools
+and methods (such as modules and packages, or <GlosRef name="Bounded Context" file="ddd.boundedcontext" />s),
+a single **Concern** becomes _separated_ from other concerns co-existing in the system. Concerns do not overlap, and as
+a consequence they become special and distinctive to this system.
+
+In his paper [On the role of scientific thought](https://link.springer.com/chapter/10.1007/978-1-4612-5695-3_12)<BibRef name="DIJ" pp="61" /> , [Edsger W. Dijkstra](https://en.wikipedia.org/wiki/Edsger_W._Dijkstra) writes:
+
+> _"It is what I sometimes have called "the separation of concerns", which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of. This is what I mean by "focussing one's attention upon some aspect": it does not mean ignoring the other aspects, it is just doing justice to the fact that from this aspect's point of view, the other is irrelevant. It is being one- and multiple-track minded simultaneously."_ [Edsger W.Dijkstra](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html)
