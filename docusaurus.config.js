@@ -96,9 +96,9 @@ const config = {
             label: 'Articles',
           },{
             type: "docSidebar",
-            sidebarId: "addendum",
+            sidebarId: "toolbox",
             position: "left",
-            label: "Addendum"
+            label: "Toolbox"
           },
           {to: '/projects', label: 'Projects', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},
