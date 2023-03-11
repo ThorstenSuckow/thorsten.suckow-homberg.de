@@ -4,7 +4,6 @@ title: "Separate Query From Modifier"
 
 import {GlosRef} from "../../src/components/References";
 import {BibRef} from "../../src/components/References";
-import SVG from 'react-inlinesvg';
 
 
 # Separate Query From Modifier (Refactoring)
@@ -51,10 +50,15 @@ The method modifies the value before it is returned (or does it?):
 The implications of `updateSalary()` are unclear to `salary()`, right so for the client who is not aware that a call to
 `salary()` also updates the existing `salary` with an outstanding bonus.
 
-What if the client expects the method to be <GlosRef name="pure" file="sd.pure"/>?
+What if the client expects the method to be more "pure"?
 
-The client should expect the method to be pure for as long as the **Employee** does not get a raise. However, it will
-never be pure if there are outstanding bonuses.
+:::note "More Pure" $!=$ "Pure Function"
+The client may expect the method to be "pure" in a colloquial sense: For as long as the **Employee** does not get a raise, this means for every `$empId`
+always the same `salary` is returned.
+Of course, the method will never conform to the definition of a <GlosRef name="Pure Function" file="computerscience.purefunction"/>
+given its context.
+:::
+
 
 The method is a blackbox for the client, and given its intent documented with the method name (returning the salary)
 one would not expect side effects.
