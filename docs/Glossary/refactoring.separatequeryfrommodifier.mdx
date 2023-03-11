@@ -1,0 +1,103 @@
+---
+title: "Separate Query From Modifier"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import SVG from 'react-inlinesvg';
+
+
+# Separate Query From Modifier (Refactoring)
+
+**Separate Query From Modifier** is a refactoring that helps with creating side effect free functions.
+
+The **Separate Query From Modifier**-refactoring is used to separate a modifier (i.e. some _setter_)
+from a query (i.e. some _getter_). Any _getter_ that also calls a _setter_ is usually a good candidate for the violation of the **SRP**:
+
+> _"A good rule to follow is to say that any method that returns a value should not have observable side effects"_. <BibRef name="ref" pp="279" />
+
+
+:::caution Be wary of the context
+If you're using a coarse-grained <GlosRef name="Facade" file="sd.facade" /> that provides access to fine-grained operations,
+this Facade is not necessarily side effect free. However, methods with the clear intent to
+return **a value** ("intent" as in: documented in its method name <BibRef name="CC" pp="39" />) should be side effect free.
+:::
+
+
+In the following example, **Accounting** queries an **Employee**'s salary. It also checks for an outstanding bonus
+the employee should receive and updates the salary with it. The salary is then returned.
+
+```php
+
+    class Accounting
+    {
+        public function salary(int $empId): Money
+        {
+            $bonus = $this->getOutstandingBonus($empdId)
+            if ($bonus !== null) {
+                $this->updateSalaray($empId, $bonus);
+            }
+
+            $salary = $this->querySalary($empId);
+
+            return $salary;
+        }
+    }
+```
+
+The method modifies the value before it is returned (or does it?):
+`updateSalary()` is called if `getOutstandingBonus()` indicates that if there is a need to adjust the `salary`.
+
+The implications of `updateSalary()` are unclear to `salary()`, right so for the client who is not aware that a call to
+`salary()` also updates the existing `salary` with an outstanding bonus.
+
+What if the client expects the method to be <GlosRef name="pure" file="sd.pure"/>?
+
+The client should expect the method to be pure for as long as the **Employee** does not get a raise. However, it will
+never be pure if there are outstanding bonuses.
+
+The method is a blackbox for the client, and given its intent documented with the method name (returning the salary)
+one would not expect side effects.
+
+It would be better to refactor this method so that `salary()` simply does what any client would expect it to do: return
+the `salary` for the `$empId`.
+
+
+```php
+
+    class Accounting
+    {
+        public function salary(int $empId): Money
+        {
+            $salary = $this->querySalary($empId);
+            return $salary;
+        }
+    }
+```
+
+If the client needs to adjust outstanding bonuses, another method can be used for adding the bonus to the `salary`. By
+implementing a method with a clear intent, multiple fine-grained actions are processed from a coarse-grained interface:
+
+
+```php
+    class Accounting
+    {
+        public function paySalaryAndUpdateBonus(int $empId): Money
+        {
+            $salary = $this->getSalary($empId);
+            $bonus = $this->getOutstandingBonus($empdId)
+            if ($bonus !== null) {
+                $this->removeBonus($empId, $bonus);
+                $salary = $salary->add($bonus);
+            }
+
+            $this->updatePayments($empdId, $salary);
+
+            return $salary;
+        }
+    }
+```
+
+----
+see also
+ - <GlosRef name="Facade (Software Design)" file="sd.facade" />
