@@ -1,0 +1,48 @@
+---
+title: "Single Responsibility Principle"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import SVG from 'react-inlinesvg';
+
+# Single Responsibility Principle (Software Design)
+
+The **Single Responsibility Principle** (**SRP**) is a Software Design Principle that states that there should never be
+more than one reasons to change a particular class.
+
+> _"A class should only have one reason to change."_ <BibRef name="ASD" pp="95" />
+
+The **Single Responsibility Principle** is one of the <GlosRef name="SOLID" file="sd.solid" />-Principles.
+
+A design that violates this principle would be a class that contains business logic as well as logic for persisting
+this logic, such as an **Accounting**-class: The **Accounting** class is responsible for managing salaries and payments
+in a company. In the current design, the class also contains logic for establishing connections to the database:
+
+import SRPViolation from "./img/srp-violation.svg";
+
+<UmlEmbed
+    figure={1}
+    title={"If the infrastructure changes, Accounting has to change."}
+><SRPViolation /></UmlEmbed>
+
+The responsibility for**Accounting** should be clearly to orchestrate payment and salary information, but with the
+infrastructure hardwired into the class, **Accounting** now has to change whenever the infrastructure changes.
+
+The following design resolves this violation: The concern of persisting the data is clearly decoupled from the concern
+to process the business logic given the context of **Accounting**.
+
+import SRPValid from "./img/srp-valid.svg.png";
+
+<Embed
+    figure={2}
+    modeAware={true}
+    title={"If the infrastructure changes, Accounting has no need to change."}
+><img src={SRPValid} /></Embed>
+
+
+-----
+see also
+ - <GlosRef name={"Dependency Inversion Principle"} file={"sd.dependencyinversionprinciple"} />
+ - <GlosRef name={"Separating Query From Modifier"} file={"refactoring.separatequeryfrommodifier"} />
