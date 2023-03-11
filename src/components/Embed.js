@@ -9,15 +9,6 @@ function Embed ({width, children, title, figure, modeAware}) {
 
     const ref = React.createRef();
 
-    if (!width) {
-        React.useEffect(() => {
-            const el = ref.current;
-            let width = el.firstChild.firstChild.getAttribute("width");
-            el.style.width = `${width}px`;
-        }, []);
-
-    }
-
     return (
         <div style={{width, textAlign:"center",margin:20}} ref={ref}>
             <div className={modeAware !== false ? "umlImg" : ""}>{children}</div>
