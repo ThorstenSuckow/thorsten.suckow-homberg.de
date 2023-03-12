@@ -9,44 +9,44 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Brooks, Frederic P., Jr.**
 
- - **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
+ - [MM] **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
 
 **Evans, Eric**
 
-- **Domain Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
+- [DDD] **Domain Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
 
 **Dijkstra, Edsger W.**
 
-- **Selected Writings on Computing: A personal Perspective**, Springer-Verlag, 1982 <a name="DIJ"></a>
+- [DIJ] **Selected Writings on Computing: A personal Perspective**, Springer-Verlag, 1982 <a name="DIJ"></a>
 
 **Fowler, Martin**
 
- - **Patterns of Enterprise Application Architecture**, Addison-Wesley, 2003 <a name="poeaa"></a>
+ - [POEAA] **Patterns of Enterprise Application Architecture**, Addison-Wesley, 2003 <a name="poeaa"></a>
 
- - **Refactoring - Improving the design of existing Code**, Addison-Wesley, 1999 <a name="ref"></a>
+ - [REF] **Refactoring - Improving the design of existing Code**, Addison-Wesley, 1999 <a name="ref"></a>
 
- - **UML Distilled**, Third Edition, Addison-Wesley, 2004 <a name="umldistilled"></a>
+ - [UML] **UML Distilled**, Third Edition, Addison-Wesley, 2004 <a name="uml"></a>
 
 
 **Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)**
 
- - **Design Patterns**, Addison-Wesley, 1995 <a name="ddd"></a>
+ - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
 
 **Martin, Robert C.**
 
-- **Agile Software Development**, Prentice Hall, 2003 <a name="asd"></a>
+- [ASD] **Agile Software Development**, Prentice Hall, 2003 <a name="asd"></a>
 
-- **Clean Code**, Pearson Education, 2009 <a name="cc"></a>
+- [CC] **Clean Code**, Pearson Education, 2009 <a name="cc"></a>
 
-- **Clean Craftsmanship**,  Addison-Wesley, 2021 <a name="CCM"></a>
+- [CCM] **Clean Craftsmanship**,  Addison-Wesley, 2021 <a name="CCM"></a>
 
 **McBreen, Pete**
 
-- **Software Craftsmanship: The New Imperative**, Addison-Wesley, 2001 <a name="SCS"></a>
+- [SCS] **Software Craftsmanship: The New Imperative**, Addison-Wesley, 2001 <a name="SCS"></a>
 
 **Thomas, David; Hunt, Andrew**
 
-- **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
+- [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
 
 
 
