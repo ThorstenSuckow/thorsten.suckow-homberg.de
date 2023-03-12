@@ -25,7 +25,7 @@ import {BibRef, GlosRef} from "../../../src/components/References";
     figure={1}
     title ={"The most basic expectation regarding a computer program is that a given input produces some output."} />
 
-However, the way these dependencies are wired throughout source code often comes with a bitter taste: Dependencies are found in convoluted and deeply nested program code, effectively violating <GlosRef name="SRP" file="sd.singleresponsibilityprinciples" />  and <GlosRef name="DIP" file="sg.dependencyinversionprinciple" />.
+However, the way these dependencies are wired throughout source code often comes with a bitter taste: Dependencies are found in convoluted and deeply nested program code, effectively violating <GlosRef name="SRP" file="sd.singleresponsibilityprinciple" />  and <GlosRef name="DIP" file="sd.dependencyinversionprinciple" />.
 
 We are in the need of tools and design patterns that can help us with detangling the code, or we will end up with a program that has intricate boilerplate code for setting up mocks and stubs for testing, or worse: Becomes a nightmare to integrate with different environments and infrastructures. Granted, languages like *JavaScript* makes it easy to mock dependencies during tests, but other languages are not so forgiving and test cases tend to get more complicated the more dependencies are hardwired.
 
