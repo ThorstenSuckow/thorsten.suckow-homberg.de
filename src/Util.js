@@ -1,7 +1,7 @@
 
 
 const sortCategoryItems = items => {
-    if (items[0].id.startsWith("Glossary")) {
+    if (items[0].id.startsWith("toolbox")) {
         items.sort((a, b) => {
             return a.id.split("/")[1].split(".").pop() > b.id.split("/")[1].split(".").pop() ? 1 : -1
         })

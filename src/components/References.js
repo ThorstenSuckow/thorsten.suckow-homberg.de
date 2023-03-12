@@ -10,17 +10,17 @@ function Bibliography ({name, pp}) {
 
 }
 
-function Glossary ({name, file}) {
+function toolbox ({name, file}) {
 
     file = file.startsWith("sd.") ? file.replace("sd.", "softwaredesign.") : file;
 
 
-    const href = `/docs/Glossary/${file}`;
+    const href = `/docs/toolbox/${file}`;
     return (
         <a href={href} className="glosRef">{name}</a>
     );
 
 }
 
-export {Glossary as GlosRef};
+export {toolbox as GlosRef};
 export {Bibliography as BibRef};
