@@ -96,11 +96,10 @@ const config = {
         respectPrefersColorScheme: false,
       },
       navbar: {
-        title: 'Home',
-        /*logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
-        },*/
+        logo: {
+          alt: 'Home',
+          src: 'img/home.svg',
+        },
         items: [
           {
             type: 'doc',
