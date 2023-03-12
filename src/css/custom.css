@@ -240,4 +240,14 @@ main .projectHeader {
   .col.projectCol {
     --ifm-col-width:100%;
   }
+  div.hey {
+    flex: 1;
+    margin: 5%;
+  }
+  .row.projectRow {
+    margin: 5%;
+  }
+  main .projectHeader {
+    margin: 10%;
+  }
 }
