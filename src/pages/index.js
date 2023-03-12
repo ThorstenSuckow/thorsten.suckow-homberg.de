@@ -88,7 +88,7 @@ export default function Home() {
             <h1>Hi. I'm <a href={"/about"}>Thorsten</a>,</h1>
             <h2>Full Stack Senior and Trainer for Software Development.</h2>
         <p>
-            I see <a href={"/docs/articles/software-craftsmanship/index"}>Software Development as craftsmanship</a>.
+            I see <a href={"/docs/articles/software-craftsmanship"}>Software Development as craftsmanship</a>.
         </p>
             <div className={"introduction"}>
                 The focus of my work is on Design and Agile Development of Software.
