@@ -79,6 +79,9 @@
 [data-theme='dark'] .umlImg {
   filter:invert(1);
 }
+[data-theme='light'] .navbar__logo {
+  filter:invert(1);
+}
 
 [data-theme='light'] .header-github-link {
   filter:invert(1);
