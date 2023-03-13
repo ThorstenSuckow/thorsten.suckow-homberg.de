@@ -256,6 +256,7 @@ main .projectHeader {
 }
 
 
-[data-theme='dark'] .DocSearch {
-  --docsearch-hit-active-color: var(--docsearch-hit-background);
+[data-theme='dark'] .DocSearch-Hit[aria-selected=true] a  {
+  background-color: #a2ff003d;
+  border: 1px solid var(--docsearch-primary-color);
 }
