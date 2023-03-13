@@ -254,3 +254,8 @@ main .projectHeader {
     margin: 10%;
   }
 }
+
+
+[data-theme='dark'] .DocSearch {
+  --docsearch-hit-active-color: var(--docsearch-hit-background);
+}

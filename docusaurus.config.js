@@ -88,6 +88,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: {
+        appId: "YP7SUYRV93",
+        apiKey: "452cee840e351e774f2d2933eccef46d",
+        indexName: "thorsten-suckow-homberg",
+        contextualSearch: true,
+        externalUrlRegex: 'external\\.com|domain\\.com',
+
+        searchParameters: {},
+        searchPagePath: 'search',
+      },
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       colorMode: {
