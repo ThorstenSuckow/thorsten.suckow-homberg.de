@@ -254,3 +254,9 @@ main .projectHeader {
     margin: 10%;
   }
 }
+
+
+[data-theme='dark'] .DocSearch-Hit[aria-selected=true] a  {
+  background-color: #a2ff003d;
+  border: 1px solid var(--docsearch-primary-color);
+}
