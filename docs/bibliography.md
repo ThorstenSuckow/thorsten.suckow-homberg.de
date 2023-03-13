@@ -11,6 +11,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [MM] **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
 
+**Buschmann, Frank et al.**
+
+- [POSA] **Pattern-Oriented Software Architecture - A system of Patterns Volume 1**, John Wiley & Sons, 1996 <a name="posa"></a>
+
 **Evans, Eric**
 
 - [DDD] **Domain Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>

@@ -1,0 +1,44 @@
+---
+title: "Layered Architecture"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed} from "../../src/components/Embed";
+
+# Layered Architecture (Software Design)
+
+A **Layered Architecture** is a design paradigm for putting related functions of software systems into abstract divisions.
+
+> _"The layers architectural pattern helps to structure applications that
+can be decomposed into groups of subtasks in which each group of
+subtasks is at a particular level of abstraction."_ <BibRef name="POSA" />
+
+A **Layered Architecture** may consist of
+
+ - **Client Layer**
+ - **<GlosRef name="Application Layer" file="sd.applicationlayer" />**
+ - **Domain Layer**
+ - **Infrastructure Layer**
+
+import LayeredArchitectureSvg from "./img/sd.layeredarchitecture.svg";
+
+<UmlEmbed
+    title={"A system divided into four functional distinct layers."}
+>
+    <LayeredArchitectureSvg />
+</UmlEmbed>
+
+The interaction of a client with the depicted architecture starts at the top: The commands of the client are passed to the
+**Application Layer** and processed by the layers beneath it, if applicable. In this model of hierarchical layers,
+a layer is only aware of the layer(s) beneath it. This model follows <BibRef name="ddd" pp="68-71" />.
+
+
+
+:::info Layer vs. Tier
+A **Layered Architecture** makes no predication about the technology used, and whether other layers are hosted next to
+layers of a distinct context. A **Multitier Architecture** is more consistent in this regard.
+:::
+
+<BackButton />
