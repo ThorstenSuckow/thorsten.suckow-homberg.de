@@ -12,8 +12,15 @@ function Bibliography ({name, pp}) {
 
 function toolbox ({name, file}) {
 
-    file = file.startsWith("sd.") ? file.replace("sd.", "softwaredesign.") : file;
+    switch (true) {
+        case (file.startsWith("sd.")):
+            file = file.replace("sd.", "softwaredesign.");
+            break;
 
+        case (file.startsWith("sa.")):
+            file = file.replace("sa.", "softwarearchitecture.")
+            break;
+    }
 
     const href = `/docs/toolbox/${file}`;
     return (
