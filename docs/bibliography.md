@@ -7,6 +7,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 # Bibliography
 
+**Alur, Deepak; John Crupi; Dan Malks**
+
+ - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
+
 **Brooks, Frederic P., Jr.**
 
  - [MM] **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
