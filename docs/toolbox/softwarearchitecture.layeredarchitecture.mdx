@@ -1,0 +1,83 @@
+---
+title: "Layered Architecture"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed} from "../../src/components/Embed";
+
+# Layered Architecture (Software Architecture)
+
+A **Layered Architecture** is a design paradigm for creating abstract divisions from related functionality in a software system.
+
+> _"The layers architectural pattern helps to structure applications that
+can be decomposed into groups of subtasks in which each group of
+subtasks is at a particular level of abstraction."_ <BibRef name="POSA" />
+
+A **Layered Architecture** may consist of
+
+ - **Client Layer**
+ - **<GlosRef name="Application Layer" file="sa.applicationlayer" />**
+ - **Domain Layer**
+ - **Infrastructure Layer**
+
+import LayeredArchitectureSvg from "./img/sa.layeredarchitecture.svg";
+
+<UmlEmbed
+    title={"A system divided into four functional distinct layers."}
+>
+    <LayeredArchitectureSvg />
+</UmlEmbed>
+
+The interaction of a client with the depicted architecture starts at the top: The commands of the client are passed to the
+**Application Layer** and processed by the layers beneath it, if applicable. In this model of hierarchical layers,
+a layer is only aware of the layer(s) beneath it. This model follows <BibRef name="ddd" pp="68-71" />.
+
+## How do Layers relate to each other?
+It should be safe to say that underlying layers should know nothing about the layers above them: An **Infrastructure Layer**
+that is aware of the **Application Layer** is considered bad design as it violates the <GlosRef name="SRP" file="sd.singleresponsibilityprinciple" />
+and the <GlosRef name="DIP" file="sd.dependencyinversionprinciple" />.
+
+But should the **Application Layer** know that there is an **Infrastructure Layer**? Purists might say _**no**_,
+more **Pragmatic Programmers** probably consider a _**maybe**_.
+
+In regard to a likely interdependency of the **Presentation Layer** and the **Data Layer**, _Fowler et al._ write:
+
+> _"Sometimes the layers are arranged so that the domain layer completely hides the data source from the presentation.
+More often, however, the presentation accesses the data store directly. [...] The presentation may interpret a command from
+the user [...] and then let the domain logic manipulate the data before presenting it on the glass."_ <BibRef name="POEAA" pp="20" />
+
+Wiring all communication from upper layers through each layer to the target layer may result in <GlosRef name="Needless Complexity" file="sd.symptomsofpoordesign" />. The <GlosRef name="DIP" file="sd.dependencyinversionprinciple" /> provides a solution for setting up communication contracts
+between upper layers towards lower layers without the need to iterate through all layers available:
+
+> _"The lower level modules provide the implementation for interfaces that are declared within, and called by, the upper level modules."_ <BibRef name="ASD" pp="129" />
+
+But even if we agree that upper layers may be aware of lower layers, and lower layers have no knowledge about upper layers, we
+still must make sure that communication between them works in both directions. This is of particular importance when asynchronous
+processes are used by the **Infrastructure Layer**, and where the **Domain** or **Application Layer** are depending on the results of
+these processes:
+
+> _"Layers are meant to be loosely coupled, with design dependencies in only one direction. [...] but when an object of a lower level needs to communicate upward, we need another mechanism, drawing on architectural patterns for relating layers such as callbacks and OBSERVERS (<BibRef name="GOF" />)."_ <BibRef name="DDD" pp="72-73" />
+
+
+## Layer vs. Tier
+A **Layered Architecture** makes no predication about the technology used, and whether other layers are hosted next to
+layers of a different context. A **Multitier Architecture** is more consistent in this regard. A **Layer** is an abstract
+representation of logical tasks grouped together. It could be easily placed in modules and packages to delineate their
+responsibilities. A **Multitier Architecture** however also includes the physical separation of _tiers_. We often refer
+to it as a system where the actors are physically separated: For example, the **application tier** exists on a dedicated
+**application server**, and the **data tier** is a (compound of) **database server**(s).
+
+:::info
+In the 2nd edition of **Core J2EE Patterns**, the authors refer to _**tier**_ as _"A tier is a logical partition of separation of concerns in the system."_ <BibRef name="J2EE" pp="120" /> and further elaborate _"We view each tier as logically separated from one another."_.
+
+Conversely to the above statement, the authors of the **IBM** website take the position that
+
+> _"They [tier and layer] aren't the same. A 'layer' refers to a functional division of the software, but a 'tier' refers to a functional division of the software that runs on infrastructure separate from the other divisions."_ [[https://www.ibm.com/topics/three-tier-architecture, 14.03.2023, 22:01](https://www.ibm.com/topics/three-tier-architecture)]
+
+There is no formal definition of the two terms. When in doubt, agree on a definition if the need arises in a project,
+so that the correct meaning enters the project's <GlosRef name="Ubiquitous Language" file ="ddd.ubiquitouslanguage" />.
+:::
+
+<BackButton />
