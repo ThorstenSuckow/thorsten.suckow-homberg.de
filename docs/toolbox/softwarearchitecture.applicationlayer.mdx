@@ -6,18 +6,24 @@ import {BackButton} from "../../src/components/BackButton.js";
 import {GlosRef} from "../../src/components/References";
 import {BibRef} from "../../src/components/References";
 
-# Application Layer (Software Design)
+# Application Layer (Software Architecture)
 
-The **Application Layer** is an abstract functional division in a <GlosRef name="Layered Architecture" file="sa.layeredarchitecture" /> that serves as the interface between the client
-and the software system's **Domain Logic**.
+The **Application Layer** is an abstract functional division in a <GlosRef name="Layered Architecture" file="sa.layeredarchitecture" /> that serves as the interface between the client and layers beneath the **Application Layer**, primarily the software system's **Domain** and **Infrastructure Layer**.
 
-It serves mainly for digesting the client's input as commands, which are then carried out by **sub-systems** and **Services**
-in the **Domain Layer**. The generated results of the particular operations are then returned to the client or processed
-in the **Infrastructure Layer**, or results are computed with the help of such an **Infrastructure Layer**.
+An **Application Layer** mainly digests and validates the client's input, then carries the input out as commands to the
+**sub-systems** and **Services** existing in the lower layers of the system, such as the **Domain Layer** often supported by
+an **Infrastructure Layer**.
 
-The **Application Layer** is not to be confused with the **User Interface**: Depending on the use case, Well designed
+If the results of a particular operation are returned to the client, the **Application Layer** can apply additional
+transformation to it, into a format the client understands.
+
+:::info
+The **Application Layer** is not to be confused with the **User Interface**: Well designed
 **Application Layer**s are agnostic of the interface that is used for generating inputs, e.g. an application server
 implementing a **REST Api** is unaware of the client's nature as long as the client conforms to the required protocol.
+
+In a **Layered Architecture**, the user interface would be part of the **Client Layer**.
+:::
 
 ### Example
 In a client-server application, the **Application Layer** would consist of **Controllers** that receive input (`HTTP methods` / `GET`-, `POST`-parameters) and delegate to various services in the layer beneath. Responses are then transformed into _Views_ that are returned to the client. Here, _View_ is an abstract notion: A _View_ is data formatted to a particular structure, such as `HTML` or `JSON`.
