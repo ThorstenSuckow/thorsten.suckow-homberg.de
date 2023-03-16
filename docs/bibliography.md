@@ -11,11 +11,15 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
 
+**Booch, Grady (et al.)**
+
+ - [OOA] **Object-oriented analysis and design with applications** (3rd Edition), Pearson Education, 2007 <a name="ooa"></a>
+
 **Brooks, Frederic P., Jr.**
 
  - [MM] **The Mythical Man-Month**, Anniversary Edition, Addison-Wesley, 1995 <a name="mm"></a>
 
-**Buschmann, Frank et al.**
+**Buschmann, Frank (et al.)**
 
 - [POSA] **Pattern-Oriented Software Architecture - A system of Patterns Volume 1**, John Wiley & Sons, 1996 <a name="posa"></a>
 
@@ -35,7 +39,6 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [UML] **UML Distilled**, Third Edition, Addison-Wesley, 2004 <a name="uml"></a>
 
-
 **Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)**
 
  - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
@@ -51,6 +54,10 @@ import {BackButton} from "../src/components/BackButton.js";
 **McBreen, Pete**
 
 - [SCS] **Software Craftsmanship: The New Imperative**, Addison-Wesley, 2001 <a name="SCS"></a>
+
+**Oestereich, Bernd**
+
+- [ADU] **Analyse und Design mit UML 2** (7., aktualisierte Auflage), Oldenbourg Wissenschaftsverlag GmbH, 2005 <a name="adu"></a>
 
 **Thomas, David; Hunt, Andrew**
 
