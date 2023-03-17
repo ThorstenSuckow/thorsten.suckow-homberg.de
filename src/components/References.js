@@ -12,15 +12,18 @@ function Bibliography ({name, pp}) {
 
 function toolbox ({name, file}) {
 
-    switch (true) {
-        case (file.startsWith("sd.")):
-            file = file.replace("sd.", "softwaredesign.");
-            break;
+    const mappings = {
+        "sd": "softwaredesign",
+        "sa": "softwarearchitecture",
+        "cs": "computerscience"
+    };
 
-        case (file.startsWith("sa.")):
-            file = file.replace("sa.", "softwarearchitecture.")
-            break;
-    }
+    Object.entries(mappings).some(([abbr, name]) => {
+        if (file.startsWith(`${abbr}.`)) {
+            file = file.replace(`${abbr}.`, `${name}.`);
+            return true;
+        }
+    });
 
     const href = `/docs/toolbox/${file}`;
     return (
