@@ -1,0 +1,61 @@
+---
+title: "Metaclass"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# Metaclass (Computer Science)
+
+A **Metaclass** in Object-oriented programming is a class whose instances contain class-definitions. **Metaclasses** can
+be used to define behavior and attributes of classes.
+
+
+## Python Example
+
+In **Python**, classes are objects that can be used to construct instances.
+
+
+> _"Classes provide a means of bundling data and functionality together. Creating a new class creates a new **type** of object, allowing new **instances** of that type to be made. Each class instance can have attributes attached to it for maintaining its state. Class instances can also have methods (defined by its class) for modifying its state."_ [https://docs.python.org/3/tutorial/classes.html](https://docs.python.org/3/tutorial/classes.html)
+
+
+#### Employee Example
+
+```python
+class Employee: pass
+```
+
+The `metaclass` of `Employee` is `type`:
+
+```python
+print(type(Employee)); # <class 'type'>
+```
+
+`Employee` is now a <GlosRef name="First Class Citizen" file="cs.firstclasscitizen" />:
+
+ - it can be assigned to other variables: `EmployeeFactory = Employee`
+ - it be passed to other methods as an argument: `print(Employee)`
+
+Additionally, properties can be added during runtime: `Employee.prop = "value"`;
+
+Calling `Employee` as a method will create an instance of `Employee`:
+
+```python
+emp = Employee();
+print(type(emp)); # <class '__main__.Employee'>
+```
+
+
+:::tip In a nutshell
+ - `type` is the **Metaclass** of `Employee`.
+ - thus, `Employee` is an instance of `type`.
+ - calling `Employee()` creates and returns an instance of `Employee`.
+:::
+
+<BackButton />
+
+-----
+ See also
+ - [Bouraqadi-Saidani, Ledoux, Rivard: Safe Metaclass Programming](https://dl.acm.org/doi/pdf/10.1145/286936.286949)
+ - [Briot, Cointe: Programming with ObjVLisp metaclasses in Smalltalk-80](https://www.researchgate.net/publication/229023549_Programming_with_ObjVLisp_metaclasses_in_Smalltalk-80)
+

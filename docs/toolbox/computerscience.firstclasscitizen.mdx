@@ -1,0 +1,39 @@
+---
+title: "First-Class Citizen"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# First-Class Citizen (Computer Science)
+
+In programming, an **entity** is called **First-Class Citizen** if all the following apply:
+
+ 1. it can be passed as an argument to another function
+ 2. it can be returned as a value
+ 3. it can be assigned as a value
+
+## JavaScript Example
+
+In **JavaScript**, functions are treated as **First-Class Citizens**:
+
+```javascript
+
+const f = x => x + 1;
+
+const g = f => f;
+
+// 1. argument: g(f)
+// 2. return value: return f
+// 3. assignment: h = g(f)
+const h = g(f);
+
+h(1); // 2
+```
+
+`g()` serves as a <GlosRef name="Higher-Order Function" file="cs.higherorderfunction" /> as it takes a function as an
+argument.
+
+-----
+see also
+ - [MDN, First-class Function](https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function)
