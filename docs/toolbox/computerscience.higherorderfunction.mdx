@@ -1,0 +1,29 @@
+---
+title: "Higher-Order Function"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# Higher-Order Function (Computer Science)
+
+In programming, a function is called a **Higher-Order Function**, if any of the following applies:
+
+ 1. it takes another function as an argument
+ 2. its return value is a function
+
+## JavaScript Example
+
+In **JavaScript**, [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) is a **Higher-Order Function**:
+
+```javascript
+
+const data = [1, 2, 3];
+
+const f = x => {return x => x + 1};
+
+data.map(f).map((x, index) => x(data[index])); // [2, 3, 4]
+```
+
+`f` also serves as a **Higher-Order Function** since it returns a function itself.
+
