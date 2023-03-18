@@ -13,6 +13,8 @@ A **Dependency** between a **client** (_dependent_) and a **supplier** ([_depend
 
 The notation is used to depict a **Dependency** between a **client** and a **supplier**: If the **supplier** changes, the **client** may have to change, too.
 
+> _"A dependency indicates that an element on one end of the relationship, in some manner, depends on the element on the other end of the relationship."_ <BibRef name="OOA" pp="111" />
+
 import DependencyUmlSvg from './img/uml.dependency/uml.dependency.svg';
 
 <UmlEmbed
@@ -54,7 +56,7 @@ import ObserverCallPng from "./img/uml.dependency/observer-call.svg.png";
     title={"A Usage-Dependency: Button (client) calls a method of Observer (supplier). If Observer changes, Button has to change, too." }
 ><img src={ObserverCallPng}  /></Embed>
 
-```javascript
+```javascript title="The source code may look like this (JavaScript):"
     class Button {
 
         click () {
@@ -65,10 +67,6 @@ import ObserverCallPng from "./img/uml.dependency/observer-call.svg.png";
 
     }
 ```
-
-
-
-> _"A dependency indicates that an element on one end of the relationship, in some manner, depends on the element on the other end of the relationship."_ <BibRef name="OOA" pp="111" />
 
 
 <BackButton />
