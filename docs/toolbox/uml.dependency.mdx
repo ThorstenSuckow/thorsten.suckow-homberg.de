@@ -2,15 +2,18 @@
 title: "Dependency"
 ---
 
+
 import {BackButton} from "../../src/components/BackButton.js";
-import {BibRef, GlosRef} from "../../src/components/References";
-import {UmlEmbed} from "../../src/components/Embed";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
 
 # Dependency (UML)
 
 A **Dependency** between a **client** (_dependent_) and a **supplier** ([_dependee_](https://en.wiktionary.org/wiki/dependee)) can be illustrated with a **dashed** line with its tail starting at the **client** and an **open arrowhead** ending at the **supplier**.
 
-import DependencyUmlSvg from './img/uml.dependency.svg';
+The notation is used to depict a **Dependency** between a **client** and a **supplier**: If the **supplier** changes, the **client** may have to change, too.
+
+import DependencyUmlSvg from './img/uml.dependency/uml.dependency.svg';
 
 <UmlEmbed
     width={640}
@@ -20,22 +23,49 @@ import DependencyUmlSvg from './img/uml.dependency.svg';
     <DependencyUmlSvg />
 </UmlEmbed>
 
-### Dependency Stereotypes
-While there are notations available with **UML** that can be used for other semantics and specifications, or that already imply a dependency (such as <GlosRef name="Associations" file="uml.association" />, <GlosRef name="Aggregation" file="uml.aggregation" /> or <GlosRef name="Composition" file="uml.composition" /> ), the context of a basic **Dependency** can further be specified with one of the following <GlosRef name="stereotype" file="uml.stereotype" /> (<BibRef name="UML" pp="48" /> and <BibRef name="ADU" pp = "288" />):
+### Dependency Relationship Keywords
+While there are notations available with **UML** that can be used for other semantics and specifications, or that already imply a dependency
+(such as <GlosRef name="Associations" file="uml.association" />, <GlosRef name="Aggregation" file="uml.aggregation" />
+or <GlosRef name="Composition" file="uml.composition" /> ), the context of a basic **Dependency** can further be specified with one of the
+following <GlosRef name="keywords" file="uml.keyword" /> (<BibRef name="UML" pp="48" /> and <BibRef name="ADU" pp = "288" />):
 
 
-| Keyword / Stereotype | Meaning                                                                                                                                                      |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `«call»`           | The **client** calls a method of the **supplier**                                                                                                            |
-| `«create»`         | The **client** creates instances of the **supplier**                                                                                                         |
-| `«derive»`         | The **client** is derived from the **suplier**                                                                                                               |
-| `«instantiate»`    | The **client** gets instantiated from the **supplier**. If the **client** is a class, the **supplier** is a <GlosRef name="metaclass" file="cs.metaclass" /> |
-| `«permit»`         | The **client** has the permission to access the private members of the **supplier**                                                                          |
-| `«realize»`        | The **client** realizes the **supplier**, e.g. if the **supplier** is an _interface_ or an _abstract_ element.                                               |
-| `«refine»`         | The **client** refines the semantical level of the **supplier**                                                                                              |
-| `«substitute»`     | The **client** can be substituted with the **supplier**, e.g. if they share the same type                                                                    |
-| `«trace»`          | Semantical requirements are traceable from the **client** to the **supplier**                                                                                |
-| `«use»`            | The **client** requires the **supplier** for its implementation                                                                                              |
+| Stereotype / Keyword     | Relationship | Meaning                                                                                                                                                      |
+|-----------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `«call»`        | Usage        | The **client** calls a method of the **supplier**                                                                                                            |
+| `«create»`      | Usage        | The **client** creates instances of the **supplier**                                                                                                         |
+| `«derive»`      | Abstraction  | The **client** is derived from the **suplier**                                                                                                               |
+| `«instantiate»` | Usage        | The **client** gets instantiated from the **supplier**. If the **client** is a class, the **supplier** is a <GlosRef name="metaclass" file="cs.metaclass" /> |
+| `«permit»`      | Permission   | The **client** has the permission to access the private members of the **supplier**                                                                          |
+| `«realize»`     | Realization  | The **client** realizes the **supplier**, e.g. if the **supplier** is an _interface_ or an _abstract_ element.                                               |
+| `«refine»`      | Abstraction  | The **client** refines the semantic level of the **supplier**                                                                                                |
+| `«substitute»`  | Substitution | The **client** can be substituted with the **supplier**, e.g. if they share the same type                                                                    |
+| `«trace»`       | Abstraction  | Semantical requirements are traceable from the **client** to the **supplier**                                                                                |
+| `«use»`         | Usage        | The **client** requires the **supplier** for its implementation                                                                                              |
+
+## Example
+
+import ObserverCallPng from "./img/uml.dependency/observer-call.svg.png";
+
+<Embed
+    modeAware={true}
+    width={640}
+    figure={2}
+    title={"A Usage-Dependency: Button (client) calls a method of Observer (supplier). If Observer changes, Button has to change, too." }
+><img src={ObserverCallPng}  /></Embed>
+
+```javascript
+    class Button {
+
+        click () {
+            const me = this;
+
+            me.observers.map(observer => observer.notify("click", me));
+        }
+
+    }
+```
+
 
 
 > _"A dependency indicates that an element on one end of the relationship, in some manner, depends on the element on the other end of the relationship."_ <BibRef name="OOA" pp="111" />
