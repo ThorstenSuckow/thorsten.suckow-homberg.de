@@ -1,0 +1,77 @@
+---
+title: "Keyword"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../src/components/References";
+import {ImgEmbed, Embed, UmlEmbed} from "../../src/components/Embed";
+
+# Keyword (UML)
+
+A **Keyword** in **UML** is a predefined and reserved word available with the meta-model of **UML**.
+
+## Notation
+Some keywords are wrapped in an opening and a closing [guillemet](https://en.wikipedia.org/wiki/Guillemet)
+(`U+00AB LEFT-POINTING DOUBLE ANGLE QUOTATION MARK, “«”`, `U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK, “»”`).
+A guillemet is often confused with a duplicate `U+003C LESS-THAN SIGN, “<”` (`<<`) and `U+003E GREATER-THAN SIGN, “>”` (`>>`)
+
+**wrong**: `<<create>>`
+
+**correct**: `«create»`
+
+
+## Keyword vs. Stereotype
+While the notation for some **Keywords** is the same as for **Stereotypes**, they do not necessarily refer to the same:
+
+> _"[...] many use the term **stereotype** to mean the same as **keyword**, although that is no longer correct."_ <BibRef name="UML" pp="66" />
+
+Martin Fowler refers in this quote to the differences between **UML 1** and **UML 2**, whereas in **UML 1** the _"guillemets where
+used mainly for **stereotypes**."_ <BibRef name="UML" pp="66" />: While a **Keyword** is pre-defined in the
+meta-model of **UML**, a **Stereotype** can be a custom defined model extending an element from the **UML** meta-model.
+Stereotypes can be used for providing additional or specifying functional and semantic context in an otherwise ambiguous situation.
+
+
+## Example
+Keywords such as `«create»`, `«use»` or `«call»` are used to further specify a <GlosRef name="Dependency" file="uml.dependency" />
+between two elements and provide the context of the **Relationship Type** of this **Dependency**.
+
+In the following example, a <GlosRef name="Dependency" file="uml.dependency" />
+between **Client** and **Supplier** exists. Specifying the **Relationship** can dramatically change the understanding
+of the diagram.
+
+import DependencyUmlSvg from './img/uml.keyword/dependency.svg.png';
+import CreateUmlSvg from './img/uml.keyword/create.svg.png';
+import SubstituteUmlSvg from './img/uml.keyword/substitute.svg.png';
+
+
+<Embed
+    modeAware={true}
+    width={640}
+    figure={1}
+    title={"The context of the dependency is not further specified." }
+ ><img src={DependencyUmlSvg}  /></Embed>
+
+<Embed
+    modeAware={true}
+    width={640}
+    figure={2}
+    title={"The context of the dependency is specified with the keyword «create», the relationship is of type \"Usage\"" }
+><img src={CreateUmlSvg}  /></Embed>
+
+<Embed
+    modeAware={true}
+    width={640}
+    figure={3}
+    title={"Client is now substitutable for Supplier. The relationship is now of type \"Substitution\"" }
+><img src={SubstituteUmlSvg}  /></Embed>
+
+
+-----
+see also
+ - [list of available **keywords** for a **Dependency**](/docs/toolbox/uml.dependency#dependency-relationship-keywords)
+
+
+
+
+
+<BackButton />
