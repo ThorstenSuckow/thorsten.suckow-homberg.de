@@ -1,0 +1,179 @@
+---
+title: "Association"
+---
+
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
+
+# Association (UML)
+
+An **Association** between entities can be illustrated in **UML** with a solid line connecting the entities that are related.
+
+
+import CompanyEmployeeSvg from './img/uml.association/company-employee.svg';
+
+<Embed
+    figure={1}
+    title={"Company is associated with Employee" }
+>
+    <CompanyEmployeeSvg />
+</Embed>
+
+
+
+**Associations** in **UML** are used to depict **relationships** and their [**multiplicity**](#multiplicity). Additional information, such as the [**Navigability**](#navigability) or a [**Qualifier**](#qualified-asscociation) or the **role**, can be used to provide further details about the **relationship**.
+
+## Navigability
+**Associations** illustrated with a solid line are by default bidirectional: Both entities are aware of each other and can
+_**query**_ each entity at the opposite end the line. This inherent **Bidirectionality** can be made obvious by using open arrow-heads at each end of the line:
+
+import CompanyEmployeeBidirectionalSvg from './img/uml.association/company-employee-bidirectional.svg';
+
+<Embed
+    figure={2}
+    title={"Company can query its Employee. Employee knows its Company. This is the same as <b>Figure 1</b>" }
+>
+    <CompanyEmployeeBidirectionalSvg />
+</Embed>
+
+If an **Association** should not by bidirectional, only one arrow-head should be used at the end of the entity that is
+queryable, i.e. which is _navigable_:
+
+
+import CompanyAddressSvgPng from './img/uml.association/company-address.svg.png';
+
+<Embed
+    figure={3}
+    title={"Company can query its Address. Address is not aware of its owner (Company)" }
+>
+    <img src={CompanyAddressSvgPng} />
+</Embed>
+
+
+## Multiplicity
+
+A **Multiplicity** at each end of the solid line indicates the number of associated entities of the given type. The default **Multiplicity** is **1** in the **UML** metamodel, so it is good practice to specify the multiplicity, with lower and upper bounds if required.
+Common forms of multiplicities are
+
+| Multiplicity | Description                 | Example                          |
+|--------------|-----------------------------|----------------------------------|
+| `1`          | Exactly one.                | `A` has **exactly one** `B`      |
+| `*` (`n`)    | Any number, including zero. | `A` has **none** or **more** `B` |
+| `0..1`       | Zero or one.                | `A` has **none** or **one** `B`  |
+| `1..*`       | One or more.                | `A` has **one** or **more** `B`  |
+
+
+
+import Multiplicity from './img/uml.association/multiplicity.svg.png';
+
+<Embed
+    figure={4}
+    title={"A can query B, of which it has at least one. It can have unlimited Bs." }
+>
+    <img src={Multiplicity} />
+</Embed>
+
+
+## Qualified Association
+
+ **Qualified Associations** are used to provide information about an additional **Qualifier** that is used for
+ querying an association. It is _"the UML equivalent of a programming concept variously known as associative array, [...]"_ <BibRef name="UML" pp="74" />
+
+import CompanyAddressQualified from './img/uml.association/company-address-qualified.svg.png';
+
+<Embed
+    figure={5}
+    title={"Company has multiple Addresses (and at least one). An Address is qualified using AddressType" }
+>
+    <img src={CompanyAddressQualified} />
+</Embed>
+
+## Example
+
+The following **Relationships** between `Address`, `Company`, `Employee`, `Account` should be modelled with **UML**:
+
+
+ - A `Company` _has_ **at least one** `Employee`
+ - A `Company` _has_ **at least one** `Address`, qualified through some kind of Address-type (e.g. invoicing, headquarter and so on)
+
+ - An `Employee` _has_ **exactly one** `Company`
+ - An `Employee` _has_ **exactly one** `Address`
+ - An `Employee` _has_ **exactly one** `Account`
+
+ - An `Account` _has_ **exactly one** `Employee`
+
+
+### UML Diagram
+
+The diagram uses the notation introduced above. The *role* `owner` was added to the association `Account -> Employee`
+to provide a deeper semantic context of the relationship.
+
+import Example from "./img/uml.association/example.svg.png";
+
+<Embed
+    modeAware={true}
+    figure={6}
+> <img src={Example} /></Embed>
+
+
+### Implementation
+
+The implementation is rather naive as it forgoes possible infrastructure requirements (as in `Company`'s in-memory
+storage of the `Employee`s). Of interest is the implementation of the **Qualified Association** of the `Company`'s multiple
+`Address`es: Here, a `Company` _has_ a **Usage** <GlosRef name="Dependency" file="uml.dependency" /> with `AddressType` to
+realize the **qualifier**.
+
+
+```php title="AddressType.php"
+enum AddressType: string
+{
+    case SHIPPING    = "shipping";
+    case INVOICE     = "invoice";
+    case MARKETING   = "marketing";
+    case HEADQUARTER = "hq";
+}
+```
+
+```php title="Address.php"
+class Address
+{
+    private string $street;
+    private string $city;
+    private string $country;
+}
+```
+
+```php title="Account.php"
+class Account
+{
+    private Employee $owner;
+    private Money $balance;
+}
+```
+
+```php title="Employee.php"
+class Employee
+{
+    private Account $account;
+    private Company $company;
+    private Address $address;
+}
+```
+
+```php title="Company.php"
+class Employee
+{
+    private array $addresses;
+    private array $employees;
+
+    public function getAddress(AddressType $addressType): ?Address
+    {
+        return $this->addresses[$addressType->value] ?? null:
+    }
+}
+```
+
+
+<BackButton />
