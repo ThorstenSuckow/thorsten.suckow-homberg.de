@@ -30,8 +30,15 @@ enhances this with providing a visual clue on the whole/part-relationship, using
 Aggregates can contain <GlosRef name="Value Objects" file="sd.valueobject" /> and <GlosRef name="Entities" file="sd.entity" />.
 
 ## Aggregates in DDD
-**Aggregates** have particular meaning in <GlosRef name="DDD" file="ddd.domaindrivendesign" />, where they are representants of business objects, within whose limits technical invariants apply, and which are identifiable given an <GlosRef name="Aggregate Root" file="ddd.aggregateroot" />. Their whole represents a unit in a <GlosRef name="Domain Model" file="ddd.domainmodel" />.
+**Aggregates** have particular meaning in <GlosRef name="DDD" file="ddd.domaindrivendesign" />, where they are units representing business objects in a <GlosRef name="Domain Model" file="ddd.domainmodel" />. Within their limits, technical invariants apply, and they are identifiable given an <GlosRef name="Aggregate Root" file="ddd.aggregateroot" />. Their state can be persisted and reconstituted.
 
+## Aggregation vs. Association
+Despite the visual clue in form of the _rhombus_ to delineate a whole/part-relationship, **Aggregations** provide no significant advantage over using <GlosRef name="Associations" file="uml.association" />. In <BibRef name="UML" pp="68" />, Martin Fowler writes:
 
+> _"Aggregation is strictly meaningless; as a result, I recommend that you ignore it in your own diagrams."_
+
+following _Rumbaugh et al._:
+
+> _"The distinction between aggregation and association is often a matter of taste rather than a difference in semantics.[...] Think of it as a modelling Placebo."_ <BibRef name="UREF" pp="148" />
 
 <BackButton />
