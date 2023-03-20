@@ -1,0 +1,37 @@
+---
+title: "Aggregation"
+---
+
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
+
+# Aggregation (UML)
+
+An **Aggregation** is a form of an <GlosRef name="Association" file="uml.association" /> with extended notation to emphasize on whole/part-relationships.
+
+
+import AggregationSvg from './img/uml.aggregation/aggregation.svg';
+
+<Embed
+    figure={1}
+    title={"The DiningTable denotes the whole, and 4 Chairs are its part."}
+>
+    <AggregationSvg />
+</Embed>
+
+
+An **Aggregation** between entities can be illustrated in **UML** with a blank rhombus starting at the root of the Aggregate, then connecting to the supplier(s) of the aggregate with a solid line. An Aggregation can also use [Multiplicity](/docs/toolbox/uml.association#multiplicity), and [Navigability](/docs/toolbox/uml.association#navigability). It should be noted that with **Aggregates**, the association parts of such a construct are always navigable. If the owner of the **Aggregate** is navigable, an open Arrow Head ending at the solid line connecting to the rhombus can be used.
+
+Whereas an <GlosRef name="Association" file="uml.association" /> already depicts the relationship between elements, an **Aggregation**
+enhances this with providing a visual clue on the whole/part-relationship, using the rhombus with the root of the "whole", the aggregate root.
+
+Aggregates can contain <GlosRef name="Value Objects" file="sd.valueobject" /> and <GlosRef name="Entities" file="sd.entity" />.
+
+## Aggregates in DDD
+**Aggregates** have particular meaning in <GlosRef name="DDD" file="ddd.domaindrivendesign" />, where they are representants of business objects, within whose limits technical invariants apply, and which are identifiable given an <GlosRef name="Aggregate Root" file="ddd.aggregateroot" />. Their whole represents a unit in a <GlosRef name="Domain Model" file="ddd.domainmodel" />.
+
+
+
+<BackButton />
