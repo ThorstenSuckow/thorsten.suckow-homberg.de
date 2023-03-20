@@ -59,6 +59,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [ADU] **Analyse und Design mit UML 2** (7., aktualisierte Auflage), Oldenbourg Wissenschaftsverlag GmbH, 2005 <a name="adu"></a>
 
+**Rumbaugh, James; Ivar Jacobson Grady Booch**
+
+- [UREF] **The Unified Modeling Language Reference Manual**, Addison-Wesley, 1999 <a name="uref"></a>
+
 **Thomas, David; Hunt, Andrew**
 
 - [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
