@@ -176,7 +176,7 @@ class Employee
 
 ### Can `Address`-instances be shared?
 `Company` and `Employee` have an association with `Address`, and therefor both of them are associated with "a same **type**", but do
-they share the same object instances of `Address`? The diagram is representing a **class diagram**, and the association does not provide further details about the nature of their relationshop. Thus, they do not necessarily reference the same instance of `Address` at first, just that they are _associated with instances of this **type**_. It makes no prediction if those instances are _the same_.
+they share the same object instances of `Address`? The diagram is representing a **class diagram**, and the association does not provide further details about the nature of their relationship. Thus, they do not necessarily reference the same instance of `Address` at first, just that they are _associated with instances of this **type**_. It makes no prediction if those instances are _the same_.
 This  would rather be an implementation detail of the target system. Here's how implementing it differently can have a severe impact to the system's data consistency, and where further notation with the help of **UML** can clarify its intent.
 
 #### Referencing the same `Address` as an Entity
@@ -226,16 +226,16 @@ class AddressAsValueObjectTest extends TestCase
         $company->setAddress($address, $type);
         $employee->setAddress($address);
 
-        $this->assertSame($company->getAddress(, $type), $employee->getAddress());
+        $this->assertSame($company->getAddress($type), $employee->getAddress());
 
         $company->setAddress($address->setStreet("moved to 23"), $type);
 
-        $this->assertNotSame($company->getAddress(), $employee->getAddress());
+        $this->assertNotSame($company->getAddress($type), $employee->getAddress());
     }
 }
 ```
 
-:::tip Apply details about relationships if the understanding necessitates it
+:::tip Apply details about relationships where necessary
 The `Company`'s and `Employee`'s relationship with `Address` should be seen as <GlosRef name="Composition" file="uml.Composition" />: Each `Address`-object should change for a single owning object. As such, it would be good practice to use the notation of **Composition**  here.
 :::
 
