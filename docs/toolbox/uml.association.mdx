@@ -60,7 +60,7 @@ Common forms of multiplicities are
 | Multiplicity | Description                 | Example                          |
 |--------------|-----------------------------|----------------------------------|
 | `1`          | Exactly one.                | `A` has **exactly one** `B`      |
-| `*` (`n`)    | Any number, including zero. | `A` has **none** or **more** `B` |
+| `*` (or `n`)    | Any number, including zero. | `A` has **none** or **more** `B` |
 | `0..1`       | Zero or one.                | `A` has **none** or **one** `B`  |
 | `1..*`       | One or more.                | `A` has **one** or **more** `B`  |
 
@@ -116,7 +116,6 @@ import Example from "./img/uml.association/example.svg.png";
     modeAware={true}
     figure={6}
 > <img src={Example} /></Embed>
-
 
 ### Implementation
 
@@ -174,6 +173,71 @@ class Employee
     }
 }
 ```
+
+### Can `Address`-instances be shared?
+`Company` and `Employee` have an association with `Address`, and therefor both of them are associated with "a same **type**", but do
+they share the same object instances of `Address`? The diagram is representing a **class diagram**, and as such they do not reference the same instances of `Address` at first place: The design says that they are _associated with instances of this **type**_. It
+makes no prediction if those instances are _the same_. This  would rather be an implementation detail of the implementing
+system. Here's how implementing it differently can have a severe impact to the system's data consistency.
+
+#### Referencing the same `Address` as an Entity
+If `Company` and `Employee` reference the same <GlosRef name="Entity" file="sd.entity" />, both point to **one and the same** uniquely identifiable instance of `Address`. If `Company` changes its _address_, e.g. the `street`-name changes, those changes would be affecting the `Employee` referencing the same `Address`-(id)entity: The name of the `street` where the `Employee` lives changes, too.
+
+#### Referencing the same `Address` as a Value Object
+If `Company` and `Employee` reference the same <GlosRef name="Value Object" file="sd.valueobject" />, both reference an **immutable** object: If `Company` changes its _address_, e.g. the `street`-name changes, a new **Value Object** is created and replaces the previous `Address`-Object of `Company`. The `Employee`'s place of residence is not affected by this change, since it still holds the reference to the original **Value Object**.
+
+```php title="Address as Value Obect"
+
+class Address
+{
+    public function setStreet(string $street): Address
+    {
+        return new Address(
+            $street,
+            $this->city,
+            $this->country
+        );
+    }
+}
+
+class Employee
+{
+    public function setAddress(Address $adress)
+    {
+        $this->address = $address;
+    }
+}
+
+class Company
+{
+    public function setAddress(AddressType $addressType, Address $adress)
+    {
+        $this->addresses[$addressType->value] = $address;
+    }
+}
+
+
+class AddressAsValueObjectTest extends TestCase
+{
+    public function testForReference()
+    {
+        $type = AddressType::SHIPPING;
+        $address = new Address("street", "city", "country");
+
+        $company->setAddress($address, $type);
+        $employee->setAddress($address);
+
+        $this->assertSame($company->getAddress(, $type), $employee->getAddress());
+
+        $company->setAddress($address->setStreet("moved to 23"), $type);
+
+        $this->assertNotSame($company->getAddress(), $employee->getAddress());
+    }
+}
+```
+
+The `Company`'s and `Employee`'s relationship with `Address` should be seen as <GlosRef name="Composition" file="uml.Composition" />: Each `Address`-object should change for a single owning object.
+
 
 
 <BackButton />
