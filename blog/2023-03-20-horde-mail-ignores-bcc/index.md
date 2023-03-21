@@ -117,7 +117,7 @@ A possible fix is to call `getAddressList()` on `_bcc` in `Horde_Mime_Mail::send
 
 Fixing this in `Horde/Mime/Mail.php` is also possible, although I do not know if that would cause any side effect since I 
 could not find the expected type of `_bcc`. It gets checked in '_normalize()' (see above) so I guess this would be the
-better place to apply the fix:
+better place to apply the fix, instead of doing this:
 
 ```diff title="Horde/Mime/Mail.php.diff"
 
@@ -133,3 +133,6 @@ better place to apply the fix:
 +            $recipients->add($this->_bcc->getAddressList()); 
         }
 ```
+
+--------
+Update 21.03.2023: PR available [here](https://github.com/maintaina-com/Mail/pull/3)
