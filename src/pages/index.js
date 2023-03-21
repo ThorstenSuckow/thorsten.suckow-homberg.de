@@ -93,7 +93,7 @@ export default function Home() {
             <div className={"introduction"}>
                 The focus of my work is on Design and Agile Development of Software.
                 <br />
-                I favor Object Oriented languages. I do have a soft spot vor JavaScript.
+                I favor Object Oriented languages. I do have a soft spot for JavaScript.
                 <br /><br />
                 In recent years I had the chance to accompany teams of different sizes in workshops and training sessions
                 on software development. The lessons I have learned through this are among the most valuable in my life.
