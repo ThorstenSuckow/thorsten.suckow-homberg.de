@@ -25,7 +25,7 @@ A **Layered Architecture** may consist of
 import LayeredArchitectureSvg from "./img/sa.layeredarchitecture.svg";
 
 <UmlEmbed
-    title={"A system divided into four functional distinct layers."}
+    title={"This system is divided into four functional distinct layers."}
 >
     <LayeredArchitectureSvg />
 </UmlEmbed>
@@ -36,10 +36,10 @@ a layer is only aware of the layer(s) beneath it. This model follows <BibRef nam
 
 ### How layers relate to each other
 Lower layers know nothing about the upper layers: An **Infrastructure Layer**
-that is aware of the **Application Layer** is considered bad design as it violates the <GlosRef name="SRP" file="sd.singleresponsibilityprinciple" />
+that is aware of the **Application Layer** is considered a bad design as it violates the <GlosRef name="SRP" file="sd.singleresponsibilityprinciple" />
 and the <GlosRef name="DIP" file="sd.dependencyinversionprinciple" />.
 
-But should the **Application Layer** know that there is an **Infrastructure Layer**? Purists might say _**no**_,
+But should the **Application Layer** know that there is an **Infrastructure Layer**? Purists might say _**no**_, but
 more **Pragmatic Programmers** probably consider a _**maybe**_.
 
 In regard to a likely interdependency of the **Presentation Layer** and the **Data Layer**, _Fowler et al._ write:
@@ -48,12 +48,12 @@ In regard to a likely interdependency of the **Presentation Layer** and the **Da
 More often, however, the presentation accesses the data store directly. [...] The presentation may interpret a command from
 the user, use the data source to pull the relevant data out of the database, and then let the domain logic manipulate the data [...]."_ <BibRef name="POEAA" pp="20" />
 
-Wiring all communication from upper layers through each layer to the target layer may result in <GlosRef name="Needless Complexity" file="sd.symptomsofpoordesign" />. The <GlosRef name="DIP" file="sd.dependencyinversionprinciple" /> provides a solution for setting up communication contracts
+Wiring all communication from the upper layers through each layer down to the target layer may result in <GlosRef name="Needless Complexity" file="sd.symptomsofpoordesign" />. The <GlosRef name="DIP" file="sd.dependencyinversionprinciple" /> provides a solution for setting up communication contracts
 between upper layers towards lower layers without the need to iterate through all layers available:
 
 > _"The lower level modules provide the implementation for interfaces that are declared within, and called by, the upper level modules."_ <BibRef name="ASD" pp="129" />
 
-But even if we agree that upper layers may be aware of lower layers, and lower layers have no knowledge about upper layers, we
+But even if we agree that the upper layers may be aware of the lower layers, and the lower layers have no knowledge about the upper layers, we
 still must make sure that communication works in both directions. This is of particular importance when asynchronous
 processes are used by the **Infrastructure Layer**, and where the **Domain** or **Application Layer** are depending on the results of
 these processes:
@@ -64,11 +64,11 @@ import LayerVsTierPng from "./img/layervstier.png";
 
 ## "Layer" vs "Tier"
 :::info
-A **Layered Architecture** makes no predication about the technology used, and whether other layers are hosted next to
+A **Layered Architecture** makes no prediction about the technology used, and whether other layers are hosted next to
 layers of a different context. Is a **Multitier Architecture** more consistent in this regard?
 
 We use the term **Layer** as an abstract representation of logical tasks grouped together. A **Layer** could easily be
-represented by modules and packages, using namespaces to delineating its responsibilities and to provide a semantic context.
+represented by modules and packages, using namespaces to delineate its responsibilities and to provide a semantic context.
 
 The consensus seems to be that a **Multitier Architecture** implies the physical separation of its _tiers_. It is often
 referred to as a system where the actors are physically separated: For example, the **application tier** exists on a dedicated
@@ -83,11 +83,11 @@ Conversely, the authors of the **IBM** website take the position that
 
 <ImgEmbed
     url={LayerVsTierPng}
-    figure={1}
+    figure={2}
 />
 
 
-There is no formal definition of the two terms. When in doubt, agree on a definition in your team so that the correct
+There is no formal definition of the two terms. When in doubt, agree on a definition with your team so that the correct
 meaning becomes part of your project's <GlosRef name="Ubiquitous Language" file ="ddd.ubiquitouslanguage" />.
 :::
 
