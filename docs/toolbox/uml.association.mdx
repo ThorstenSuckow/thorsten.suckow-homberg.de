@@ -180,7 +180,7 @@ they share the same object instances of `Address`? The diagram is representing a
 This  would rather be an implementation detail of the target system. Here's how implementing it differently can have a severe impact to the system's data consistency, and where further notation with the help of **UML** can clarify its intent.
 
 #### Referencing the same `Address` as an Entity
-If `Company` and `Employee` reference the same <GlosRef name="Entity" file="sd.entity" />, both point to **one and the same** uniquely identifiable instance of `Address`. If `Company` changes its _address_, e.g. the `street`-name changes, those changes would be affecting the `Employee` referencing the same `Address`-(id)entity: The name of the `street` where the `Employee` lives changes, too.
+If `Company` and `Employee` reference the same <GlosRef name="Entity" file="sd.entity" />, both point to **one and the same** uniquely identifiable instance of `Address`. If `Company` changes its _address_, e.g. the `street`-name changes, those changes would be affecting the `Employee` referencing the same `Address`-(id)entity: The name of the `street` where the `Employee` lives changes, too. This is often referred to as <GlosRef name="Aliasing Bug" file="cs.aliasing" />.
 
 #### Referencing the same `Address` as a Value Object
 If `Company` and `Employee` reference the same <GlosRef name="Value Object" file="sd.valueobject" />, both reference an **immutable** object: If `Company` changes its _address_, e.g. the `street`-name changes, a new **Value Object** is created and replaces the previous `Address`-Object of `Company`. The `Employee`'s place of residence is not affected by this change, since it still holds the reference to the original **Value Object**.
@@ -236,3 +236,9 @@ class AddressAsValueObjectTest extends TestCase
 ```
 
 <BackButton />
+
+
+-------
+see also
+ - <GlosRef name="Aggregation (UML)" file="uml.aggregation" />
+ - <GlosRef name="Composition (UML)" file="uml.composition" />

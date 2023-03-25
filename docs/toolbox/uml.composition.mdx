@@ -40,7 +40,7 @@ _Rumbaugh et al._ state that once the owning element is destroyed, the owning el
 
 > _"If the composite is destroyed, it must either destroy all its parts or else give responsibility for them to other objects."_ <BibRef name="UREF" pp="227"/>
 
-### The one-composite-at-a-time dilemma
+### The "one-composite-at-a-time"-rule
 A **Composition** serves as an abstraction to parent/child-relationships. It is defined through the sum of its parts, i.e. the **owning object** and its parts with the prerequisite that a **Composition** - as a stronger form of an **Aggregation** - maintains and controls references to its parts, and no other object must do this for as long as the owning composite exists. Other elements may reference the parts, but they may not control their lifecycle.
 
 In the Toolbox-entry <GlosRef name="Association" file="uml.Association" />, the `Company`'s and  `Employee`'s relationship with `Address` is  modelled as plain **Association**.
@@ -61,7 +61,7 @@ import AddressComposition from './img/uml.composition/address-composition.svg.pn
 </Embed>
 
 If **Address** is navigable through `Employee` and `Company`,
-and there is an instance that is shared by both `Employee` and `Company`, which of those elements is then considered to be the owning object of `Address`? Not using arrows as indicators for the navigability doesn't help in this case: If a **Composition** is used in a design, then a part of it _"may be part of only one composite object at a time."_ <BibRef name="UREF" pp="228" /> and further > _"during the life of the composite, no other object may have responsibility for it."_ <BibRef name="UREF" pp="227" />
+and there is an instance that is shared by both `Employee` and `Company`, which of those elements is then considered to be the owning object of `Address`? Not using arrows as indicators for the navigability doesn't help in this case: If a **Composition** is used in a design, then a part of it _"may be part of only one composite object at a time."_ <BibRef name="UREF" pp="228" /> and further _"during the life of the composite, no other object may have responsibility for it."_ <BibRef name="UREF" pp="227" />
 
 Modeling the relationship as an **Aggregation** provides a looser contract on the relationship between the element, and permits the developers to choose implementation details like applying the **Value Object**-design to `Address`.
 
