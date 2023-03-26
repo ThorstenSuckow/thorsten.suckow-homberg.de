@@ -13,14 +13,13 @@ The expression needs to be <GlosRef name="pure" file="cs.purefunction" /> in ord
 
 let $P$ be the **referential transparent context**, the _Program_, with $P\colon f \circ g$, where $f\colon Y \rightarrow Z$, $g \in Inj(X, Y)$, $f$ and $g$ are representing expressions.
 
-if $\forall u,v \in Y: \exists x \in X: u=g(x)=v \land P(v) = P(y)$, then $g$ is **referential transparent** (furthermore, it implies that $f \in Inj(Y, Z)$).
+if $\forall u,v \in Y: \exists x \in X: u=g(x)=v \land f(v) = f(y)$, then $g$ is **referential transparent**. Furthermore, it implies that $f \in Inj(Y, Z)$ since  $\forall u,v \in Y:  f(v) = f(v)  \implies u=v$.
 
-
-> _"A mode of containment φ is referentially transparent if, whenever an occurrence of a singular term $t$ is purely referential in a term or sentence $ψ(t)$, it is purely referential also in the containing term or sentence $φ(ψ(t))$."_ [Quine: Word and Object, §30](https://archive.org/details/in.ernet.dli.2015.529086)
+A more formal introduction to this topic is available from [_Sondergaard_](https://findanexpert.unimelb.edu.au/profile/13416-harald-sondergaard) and [_Sestoft_](https://www.itu.dk/people/sestoft/) in [Referential Transparency,
+Definiteness and Unfoldability](https://www.cs.tufts.edu/~nr/cs257/archive/peter-sestoft/ref-trans.pdf):
 
 > _"By this, an operator is referentially transparent if it preserves applicability of Leibniz's law, or substitutivity of identity:
-the principle that any subexpression can be replaced by any other equal in value. "_ [Sondergaard, Sestoft: Referential Transparency,
-Definiteness and Unfoldability, pp. 11](https://www.cs.tufts.edu/~nr/cs257/archive/peter-sestoft/ref-trans.pdf)
+the principle that any subexpression can be replaced by any other equal in value. "_
 
 ## Example
 
@@ -46,3 +45,5 @@ f(g(7)) === f (8);
 --------
 see also
  - [Andrew Birkett: Referentially transparent](https://www.nobugs.org/blog/archives/2008/11/12/why-do-they-call-it-referentially-transparent/)
+
+ - _"A mode of containment φ is referentially transparent if, whenever an occurrence of a singular term $t$ is purely referential in a term or sentence $ψ(t)$, it is purely referential also in the containing term or sentence $φ(ψ(t))$."_ [Quine: Word and Object, §30](https://archive.org/details/in.ernet.dli.2015.529086)
