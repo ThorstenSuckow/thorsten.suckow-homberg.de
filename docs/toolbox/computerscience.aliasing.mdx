@@ -20,6 +20,8 @@ $alias = $ref;
 An **Aliasing Bug** denotes an issue when two (or more) objects reference an object, and the intentional change of the
 state of this instance causes unexpected behavior with one of the objects referencing this instance.
 
+This often happens with **mutable**  <GlosRef name="Value Objects" file="sd.valueobject" />, where instances are shared across a number of objects, each having (indirect) access to the fields of the **Value Object**
+
 
 > _"A class of subtle programming errors that can arise in code that does dynamic allocation, esp. via malloc(3) or equivalent. If several pointers address (are aliases for) a given hunk of storage, it may happen that the storage is freed or reallocated (and thus moved) through one alias and then referenced through another, which may lead to subtle (and possibly intermittent) lossage depending on the state and the allocation history of the malloc arena."_ [http://www.catb.org/jargon/html/A/aliasing-bug.html](http://www.catb.org/jargon/html/A/aliasing-bug.html)
 
@@ -71,7 +73,7 @@ public static void main(String []args)
 }
 ```
 
-**Aliasing Bugs** can be prevented by using immutable objects, such as a <GlosRef name="Value Object" file="sd.valueobject" />, where changing the state of such an object results in a new object replacing the previous one.
+**Aliasing Bugs** can be prevented by using **immutable** <GlosRef name="Value Objects" file="sd.valueobject" />, where changing the state of such an object results in a new object replacing the previous one.
 
 
 ```java title="Address is immutable "
