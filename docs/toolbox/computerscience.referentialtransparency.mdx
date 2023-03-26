@@ -11,13 +11,9 @@ If an expression can be substituted for a value without changing the program's c
 
 The expression needs to be <GlosRef name="pure" file="cs.purefunction" /> in order to achieve **Referential Transparency**.
 
-let $P$ be the **referential transparent context**, the _Program_, with $P\colon f \circ g$ with $f\colon Y \rightarrow Z$, $g\colon X \rightarrow Y$, where $f$ and $g$ are representing expressions.
+let $P$ be the **referential transparent context**, the _Program_, with $P\colon f \circ g$, where $f\colon Y \rightarrow Z$, $g \in Inj(X, Y)$, $f$ and $g$ are representing expressions.
 
-let $g \in Inj(X, Y)$.
-
-let $u, v \in Y$ with $\exists x \in X: u=g(x)=v$
-
-if $\forall v,u: P(v) = P(y)$, then $g$ is **referential transparent** (furthermore, it implies that $f \in Inj(Y, Z)$).
+if $\forall u,v \in Y: \exists x \in X: u=g(x)=v \land P(v) = P(y)$, then $g$ is **referential transparent** (furthermore, it implies that $f \in Inj(Y, Z)$).
 
 
 > _"A mode of containment φ is referentially transparent if, whenever an occurrence of a singular term $t$ is purely referential in a term or sentence $ψ(t)$, it is purely referential also in the containing term or sentence $φ(ψ(t))$."_ [Quine: Word and Object, §30](https://archive.org/details/in.ernet.dli.2015.529086)
