@@ -1,0 +1,124 @@
+---
+title: "Aliasing"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# Aliasing (Computer Science)
+
+**Aliasing** in Object-Oriented Programming is a synonym for two (or more) variables referencing the same instance.
+
+```php title="$ref and $alias referencing the same instance"
+$ref = new \stdClass();
+$alias = $ref;
+```
+
+
+## Aliasing Bug
+
+An **Aliasing Bug** denotes an issue when two (or more) objects reference an object, and the intentional change of the
+state of this instance causes unexpected behavior with one of the objects referencing this instance.
+
+This often happens with **mutable**  <GlosRef name="Value Objects" file="sd.valueobject" />, where instances are shared across a number of objects, each having (indirect) access to the fields of the **Value Object**
+
+
+> _"A class of subtle programming errors that can arise in code that does dynamic allocation, esp. via malloc(3) or equivalent. If several pointers address (are aliases for) a given hunk of storage, it may happen that the storage is freed or reallocated (and thus moved) through one alias and then referenced through another, which may lead to subtle (and possibly intermittent) lossage depending on the state and the allocation history of the malloc arena."_ [http://www.catb.org/jargon/html/A/aliasing-bug.html](http://www.catb.org/jargon/html/A/aliasing-bug.html)
+
+
+### Example
+
+```java title="privateAddress gets changed unintentionally"
+class Employee
+{
+    public Address privateAddress;
+    public Address shippingAddress;
+}
+
+class Address
+{
+    public String street;
+    public String city;
+
+    public Address(String street, String city)
+    {
+        this.street = street;
+        this.city = city;
+    }
+
+    public String toString()
+    {
+        return this.street + " in " + this.city;
+    }
+}
+
+public static void main(String []args)
+{
+
+    Employee employee = new Employee();
+
+    Address address = new Address("East 74th Street", "New York");
+
+    // privateAddress and shippingAddress are aliasing "address"
+    employee.privateAddress = address;
+    employee.shippingAddress = address;
+
+    // the street of the shippingAddress is changed to "36 Fuller Place"
+    employee.shippingAddress.street = "36 Fuller Place";
+
+    System.out.println(employee.shippingAddress);
+    // since privateAddress is an alias for address, which was just changed (through accessing it with the alias
+    // shippingAddress), privateAddress is now also updated.
+    System.out.println(employee.privateAddress);
+}
+```
+
+**Aliasing Bugs** can be prevented by using **immutable** <GlosRef name="Value Objects" file="sd.valueobject" />, where changing the state of such an object results in a new object replacing the previous one.
+
+
+```java title="Address is immutable "
+
+class Address
+{
+    public String street;
+    public String city;
+
+    public Address(String street, String city)
+    {
+        this.street = street;
+        this.city = city;
+    }
+
+    public Address setStreet(String street)
+    {
+        return new Address(street, this.city);
+    }
+
+    public String toString()
+    {
+        return this.street + " in " + this.city;
+    }
+}
+
+ public static void main(String []args){
+
+    Employee employee = new Employee();
+
+    Address address = new Address("East 74th Street", "New York");
+
+    employee.privateAddress = address;
+    employee.shippingAddress = address;
+
+    // changing the address does not change the state of "address", instead it
+    // returns a new object with the updated state
+    employee.shippingAddress = address.setStreet("36 Fuller Place");
+
+    System.out.println(employee.shippingAddress);
+    System.out.println(employee.privateAddress);
+ }
+```
+
+
+-----
+See also
+ - [Martin Fowler, Aliasing Bug](https://martinfowler.com/bliki/AliasingBug.html)

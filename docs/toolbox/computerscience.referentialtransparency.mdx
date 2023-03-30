@@ -1,0 +1,51 @@
+---
+title: "Referential Transparency"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../src/components/References";
+
+# Referential Transparency (Computer Science)
+
+If an expression can be substituted for a value without changing the program's computational result, the expression is **referential transparent**.
+
+The expression needs to be <GlosRef name="pure" file="cs.purefunction" /> in order to achieve **Referential Transparency**.
+
+### Informal Description
+let $P$ be the **referential transparent context**, the _Program_, with $P\colon f \circ g$, where $f\colon Y \rightarrow Z$, $g \in Inj(X, Y)$, $f$ and $g$ are representing expressions.
+
+if $\forall u,v \in Y: \exists x \in X: u=g(x)=v \land f(v) = f(y)$, then $g$ is **referential transparent**. Furthermore, it implies that $f \in Inj(Y, Z)$ since  $\forall u,v \in Y:  f(v) = f(v)  \implies u=v$.
+
+:::tip Referential Transparency, Definiteness and Unfoldability
+A more formal introduction to this topic is available from [_Sondergaard_](https://findanexpert.unimelb.edu.au/profile/13416-harald-sondergaard) and [_Sestoft_](https://www.itu.dk/people/sestoft/) in [Referential Transparency, Definiteness and Unfoldability](https://www.cs.tufts.edu/~nr/cs257/archive/peter-sestoft/ref-trans.pdf): <br />
+> _"By this, an operator is referentially transparent if it preserves applicability of Leibniz's law, or substitutivity of identity: the principle that any subexpression can be replaced by any other equal in value. "_
+:::
+
+
+
+## Example
+
+For $x \in \N, y \in \N$:
+
+```javascript
+
+function f (y) {
+    return y * y;
+}
+
+function g (x) {
+    return x + 1;
+}
+
+// f(?) = 64
+// 64 = 8 * 8; 64 = 8 * 8; 8 = 7 + 1; 8 = g (7); -> ? = 8 || g(7)
+f(g(7)) === f (8);
+```
+
+<BackButton />
+
+--------
+see also
+ - [Andrew Birkett: Referentially transparent](https://www.nobugs.org/blog/archives/2008/11/12/why-do-they-call-it-referentially-transparent/)
+
+ - _"A mode of containment φ is referentially transparent if, whenever an occurrence of a singular term $t$ is purely referential in a term or sentence $ψ(t)$, it is purely referential also in the containing term or sentence $φ(ψ(t))$."_ [Quine: Word and Object, §30](https://archive.org/details/in.ernet.dli.2015.529086)

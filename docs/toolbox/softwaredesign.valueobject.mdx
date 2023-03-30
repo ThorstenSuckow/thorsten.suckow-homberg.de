@@ -1,0 +1,263 @@
+---
+title: "Value Object"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {Embed} from "../../src/components/Embed";
+
+# Value Object (Software Design)
+
+In **Object-Oriented Programming**, a **Value Object** is an abstraction of a value belonging to a particular domain.
+
+A **Value Object** usually provides access to operations on the value given an OOP interface, or through operator overloading (e.g., concatenating strings with `+`).
+
+A **Value Object** can represent a primitive datatype such as `integer`, `float` or `boolean` as well as more complex data, where the _value_ of the particular **Value Object** is defined through more than one field (e.g., an _address_).
+
+:::info Key aspects of a Value Object
+Fowler introduces the **Value Object** in <BibRef name="POEAA" pp="486" /> as an object _"whose equality isn't based on identity"_.<br />
+In <BibRef name="DDD" pp="97" />, Evans refers to a **Value Objects** as an object that _"describe[s] some characteristic of a thing"._<br />
+Ward Cunningham relates the _Whole Value (a.k.a. Value Object)_ to a concept that represents not a _thing_, [_"but measures of things"_](http://fit.c2.com/wiki.cgi?WholeValue).
+
+All authors seem to agree on the statement that a **Value Object** is not a _thing, but measure of it_, and lay foundation to key design aspects of a**Value Object** with: **Equality**, **Shareability**, **Immutability**.
+:::
+
+
+## Values as Objects
+
+Treating values as objects is already fundamental to many programming languages, such as **Java**, where the class [java.lang.String](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html) is implemented as an **immutable Value Object**:
+
+> _"The String class represents character strings. [...] Strings are constant; their values cannot be changed after they are created. [...] Because String objects are immutable they can be shared."_ [[java.lang.String]](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html)
+
+## Identity
+
+When designing abstractions of _values_, there is no need to consider the **identity** of a _value_, whereas **identity** in this context refers to the abstraction of an identifier available with the high-level code, such as a field `id`, containing an unique identifier. Such unique identifiers usually help with referring to objects that have a _lifecycle_, allowing to track the state of these objects, and furthermore reconstitute it through various instances of a software system.
+
+**Value Objects** do not have such an identity, since their identity is of no interest to the client, as their inherent _value_ is solely used for _measurement_ or _description_.
+
+A _money value_ may exist to _describe_ the financial worth of something. An _address value_ may exist to describe the residence of a person. If the person moves, the address of the person moves with this person. If the financial worth of a company changes, the value reflecting the worth gets updated. In both cases, these values do not have to be uniquely identifiable.
+
+:::tip Is Address a Value Object?
+I provide a use case where `Address` as **Value Object** is meaningful iin the given context. Also, Eric Evans shares the notion that it depends on _"who's asking"_ and reflects on several use cases in <BibRef name="DDD" pp="98" />.
+:::
+
+:::info Picking an apple
+If I want to pick a green apple out of a set of green and red apples, I don't care about the identity of the apple, for as long as the apple can be **described as _green_**. If I put the apple away, I can always return later and pick another one from the set, preferably one that's green; I don't care if it turns out to be the same one or not.
+:::
+
+### Equality
+If _equality_ isn't based on identity, then _equality_ is determined based on one or more attributes between objects.
+
+In Java, comparing for the equality of `Strings` is done using the [`equals`](#equals)-method:
+```java
+String name = new String("Peter");
+String firstname = new String("Peter");
+
+// name == firstname -> false
+// name.equals(firstname) -> true
+
+```
+
+Here, `name` and `firstname` are _equal_, but not _identical_. When we speak of _identical_ in this context, we refer to the low-level identity of two variables referencing the same memory-address where an object is stored.
+
+
+:::info equals() in Java
+In **Java**, `java.lang.Object` provides a method for implementing equivalence relations on references:
+
+```java
+public boolean equals(Object obj);
+```
+
+Specifics of `java.lang.Object` can implement `equals` to consider attribute-values (_equality based on values_) and
+references when testing for equality. [[Java Docs]](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object))
+:::
+
+**Value Objects** are used in cases where the identity of objects is not important, but their _equality_. In the given example, the value of the `String`-objects are of interest when comparing them for equality, but not their identity.
+
+The identity and the equality of **Value Objects** are based on the values of their attributes, conversely to an <GlosRef name="Entity" file="sd.entity" />, which can be treated _non-equal_ even if attributes are the same for other **Entities**. This is often realized through some kind of _identifier_: If two **Entities** both share the same value `name="Peter Parker"`, but do not share the same value for their unique identifier, then these **Entities** should not be considered equal.
+
+In the following example, a system requires a model of an `Employee`. Clearly, the identity of `Employee` cannot be based
+on the Employee's name, since the same name may occur multiple times in a system. The model needs an unique `id`, so
+`Employee`s can be distinguished in a system. Then, the equality is based on `identity`: An object is only equal to another object
+if it shares the same reference or if the `id` is the same, which can only exist one at a time in a system.
+
+```php
+
+class Employee
+{
+    private string $name;
+    private int $id;
+    public function __construct(int $id, string $name)
+    {
+        $this->id = $id;
+        $this->name = $name;
+    }
+}
+
+$personOne = new Employee(1, "Parker");
+$personTwo = new Employee(2, "Parker");
+```
+
+The system can now reconcile necessary processes with the Person-Data: If "Parker" is about to be transferred to another department, it is important to identify the right "Parker", so the wrong one does not end up in a position he wasn't qualified for in the first place.
+
+**Value Objects** are next to <GlosRef name="Entities" file="sd.entity" /> building blocks of <GlosRef name="Aggregates in DDD" file="ddd.aggregate" />. They are often designed as **immutable objects**.
+
+
+## Immutability
+I follow the notion that **Value Objects** should be [immutable](https://wiki.c2.com/?ValueObjectsShouldBeImmutable).
+
+import _5776_and_24 from './img/softwaredesign.valueobject/5776+24.svg.png';
+
+<Embed
+    figure={1}
+    title={"Does adding 24 to 5776 change 5776 to 5800?"}
+>
+    <img src={_5776_and_24} />
+</Embed>
+
+
+If $24 \in \N$ is added to $5776 \in \N$, the number $5776$ still exists as an element in $\N$: It does not get accidentally changed to $5800$, because if that would be the case, anything that previously referred to $5776$ would now [unintentionally refer to $5800$](#one-integer) (also, we might run out of numbers in the not so near future). Instead, adding one value to another one yields a new value, reflecting the sum of both values - in this case $5800 \in \N$.
+
+import ValueObject5800 from './img/softwaredesign.valueobject/valueobject-5800.svg.png';
+
+<Embed
+    figure={1}
+    title={"5776 is an element in N. Adding a new value to it does not change 5776, but instead returns a new value, 5800"}
+>
+    <img src={ValueObject5800} />
+</Embed>
+
+```javascript title="A (simplified) Value Object for Integer"
+class IntegerValue {
+
+    static from (value) {
+        return new IntegerValue(value);
+    }
+
+    constructor(value) {
+        this.v = value;
+    }
+
+    value () {
+        return this.v;
+    }
+
+    add (integerValue) {
+        return IntegerValue.from(this.value() + integerValue.value());
+    }
+
+}
+
+const i24   = IntegerValue.from(24);
+const i5776 = IntegerValue.from(5776);
+const i5800 = i5776.add(i24);
+
+console.log(i5800.value());
+```
+
+
+:::info The One-$n \in \N$ Universe <a name="one-integer"></a>
+_"Feynman, I know why all electrons have the same charge and the same mass" "Why?" "Because, they are all the same electron!"_ [["The Development of the Space-Time View of Quantum Electrodynamics"]](https://www.nobelprize.org/prizes/physics/1965/feynman/lecture/)
+
+Based on the postulate of the [**One-Electron Universe**](https://en.wikipedia.org/wiki/One-electron_universe), we can also postulate that all $x \in \N$ are manifestations of one and the same $n \in \N$ travelling forth and back in time. We'd just have a hard time to provide an accurate implementation of this model in software.
+:::
+
+
+## Sharing
+
+**Value Objects** can easily be used as shared instances for a number of referencing objects.
+If implemented as **immutable** and the value of an object-defining attribute needs to change, the targeted instance gets replaced with a new instance, containing the updated state of the attribute(s).
+This makes sure that a change to one **Value Object** does not affect all objects referencing this particular **Value Object**.
+
+:::tip Aliasing Bugs
+If _**mutable**_ **Value Objects** are [shared](#shareability), <GlosRef name="Aliasing Bugs" file="computerscience.aliasing#aliasing-bug" /> are likely to happen. Making them **immutable** prevents these kind of errors.
+:::
+
+
+## Example
+
+
+### Money
+In most of our computer programs we do not care about the identity of _Money_, but the value representing its _amount_.
+
+The following example implements a `Money`-class (see <BibRef name="POEAA" pp="488-495"/> for a more elaborate example of the design for `Money`). As an immutable **Value Object**, we can not change its `value` directly. Instead, a new instance of `Money` is returned each time we `add()` an amount to an instance, preventing <GlosRef name="Aliasing Bugs" file="cs.aliasing#aliasing-bug" />.
+
+In `Account.py`, each `Employee` has initially the same _salary_. This _salary_ is a shared instance of `Money`. If `Money`gets added to an `Employee`'s `Account`, a new instance of `Money` is created for the `Account`-instance.
+
+Changing the value of _salary_ does not affect the `Accounts` initialized with this _salary_.
+
+<Tabs>
+<TabItem value="Money.py" label="Money.py">
+
+```python
+    class Money:
+        def __init__(self, value = 0):
+            self.value = value
+
+        def getValue(self):
+            return self.value;
+
+        def add(self, money: Self) -> Self:
+            return Money(self.value + money.getValue())
+```
+
+</TabItem>
+<TabItem value="TestMoney.py" label="TestMoney.py">
+
+```python
+    import unittest
+
+    class TestMoney(unittest.TestCase):
+
+        def test_value(self):
+            noMoney = Money();
+            self.assertEqual(0, noMoney.getValue());
+            oneDollar = Money(1);
+            self.assertEqual(1, oneDollar.getValue());
+
+        def test_add(self):
+            oneDollar = Money(1);
+            twoDollar = oneDollar.add(oneDollar);
+            self.assertEqual(2, twoDollar.getValue())
+            self.assertEqual(1, oneDollar.getValue())
+            self.assertNotEqual(oneDollar, twoDollar)
+```
+
+</TabItem>
+<TabItem value="Account.py" label="Account.py">
+
+```python
+class Account:
+    def __init__(self, money: Money):
+        self.money = money
+
+    def add(self, money: Money) -> Money:
+        self.money = self.money.add(money)
+        return self.money;
+
+salary = Money(500);
+
+employeeAccount = Account(salary);
+newEmployeeAccount = Account(salary);
+
+employeeAccount.add(Money(100));
+newEmployeeAccount.add(Money(100));
+```
+
+</TabItem>
+</Tabs>
+
+
+
+<BackButton />
+
+
+-------------
+ see also
+
+- [wiki.c2.com, Value Object](https://wiki.c2.com/?ValueObject)
+- [Ward Cunningham, Whole Value](http://fit.c2.com/wiki.cgi?WholeValue)
+- [Riehle et al., Values in Object Systems](https://www.riehle.org/computer-science/research/1998/ubilab-tr-1998-10-1.pdf)
