@@ -407,12 +407,71 @@ The trap for the constructor will probe the target class for all the dependencie
     url={"https://cdn-images-1.medium.com/max/2362/1*bKdGtQiwoy8a3W-a4cmDXQ.png"}
 />
 
+## Dependency Injection in Angular
+
+In [**Angular**](https://angular.io), **Dependency Injection** is already built into the framework. Conversely to
+the approach above where we set up the injectable classes in a global configuration file, **Angular** lets you decorate a
+class as **Injectable** by using the [@Injectable()](https://angular.io/api/core/Injectable)-Decorator:
+
+```ts title="Image.service.ts [Angular]"
+@Injectable({
+  providedIn: 'root'
+})
+class ImageService {}
+```
+
+If we had such a class that provides an abstraction to an `ImageService`, registering the service as an injectable <GlosRef name="Singleton" file="sd.singleton" /> in an `extjsapp` namespaced **Ext JS**-application
+would translate to the following:
+
+```json "title=extjsapp.core.conf [Ext JS]"
+{
+     "ioc": {
+        "bindings": {
+            "extjsapp": {
+                "ImageService": {
+                    "xclass": "ImageService",
+                    "singleton": true
+                }
+            }
+        }
+    }
+}
+```
+
+Constructor-binding works out-of the box with **Angular**. To register the `ImageService` with a host, simply add the `ImageService` as an argument for the host's constructor:
+
+```ts title="Host.component.ts [Angular]"
+import {ImageService} from "./Image.service";
+
+class HostComponent {
+    constructor (private imageService: ImageService) {}
+}
+```
+
+whereas we'd have to denote the requirement in the `statics.required`-property to realize constructor injection:
+
+```javascript title="HostComponent.js [Ext JS]"
+Ext.define("HostComponent", {
+    statics: {
+        required: {
+            imageService: "ImageService"
+        }
+    },
+    // ....
+})
+
+```
+
+
+
 ## Additional Resources
 
 The repository for coon.js and the IoC-Container implementation is located at [Github](https://github.com/coon-js/extjs-lib-core). It’s already used in the newest version of [conjoon 1.0.4](https://www.conjoon.org/blog/2022/12/17/1.0.4-release) which is an interim release that paves the way for additional authentication plugins planned for [1.1.0](https://github.com/orgs/conjoon/projects/6).
 
-
+-------
 **Significant Revisions**
+
+* 30 March 2023: Add section "Dependency Injection in Angular"
 
 * 05 March 2023: Merged article into this site
 
