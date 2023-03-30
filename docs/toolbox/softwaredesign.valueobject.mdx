@@ -32,8 +32,23 @@ Treating values as objects is already fundamental to many programming languages,
 
 > _"The String class represents character strings. [...] Strings are constant; their values cannot be changed after they are created. [...] Because String objects are immutable they can be shared."_ [[java.lang.String]](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html)
 
+## Identity
 
-## Equality
+When designing abstractions of _values_, there is no need to consider the **identity** of a _value_, whereas **identity** in this context refers to the abstraction of an identifier available with the high-level code, such as a field `id`, containing an unique identifier. Such unique identifiers usually help with referring to objects that have a _lifecycle_, allowing to track the state of these objects, and furthermore reconstitute it through various instances of a software system.
+
+**Value Objects** do not have such an identity, since their identity is of no interest to the client, as their inherent _value_ is solely used for _measurement_ or _description_.
+
+A _money value_ may exist to _describe_ the financial worth of something. An _address value_ may exist to describe the residence of a person. If the person moves, the address of the person moves with this person. If the financial worth of a company changes, the value reflecting the worth gets updated. In both cases, these values do not have to be uniquely identifiable.
+
+:::tip Is Address a Value Object?
+I provide a use case where `Address` as **Value Object** is meaningful iin the given context. Also, Eric Evans shares the notion that it depends on _"who's asking"_ and reflects on several use cases in <BibRef name="DDD" pp="98" />.
+:::
+
+:::info Picking an apple
+If I want to pick a green apple out of a set of green and red apples, I don't care about the identity of the apple, for as long as the apple can be **described as _green_**. If I put the apple away, I can always return later and pick another one from the set, preferably one that's green; I don't care if it turns out to be the same one or not.
+:::
+
+### Equality
 If _equality_ isn't based on identity, then _equality_ is determined based on one or more attributes between objects.
 
 In Java, comparing for the equality of `Strings` is done using the [`equals`](#equals)-method:
@@ -90,21 +105,6 @@ The system can now reconcile necessary processes with the Person-Data: If "Parke
 
 **Value Objects** are next to <GlosRef name="Entities" file="sd.entity" /> building blocks of <GlosRef name="Aggregates in DDD" file="ddd.aggregate" />. They are often designed as **immutable objects**.
 
-### Identity
-
-When designing abstractions of _values_, there is no need to consider the **identity** of a _value_, whereas **identity** in this context refers to the abstraction of an identifier available with the high-level code, such as a field `id`, containing an unique identifier. Such unique identifiers usually help with referring to objects that have a _lifecycle_, allowing to track the state of these objects, and furthermore reconstitute it through various instances of a software system.
-
-**Value Objects** do not have such an identity, since their identity is of no interest to the client, as their inherent _value_ is solely used for _measurement_ or _description_.
-
-A _money value_ may exist to _describe_ the financial worth of something. An _address value_ may exist to describe the residence of a person. If the person moves, the address of the person moves with this person. If the financial worth of a company changes, the value reflecting the worth gets updated. In both cases, these values do not have to be uniquely identifiable.
-
-:::tip Is Address a Value Object?
-It depends on who's asking. Eric Evans discusses several use cases in <BibRef name="DDD" pp="98" />.
-:::
-
-:::info Picking an apple
-If I want to pick a green apple out of a set of green and red apples, I don't care about the identity of the apple, for as long as the apple can be **described as _green_**. If I put the apple away, I can always return later and pick another one from the set, preferably one that's green; I don't care if it turns out to be the same one or not.
-:::
 
 ## Immutability
 I follow the notion that **Value Objects** should be [immutable](https://wiki.c2.com/?ValueObjectsShouldBeImmutable).
