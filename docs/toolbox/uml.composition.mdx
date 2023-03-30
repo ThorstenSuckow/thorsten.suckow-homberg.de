@@ -1,0 +1,109 @@
+---
+title: "Composition"
+---
+
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
+
+# Composition (UML)
+
+A **Composition** is an <GlosRef name="Association" file="uml.association" /> and designates a special form of an <GlosRef name="Aggregation" file="uml.aggregation" />. It is used in cases where the abstraction of a model requires a strong emphasis on the whole/part-relationship, approximately corresponding to denoting a parent/child-relationship of the elements within the **Composition**.
+
+A **Composition** between entities can be illustrated in **UML** with a filled diamond-shaped adornment starting at the root of the **Composition** (the **composite**), then connecting to its part(s) with a solid line.
+
+import CompositeParts from './img/uml.composition/composite-parts.svg.png';
+
+<Embed
+    figure={2}
+    title={"A composite and its parts."}
+>
+    <img src={CompositeParts} />
+</Embed>
+
+
+In a **Composition**, the owning element (the **Composite**) is responsible for the lifetime of its parts.
+In a system, **Compositions** do not share instances of their parts: Each part always belongs to only one **composite** at a time.
+As such, the parts of a **composite** share the lifetime of the owning **composite**: If the **composite** is destroyed, its parts are destroyed,
+too. However, there is an important detail in this statement (see [Lifecycle](#lifecycle)).
+
+### Lifecycle
+The following applies to the relationship between a **composite** `A` and its parts :
+
+ - the owning object `A` is solely responsible for its parts
+ - the parts may not belong to another **composite**, for as long as they belong to `A`.
+
+This implies that the parts **exclusively belong** to `A`, for as long as `A` exists, and `A` is responsible for the deposition
+of its parts. **That must not necessarily mean that the parts are _destroyed_ when `A` is _destroyed_**. Rather, `A` sets up the constraints for what happens to its parts once it gets destroyed. It is entirely possible that existing parts might become the parts of another **composite**. However, the deposition must be controlled through `A`.
+_Rumbaugh et al._ state that once the owning element is destroyed, the owning element may either destroy its parts, too, or **permit** other elements to take ownership:
+
+> _"If the composite is destroyed, it must either destroy all its parts or else give responsibility for them to other objects."_ <BibRef name="UREF" pp="227"/>
+
+### The "one-composite-at-a-time"-rule
+A **Composition** serves as an abstraction to parent/child-relationships. It is defined through the sum of its parts, i.e. the **owning object** and its parts with the prerequisite that a **Composition** - as a stronger form of an **Aggregation** - maintains and controls references to its parts, and no other object must do this for as long as the owning composite exists. Other elements may reference the parts, but they may not control their lifecycle.
+
+In the Toolbox-entry <GlosRef name="Association" file="uml.Association" />, the `Company`'s and  `Employee`'s relationship with `Address` is  modelled as plain **Association**.
+
+We understand that `Company` and `Employee` **must not share** the same `Address`-objects, since changing an address
+ $A$ for `Company` $C$ would also change the data for `Employee` $E$. The formal definition for a **Composition** in **UML** rules the simultaneously existence of more than one owning object out.
+
+How should a model depict the relationship between those elements? An Address is unique, so wouldn't it make sense to share addresses to prevent redundancy? The **Association** example shows that it would be good practice to use <GlosRef name="Value Objects" file="sd.valueobject" />:
+For as long as shared addresses do not change their values, owning objects may reference the same instances which will help with keeping memory footprint low. However, designing the model as a **Composition** forbids such an implementation:
+
+import AddressComposition from './img/uml.composition/address-composition.svg.png';
+
+<Embed
+    figure={3}
+    title={"Each Company and Employee denote a Composite with an Address being one of its parts, but implementing the model so that instances are shared violates the definition of a Composition in UML."}
+>
+    <img src={AddressComposition} />
+</Embed>
+
+If **Address** is navigable through `Employee` and `Company`,
+and there is an instance that is shared by both `Employee` and `Company`, which of those elements is then considered to be the owning object of `Address`? Not using arrows as indicators for the navigability doesn't help in this case: If a **Composition** is used in a design, then a part of it _"may be part of only one composite object at a time."_ <BibRef name="UREF" pp="228" /> and further _"during the life of the composite, no other object may have responsibility for it."_ <BibRef name="UREF" pp="227" />
+
+Modeling the relationship as an **Aggregation** provides a looser contract on the relationship between the element, and permits the developers to choose implementation details like applying the **Value Object**-design to `Address`.
+
+import CompanyEmployeeAddressAggregation from './img/uml.composition/company-employee-address-aggregation.svg.png';
+
+<Embed
+    figure={4}
+    title={"The relationship modelled as Aggregation. Each Company and Employee may share instances of Addresses now."}
+>
+    <img src={CompanyEmployeeAddressAggregation} />
+</Embed>
+
+## Example
+
+The following model hold **Compositions** and **Aggregations**:
+
+import CompanyEmployeeDepartment from './img/uml.composition/company-employee-department.svg.png';
+
+<Embed
+    figure={4}
+    title={"A Department is a Composite wit one to n Employees. An Employee can only belong to one Department."}
+>
+    <img src={CompanyEmployeeDepartment} />
+</Embed>
+
+ - `Company` is the **composite** for `Employee`s
+ - `Company` is the **composite** for `Department`s
+ - `Department`is an **aggregate** for `Employee`s
+ - `Employee` is the **composite** for `Account`
+
+A `Company` has at least one `Employee`.
+One `Employee` has one `Account`. An `Account` knows the `Employee` it belongs to.
+
+A `Department` is associated with multiple `Employee`s.
+
+### Lifecycle impacts
+
+If an `Employee` leaves the `Company`, the **link** to the `Employee`'s `Account` is also destroyed: Without an `Employee`, an `Account` has no meaning in this context and model.
+
+If a `Department` closes, it has no impact to the Departments `Employee`s: They remain in the `Company`.
+
+If the `Company` closes, the `Department`s shut down.
+Closing the `Company` also removes all its `Employee`s in the given model.
+
+<BackButton />

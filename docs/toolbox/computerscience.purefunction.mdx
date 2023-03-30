@@ -14,9 +14,16 @@ A function is considered a **Pure Function** if
 
 In this context, a **Pure Function** is similiar to a mathematical function.
 
+:::tip Referential Transparency
+If a function is **pure**, it is <GlosRef name="referential transparent" file="computerscience.referentialtransparency" />
+:::
+
+## Example
+
+### Pure Function
 The following function $f$
 
- $f:\R \rightarrow \R, x \mapsto x*x$
+ $f\colon\R \rightarrow \R, x \mapsto x*x$
 
 translates to JavaScript
 
@@ -29,6 +36,7 @@ The function conforms to the definition of a **Pure Function**:
  1. for each input $x$ it **always** returns $x*x$.
  2. It is side effect free (i.e. it does not change the state of any other variable)
 
+### Impure Function
 Whereas the following functions are considered **impure**:
 
 ```javascript

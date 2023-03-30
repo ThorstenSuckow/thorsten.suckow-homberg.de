@@ -1,0 +1,47 @@
+---
+title: "Aggregation"
+---
+
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
+
+# Aggregation (UML)
+
+An **Aggregation** is a form of an <GlosRef name="Association" file="uml.association" /> with extended notation to emphasize on whole/part-relationships.
+
+
+import AggregationSvg from './img/uml.aggregation/aggregation.svg';
+
+<Embed
+    figure={1}
+    title={"The DiningTable denotes the whole, and 4 Chairs are its part."}
+>
+    <AggregationSvg />
+</Embed>
+
+
+An **Aggregation** between entities can be illustrated in **UML** with a blank rhombus starting at the root of the Aggregate, then connecting to the supplier(s) of the aggregate with a solid line. An Aggregation can also use [Multiplicity](/docs/toolbox/uml.association#multiplicity), and [Navigability](/docs/toolbox/uml.association#navigability). It should be noted that with **Aggregates**, the association parts of such a construct are always navigable. If the owner of the **Aggregate** is navigable, an open Arrow Head ending at the solid line connecting to the rhombus can be used.
+
+Whereas an <GlosRef name="Association" file="uml.association" /> already depicts the relationship between elements, an **Aggregation**
+enhances this with providing a visual clue on the whole/part-relationship, using the rhombus with the root of the "whole", the aggregate root.
+
+## Aggregation vs. Association
+Despite the visual clue in form of the _rhombus_ to delineate a whole/part-relationship, **Aggregations** provide no significant advantage over using <GlosRef name="Associations" file="uml.association" />. In <BibRef name="UML" pp="68" />, Martin Fowler writes:
+
+> _"Aggregation is strictly meaningless; as a result, I recommend that you ignore it in your own diagrams."_
+
+following _Rumbaugh et al._:
+
+> _"The distinction between aggregation and association is often a matter of taste rather than a difference in semantics.[...] Think of it as a modelling Placebo."_ <BibRef name="UREF" pp="148" />
+
+:::tip
+A <GlosRef name="Composition" file="uml.composition" /> can be used as a stronger form of **Aggregation** when the lifetime of parts
+should be tied to the lifetime of the owning object.
+:::
+
+## Aggregates in DDD
+**Aggregates** have particular meaning in <GlosRef name="DDD" file="ddd.domaindrivendesign" />, where they are units representing business objects in a <GlosRef name="Domain Model" file="ddd.domainmodel" />. Within their limits, technical invariants apply, and they are identifiable given an <GlosRef name="Aggregate Root" file="ddd.aggregateroot" />. Their state can be persisted and reconstituted.
+
+<BackButton />
