@@ -4,9 +4,93 @@ title: "λ Calculus"
 
 import {GlosRef} from "../../src/components/References";
 import {BackButton} from "../../src/components/BackButton.js";
+import {Embed} from "../../src/components/Embed";
 
 # Lambda Calculus (Computer Science)
 
 Lambda Calculus is a formal definition for expressing functional computational operations based on variable binding and substitution.
 
-It was introduced by [Alonzo Church](https://en.wikipedia.org/wiki/Alonzo_Church).
+It was introduced by [Alonzo Church](https://en.wikipedia.org/wiki/Alonzo_Church) resulting from his studies on the foundation of mathematics and computation.
+
+## Notation
+
+### Term
+The set of **$\lambda$-calculus** terms is defined by
+
+$t ::= \space x | \space t_1 t_2 | \space (t) \space | \space \lambda x.t$
+
+A _term_ can be a variable (e.g., $x$), the [**application**](#application) of one _term_ $t_1$ to another _term_ $t_2$, and an [**abstraction**](#abstraction) of a variable from a term $t$. Furthermore, the $\lambda$-calculus allows for using parentheses for structuring terms.
+
+### Application
+$(t_1 \space t_2)$ is an **application**. It is the **application** of the term $t_1$ to an argument $t_2$.
+
+### Abstraction
+$\lambda x.t$ is an abstraction and represents a **bound** function with the parameter $x$ and the function body $t$. $x$ is **bound** in $t$.
+
+$\lambda x.t$ is also called an _anonymous function_. It has no name and is simply defined through the formal parameter `x`, prefixed with the $\lambda$-symbol. A dot `.` separates the formal parameter from the function body $t$. If $t$ contains an $x$, this $x$ is bound to the formal parameter $x$.
+
+import LambdaAbstraction from "./img/computerscience.lambdacalculus/abstraction.svg.png";
+
+<Embed
+    figure={1}
+    title={"This λ-abstraction represents a function that returns the sum of x and 1, whereas x is the formal parameter and bound in the term t."}
+>
+    <img src={LambdaAbstraction} />
+</Embed>
+
+Sequences of formal parameters may be collapsed:
+
+$\lambda x. \lambda y . \lambda z . t \lrArr \lambda xyz.t$
+
+:::info
+The anonymous function from above can be implemented in Haskell:
+
+```haskell title="Haskell"
+\x -> x + 1
+```
+The leading backslash ought to remind one of the Lambda-symbol: _"In Haskell source code, the Greek letter lambda is replaced by a backslash character ('\') instead [...]"_ [[Haskell Wiki]](https://wiki.haskell.org/Lambda_abstraction)
+
+In JavaScript, the anonymous function can be implemented like this:
+
+```javascript title="JavaScript"
+// traditional
+(function(x) {return x + 1;})
+
+// arrow function
+x => x + 1
+```
+:::
+
+### Free Variables
+
+The set of **Free Variables** in a **Lambda Calculus**-term are defined by:
+
+$FV(x) = \{x\}$: x is a free variable.
+
+$FV(t_1 \space t_2) = FV(t_1) \cup FV(t_2)$: The free variables in the **application** are the union of all free variables of all sub-terms.
+
+$FV(\lambda x.t) = FV(t) \setminus \{x\}$: The free variables in the abstraction are the free variables of the body of the abstraction, minus any variable bound by the parameters of the abstraction.
+
+:::tip
+A **free variable** is a variable that is not bound in a term $t$. The following would implement an anonymous function where the variable $x$ is bound in the function body, and $y$ is a free variable:
+
+```javascript title="Javascript"
+const y = 1;
+
+(x => x + y)(5);
+```
+
+```haskell title="Haskell"
+let y = 1
+
+(\x -> x + y)(5)
+```
+
+:::
+
+
+
+-------
+References:
+
+  - [Tobias Nipkow, TUM](https://www21.in.tum.de/~nipkow/): [Lambda Calculus](https://www21.in.tum.de/teaching/lambda/WS22/assets/lecture-notes.pdf)
