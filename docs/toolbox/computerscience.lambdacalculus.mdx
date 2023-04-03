@@ -61,7 +61,29 @@ x => x + 1
 ```
 :::
 
-### Free Variables
+## Bound Variables
+
+In a **Lambda term** $\lambda x.t$ we call the formal parameter $\lambda x$ the _binder_, and say that the _subterm_ $t$ is in the scope of the _binder_: Occurrences of $x$ in $t$ are _bound_.
+
+In an informal sense, $x$ is a local variable in the function-body $t$.
+
+The set of **Bound Variables** in a **Lambda Calculus**-term are defined by:
+
+$BV(x) = \empty$
+
+$BV(t_1 \space t_2) = BV(t_1) \cup BV(t_2)$
+
+$BV(\lambda x . t) = {x} \cup BV(t)$
+
+
+:::info bound variables in mathematics
+
+In mathematics, _bound variables_ are also known:
+
+$\displaystyle\sum_{x=1}^5 x$
+:::
+
+## Free Variables
 
 The set of **Free Variables** in a **Lambda Calculus**-term are defined by:
 
@@ -89,6 +111,35 @@ let y = 1
 :::
 
 
+## β-Reduction
+
+**Lambda calculus**-terms can be brought into **$\beta$-normal-form** by applying  **$\beta$-reduction** - that is, informal, evaluating a term by applying arguments to it.
+
+$(\lambda x.s) t \rarr s[x:=t]$
+
+Here, $\lambda x.s$ is a term that gets applied to another term $t$, and is called the $\beta$-redex. It gets _reduced_ to  $s[x:=t]$, the **reduct**: All occurrences of $x$ in $s$ are replaced with $t$.
+
+import BetaReduction from "./img/computerscience.lambdacalculus/beta-reduction.svg.png";
+
+<Embed
+    figure={2}
+>
+    <img src={BetaReduction} />
+</Embed>
+
+### Examples
+
+ - The **$\beta$-normal-form** of $(\lambda x.x)(\lambda y.y)$ is
+
+$(\lambda x.x)(\lambda y.y) \rarr_\beta \lambda y.y$
+
+<br /><br />
+
+ - The **$\beta$-normal-form** of $(\lambda x.z)((\lambda y.y)(\lambda \omega.\omega))$  is
+
+$(\lambda x.z)(\underline{(\lambda y.y)(\lambda \omega.\omega)}) \rarr_\beta (\lambda x.z)(\underline{\lambda \omega.\omega})$
+
+$(\lambda x.z)(\underline{\lambda \omega.\omega}) \rarr_\beta z$
 
 -------
 References:
