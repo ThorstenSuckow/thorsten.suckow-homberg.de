@@ -1,0 +1,119 @@
+---
+title: "Singleton"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Singleton (Software Design)
+
+A **Singleton** is an object that uniquely exists for a class: Creating new instances of this class always restrict to this one object.
+
+The **Singleton**-pattern belongs to the **Creational Patterns**<BibRef name="GOF" pp="88-ff." /> and is described in <BibRef name="GOF" pp="127-134" />.
+
+## Implementation
+Controlling the creation of object instances and thus enforcing **Singleton**-behavior can be realised through _private_ constructors: clients may not create objects directly using the `new`-keyword [[1]](#new-keyeword), so _public_ object creation is forbidden. Instead, a <GlosRef name="Factory Method" file="sd.factorymethod" /> can be implemented at class-level. The factory method then can hide implementation details and provide means for returning one and the same instance of the class when the client requests such an object instance.
+
+<Tabs>
+<TabItem value="singleton_php" label="Singleton (PHP)">
+
+```php
+
+declare(strict_types=1);
+
+final class Configuration
+{
+    private static ?Configuration $inst = null;
+
+    public static function ins(): self
+    {
+        if (!self::$inst) {
+            self::$inst = new self();
+        }
+
+        return self::$inst;
+    }
+
+    private function __construct() {}
+}
+```
+
+</TabItem>
+<TabItem value="singleton_php_test" label="TestCase (PHPUnit)">
+
+```php
+
+declare(strict_types=1);
+
+use PHPUnit\Framework\TestCase;
+
+class ConfigurationTest extends TestCase
+{
+    public function testInst(): void
+    {
+        $lft = Configuration::inst();
+        $this->assertInstanceOf(Configuration::class, $lft);
+        $this->assertSame($lft, Configuration::inst());
+    }
+}
+
+```
+
+</TabItem>
+</Tabs>
+
+## Disadvantages
+In a larger system, **Singletons** are shared by an equally large ammount of clients, which can be problematic if the
+**Singleton** is not stateless and clients change the state of the **Singleton**, which may lead to <GlosRef name="Aliasing Bugs" file="cs.aliasing#aliasing-bug" />.
+
+Also, writing tests for classes that use **Singletons** can be problematic since not only the system is bound to one instance of a specific type: Such tests are then also depending on such a **Singleton** that hides construction details from clients and may also hide dependencies that are hard to conform to in a test system: With a private constructor and a static factory method, injecting dependencies becomes more intricate. Also, mocking **Singletons** is more complicated when they are hardwired with the clients.
+
+Imagine the following implementation of an `AttendanceClock` - whenever a client wants to register a date with the `begin()` method,
+the method request the `Configuration`-**Singleton** and uses the `dateFormat()` return-value as the key for the object-level's `registered`-field.
+
+Testing this method would require the test class to make sure that the singleton exists. Also, mocking the **Configuration**-singleton would require to mock the entire class instead of just an instance of it.
+
+```php title="Singleton as Anti Pattern"
+class AttendanceClock
+{
+
+    public function begin(Date $d): bool
+    {
+        $format = Configuration::inst()->dateFormat();
+        $this->registered[$d->format($format)] = true;
+
+        return true;
+    }
+}
+```
+
+Applying the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" /> and using <GlosRef name="Dependency Injection" file="sd.dependencyinjection" /> can help with working around this.
+
+```php title="Singleton replaced with DI"
+
+class AttendanceClock
+{
+    private Configuration $config;
+
+    public function __construct(Configuration $config)
+    {
+        $this->config = $config;
+    }
+
+    public function begin(Date $d): bool
+    {
+        $format = $this->config->dateFormat();
+        $this->registered[$d->format($format)] = true;
+
+        return true;
+    }
+}
+```
+
+
+-----
+
+ - **[1]**<a name="new-keyeword"></a> in programming languages that support object creation in such a way, that is.
