@@ -1,0 +1,95 @@
+---
+title: "Factory Method"
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+
+# Factory Method (Software Design)
+
+A **Factory Method** is a method for creating a new object for a given type.
+
+By using a method call for object instantiation, the method can further implement checks for constraints, invariants and dependencies that need to be configured with the object of the target class.
+
+This has the advantage that a constructor can solely focus on initializing the fields of the object with the information that were applied from outside, and can be kept free from additional logic. The client can more easily recover from any errors the factory may produce.
+
+:::tip The GOF-factory method
+The **Factory Method**-pattern belongs to the **Creational Patterns**<BibRef name="GOF" pp="88-ff." /> and is described in <BibRef name="GOF" pp="107-116" />.
+
+The pattern described by GoF narrows the applicability to a very specific problem down:
+
+> _"Define an interface for creating an object, but let subclasses decide which class to
+instantiate. Factory Method lets a class defer instantiation to subclasses."_ <BibRef name="GOF" pp="107" />
+
+I treat the meaning of **Factory Method** with the main intent described in this Toolbox-entry not as an exclusive-or regarding the **GoF**-definition, but as a union.
+
+:::
+
+## Example
+
+In the following example, a `Route`-object can only be created if `$legs` has at least one entry. The example uses the `__constructor()`
+which requires the class to implement the specification in this method.
+
+```php title="Logic in constructor"
+class Route
+{
+    private ?Legs $legs = null;
+
+    public function __construct(Legs $legs)
+    {
+        if ($legs->entries() === 0) {
+            throw new RouteException("Route needs at least one leg");
+        }
+
+        $this->legs = legs;
+    }
+}
+```
+
+The constructor should not be aware of such details, more so, shouldn't be aware that such a specification exists, as this would require the constructor to be able to make a decision whether it may exists as an instance or not.
+
+By placing the specification on class-level as a meta-information with a factory-method, the responsibility for meeting the constraints and whether instances are allowed are then delegated to the factory method, serving as a mediator between the client and the target instance:
+
+
+```php title="Logic in factory method"
+class Route
+{
+    private ?Legs $legs = null;
+
+    public static function create(Legs $legs): Route
+    {
+        if ($legs->entries() === 0) {
+            throw new RouteException("Route needs at least one leg");
+        }
+    }
+
+    private function __construct(Legs $legs)
+    {
+        $this->legs = legs;
+    }
+}
+```
+
+:::note
+In the example above, the whole process of `Route`-creation is placed into the factory-method. This might be problematic if **IoC** is applied and injecting dependencies relies on the existence of a _public_ available _constructor_. [Spring](https://spring.io/) allows for [registering factory methods,](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-class-static-factory-method) so they can be considered when <GlosRef name="Dependency Injection" file="sd.dependencyinjection" /> is used:
+
+```xml
+<bean id="routeBean" class="tracking.RouteBean" factory-method="createInstance" />
+```
+```java
+public class RouteBean {
+
+    private Route()
+    {
+    }
+
+    public static RouteBean createInstance ()
+    {
+        RouteBean rb = new RouteBean ();
+        return rb;
+    }
+}
+```
+
+:::
