@@ -1,0 +1,31 @@
+---
+title: "Anemic Domain Model"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+
+# Anemic Domain Model (Software Design)
+
+An **Anemic Domain Model** is a domain model that contains little or no business logic, and whose <GlosRef name="Aggregates" file="ddd.aggregate" /> mainly consists of getters and setters. Specification and invariants regarding the domain logic are controlled through layers and upstream components.
+
+**Anemic Domain Model** is considered to be an _Anti Pattern_ to <GlosRef name="Domain Model" file="ddd.domainmodel" />.
+
+In <GlosRef name="DDD" file="ddd.domaindrivendesign" />, the **Domain Layer** has **Domain models** that contain <GlosRef name="Aggregates" file="ddd.aggregate" />, which represent conceptual whole objects of the context of a domain. They should also contain behavior and logic intrinsic to the concept they abstract, within their applicable boundaries. Without this, the meaning and the role of such domain models is diluted, since **Domain Logic** is then often to be found in the various layers that _access_ or _control_ such **Anemic Domain Models**.
+
+> _"[...]you realize that there is hardly any behavior on these objects, making them little more than bags of getters and setters. [...] Instead there are a set of service objects which capture all the domain logic, carrying out all the computation and updating the model objects with the results. These services live on top of the domain model and use the domain model for data."_ [Martin Fowler, Anemic Domain Model](https://martinfowler.com/bliki/AnemicDomainModel.html)
+
+:::tip What causes Anemic Domain Models
+**Anemic Domain Models** happen when there is high technical and little domain knowledge. Designing a **Domain Model** closely with **Doman Experts** can help with identifying **Domain Logic** that should be made available within the **Domain Model**, and that should be part of **Aggregates**.
+
+In <BibRef name="IDDD" pp="14-19" />, Vaughn Vernon gives a brief overview why **Anemic Domain Models** happen, and why they are seldomly recognized as a problem, by arguing that developers are mainly used to implement data structures upfront, then behavior. He also mentions historic reasons why **Anemic Domain Models** are not identified as problematic: Due to the popularity of shared systems in the late 1990's, serializing data for communication  became an important aspect of software design. Often, systems where designed with a strong focus on the portability of data, rather than its behavior given the domain context it should exist in.
+:::
+
+---
+references
+
+ - [Martin Fowler: Anemic Domain Model](https://martinfowler.com/bliki/AnemicDomainModel.html)
+
+
+<BackButton />
