@@ -67,6 +67,9 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
 
+**Vernon, Vaughn**
+
+- [IDDD] **Implementing Domain-Driven Design**, Pearson Education, 2013 <a name="iddd"></a>
 
 
 <BackButton />
