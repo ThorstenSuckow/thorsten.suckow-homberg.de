@@ -11,8 +11,7 @@ import {BibRef} from "../../src/components/References";
 The **Application Layer** is an abstract functional division in a <GlosRef name="Layered Architecture" file="sa.layeredarchitecture" /> that serves as the interface between the client and layers beneath the **Application Layer**, primarily the software system's **Domain** and **Infrastructure Layer**.
 
 An **Application Layer** mainly digests and validates the client's input, then carries the input out as commands to the
-**sub-systems** and **Services** existing in the lower layers of the system, such as the **Domain Layer** often supported by
-an **Infrastructure Layer**.
+**sub-systems** and **Services** existing in the lower layers of the system, such as the **<GlosRef name="Domain Layer" file="ddd.domainlayer" />** often supported by an **Infrastructure Layer**.
 
 If the results of a particular operation are returned to the client, the **Application Layer** can apply additional
 transformation to it, into a format the client understands.
