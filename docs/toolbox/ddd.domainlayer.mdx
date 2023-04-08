@@ -1,0 +1,31 @@
+---
+title: "Domain Layer"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+# Domain Layer (DDD)
+
+The **Domain Layer** is a _layer_ in  a <GlosRef name="Layered Architecture" file="sa.layeredarchitecture" /> and holds all implementation related to the business of the software, such as rules and concepts, manifesting in <GlosRef name="Domain Models" file="ddd.domainmodel" />, expressed through a <GlosRef name="Ubiquitous Language" file="ddd.ubiquitouslanguage" /> and bounded by <GlosRef name="Contexts" file="ddd.boundedcontext" />.
+
+import DomainLayer from "./img/ddd.domainlayer/layer.svg.png";
+
+<Embed
+    figure={1}
+    title={"A domain with multiple Bounded Contexts"}
+>
+    <img src={DomainLayer} />
+</Embed>
+
+In **Figure 1**, a **Domain Layer** is depicted with multiple **Bounded Contexts**. Each **Bounded Context** is semantically defined through its **Ubiquitous Language**. The vocabulary of an **Ubiquitous Language** does not exclusively belong to one **Counded Context**, words an meaning might be (re-)used across boundaries. Each **Bounded Context** has a **Domain Model** that in turn consist of **Domain Objects**, such as <GlosRef name="Aggregates" file="ddd.aggregate" /> (with <GlosRef name="Value Objects" file="sd.valueobject" /> and <GlosRef name="Entities" file="sd.Entity" />) and <GlosRef name="Repositories" file="sd.repository" />, amongst others.
+
+
+> _"This layer is the heart of business software."_ <BibRef name="DDD" pp="70" />
+
+
+
+
+<BackButton />
