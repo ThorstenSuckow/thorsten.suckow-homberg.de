@@ -1,0 +1,61 @@
+---
+title: "Aggregate"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+# Aggregate (DDD)
+
+An **Aggregate** is an abstraction for an object that is important and of value to the business of its domain. It is often referred to as a "cluster" of objects, because it is modelled as a **whole/parts**-relationship holding <GlosRef name="Associations" file="uml.association" /> between <GlosRef name="Entities" file="sd.entity" /> and <GlosRef name="Value Objects" file="sd.valueobject" />.
+
+**Aggregates** are not to be understood as data-structures: They have particularly responsibility for carrying out and applying logic and behavior characteristic to the <GlosRef name="Bounded Context" file="ddd.boundedcontext" /> they belong to.
+
+An **Aggregate** is uniquely identifiable given high-level code semantics, e.g. through (one of) its attributes.
+
+import EmailAggregate from "./img/ddd.aggregate/email-aggregate.svg.png";
+
+<Embed
+    figure={1}
+    title={"An Email modeled as an Aggregate"}
+>
+    <img src={EmailAggregate} />
+</Embed>
+
+**Figure 1** depicts the **Aggregate**-model of an **Email**. This model suggests a simpification of an **Email**-message in a way that clients do not have to be aware of the intricate structure [[RFC2822]](https://www.rfc-editor.org/rfc/rfc2822) of an Email, but rather can add and remove attachments, edit its message body and update header fields given the interface provided by the **Aggregate Root**, `Email`.
+
+Another **Aggregate** in form of the `Mailbox` (i.e. the folder that owns the `Email`) can provide access to its `Emails`.
+
+## Aggregate Root
+The **root** of the **Aggregate** _guards the objects_ of the **Aggregate** and is the only object that grants access to its elements. It is also responsible for making sure that any **Aggregate**-defining **invariants** are not violated when business logic is applied, or during creation or reconstitution from a persistent state.
+
+Identities of such embedded objects are often only of importance _within and to the Aggregate_. Thus, an **Aggegrate** also designates a **consistency boundary** so that parts of the **Aggregate** may not be accessed from outside to _prevent violating_ the consistency. Control must only be given by the **Aggregate Root**.
+In such cases, it is preferable to satisfy interested clients with transient references, often in the form of <GlosRef name="Value Objects" file="sd.valueobject" /> so any state of the **Aggregate** does not get accidentally changed, e.g. through <GlosRef name="Aliasing Bugs" file="cs.aliasing#aliasing-bugs" />.
+
+## Invariants
+Invariants for the **Aggregate** are rules that apply to the **whole** and are validated against its **parts**. The state of the **Aggregate** is only valid if no **invariant** is violated. **Invariants** can be simple checks which make sure that the format of field-values is valid, or more complex ones where specifications encapsulate business rules.
+
+## Transactional Consistency
+When the state of an **Aggregate** is persisted, the whole **Aggregate** must be committed, including any changes made to the state of its **parts**. The implementation has to make sure that affected **Aggregates** are updated using appropriate methodologies, such as **<GlosRef name="Eventual Consistency" file="sd.eventualconsistency" />**. The design of the **Aggregate should make sure that the boundaries of such conceptual related abstractions are meaningful to the model as well as the system, where non-functional requirements such as scalability and performance also apply.
+
+:::tip Aggregates are not Object Graphs
+It is suggested to design **Aggregates** small: They should _not_ become **object graphs** of (large) relational models, but it should also be taken care of meaningful **transactional boundaries**: Committing changes of an **Aggregate** should not require the update a large number of fine-granular conceptual related **Aggregates**. The existence of such aggregates should be questioned and reconciled with the model that triggered the state-change in the first place. On the other hand, such a transaction should not lock the data-model down so that concurrent operations on related **Aggregates** are not put to an hold.
+
+Questions that can help with designing **Aggregates** are, amongst others:
+ - How many transactions are required to successfully commit changes to the **Aggregate**?
+ - What are the transactional boundaries?
+ - Are there any invariants redundant to invariants of other conceptual related **Aggregates**?
+
+A detailed discussion on designing **Aggregates** is given with <BibRef name="IDDD" pp="347-388" />.
+
+_"(Therefore,) Aggregates are (chiefly) about consistency boundaries and not
+driven by a desire to design object graphs."_ <BibRef name="IDDD" pp="355" />
+:::
+
+
+
+-----
+references
+ - ["Design validations in the domain model layer", Microsoft.com](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-model-layer-validations)
