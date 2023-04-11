@@ -1,0 +1,50 @@
+---
+title: "Eventual Consistency"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+# Eventual Consistency (Software Design)
+
+An **Eventual Consistency** is a consistency model that guarantees the consistent state of data.
+
+If all involved systems agree on the equal state of the data, that is, no updates are occurring, the data is considered to be **eventual consistent**.
+
+
+## Example
+In the following example, **Client A** accesses **System A** for a write operation at $t_0$ (informal: an unspecific point $t_n$ in time, where $n,m \in N_0$ and $n < m \Lrarr t_n \space before \space t_m$).
+
+import NodeUpdate from "./img/sd.eventualconsistency/nodeupdate.svg.png";
+
+<Embed
+    figure={1}
+    title={"A client updates a node, but the data is not immediately consistent across all systems, but eventual after a given time"}
+>
+    <img src={NodeUpdate} />
+</Embed>
+
+- At $t_1$, **Client B** queries the data, which returns the data from $d \in D$ from the set that was updated before $t_0$.
+- At $t_2$, the data gets updated in $D$.
+- At $t >= 3$, the system has reached eventual consistency.
+
+**Client B** will now receive the data that is considered to be **eventual consistent**.
+
+Likewise, **Client A** will not receive the updated data at $t_n:1 < n < 3$ (that is, requesting the update of the data, then immediately querying the update will respond with the old data from $t_0$.)
+
+
+:::info
+**Eventual Consistency** is not reserved to systems where the boundaries are denoted through hardware-infrastructure. In a monolithic system, problems arise through caching: The monolithic system is considered to be **Eventual Consistent** when both the original data and it's cache are reconciled to the same state, i.e. if both contain the same data.
+:::
+
+
+<BackButton />
+
+
+-----
+see also
+
+ - [Radha Jagadeesan and James Riely: "Eventual Consistency for CRDTs"; DePaul University, Chicago, USA](https://link.springer.com/chapter/10.1007/978-3-319-89884-1_34)
+ - [Martin Fowler: "Microservice Trade-Offs"](https://martinfowler.com/articles/microservice-trade-offs.html)
