@@ -25,7 +25,8 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Evans, Eric**
 
-- [DDD] **Domain Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
+- [DDD] **Domain-Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
+- [DDDR] **Domain-Driven Design Reference: Definitions and Patterns Summaries**, [PDF](https://www.domainlanguage.com/product/domain-driven-design-reference) <a name="ddd"></a>
 
 **Dijkstra, Edsger W.**
 
