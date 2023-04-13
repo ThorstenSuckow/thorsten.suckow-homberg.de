@@ -1,0 +1,44 @@
+---
+title: "Big Ball of Mud"
+---
+
+# Big Ball of Mud (Software Design)
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+import {ImgEmbed, UmlEmbed} from "../../src/components/Embed";
+
+
+A "Big Ball of Mud" is a historically grown software system (or a part of it) often characterized through lack of modularization, missing <GlosRef name="contextual boundaries" file="ddd.boundedcontext" />, redundant code and information leaking through various levels of abstractions.
+
+It is also referred to as **spaghetti code**, a common phrase for an unstructured, opaque, tangled mess of seemingly unrelated functions and classes.
+
+The assumption would be that the quality of the source code in a **Big Ball of Mud** is weighed down by this negative connotation. Obviously, a **Big Ball of Mud** seems to represent an Anti-Pattern at first sight, but [Foote and Yoder](#bbom) propose the **Big Ball of Mud** as a valid architectural pattern: In some cases, a software might benefit from it when reasonably applied, e.g. cost must be kept low in the initial phase of the project, and a quick time-to-market is important.
+
+In the conclusion of their paper, _Foote_ and _Yoder_ state that
+
+> _"Periods of moderate disorder are a part of the ebb and flow of software evolution. As a master chef tolerates a messy kitchen, developers must not be afraid to get a little mud on their shoes as they explore new territory for the first time. Architectural insight is not the product of master plans, but of hard won experience."_
+
+Also, existing **Big Ball of Mud**s can be demarcated with clear boundaries and a coarse-grained API allowing for exposing selected functionality of the malicious system, preventing further entanglement and leaking of _mud_ into the integrating system:
+
+> _"Draw a boundary around the entire mess and designate it a big ball of mud. Do not apply sophisticated modeling within this context. Be alert to the tendency for such systems to sprawl into other contexts."_ <BibRef name="DDDR" pp="38" />
+
+
+:::info
+The term was most likely coined by [J. Moses, as quoted by Steele and Sussman](https://web.archive.org/web/20010602122528/http://www.cosc.canterbury.ac.nz/~wolfgang/cosc302/Chap2.3.html):
+
+> _"LISP, on the other had, is like a ball of mud. You can add any amount of mud to it and it still looks like a ball of mud."
+
+then gradually found its way into the vocabulary of Software Architecture, as _Foote_ and _Yoder_ write in their Paper **Big Ball of Mud**:
+
+>_"Brian Marick first suggested the name "BIG BALL OF MUD" as a name for these sort of architectures, and the observation that this was, perhaps, the dominant architecture currently deployed, during a meeting of the University of Illinois Software Architecture Group several years ago. We have been using the term ever since."_
+
+:::
+
+-----
+References
+
+ - [Foote, Yoder: "Big Ball of Mud"; University of Illinois, 1999](http://www.laputan.org/mud/)<a name="bbom"></a>
+
+
