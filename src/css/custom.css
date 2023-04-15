@@ -237,6 +237,11 @@ main .projectHeader {
 
 
 @media (max-width: 996px) {
+
+  article p {
+    text-align:justify;
+  }
+
   .col.socialLink {
     flex-basis: content;
   }
