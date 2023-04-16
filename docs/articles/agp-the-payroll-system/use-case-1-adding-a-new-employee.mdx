@@ -3,7 +3,7 @@ title: "Use Case 1 - Adding a new employee"
 slug: Use-Case-1-Adding-a-new-employee
 ---
 
-import {GlosRef} from "../../../src/components/References";
+import {GlosRef, BibRef} from "../../../src/components/References";
 
 # Use Case 1 - Adding a new employee.
 
@@ -11,11 +11,11 @@ import {GlosRef} from "../../../src/components/References";
 _A new employee is added by the receipt of an `AddEmp` transaction. This transaction contains the employee's name, addess, and assigned employee number. The transaction has the following three forms:_
 
 ```bash
-$ AddEmp <EmpId> "<name>" "<address>" "<address>" H <hourly-rate>
+$ AddEmp <EmpId> "<name>" "<address>" H <hourly-rate>
 
-$ AddEmp <EmpId> "<name>" "<address>" "<address>" S <monthly-salary>
+$ AddEmp <EmpId> "<name>" "<address>" S <monthly-salary>
 
-$ AddEmp <EmpId> "<name>" "<address>" "<address>" C <hourly-rate> <commission-rate>
+$ AddEmp <EmpId> "<name>" "<address>" C <hourly-rate> <commission-rate>
 ```
 
 The employee's record is created with its field assigned appropriately.
@@ -27,7 +27,7 @@ If the transaction structure is inappropriate, it is printed out in an error mes
 
 ## Requirement Analysis 
 The Use Case describes various ways how _Employee_-data can be added to the system.
-`AddEmp` could be implemented as a polyadic function that receives 6 to 7 arguments, 
+`AddEmp` could be implemented as a polyadic function that receives 5-6 arguments,
 describing an _Employee_'s personal information and the salary the _Employee_receives, and
 the type of _salary_ (`H`, `S` or `C`). If the salary type is `C`, an _Employee_ requires an additional `commission-rate`. 
 Obviously, errors happening during transactions must be treated with care, appropriate error messages should be displayed.
@@ -38,7 +38,7 @@ rates; also, check if `empId`s already exist and prevent multiple occurences of 
  - validate user input:
     - `empId`: existing? valid format?
     - `salaryType`: is it one of `H`, `C`, `S`?
-    - `salary` should probably be greater than `0`
+    - `salary` should be greater than `0`
  - display error messages if a transaction failed
 
 ### Actors 
@@ -58,10 +58,25 @@ any other "role" would be eligible, but since the system exists in a <GlosRef na
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
 
 ## Design
-The initial design should consist of 3 parts: An **Application Layer**, a **Repository** for managing transaction-calls
-and an `Employee`-<GlosRef name="Entity" file="sd.entity" />.
- - `Payroll` exists in the **Application Layer** and is the main entry point for interacting with the system, in the form
-    of a traditional <GlosRef name="Facade" file="sd.facade" />.
- - The <GlosRef name="Repository" file="sd.repository" /> would be the `EmployeeRepository` and encapsulates the
-    required infrastructure for persisting `Employee`-**Entity**s.
- - The **Entity** would be the `Employee` itself.
+ The main program receives the input and forwards it to the <GlosRef name="Application Layer" file="sd.applicationlayer" />. A <GlosRef name="Repository" file="sd.repository" /> manages transaction-calls for an `Employee`-<GlosRef name="Entity" file="sd.entity" />. This will be orchestrated by `Payroll`,
+a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain Layer**.
+
+### Domain Objects
+ - The `Employee`-**Entity** providing information about `salary`, `salary-type` etc.
+ - The `EmployeeRepository` accesses the required infrastructure for persisting `Employee`-Entities. The Repository should give the client the illusion that objects queried from it are in memory <BibRef name="DDD" pp="157" />. Thus, the reconstitution as well as the creation of `Employee`-instances will be delegated to a <GlosRef name="Factory Method" file="sd.factroymethod" /> as part of the `Employee`-class. (At this point, I do not see the need for a more complex factory that assembles intricate <GlosRef name="aggregates" file="ddd.aggregate" />).  Following the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" />, the `EmployeeRepository` will provide the **Interface** to which the object in the Infrastructure Layer has to conform to.
+
+### Layers
+
+#### Client Layer
+ - We will receive input from here. This layer will be substituted by the test classes
+
+#### Application Layer
+ - Will consume the input and forward it to the **Domain Layer**. This layer will be substituted by the test classes
+
+#### Domain Layer
+ - `Payroll` exists in the **Domain Layer** in the form of a <GlosRef name="Facade" file="sd.facade" />
+ - The `EmployeeRepository` handles **Domain Objects** so it's associated with **_this_** domain and will a such become part of the **Domain Layer**.
+
+#### Infrastructure Layer
+ - The `EmployeeRepository` accesses lower-level objects facilitating `write`-operations for a data storage of an arbitrary type. The lower-level objects
+will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations
