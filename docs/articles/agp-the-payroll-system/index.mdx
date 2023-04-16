@@ -36,11 +36,14 @@ I stick to the following rules while implementing my solution with the knowledge
 2. [Pragmatism over Dogmatism.](https://twitter.com/home)
 3. Implement the Use case given only the information the Use Case provide. A Use Case represents a Story that has to be implemented in _this_ sprint. There is no knowledge of the requirements given _future_ Use Cases.
 3. Establish a healthy code base with a test-first approach. 
-4. Prevent Over-Engineering by strictly following Rules 2, 3 and 4.
+4. Avoid <GlosRef name="Needless Complexity" file="sd.symptomsofpoordesign" /> by strictly following Rules 2, 3 and 4.
 
 ### A note on testing 
-1. I did not write a scripting system for the acceptance tests: The acceptance tests described with the Use Cases are written with PHPUnit
-2. I consider the inputs defined with the acceptance tests as an important requirement of the customer, so I adhere to the inputs by mapping them to function arguments. The instantiation of concrete objects is leveraged to the lower level API. If you think this is rather unusual, the acceptance tests describe the interaction of the customer with the _application_. The customer knows the input parameters, but has no idea about any abstract object specification. 
+There is not a scripting system for the acceptance tests: The acceptance tests described with the Use Cases are written
+with [PHPUnit](https://phpunit.de/).
+2. I consider the inputs defined with the acceptance tests as an important requirement for the user interface. The user
+interface will be leveraged to the testing environment.
+
 
 This is an ongoing article series.
 
