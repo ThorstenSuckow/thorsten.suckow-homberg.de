@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[913],{6481:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/comment","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

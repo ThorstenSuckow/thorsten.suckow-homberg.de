@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[6902],{6358:e=>{e.exports=JSON.parse('{"label":"Software Architecture","permalink":"/blog/tags/software-architecture","allTagsPath":"/blog/tags","count":1}')}}]);
