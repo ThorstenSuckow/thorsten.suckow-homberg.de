@@ -1,5 +1,5 @@
 ---
-title: "🇩🇪 Verfällt ein Big Ball of Mud?"
+title: "[DE] Verfällt ein Big Ball of Mud?"
 authors: [thorstensuckow]
 tags: [Software Architecture, Comment, Personal]
 ---
