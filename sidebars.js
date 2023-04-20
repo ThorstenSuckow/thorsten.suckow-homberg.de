@@ -36,7 +36,8 @@ const sidebars = {
                     "collapsed": false
                 },
                 "articles/javascript-promises-return-values-and-error-handlers/index",
-                "articles/a-fluent-interface-for-javascript-promises/index"
+                "articles/a-fluent-interface-for-javascript-promises/index",
+                "articles/php-default-time-zones-and-dst/index"
             ],
     }],
     toolbox: [

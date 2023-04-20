@@ -1,0 +1,391 @@
+---
+title: "PHP, default time zones and DST"
+description: Preparing your PHP Application to support different time zones
+---
+
+:::info
+This article originally appeared on the [17th of November, 2011](https://web.archive.org/web/20120731100935/http://thorsten.suckow-homberg.de/2011/11/17/zend_date-default-timezones-and-dst/) on my [personal website](https://thorsten.suckow-homberg.de) under the title “Zend_Date, default time zones and DST” and was later translated to german and published in the [PHP Magazin](https://entwickler.de/php/mittag-in-san-francisco-abend-in-london). Some frameworks I’m mentioning in this article are outdated. The challenge to properly calculating dates for an international operating web-application still persist, though. The formatting of the original article was slightly changed for this website.
+:::
+
+
+Is your application prepared to support different locales? Do you provide translations and different number formats based on a user’s regional conditions? If so, how about time and calendar dates? Do you keep track of the [UTC Offset](https://en.wikipedia.org/wiki/UTC_offset) and the [Daylight Saving Time (DST)](https://en.wikipedia.org/wiki/Daylight_saving_time) relative to the time zone your users live in, and are you able to convert dates properly to different time zones? This article will show you how to utilize `Zend_Date` to make your application aware of all this.
+
+### **Intended Audience & other Notes**
+
+* Are you working with PHP and Zend Framework, and share a hearty dislike for I18N? Then this article is for you.
+
+* This article was written for Zend Framework 1.11 and PHP >= 5.2. Database examples are using MySQL.
+
+* Working with time-related functions may cause problems on systems where PHP supports only timestamps as unsigned 32-bit integers. Since this problems should’ve been fixed to a large degree with PHP 5.1.0, and the fact that even `Zend_Date` silently assumes that working with dates in the range of 1901 and 2038 using PHP internal functions will succeed, we are not paying too much attention to this.
+
+
+## Michael, Tim and an 8 hour offset
+
+Why would you want to convert dates to different time zones once they have been persisted in the data storage? Let’s say you are a London based developer and one of your clients works with this software you’ve written, a tool for creating, managing and sharing documents. This company is about to expand globally, and you’re excited that they just ordered a few more licenses for their new office in San Francisco. Michael, the former head of the financial department and one of the core users of your document sharing tool, will be the company’s first long time employee heading to the US, and a week before he moves, he introduces Tim — his replacement for the London based office — to the functionality of your software.
+“See”, Michael says, “once you have finished working with the document, you click the ‘share’ button and it will automatically end up in my inbox for pending reviews.” He leans back, crossing the arms behind his head. “It’s that easy!”
+A few days later — Tim finally got his own user account set up by the company’s admin — Michael moves from London to San Francisco. Your application did its job really good over the past months, and everyone’s pleased with how smooth everything’s working, and how convenient it is to access and manage documents from any computer with a working internet connection<sup>[**[1]**](#_1_)</sup>.
+What nobody recognized yet — your application stored Michael’s (and everyone else’s) documents along with the absolute date of the time zone of London ([GMT](https://en.wikipedia.org/wiki/Greenwich_Mean_Time), that is), and he now continues to use your software in San Francisco. And he’s pretty confused about the strange dates that confront him now while looking at his document workspace. “Bananas”, he thinks.
+“This one draft here”, he takes a close look at the monitor while circling the mouse pointer over the document entry, “I know Tim created it and shared it with me last monday, but that was clearly not at 08:00 PM.”
+He scratches his head. “I remember receiving this draft around noon, or was it the other day? I went home around 07:00 PM, there’s no way I could have received the draft later on. Something must be broken… Or am I stressed out?”
+So what’s happening here? Well, he moved to the pacific time zone which relies upon** [Pacific Standard Time (PST)](https://en.wikipedia.org/wiki/Pacific_Time_Zone)**. And this time zone is exactly 8 hours behind the time zone he previously lived in (ignoring **[Daylight Saving Time](https://en.wikipedia.org/wiki/Daylight_saving_time)** for now).
+Clicking somewhat lost through your application in search for a reasonable explanation, he notices that the software does not consider him being in a different time zone. Furthermore: He doesn’t find any option that would let him select a different time zone other than the one he lived in — and obviously where the software was developed.
+It’s definitely time for some improvements. We all want our software to be used across the globe, don’t we?
+>  To clarify things: Yes, Tim actually saved the draft at 08:00 PM, but according to GMT. Since London is 8 hours ahead of San Francisco, Michael must have received the draft somewhen around 12:00 noon PST — the time Tim actually sent the draft from London minus the 8 hour offset to PST.
+
+Confused? Don’t worry, **Zend_Date** is here to help. As part of the **Zend Framework**, `Zend_Date` allows for convenient access to operations related to calculations, formats and transformations of dates.
+
+## Preparing your application
+
+It is really important for software to be aware of the time zone it is currently serving as soon as there are any calculations related to dates and times involved.
+Wondering whether your software is affected by this problem? Are dates and times part of any entity in your software which need to be persisted? If you can answer this question with “Yes!” (or if your first thought was “ah, crap…”), then you have already given yourself the answer: To a certain degree, it is possible that your software messes with the users’ feelings as soon as the time zone changes — whether it’s the time zone of your PHP environment or the time zone a user lives in. The following will give you some food for thought for your next planning meeting[2].
+
+![Don’t forget: Pain grows exponentially to the time spent deferring important decisions.](https://cdn-images-1.medium.com/max/2000/0*m3vEwD83MqgYKGG2.png)
+
+There are a few steps you should take into account when adding time zone support to your application, and all of them should be implemented in one or another way in your software:
+
+* Make the time zone globally configurable
+
+* Provide a default time zone and let the user choose the timezone he currently lives in
+
+* Set the default time zone for further date calculations for each request
+
+### Make the time zone globally configurable
+
+The time zone setting should be globally configurable without even touching PHP’s or the system’s configuration. When working with Zend_Framework, this can easily be done by using **Zend_Config**, a powerful component which helps in parameterizing your software. There are a lot of good tutorials out there so I won’t dive too deep into how to set up an application with Zend_Config, and give you a simple example instead:
+
+```ini title="Configuration (ini-format) for a Zend_Framework application, defining the default time zone."
+[environment]
+; Specify the default time zone for the application here. For a list of
+; timezones supported by PHP, see http://de.php.net/manual/en/timezones.php
+date.timezone.default = Europe/Berlin
+```
+
+You can access the configuration by simply loading the ini-File using Zend_Config_Ini, and then query the settings accordingly.
+
+```php title="Code snippet demonstrating how to load and read out an ini-configuration file using Zend_Config_Ini"
+// load the configuration
+$config = new Zend_Config_Ini('/path/to/config/file');
+// read out the time zone setting
+$timezone = $config->environment->date->timezone->default;
+```
+
+Following this approach, we are now able to easily specify a default time zone value for our application that should later be used. This is our very first step to gain more independence from our server’s presets and escape the scourge of unwanted configuration locks.
+
+### Let the user choose a time zone
+
+There are a lot of ways we can map a time zone to a user: We could bind this property to a user object which is available through the request lifetime for each and every signed in user, or we could create an individual settings-object, which — again — can be mapped 1:1 to a user.
+
+“What about guests visiting the application”, you ask? Remember that we have set up a default time zone, right? You can use this value for each visitor, or you could guess the time zone, for example based on locale informations available through HTTP headers (Accept-Language), or by using Javascript to examine a few available client properties. Heck, you could even let a visitor choose a time zone and save this value to a cookie.
+
+For a list of available and supported time zones in PHP, you can visit [http://de.php.net/manual/en/timezones.php](https://www.php.net/manual/en/timezones.php). But if you want to create a drop-down box with a set of all time zones to choose from, it would be best to create this list automatically by using PHP’s native [DateTimeZone](https://www.php.net/manual/en/class.datetimezone.php) object, which is available for PHP >= 5.2:
+
+```php title="Code snippet to list all time zones supported by PHP. (PHP >= 5.2 required for DateTimeZone)."
+$timezones = DateTimeZone::listIdentifiers();
+for ($i=0, $len = count($timezones); $i < $len; $i++) {
+    echo $timezones[$i] . "\n";
+}
+```
+
+The remaining work shouldn’t be too much of a challenge — we provide a settings section in our application where the user can specify the desired time zone. It’s simple as that.
+
+### Set up the time zone for each request
+
+We’re almost there — just one important step is missing: How do we tell which time zone the application should serve? Quite simple — put the application in a time zone context by applying best practices<sup>[**[3]**](#_3_)</sup>! And the best practice would be to call [date_default_timezone_set()](http://de.php.net/manual/en/function.date-default-timezone-set.php) in your bootstrapper, with the value of either the default time zone — or, if available — the user’s manually chosen time zone or the one you tried to autodetect.
+
+```php title="Specify a default time zone with a request. Make sure the setting is valid during the whole request and doesn’t change unintentionally."
+// code to read out the users time zone from his settings,
+// assuming that our user object provides a "getTimezone()" method
+$timezone = $user->getTimezone();
+$result   = @date_default_timezone_set($timezone);
+```
+
+We are using `@` in front of date_default_timezone_set() to suppress any Notice thrown by PHP in case the passed argument is invalid. It is up to you to add appropriate error behavior at this point.
+
+**Q:** *I don’t need to handle different time zones. I think I’m fine with adjusting the time zone in the *php.ini*, and reading it out accordingly, right?*
+**A:** Sure, go ahead, but for portability reasons it's best practice to set the default time zone manually. Once you're moving your application to another server or the php.ini needs to be changed regarding date/time zone settings, you'll be probably out of luck and need to implement this feature to a time when there is already a large amount of user generated dates/times spread like crazy in your data storage.
+
+**Q:** *I looked up the *date.timezone *setting in my* php.ini*, but it's missing. So what timezone is my application running in if I do not set it manually?*
+**A:** It largely depends on what framework/libraries you are using, but in the most cases the default time zone is read out by calling date_default_timezone_get() (even `Zend_Date` uses it). According to the **[PHP manual](https://www.php.net/manual/en/function.date-default-timezone-get.php)**, the timezone is determined in the following order:
+> - Reading the timezone set using the date_default_timezone_set() function (if any)
+ - Prior to PHP 5.4.0 only: Reading the TZ environment variable (if non empty)
+ - Reading the value of the date.timezone ini option (if set)
+ - Prior to PHP 5.4.0 only: Querying the host operating system (if supported and allowed by the OS). This uses an algorithm that has to guess the timezone. This is by no means going to work correctly for every situation. A warning is shown when this stage is reached. Do not rely on it to be guessed correctly, and set date.timezone to the correct timezone instead. <br /> <br />If none of the above succeed, date_default_timezone_get() will return a default timezone of UTC.
+
+
+## The 0 meridian for your data storage
+
+We have just enhanced our application with support for serving different time zones, but how exactly would we want to store the dates/times in the underlying data storage of our application? By storing the data without any time offset*[4]*! We use **UTC**/**GMT** as the preferred time zone for all of our date values.
+
+Looking at several dates marked with either GMT or UTC, users see no difference between them, so how do we distinguish them? And should we even care? Well, a fractional second difference exist between the two, but it is so small, that it won’t affect your everyday work<sup>[**[5]**](#_5_)</sup>. To be on the safe side: Use UTC when in doubt. It means almost the same as GMT and it’s kind of its modern successor. Atomic age and stuff, you know?
+
+There are various steps involved in making sure we are putting the proper UTC date to our data storage — and to be able to serve this dates properly to different time zones:
+
+* Choosing the MySQL data type for our dates
+
+* Converting user/system generated dates to UTC
+
+* Converting UTC dates back to a specific time zone
+
+### Choosing the MySQL data type for our dates
+
+Storing UTC dates in our data storage boosts the (locale) portability of our software. However, we have to think about how our dates will be stored. We will take a look at two common alternatives:
+
+* Saving dates and times as Unix timestamps
+
+* Saving dates and times in a datetime field
+
+Both of them have advantages and disadvantages:
+
+### Unix Timestamp
+
+A Unix timestamp is an integer value which represents the elapsed seconds since `1970-01-01 00:00:00(GMT)`. This is the so called “Unix Epoch”. On 32-bit systems, the valid range of values reach from `1970-01-01 00:00:00 UTC` to `2038-01-19 03:14:07 UTC` (the upper limit denoted by the year 2038 is commonly referred to as the [Year 2038 problem](https://en.wikipedia.org/wiki/Year_2038_problem)). The short range of 68 years which can be represented by unsigned 32-bit timestamps and the fact that you cannot use dates before 1970 (except for 64-bit systems where Unix timestamps are stored as signed 64-bit integers, or on most 32-bit systems where timestamps are stored as signed integers, supporting a range from `1901-12-13 20:45:54 UTC` to `2038-01-19 03:14:07 UTC`) narrows the use cases for timestamps somewhat down<sup>[**[6]**](#_6_)</sup>.
+
+An operating system with support for signed 32-bit timestamps should be one of the prerequisites for our application in this case. Since PHP made date_default_timezone_set() available with version 5.1.0, and this version fixed some issues with supporting only unsigned integers on some 32-bit systems when working with timestamps, this is mandatory.
+
+However, when dealing with “transient” dates, such as dates belonging to log entries or such, timestamps are proven to work. Oh, and it’s hard to figure out what date exactly a 4-byte long value represents without doing some good old math, don’t you think?*[7]*
+
+Unix timestamps are UTC dates. This means: They do not provide any offset to another timezone. You can simply add or subtract the needed offset in seconds from the timestamp<sup>[**[8]**](#_8_)</sup>. Et voilá — you have your localized date.
+
+Working with PHP on a 64-bit OS and using its functions to generate Unix timestamps? Beware, as timestamp-related functions in MySQL are not (yet) taking advantage of the large range of dates 64-bit timestamps can represent. See **[the manual](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)** for more information. If you want to store 64-bit timestamps in a MySQL table, make sure you do choose the appropriate data type for the column and do not need to rely on any MySQL timestamp-related functions for generating or comparing the therein stored values.
+
+### datetime Fields
+
+datetime fields in MySQL require dates to be in the format `YYYY-MM-dd HH:mm:ss` (example: `1999-05-03 20:15:00`) which makes it not only perfect readable, but also allows for complex date calculations by using MySQL’s built in functionality. The supported range for datetime values is `1000-01-01 00:00:00` to `9999-12-31 23:59:59`. This covers a wide range of dates<sup>[**[9]**](#_9_)</sup> and is perfect for storing UTC datetime values.
+
+Read more about MySQL’s datetime **[here](https://dev.mysql.com/doc/refman/8.0/en/datetime.html)**.
+
+Beware of using MySQL’s date calculation-functions which rely upon timezone settings, such as **[NOW()](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_now)**, as computed results will depend on the time zone settings of the host system the method gets called on. You will find more information about MySQL time zone settings **[here](https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html)**.
+
+For another point of view regarding Unix timestamps and datetime fields in MySQL databases, see **[this post by Eli Billauer](http://billauer.co.il/blog/2009/03/mysql-datetime-epoch-unix-time/)**.
+
+### Getting that UTC date ready for Mysql
+
+Since we’ve decided to store only UTC dates in our database, we go now back to `Zend_Date` and take a look at how we convert any date string to UTC date.
+
+```php title="Converting a date of any time zone to a UTC date."
+// we assume that the variable $date holds the date we want to add in
+// UTC to the data storage
+// the following works with date formats that include time zone offsets,
+// e.g. Fri, 19 Jan 2007 22:08:13 +0100 (CET)
+// read out the currently used timezone
+$date    = 'Fri, 19 Jan 2007 22:08:13 +0100 (CET)';
+$oldZone = date_default_timezone_get();
+// set the new timezone to UTC to give PHP a hint what `strtotime()` has to
+// do
+date_default_timezone_set('UTC');
+assert(date_default_timezone_get() === 'UTC');
+
+// `strtotime()` is much more forgiving to date strings which
+// do not comply to the exact standard
+$dvalue = @strtotime($date);
+
+// reset default timezone to previous value
+date_default_timezone_set($oldZone);
+assert(date_default_timezone_get() === $oldZone);
+
+// get back to Zend Date
+$dateObject = new Zend_Date();
+try {
+    $dateObject->set(($dvalue === false ? $date : $dvalue));
+} catch (Zend_Date_Exception $e) {
+     // fall back to default date to have a value at last
+     $dateObject->set('1970-01-01 00:00:00');
+}
+$dateObject->setTimezone('UTC');
+$result = $dateObject->get('YYYY-MM-dd HH:mm:ss');
+assert($result === '2007-01-19 21:08:13');
+echo $result;
+```
+
+Note our first call to `strtotime()`. This is a native PHP function which is much more forgiving than `Zend_Date` when it comes to parsing date strings which do not comply to international standards. However, `strtotime()` can fail, and if it does, we delegate the parsing of the date to Zend_Date. It does not use `strtotime()` itself, but instead tokenizes the passed string for gathering all the information it needs. It even uses the BC Math extension (if available), which comes quite handy in case `strtotime()` failed with a date which is out of bounds. We’ll get to that later.
+
+> **Q:** So if `strtotime()` does a better job when it comes to parsing malformed dates, why doesn't `Zend_Date` use it? <br />
+**A:** Remember what we've just learned about the limited range of dates you can represent with a timestamp? If you specify a date before 1901 or after 2038 in the above example, you're most likely to fail on systems where PHP supports timestamps only as (signed) 32-bit integer. **If your use case includes the option of handling dates prior to 1901 or after 2038, do not rely on** `strtotime()` **and use only **Zend_Date**!** Although it uses **[mktime()](https://www.php.net/manual/en/function.mktime.php)** itself as long as the year is in between 1901 and 2038, it is able to fall back to internal calculations as soon as this value is out of bounds. See also the answer to the next question.
+
+> **Q:** I've read that `Zend_Date` **works internally with timestamps**. If the range of dates which timestamps can represent is limited, what kind of workaround does `Zend_Date` use itself? <br />
+**A:** None. Well, at least not directly. On 32-bit systems, timestamps represented as signed 32-bit integers (which we assume to be the lowest common denominator for our target system), can work with dates ranging from 1901-12-13 to 2038-01-19 (+ a few hours). Zend Framework suggests to make the **BC Math extension** available to your PHP installation if you want to support dates which are outside of this range.<sup>[**[10]**](#_10_)</sup>
+
+If parsing the date failed, we catch the exception and fall back to a default value of `1970-01-01 00:00:00`, but it’s up to you if you let the exception bubble up or replace the date with any value you want. It mainly depends on your use case and how sensitive your data is to wrong date values<sup>[**[11]**](#_11_)</sup>.
+The last step is to put `Zend_Date` into the UTC timezone, and – based on that – convert the string to the format YYYY-MM-dd HH:mm:ss, which is the required format for MySQL datetime fields.
+Let’s go back to `strtotime()` for a second. You should’ve noted that we temporarily set another timezone (UTC) so the internal date conversion knows what kind of output we expect.
+This might confuse you at first, so let’s go through it in detail: Let’s assume we have the following date that needs to be converted to UTC: `Fri, 19 Jan 2007 22:08:13 +0100 (CET)`. The last part of the string includes the offset to the UTC time zone “`+0100 (CET)`” (means: CET is 1 hour ahead of UTC when no DST is available, otherwise it would be + 2 hrs), and the first part “`Fri, 19 Jan 2007 22:08:13`” is actually the local date that should be put into the UTC time zone and stored to the data storage. By telling `strtotime()` it should generate a Unix timestamp from that date and setting the default timezone to UTC, the offset is calculated against the local date. If, however, you’d set the default timezone to America/Los_Angeles, the offset to `UTC (-08:00)` for this time zone (PST) is computed against the UTC date of the local date.
+
+
+:::info
+This following code snippet illustrates the interaction between default time zones and strtotime(). The comments explain how the calculation works. If you want to know more about this, follow **[this link](https://www.cl.cam.ac.uk/~mgk25/iso-time.html)**.*
+:::
+
+```php
+// show which timezone our script runs in
+echo date_default_timezone_get() . "\n";
+// outputs the converted date, depending on the timezone initially set
+echo "1: ".date("Y-m-d H:i:s", strtotime('Fri, 19 Nov 2007 22:08:13 +0100 (CET)')) . "\n";
+
+// lets have a look at DST. Set the timezone to a value of which we know
+// that it uses DST
+date_default_timezone_set('Europe/Berlin');
+assert(date_default_timezone_get() === 'Europe/Berlin');
+
+// no DST from end of Okt to end of March in Europe/Berlin,
+// so the following will output 2007-01-19 22:08:13
+$d = date("Y-m-d H:i:s", strtotime('Fri, 19 Jan 2007 22:08:13 +0100 (CET)'));
+assert($d === '2007-01-19 22:08:13');
+echo "2: $d \n";
+
+// summertime, i.e. CEST in Europe/Berlin, for example during August
+// the following will output 2007-08-19 23:08:13, since the timezone is specified
+// as CET, but during August, DST is active, so 1 hour wil be added
+$d = date("Y-m-d H:i:s", strtotime('Sun, 19 Aug 2007 22:08:13 +0100 (CET)'));
+assert($d === '2007-08-19 23:08:13');
+echo "3: $d \n";
+
+// now specify CEST as a timezone - this tells that the date is in Central European
+// Summer Time (2 hrs ahead of UTC)
+// the output will be 2007-08-19 22:08:13
+$d = date("Y-m-d H:i:s", strtotime('Sun, 19 Aug 2007 22:08:13 +0200 (CEST)'));
+assert($d === '2007-08-19 22:08:13');
+echo "4: $d \n";
+
+// changing the timezone to UTC
+date_default_timezone_set('UTC');
+assert(date_default_timezone_get() === 'UTC');
+
+// ouputs 2007-01-19 21:08:13, the date converted to UTC time zone
+$d = date("Y-m-d H:i:s", strtotime('Fri, 19 Jan 2007 22:08:13 +0100 (CET)'));
+echo "5: $d \n";
+assert($d === '2007-01-19 21:08:13');
+
+// changing the timezone to America/Los_Angeles
+date_default_timezone_set('America/Los_Angeles');
+assert(date_default_timezone_get() === 'America/Los_Angeles');
+
+// outputs 2007-01-19 13:08:13, the specified date in the time
+// zone of Los Angeles (America)
+// calculate UTC date:
+// (Fri, 19 Jan 2007 22:08:13 - (+01:00)) =  Fri, 19 Jan 2007 21:08:13 +00:00 (UTC)
+// now substract 08:00 (PST is 8 hrs behind UTC) from the UTC date
+// (Fri, 19 Jan 2007 21:08:13 +00:00 (UTC)) - (08:00))
+// == Fri, 19 Jan 2007 13:08:13 -08:00 (PST)
+$d = date("Y-m-d H:i:s", strtotime('Fri, 19 Jan 2007 22:08:13 +0100 (CET)'));
+echo "6:  $d \n";
+assert($d === '2007-01-19 13:08:13');
+
+// test this the same way around:
+date_default_timezone_set('Europe/Berlin');
+assert(date_default_timezone_get() === 'Europe/Berlin');
+
+// outputs 2007-01-19 22:08:13
+$d = date("Y-m-d H:i:s", strtotime('Fri, 19 Jan 2007 13:08:13 -08:00 (PST)'));
+echo "7: $d \n";
+assert($d === '2007-01-19 22:08:13');
+
+// Output generated:
+// [your timezone]
+// 1: [date based on your time zone]
+// 2: 2007-01-19 22:08:13
+// 3: 2007-08-19 23:08:13
+// 4: 2007-08-19 22:08:13
+// 5: 2007-01-19 21:08:13
+// 6: 2007-01-19 13:08:13
+// 7: 2007-01-19 22:08:13
+```
+
+**Rule of thumb**: local date - ((-/+)time offset) = UTC date
+
+It’s quite easy once you get the hang of it. The most important part is to relate to UTC all the time, and simply take the offsets of other time zones into account during converting. By using the UTC timezone, you can safely and easily display them in other time zones.
+
+> **Q:** When specifying the input date — why are we neither `strtotime()` nor `Zend_Date` telling which timezone it belongs to?<br />
+**A:** Because we want PHP/Zend do the heavy lifting for us. See, sometimes we deal with date strings that come from resources we do not control, such as dates in email headers <sup>[**[12]**](#_12_)</sup>. Parsing a date string by hand involves a lot of work which was (thankfully) already done by other programmers, and this functionality is given to us by strtotime()/Zend_Date. You can, however, do a syntax check beforehand and disallow parsing for any date that looks fishy, e.g. if no offset information can be found.
+
+>**Q:** So what happens if there is no additional time zone information in the string I pass to `strtotime()` or `Zend_Date`?<br />
+**A:** In this case, both functions will fall back to the default time zone previously set with `date_default_timezone_set()`.
+
+## Being soft and flexible
+
+Now that you have prepared your application to store UTC dates in the format `YYYY-MM-dd HH:mm:ss`, you are able to display them properly based on the time zone you have specified by using `date_default_timezone_set()`. We return to `Zend_Date` now to convert UTC dates to the default time zone cosen by you or your application’s user, as mentioned above.
+
+Let’s first have a look at an error-prone solution and see why this is not the right way to do it:
+
+```php title="How Zend_Date should not be used when converting datetime values to the application's time zone"
+//creating `Zend_Date` and pass our datetime value from the data storage to
+// the constructor
+$dateObject = new Zend_Date('2007-01-19 14:08:13');
+echo $date->get('YYYY-MM-dd HH:mm:ss');
+```
+
+So why is this wrong? Well, first off we’re simply passing a string to `Zend_Date` which provides no further information about its time zone, and therefor its offset (remember our date string “`Fri, 19 Jan 2007 22:08:13 +0100 (CET)`“? The timezone and offset information at its end helps functions like `strtotime()` when they look for any additional information for which region in the world the date was created for). Thus, `Zend_Date` will fall back to the timezone it has detected when it internally queried the return value of `date_default_timezone_get()`, and uses this value for converting.
+
+Secondly, we’re not specifying the target time zone the date should be converted to. Guess what? By echoing the return value of `Zend_date::get()` in this case, the converted value will be the same as the value we just passed to `Zend_Date::__construct()` (whereas getting the same value is not an error: This happens when an input date with zero offset is converted to a timezone which in turn does not have an offset itself<sup>[**[13]**](#_13_)</sup>).
+Let’s have a look at another example:
+
+
+```php title="How Zend_Date should not be used when converting UTC datetime values to the application's time zone"
+//create `Zend_Date` and pass the datetime value to the constructor
+$dateObject = new Zend_Date('2007-01-19 14:08:13');
+// set the time zone
+$dateObject->setTimezone(date_timezone_default_get());
+echo $dateObject->get('YYYY-mm-dd HH:ii:ss');
+```
+
+Well, we’re not doing anything different here, are we? We simply do a call to Zend_Date::setTimezone() to set the Zend_Date-object to the time zone it was already set to. It already checks the value of `date_timezone_default_get()` internally. Relax. Take a break. And then have a look at a working example.
+
+```php title="How to convert UTC datetime values to a specific time zone using Zend_Date"
+// create `Zend_Date` object
+$dateObject = new Zend_Date();
+// put the Date_Object into the UTC time zone
+$dateObject->setTimezone('UTC');
+// set the UTC date the date object must work with
+$dateObject->set('2007-01-19 14:08:13');
+// now, set the time zone of the object to the time zone our application runs in
+$dateObject->setTimezone(date_default_timezone_get());
+// display the UTC date converted to our time zone
+echo $dateObject->get('YYYY-MM-dd HH:mm:ss');
+```
+
+> **Q:** Can’t `Zend_Date` just guess which timezone the string belongs to? <br />
+**A:** No, that won't work, since there is no information about the time zone offset in a YYYY-MM-dd HH:mm:ss-formatted date string. We know that it's a UTC date, but we have to forward this information to Zend_Date.
+
+## Wrapping things up
+
+Adding time zone support to your PHP application isn’t too much of a hassle, and not only will the user benefit from it, but so do you by eliminating a potential source for errors.
+There aren’t too many steps involved in adding time zone support, and it’s best done at a very early implementation cycle to spare you the problems that occur when persisted data has to be converted back to UTC if you do not know which time zones the dates originally belong to.
+
+As mentioned earlier — if you need to make your code work on each and every (32-bit) OS where PHP is available and you need to consider those OSs where PHP only supports unsigned 32-bit timestamps, you need to check whether dates which get processed with PHP internal functions are in between 1970-01-01 and 2038-01-19. In this case, you have to use a different approach than the one this article is about, since `Zend_Date` assumes that your target system supports at least signed 32-bit integers when working time related functions (PHP supporting only timestamps as unsigned 32-bit timestamps is a known problem which has been fixed since 5.1.0).
+An additional “soft” approach when deploying your application would be to require the availability of the BC Math extension, so `Zend_Date` can take advantage of it.
+The best configuration for a PHP system that covers a large range of dates would be a 64-bit OS. Your webpage should be guaranteed to run even in the far away future.
+
+Oh, and did I mention the Unit Tests you should write for your date manipulating functions to get started in the first place?
+Happy PHPing!
+
+
+--------
+_Remarks:_
+
+ <sup>[1]</sup> <a name="_1_"></a>They were specially excited about phone calls during the weekends when their division manager would ask them to check a document for them. Write once, run anywhere.<br />
+
+ <sup>[2]</sup> <a name="_2_"></a>You are an agilist, aren’t you?<br />
+
+ <sup>[3]</sup> <a name="_3_"></a>They are proven to work<br />
+
+ <sup>[4]</sup> <a name="_4_"></a>You remember that 8 hour offset from San Francisco — London that ended up in the data storage? You don’t want that!<br />
+
+ <sup>[5]</sup> <a name="_5_"></a>Should you be working for the [LHC](https://en.wikipedia.org/wiki/Large_Hadron_Collider), then the fractional second difference should definitely matter to you.<br />
+
+ <sup>[6]</sup> <a name="_6_"></a>Think about birthdates. Even Facebook’s userbase does not only exist of people like “awesomesauce_1988″ and the like<br />
+
+ <sup>[7]</sup> <a name="_7_"></a>Unless your first name is Sheldon and you tend to embrace your genius to the fullest<br />
+
+ <sup>[8]</sup> <a name="_8_"></a>Assuming you converted the date to a timestamp properly<br />
+
+ <sup>[9]</sup> <a name="_9_"></a>Watch out, PHP programmers working in history-related institutions!<br />
+
+ <sup>[10]</sup> <a name="_10_"></a>Take a look at Zend_Locale_Math to understand how `Zend_Date` utilizes BC Math<br />
+
+ <sup>[11]</sup> <a name="_11_"></a>Ever wondered how these emails from 1970 end up in your inbox?<br />
+
+ <sup>[12]</sup> <a name="_12_"></a>How many email clients do you know, and how many of them are **looking out** to push their own proprietary standard through?<br />
+
+ <sup>[13]</sup> <a name="_13_"></a>London Calling<br />
+
+
+
