@@ -63,3 +63,15 @@ References
 
  - [<sup>[1]</sup> Foote, Yoder: "Big Ball of Mud"; University of Illinois, 1999](http://www.laputan.org/mud/mud.html#SweepingItUnderTheRug) <a name="bbompaper"></a>
  - [Eberhard Wolff: "Software-Architektur im Stream, Folge 159: Big Ball of Mud"](https://software-architektur.tv/2023/03/31/folge159.html)
+
+----
+
+Kommentar von Eberhard:
+
+Danke für den ausführlichen Blog-Post - mir ist nun deutlich klarer, was Du im Stream gemeint hast! Natürlich finde ich Tests sinnvoll wie auch eine saubere Struktur eines System eigentlich sinnvoll ist. Allerdings muss eine saubere Struktur auch einen Geschäftswert haben. Da ich sehr viele Projekte sehe, die genau so eine saubere Struktur etablieren wollen, um die Wartbarkeit zu verbessern, ist sie in vielen Fällen ganz sicher vorhanden und auch erkannt. Ich finde die Broken-Windows-Idee allerdings schwierig: In der Praxis sehe ich praktisch nie perfekt strukturierte Systeme. Also gibt es immer ein paar "broken Windows". Die alle zu "reparieren" ist meiner Meinung nach nicht nur sehr aufwändig, sondern auch unwirtschaftlich. Wenn ein Systemteil nie oder nur selten geändert wird, hat die saubere Struktutrierung keine positiven wirtschaftlichen Auswirkungen. Warum sollte man dann diesen Systemteil verbessern? 
+
+Aus dem Blog könnte man den Eindruck gewinnen, dass man eine saubere Strukturierung haben will, damit man Tests schreibt. Das wäre für mich kein ausreichender Grund, um die Strukturierung aufzuräumen, weil es ein indirekter Effekt der besseren Strukturierung ist. Das kann als Begründgung  für teuere Verbesserungen eigentlich nicht ausreichen. Und wer sich durch schlechte Struktur davon abhalten lässt, Tests zu schreiben, kann niemals die schlechte Struktur mit einem Sicherheitsnetz aus Tests verbessern.
+
+Übrigens stellt Evan Big Ball of Mud gerade ähnlich wie die Aussage von Hunt und Thomas als eine Möglichkeit dar, um einen Bereich des Systems mit schlechtzer Strukturierung abzugrenzen und die weitere Ausbreitung des Problems zu vermeiden, oder eben das "Sweeping it under the rug". Von daher sehe ich da keinen Widerspruch zu Big Ball of Mud und den anderen Pattern. 
+
+Ein Hinweis noch: Ich finde es schwierig, wenn Manager:innen Tests unterbinden. Dann ist die funktionale Korrektheit des Systems gefährdet und das kann eigentlich nicht ernsthaft zu einem akzeptablen Projekt-Ergebnis führen. Personen, die das dennoch glauben, sollten vielleicht keine Software-Projekte leiten. Zumindest sollte es im Team Personen geben, die dieses fundamentale Prinzip kennen. Warum hören Manager:innen dann auf sie nicht? Am Ende ist das Test-Verbot dann eher ein soziales Problem. Außerdem frage ich mich, wie die Manager:in merkt, ob Entwickler:innen Unit Tests schreiben oder nicht. Schauen die ernsthaft auf der Ebene in den Code? Können Entwickler:innen dann nicht einfach trotzdem Tests schreiben?
