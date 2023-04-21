@@ -2,6 +2,7 @@
 title: conjoon installer updates
 authors: [thorstensuckow]
 tags: [npm, tooling, javascript, conjoon]
+enableComments: true
 ---
 
 ![](https://cdn-images-1.medium.com/max/2186/1*jfdWSDOHVoTAkKJmlsSYqQ.gif)
