@@ -2,6 +2,7 @@
 title: Easily create Siesta tests for your applications
 authors: [thorstensuckow]
 tags: [npm, tooling, javascript]
+enableComments: true
 ---
 
 ## Easily create Siesta tests for your applications

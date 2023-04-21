@@ -2,6 +2,7 @@
 title: "Releasing conjoon 1.0.0-beta.0"
 authors: [thorstensuckow]
 tags: [release, conjoon, open source, email]
+enableComments: true
 ---
 ![](https://cdn-images-1.medium.com/max/2736/0*HWdUhNVaz3OI-bRw.png)
 
