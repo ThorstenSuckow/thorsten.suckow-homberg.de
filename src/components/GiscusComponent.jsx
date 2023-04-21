@@ -9,7 +9,7 @@ export default function GiscusComponent() {
         <Giscus
             repo="ThorstenSuckow/thorsten.suckow-homberg.de"
             repoId="R_kgDOJCT_sA"
-            category="General"
+            category="Blog"
             categoryId="DIC_kwDOJCT_sM4CV8kx"
             mapping="url"
             term="Welcome to @giscus/react component!"
