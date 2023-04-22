@@ -4,8 +4,9 @@ slug: Use-Case-1-Adding-a-new-employee
 ---
 
 import {GlosRef, BibRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
 
-# Use Case 1 - Adding a new employee.
+# Use Case 1 - Adding a new employee
 
 :::info Use Case 1 - Adding a new employee
 _A new employee is added by the receipt of an `AddEmp` transaction. This transaction contains the employee's name, addess, and assigned employee number. The transaction has the following three forms:_
@@ -44,13 +45,12 @@ rates; also, check if `empId`s already exist and prevent multiple occurences of 
 ### Actors 
 **Accountant** - adds a new _Employee_ to the system.
 
-import Actor from './img/usecase1/actor.svg';
-import {Embed} from "../../../src/components/Embed";
+import Actor from './img/usecase1/actor.svg.png';
 
 <Embed
     title={"Actor \"Accountant\" carries out the \"Add Employee\"-Use Case."}
 >
-    <Actor />
+    <img src={Actor} />
 </Embed>
 
 The <GlosRef name="Actor" file="uml.actor" /> carrying out the <GlosRef name="Use Case" file="uml.usecase" /> is an **Accountant**. Of course,
@@ -63,7 +63,7 @@ a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain
 
 ### Domain Objects
  - The `Employee`-**Entity** providing information about `salary`, `salary-type` etc.
- - The `EmployeeRepository` accesses the required infrastructure for persisting `Employee`-Entities. The Repository should give the client the illusion that objects queried from it are in memory <BibRef name="DDD" pp="157" />. Thus, the reconstitution as well as the creation of `Employee`-instances will be delegated to a <GlosRef name="Factory Method" file="sd.factroymethod" /> as part of the `Employee`-class. (At this point, I do not see the need for a more complex factory that assembles intricate <GlosRef name="aggregates" file="ddd.aggregate" />).  Following the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" />, the `EmployeeRepository` will provide the **Interface** to which the object in the Infrastructure Layer has to conform to.
+ - The `EmployeeRepository` accesses the required infrastructure for persisting `Employee`-Entities. The Repository should give the client the illusion that objects queried from it are in memory <BibRef name="DDD" pp="157" />. Thus, the reconstitution as well as the creation of `Employee`-instances will be delegated to a <GlosRef name="Factory Method" file="sd.factroymethod" /> as part of the `Employee`-class. At this point, I do not see the need for a more complex factory that assembles intricate <GlosRef name="aggregates" file="ddd.aggregate" />, but providing a **Factory Method** as part of this **Domain Object** (and **Domain Objects** in general) can help with leveraging responsibilities for constructing and reconstitution of said **Domain Objects** to the **Domain Object** itself <BibRef name="DDD" pp="139" />.  Following the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" />, the `EmployeeRepository` will provide the **Interface** to which the object in the Infrastructure Layer has to conform to.
 
 ### Layers
 
@@ -71,12 +71,21 @@ a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain
  - We will receive input from here. This layer will be substituted by the test classes
 
 #### Application Layer
- - Will consume the input and forward it to the **Domain Layer**. This layer will be substituted by the test classes
+ - Will consume the input and forward it to the **Domain Layer**. This layer will be substituted by the test classes. Thus, the test cases replace the controller method. It will accepts primitive data types which are forwarded to the `Employee`'s **Factory Method**. `Employee`-instances will be forwarded to the `Payroll`'s `addEmployee`-method
 
 #### Domain Layer
- - `Payroll` exists in the **Domain Layer** in the form of a <GlosRef name="Facade" file="sd.facade" />
+ - `Payroll` exists in the **Domain Layer** in the form of a <GlosRef name="Facade" file="sd.facade" />.
  - The `EmployeeRepository` handles **Domain Objects** so it's associated with **_this_** domain and will a such become part of the **Domain Layer**.
 
 #### Infrastructure Layer
  - The `EmployeeRepository` accesses lower-level objects facilitating `write`-operations for a data storage of an arbitrary type. The lower-level objects
-will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations
+will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations, but implement a <GlosRef name="Table Gateway" file="sd.tabledatagateway" /> that provides access to `Employee`-data. The **Domain Layer** will provide the interface for such an `EmployeeGateway` according to the <GlosRef name="Dependency-Inversion Principle" file="sd.dependencyinversionprinciple" />.
+
+### Resulting UML
+import Design from './img/usecase1/design.svg.png';
+
+<Embed
+    title={"The up-front design for Use Case 1, spanning several layers."}
+>
+    <img src={Design} />
+</Embed>
