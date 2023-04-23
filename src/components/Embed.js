@@ -4,6 +4,7 @@ import React from 'react';
 import l8 from "@l8js/l8";
 import Gist from "react-gist";
 import CodeBlock from '@theme/CodeBlock';
+import fetch from 'cross-fetch';
 
 function Embed ({width, children, title, figure, modeAware}) {
 
