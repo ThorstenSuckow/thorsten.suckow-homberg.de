@@ -81,7 +81,7 @@ a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain
 
 #### Infrastructure Layer
  - The `EmployeeRepository` accesses lower-level objects facilitating `write`-operations for a data storage of an arbitrary type. The lower-level objects
-will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations, but implement a <GlosRef name="Table Gateway" file="sd.tabledatagateway" /> that provides access to `Employee`-data. The **Domain Layer** will provide the interface for such an `EmployeeGateway` according to the <GlosRef name="Dependency-Inversion Principle" file="sd.dependencyinversionprinciple" />.
+will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations, but implement a <GlosRef name="Table Data Gateway" file="sd.tabledatagateway" /> that provides access to `Employee`-data. The **Domain Layer** will provide the interface for such an `EmployeeGateway` according to the <GlosRef name="Dependency-Inversion Principle" file="sd.dependencyinversionprinciple" />.
 
 ### Resulting UML
 
