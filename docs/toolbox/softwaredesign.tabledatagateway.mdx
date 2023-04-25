@@ -2,8 +2,66 @@
 title: "Table Data Gateway"
 ---
 
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
 # Table Data Gateway (Software Design)
 
 A **Table Data Gateway** provides an interface to the table of a database.
 
-The interface supports the semantics of the domain the data belongs to. Any required **SQL** used for communicating with the underlying infrastructure is hidden from the client.
+The interface maps semantics of native SQL-commands to its interface-methods, such as `INSERT`, `UPDATE`, `DELETE` and `SELECT`.
+
+Additional methods might be added to the Gateway, e.g. for querying data based on more complex filter criteria.
+
+For reconstituting more complex <GlosRef name="Domain Models" file="ddd.domainmodel" />, such as <GlosRef name="Aggregates" file="ddd.aggregate" />, **Data Mappers** can be used.
+
+## Example
+
+The following class provides an interface for a **Table Data Gateway** for an `Employee`-table:
+
+:::info
+(SQL-)code intentionally simplified for demonstration purposes.
+:::
+
+```php title="EmployeeTableDataGateway.php"
+
+class EmployeeTableDataGateway {
+
+
+    public function insert(string $empId, string $name, string $address): string
+    {
+        $sql = "INSERT INTO employee (emp_id, name, address) VALUES ('$empId', '$name', '$address')";
+
+        return $this->dbConn->execute($sql);
+    }
+
+
+    public function update(string $empId, string $name, string $address): bool
+    {
+        $sql = "UPDATE employee SET emp_id='$empId', name='$name', address='$address'";
+
+        return $this->dbConn->execute($sql);
+    }
+
+
+    public function find(string $empId): array
+    {
+        $sql = "SELECT FROM employee WHERE emp_id='$empId'";
+
+        return $this->executeSelect($sql);
+    }
+
+
+    public function findByCompany(string $companyId): array
+    {
+        $sql = "SELECT FROM employee WHERE company_id='$companyId'";
+
+        return $this->executeSelect($sql);
+    }
+}
+
+```
+
+
+
+<BackButton />
