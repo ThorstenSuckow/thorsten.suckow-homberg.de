@@ -18,7 +18,7 @@ $ AddEmp <EmpId> "<name>" "<address>" H <hourly-rate>
 
 $ AddEmp <EmpId> "<name>" "<address>" S <monthly-salary>
 
-$ AddEmp <EmpId> "<name>" "<address>" C <hourly-rate> <commission-rate>
+$ AddEmp <EmpId> "<name>" "<address>" C <monthly-salary> <commission-rate>
 ```
 
 The employee's record is created with its field assigned appropriately.
@@ -58,6 +58,14 @@ import Actor from './img/usecase1/actor.svg.png';
 The <GlosRef name="Actor" file="uml.actor" /> carrying out the <GlosRef name="Use Case" file="uml.usecase" /> is an **Accountant**. Of course,
 any other "role" would be eligible, but since the system exists in a <GlosRef name="Domain" file="sd.domain" /> dealing with
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
+
+## Specifications
+ - $S_n$ is a set of arbitrary characters where $|S_n|=n$. Then `""`=$S_0$.
+ - "empId" $\in S_n$
+ - "salary type" $\in \{"H", "C", "S"\}$
+ - "salary type" $= "C" \rArr$ `<commission-rate>` $\in \R_{\ge0}$
+ - "rate" $\in \{x=$ `<hourly-rate>` $\lor \space x=$ `<monthly-salary>` $| \space x \in \R_{\ge0}\}$
+
 
 ## Design
  The main program receives the input and forwards it to the <GlosRef name="Application Layer" file="sd.applicationlayer" />. A <GlosRef name="Repository" file="sd.repository" /> manages transaction-calls for an `Employee`-<GlosRef name="Entity" file="sd.entity" />. This will be orchestrated by `Payroll`,
