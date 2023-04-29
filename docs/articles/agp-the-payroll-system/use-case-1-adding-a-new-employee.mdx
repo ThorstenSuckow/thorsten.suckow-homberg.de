@@ -60,8 +60,8 @@ any other "role" would be eligible, but since the system exists in a <GlosRef na
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
 
 ## Specifications
- - $S_n$ is a set of arbitrary characters where $|S_n|=n$. Then `""`=$S_0$.
- - "empId" $\in S_n$
+ - For $n \in \N_0$, $S_n$ is a set of arbitrary characters $|S_n|=n$. Then `""`=$S_0$, an empty `string`.
+ - "empId" $\in S_{n>0}$
  - "salary type" $\in \{"H", "C", "S"\}$
  - "salary type" $= "C" \rArr$ `<commission-rate>` $\in \R_{\ge0}$
  - "rate" $\in \{x=$ `<hourly-rate>` $\lor \space x=$ `<monthly-salary>` $| \space x \in \R_{\ge0}\}$
