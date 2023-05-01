@@ -3,7 +3,8 @@
 import React from 'react';
 import l8 from "@l8js/l8";
 import Gist from "react-gist";
-
+import CodeBlock from '@theme/CodeBlock';
+import fetch from 'cross-fetch';
 
 function Embed ({width, children, title, figure, modeAware}) {
 
@@ -59,4 +60,21 @@ function MigrationNotice({when, where}) {
 
 }
 
-export {GitCode, Embed, ImgEmbed, UmlEmbed, MigrationNotice};
+
+function ExternalCodeBlock ({url}) {
+
+    const [code, setCode] = React.useState("");
+
+    fetch(url).then((resp) => {
+        resp.text().then((code) => setCode(code)) ;
+    });
+
+    return (
+        <CodeBlock language="php">{code}</CodeBlock>
+    );
+
+}
+
+
+
+export {ExternalCodeBlock, GitCode, Embed, ImgEmbed, UmlEmbed, MigrationNotice};

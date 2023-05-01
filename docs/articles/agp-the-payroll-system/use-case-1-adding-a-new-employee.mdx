@@ -4,8 +4,11 @@ slug: Use-Case-1-Adding-a-new-employee
 ---
 
 import {GlosRef, BibRef} from "../../../src/components/References";
+import {Embed, ExternalCodeBlock} from "../../../src/components/Embed";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-# Use Case 1 - Adding a new employee.
+# Use Case 1 - Adding a new employee
 
 :::info Use Case 1 - Adding a new employee
 _A new employee is added by the receipt of an `AddEmp` transaction. This transaction contains the employee's name, addess, and assigned employee number. The transaction has the following three forms:_
@@ -15,7 +18,7 @@ $ AddEmp <EmpId> "<name>" "<address>" H <hourly-rate>
 
 $ AddEmp <EmpId> "<name>" "<address>" S <monthly-salary>
 
-$ AddEmp <EmpId> "<name>" "<address>" C <hourly-rate> <commission-rate>
+$ AddEmp <EmpId> "<name>" "<address>" C <monthly-salary> <commission-rate>
 ```
 
 The employee's record is created with its field assigned appropriately.
@@ -44,18 +47,25 @@ rates; also, check if `empId`s already exist and prevent multiple occurences of 
 ### Actors 
 **Accountant** - adds a new _Employee_ to the system.
 
-import Actor from './img/usecase1/actor.svg';
-import {Embed} from "../../../src/components/Embed";
+import Actor from './img/usecase1/actor.svg.png';
 
 <Embed
     title={"Actor \"Accountant\" carries out the \"Add Employee\"-Use Case."}
 >
-    <Actor />
+    <img src={Actor} />
 </Embed>
 
 The <GlosRef name="Actor" file="uml.actor" /> carrying out the <GlosRef name="Use Case" file="uml.usecase" /> is an **Accountant**. Of course,
 any other "role" would be eligible, but since the system exists in a <GlosRef name="Domain" file="sd.domain" /> dealing with
 _Accounting_, I assume **Accountant** describes (a part of the) target audience of the system quite well.
+
+## Specifications
+ - For $n \in \N_0$, $S_n$ is a set of arbitrary characters $|S_n|=n$. Then `""`=$S_0$, an empty `string`.
+ - "empId" $\in S_{n>0}$
+ - "salary type" $\in \{"H", "C", "S"\}$
+ - "salary type" $= "C" \rArr$ `<commission-rate>` $\in \R_{\ge0}$
+ - "rate" $\in \{x=$ `<hourly-rate>` $\lor \space x=$ `<monthly-salary>` $| \space x \in \R_{\ge0}\}$
+
 
 ## Design
  The main program receives the input and forwards it to the <GlosRef name="Application Layer" file="sd.applicationlayer" />. A <GlosRef name="Repository" file="sd.repository" /> manages transaction-calls for an `Employee`-<GlosRef name="Entity" file="sd.entity" />. This will be orchestrated by `Payroll`,
@@ -63,7 +73,7 @@ a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain
 
 ### Domain Objects
  - The `Employee`-**Entity** providing information about `salary`, `salary-type` etc.
- - The `EmployeeRepository` accesses the required infrastructure for persisting `Employee`-Entities. The Repository should give the client the illusion that objects queried from it are in memory <BibRef name="DDD" pp="157" />. Thus, the reconstitution as well as the creation of `Employee`-instances will be delegated to a <GlosRef name="Factory Method" file="sd.factroymethod" /> as part of the `Employee`-class. (At this point, I do not see the need for a more complex factory that assembles intricate <GlosRef name="aggregates" file="ddd.aggregate" />).  Following the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" />, the `EmployeeRepository` will provide the **Interface** to which the object in the Infrastructure Layer has to conform to.
+ - The `EmployeeRepository` accesses the required infrastructure for persisting `Employee`-Entities. The Repository should give the client the illusion that objects queried from it are in memory <BibRef name="DDD" pp="157" />. Thus, the reconstitution as well as the creation of `Employee`-instances will be delegated to a <GlosRef name="Factory Method" file="sd.factroymethod" /> as part of the `Employee`-class. At this point, I do not see the need for a more complex factory that assembles intricate <GlosRef name="aggregates" file="ddd.aggregate" />, but providing a **Factory Method** as part of this **Domain Object** (and **Domain Objects** in general) can help with leveraging responsibilities for constructing and reconstitution of said **Domain Objects** to the **Domain Object** itself <BibRef name="DDD" pp="139" />.  Following the <GlosRef name="Dependency Inversion Principle" file="sd.dependencyinversionprinciple" />, the `EmployeeRepository` will provide the **Interface** to which the object in the Infrastructure Layer has to conform to.
 
 ### Layers
 
@@ -71,12 +81,57 @@ a **<GlosRef name="Domain Model" file="ddd.domainmodel"/>** part of the **Domain
  - We will receive input from here. This layer will be substituted by the test classes
 
 #### Application Layer
- - Will consume the input and forward it to the **Domain Layer**. This layer will be substituted by the test classes
+ - Will consume the input and forward it to the **Domain Layer**. This layer will be substituted by the test classes. Thus, the test cases replace the controller method. It will accepts primitive data types which are forwarded to the `Employee`'s **Factory Method**. `Employee`-instances will be forwarded to the `Payroll`'s `addEmployee`-method
 
 #### Domain Layer
- - `Payroll` exists in the **Domain Layer** in the form of a <GlosRef name="Facade" file="sd.facade" />
+ - `Payroll` exists in the **Domain Layer** in the form of a <GlosRef name="Facade" file="sd.facade" />.
  - The `EmployeeRepository` handles **Domain Objects** so it's associated with **_this_** domain and will a such become part of the **Domain Layer**.
 
 #### Infrastructure Layer
  - The `EmployeeRepository` accesses lower-level objects facilitating `write`-operations for a data storage of an arbitrary type. The lower-level objects
-will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations
+will be part of **_this_** layer. For this implementation, we will focus on the interface and provide simple file-based operations, but implement a <GlosRef name="Table Data Gateway" file="sd.tabledatagateway" /> that provides access to `Employee`-data. The **Domain Layer** will provide the interface for such an `EmployeeGateway` according to the <GlosRef name="Dependency-Inversion Principle" file="sd.dependencyinversionprinciple" />.
+
+### Resulting UML
+
+import Design from './img/usecase1/design.svg.png';
+
+<Embed
+    title={"The up-front design for Use Case 1, spanning several layers."}
+>
+    <img src={Design} />
+</Embed>
+
+### Implementation
+
+
+:::info
+Source code is loaded from [payroll](https://github.com/ThorstenSuckow/payroll). The branch is [**usecase1**](https://github.com/ThorstenSuckow/payroll/tree/usecase1).
+
+:::
+
+<Tabs>
+<TabItem value="employee_desc" label="The Employee.">
+
+I have deliberately put the `Employee` into the `Company` namespace. According to the [description of the software](/docs/articles/agp-the-payroll-system/introduction#a-brief-description-of-the-payroll-system),
+the `Payroll`-system will make sure to pay an `Employee` - and I see an `Employee` in the context of a **Company**, although putting `Employee` into the `Company`-namespace hints to resembling a parent("company")-child("employee") relationship. Such namespaces often share symptoms of vacuous modelling - just like an <GlosRef name="Anemic Domain Model" file="ddd.anemicdomainmodel" /> is of little functional and conceptual value. In general, [Vernon](https://vaughnvernon.com/) suggests to _"relax the rules a bit between child and parent Modules."_ <BibRef name="IDDD" p="334" />.
+
+Even if the Use Case does not explicitly state such a context, at least the semantics indicate it. Is `Company` then eligible to understand the context of `Employee`? Not necessarily. But the discussion should be held with domain experts understanding the project to the fullest. Is the Software used with **Public Administrations**? Then **Company** might not be the best fit for the managed `Employee`.
+
+
+</TabItem>
+
+<TabItem value="employee_php" label="Employee.php">
+
+<ExternalCodeBlock url="https://raw.githubusercontent.com/ThorstenSuckow/payroll/usecase1/src/Company/Employee.php" />
+
+</TabItem>
+
+<TabItem value="employee_test_php" label="EmployeeTest.php">
+
+<ExternalCodeBlock url="https://raw.githubusercontent.com/ThorstenSuckow/payroll/usecase1/tests/Company/EmployeeTest.php" />
+
+</TabItem>
+
+</Tabs>
+
+

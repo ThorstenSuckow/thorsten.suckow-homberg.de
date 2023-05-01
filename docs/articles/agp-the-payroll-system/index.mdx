@@ -39,11 +39,21 @@ I stick to the following rules while implementing my solution with the knowledge
 4. Avoid <GlosRef name="Needless Complexity" file="sd.symptomsofpoordesign" /> by strictly following Rules 2, 3 and 4.
 
 ### A note on testing 
-There is not a scripting system for the acceptance tests: The acceptance tests described with the Use Cases are written
+1. There is not a scripting system for the acceptance tests: The acceptance tests described with the Use Cases are written
 with [PHPUnit](https://phpunit.de/).
+
 2. I consider the inputs defined with the acceptance tests as an important requirement for the user interface. The user
 interface will be leveraged to the testing environment.
 
+## Source code
+
+The source code is maintained at https://github.com/thorstensuckow/payroll. Branches are named after the use case:
+ - [Branch "usecase1"](https://github.com/ThorstenSuckow/payroll/usecase1/) for [Use Case 1](./use-case-1-adding-a-new-employee)
+
+The main branch will always reflect the source code from the most recent sprint. Once a Use Case is marked as "finished", code in this branch will not be changed anymore, and required code changes of the finished branch's code base will be implemented with the most recent sprint and. Tags and Versions will reflect this.
+
+
+## Use Cases and Articles
 
 This is an ongoing article series.
 
