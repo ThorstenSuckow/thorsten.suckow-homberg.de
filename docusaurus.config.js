@@ -70,6 +70,8 @@ const config = {
             'https://github.com/thorstensuckow/thorsten.suckow-homberg.de/tree/main/',
         },
         blog: {
+          remarkPlugins: [math],
+          rehypePlugins: [katex],
           blogSidebarTitle: 'Recent Posts',
           blogSidebarCount: 'ALL',
           showReadingTime: true,
