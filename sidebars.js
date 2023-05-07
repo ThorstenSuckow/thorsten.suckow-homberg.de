@@ -8,6 +8,7 @@ const sidebars = {
             link: {type: 'doc', id: 'articles/index'},
             items: [
                 "articles/software-craftsmanship/index",
+                "articles/php8-constructor-property-promotion-attributed-accessors/index",
                 {
                     type: 'category',
                     label: 'The Payroll System',

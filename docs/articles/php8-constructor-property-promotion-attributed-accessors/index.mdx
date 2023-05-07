@@ -1,0 +1,145 @@
+---
+title: "Guarded Accessors with PHP8 Attributes"
+description: Guarded property accessors with PHP8 attributes and constructor property promotion
+---
+
+import {GlosRef} from "../../../src/components/References";
+
+Encapsulation in object-oriented programming is often connotated with implementing `getters` and `setters` for properties
+used to represent the state of an object or to store information required for further processing.
+
+This usually leads to verbose class implementations where the majority of methods simply represent said `getters` and
+`setters` without supporting the conceptual context the class is used in.
+
+```php title="Employee.php"
+class Emplyoee
+{
+
+    private string $empId;
+
+    private string $name;
+
+    public function __construct(string $empId, string $name)
+    {
+        $this->setEmpId($empId);
+        $this->setName($name);
+    }
+
+    public function setEmpId(string $empId): void
+    {
+        $this->empId = $empId;
+    }
+
+    public function getEmpId(string $empId): string
+    {
+       return $this->empId;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getName(string $name): string
+    {
+        return $this->name;
+    }
+
+    // ...
+}
+```
+
+In the example above, the code for the `Employee` is cluttered with **getters** and **setters** that expose
+the existence of properties when following the (non-formalized) notation of `get/set[property_name]`, helping data
+mappers and serializers when reconstituting or creating owning objects.
+
+However, such methods don't promote the means of a model of a particular domain and not seldom are programmers tempted to implement logic or
+behavior preceding such an API. In fear of breaking functionality when `setters` unexpectedly implement logic for either updating (associated) data or
+using constraints on the submitted data, this often leads to <GlosRef name="anemic domain models" file="ddd.anemicdomainmodel" />.
+
+```php
+$employee = new Employee();
+
+$employee->setSalaryClass(Salary::EL13);
+$employee->setRole(CompanyRole::ITResearch);
+
+// instead of
+// $employee->promoteTo(CompanyRole::ITResearch);
+```
+
+Code like this is often leveraged into facades that end up containing business logic, whereas such business logic should
+rather belong to the entities directly, in this case the `Employee`-class.
+
+The following article will show how **PHP8** can be used to reduce such boilerplate code, without losing accessors to
+the properties of an object. Additionaly, the article will show how **guards** can be implemented in the target classes
+that are used to control the changing of data.
+
+## PHP8 Attributes
+[Attributes](https://www.php.net/manual/en/language.attributes.overview.php) were introduced with **PHP8** and can be
+used to provide metadata information. While this was already possible with doc-block comments and annotations in previous
+ versions of **PHP**, **PHP Attributes** allow to do the same in a more formal context. Similar to **Java**, where **Annotations**
+  can be used without doc-comments embedded directly into the code, **Attributes** do not need doc-blocks, making parsers
+  unnecessary. The [Reflection API](https://www.php.net/manual/en/class.reflectionattribute.php) can then be used to read
+  out any attribute, which can belong to classes, or methods and properties.
+
+For our purpose, we define two classes that serve as _**tagging Attributes**_: They will be used for identifying
+properties for which **getters** and **setters** should be made available.
+
+```php title="Setter.php"
+#[Attribute]
+class Setter
+{
+}
+```
+
+
+```php title="Getter.php"
+#[Attribute]
+class Getter
+{
+}
+```
+
+## Implementing a `trait`
+Any client interested in updating or querying data from an object whose properties where marked with `#[Setter]` and
+`#[Getter]` should be able to use particular `getters` and `setters`. Since our server will not implement these methods
+directly, we need to facilitate PHP's [`__call()`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call).
+The method will be implemented in a **Trait**: [Traits](https://www.php.net/manual/en/language.oop5.traits.php)
+provide code reusabilty in **PHP8** without using inheritance or object composition.
+
+:::info
+The following version of `AccessorTrait` will not provide the full implementation of its helper classes. For a complete
+example, see [this file](https://github.com/quant-php/quant/blob/main/src/Traits/PropertyAccessorTrait.php).
+:::
+
+```php title="AccessorTrait.php"
+trait AccessorTrait
+{
+    if (($isSetter = str_starts_with($method, "set")) ||
+        str_starts_with($method, "get")) {
+
+        $property = lcfirst(substr($method, 3));
+
+        if ($isSetter) {
+            if ($this->hasSetterAttribute($property)) {
+                $this->applyFromSetter($property, $args[0]);
+                return $this;
+            }
+        } else  {
+            if ($this->hasGetterAttribute($property)) {
+                return $this->$property;
+            }
+        }
+    }
+
+    throw new BadMethodCallException("$method not found.");
+}
+```
+
+`__call` will probe the requested method first for a `get`-/`set`-prefix, then query the owning object if the requested
+property has a `#[Setter]` or `#[Getter]` attribute.
+
+## Using the trait with a server
+
+
+
