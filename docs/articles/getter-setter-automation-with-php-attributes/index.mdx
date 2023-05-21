@@ -9,28 +9,30 @@ import {Embed}  from "../../../src/components/Embed";
 
 ## 1. Abstract
 
-This article introduces getter and setter automation based on **PHP Attributes**, **Traits**
-and **Constructor Property Promotion** for **PHP >= 8.2** and demonstrates how boilerplate code can be reduced where classes
-require simultaneously property access encapsulation and guarded setters.
+This article introduces `getter` and `setter` automation in **PHP** based on **Attributes**, **Traits**
+and **Constructor Property Promotion** for **PHP >= 8.2** and shows how boilerplate code can be reduced for classes that
+ require property encapsulation while simultaneously considering custom logic with setters.
 
-The article also gives details on challenges one faces when access modifiers have to be considered, and when the scope
- of a given callee has to be validated with permissions to update various properties that may not reside in the scope of the callee.
+If access modifiers are required with `getters` and `setters` that do not exist in source code, code resolving such methods has to check whether
+the caller belongs to the scope that can access the method. While `access modifiers` are usually handled by the programming language's engine,
+ the article demonstrates the various challenges that occur when these checks have to be implemented in high level code.
 
-The impacts of getter/ setter automation on performance is demonstrated with benchmarks that compare various levels of details of such an implementation.
+The impacts of `getter`/ `setter` automation on performance is demonstrated with benchmarks that compare various levels of details of such an implementation.
 
 
 ### 1.1 Notation
-For a typed property `employee`, we may construct setters and getters such that `setEmployee(T $value)` has write-access and `getEmployee(): T`
-has read-access.
 
-In the following text, the generalization of such getters and setters uses abbreviations `set*()` and `get*()`, with `* = "\$(A-Z)[a-zA-Z0-9_]*"`.
+**Example:** For a typed property `T $employee`, we may construct setters and getters such that `setEmployee(T $value)` has write-access and `getEmployee(): T`
+has read-access, with the following implications:
 
-For semantic purposes, we introduce `is*()` as a representant of a method with read-access to a `boolean` property.
+ **1.1.2** In the following article, the generalization of such `getters` and `setters` uses abbreviations `set*()` and `get*()`, where `*` is a list of characters conforming to the regular expression `"\$(A-Z)[a-zA-Z0-9_]*"`.
 
-This article mentions "physical" and "virtual" existing methods. In the context of the topic of this article, a "phsical" method
+ **1.1.3** For semantic purposes, we introduce `is*()` as a representant of a method with read-access to a `boolean` property.
+
+ **1.1.4** This article mentions "physical" and "virtual" existing methods. In the context of the topic of this article, a "phsical" method
 refers to a method that is explicitly implemented with the source code. A "virtual" method refers to a method that is resolved by
-`PHP`'s magic method [`__call`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call). In this regard,
-the term shares shares similiarities with the concept of `virtual functions`, where the target function is not known during compile time.
+`PHP`'s magic method [`__call`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call). (In this regard,
+the term shares similiarities with the concept of [`virtual functions`](https://en.cppreference.com/w/cpp/language/virtual), where the target function is not known during compile time.)
 
 
 ## 2. Introduction
@@ -45,8 +47,8 @@ the implementation without adding new code and letting the old rot. Instead of s
 meaningful interface supports such an abstraction, classes tend do grow or introduce breaking changes.
 
 A complete set of `getters` and `setters` aligning with available properties may caress the ego of a developer or a project's coding
-standards, but bloats the source code and reduces its readability. One may doubt that it supports the conceptual context
-the class is used with:
+standards, but bloats the source code and reduces its readability. One can doubt that the conceptual context of an `Employee` is supported
+with the following implementation:
 
 ```php title="Employee.php"
 class Emplyoee
@@ -86,13 +88,12 @@ class Emplyoee
 }
 ```
 
-In the example above, the code for the `Employee` is has **getters** and **setters** exposing
-the existence of properties when following the (non-formalized) notation of `get*()`/ `set*()` / `is*()`, helping data
+The `Employee`-code has **getters** and **setters** exposing the existence of properties when following the [notation](#11-notation) of `get*()`/ `set*()` / `is*()`, helping data
 mappers and serializers when reconstituting or creating owning objects.
 
 However, such methods don't promote the means of a model of a particular domain and not seldom are programmers tempted to implement logic or
 behavior in places preceding such an API. In fear of breaking functionality when `setters` unexpectedly implement logic for either updating (associated) data or
-using constraints on the submitted data, this often leads to <GlosRef name="anemic domain models" file="ddd.anemicdomainmodel" />.
+using constraints on the submitted data; this can lead to <GlosRef name="anemic domain models" file="ddd.anemicdomainmodel" />.
 
 ```php
 $employee = new Employee();
@@ -105,21 +106,21 @@ $employee->setRole(CompanyRole::ITResearch);
 ```
 
 Often enough can we witness projects where business logic finds its way into <GlosRef name="Facades" file="sd.facade" />,
-whereas such business logic would have its rightful place in the <GlosRef name="Entity" file="sd.entity" /> itself (in this case the `Employee`-class).
+albeit such business logic would have its rightful place in the <GlosRef name="Entity" file="sd.entity" /> itself (in this case, the `Employee`-class).
 
-In the following article I will show how **PHP8** can be used to reduce such boilerplate code, by still conforming to the needs
- of data mappers and without losing access to (selected) properties of an object. Additionally, I will demonstrate how
- **guards** can be implemented with having responsibility for constraining possible data changes.
+To encourage a more verbose, intention revealing API, the visibility of such methods should be reduced. However, the API should still conform
+to the needs of data mappers and other programs that use `getter` and `setters` with property discovery. Explicitly declared [**guards**](#43-guarding-constructor-arguments) can be given responsibility for putting constraints on data changes.
 
 ## 3. PHP Attributes
 [Attributes](https://www.php.net/manual/en/language.attributes.overview.php) were introduced with **PHP8** and can be
-used to provide metadata information. While this was already possible with doc-block comments and annotations in previous
- versions of **PHP**, **PHP Attributes** allow to do the same in a more formal context. Similar to **Java**, where [**Annotations**](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/text/Annotation.html)
-  have their own type and can be embedded directly into code, **PHP Attributes** do not need doc-blocks, making parsers
-  obsolete. The [Reflection API](https://www.php.net/manual/en/class.reflectionattribute.php) allows for reading
+used to provide metadata information with class implementations. While this was already possible with doc-block comments embedding annotations in previous
+ versions of **PHP**, **Attributes** allow to do the same in a more formal context and with native support by the language engine.
+ Similar to **Java**, where [**Annotations**](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/text/Annotation.html)
+  have their own type and can be embedded directly into code (instead of comments), **PHP Attributes** do not require doc-blocks,
+  making parsers introducing expensive runtime behavior obsolete. PHP's [Reflection API](https://www.php.net/manual/en/class.reflectionattribute.php) allows for reading
   out **Attributes** preceding classes, methods or properties.
 
-For our purpose, we define two classes that serve as _**tagging Attributes**_: They will be used for identifying
+For this article, we define two classes that serve as _**tagging Attributes**_: They will be used for identifying
 properties that require **getters** and **setters** to be available as part of their host's interface.
 
 ```php title="Setter.php"
@@ -137,17 +138,17 @@ class Getter
 }
 ```
 
-## 4. The AccessorTrait
-Any client interested in updating or querying data from an object whose properties are attributed with `#[Setter]` and
-`#[Getter]` should be able to use particular `get`- and `set`-methods.
+## 4. The `AccessorTrait`
+Any client interested in updating or querying data of an object whose properties are attributed with `#[Setter]` and
+`#[Getter]` should be able to use particular `get`- and `set`-methods. For this purpose, we will use a
+[`Trait`](https://www.php.net/manual/en/language.oop5.traits.php): This allows code re-usabilty without using inheritance or object composition.
 
-Since our server will not implement these methods directly, we need to facilitate PHP's [`__call()`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call).
-The method will be implemented in a [Trait](https://www.php.net/manual/en/language.oop5.traits.php) which generally provides
-code reusabilty in **PHP** without using inheritance or object composition.
+In this `Trait`, we need to implement PHP's [`__call()`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call), allowing us to capture
+any method call that was not treated by an actual, physical implementation of this method.
 
 :::info
 The following version of `AccessorTrait` will only showcase the basic implementation. For a complete
-example, see [this file](https://github.com/quant-php/quant/blob/main/src/Traits/AccessorTrait.php).
+version of this code, refer to [quant/core](https://quant-php.dev/docs/packages/quant/core).
 :::
 
 ```php title="AccessorTrait.php"
@@ -177,15 +178,15 @@ trait AccessorTrait
 }
 ```
 
-`__call()` will be available to the host implementing the Trait: Whenever a method is called that is not available on the
+`__call()` will be available to the host using the `Trait`: Whenever a method is called that is not available on the
 target object, **PHP** will pass pass the requested method name along with any submitted arguments to this method. In our case,
 `__call` inspects the requested method-name for a `get`-/`set`-prefix, and, if available, queries the host for properties
-attributed with `#[Setter]` or `#[Getter]`. Properties can in this case be either properties defined directly in the host's
-class, or -  using [**Constructor Property Promotion**](https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion) - with the parameters defined in the host's constructor.
+attributed with `#[Setter]` or `#[Getter]`. Such properties can also be declared by using [**Constructor Property Promotion**](https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion)
+ with the appropriate attributes preceding them.
 
-### 4.1 Hosting the AccessorTrait
+### 4.1 Hosting the `AccessorTrait`
 
-As a requirement, we want the `empId` of the previously introduced `Employee`-class to be available with `getEmpId()`: Once provided with the constructor, this property will be immutable for the lifetime of the associated `Employee`.class
+As a requirement, the `empId` of the previously introduced `Employee`-class should be immutable, but readable with `getEmpId()`.
 Using the available `#[Getter]`-Attribute along with [**Constructor Property Promotion**](https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion), our implementation looks like this:
 
 ```php title="Employee.php"
@@ -204,19 +205,19 @@ class Employee {
 }
 ```
 
-Creating an instance and immediately accessing the `$empId` declared as `private` is now possible due to the `AccessorTrait`:
+Creating an instance and immediately accessing the `$empId` declared as `private` is now possible since `Employee` uses the `AccessorTrait`:
 
 ```php
 $employee = new Employee("87i-dsd-89z-978");
 $employe->getEmpId(); // returns "87i-dsd-89z-978"
 ```
 
-Also, read-access to `$name` is nor provided by `getName()`.
+Also, read-access to `$name` is given by calling `getName()`.
 
-As expected, a call to `setEmpId()` throws a `BadMethodCallException`: It's neither defined in `Employee`, nor is it
-considered with `AccessorTrait::__call()` since the `#[Setter]`-attribute is missing.
+A call to `setEmpId()` throws a `BadMethodCallException`: It's neither defined in `Employee`, nor is it
+considered with `AccessorTrait::__call()` since the `#[Setter]`-attribute for its property is missing.
 
-However, it should be possible to change the `$name` of `Employee`: Adding the `#[Setter]`-attribute to its property yields in
+In a second step, the `$name` property of `Employee` should be mutable: Adding the `#[Setter]`-attribute to its property yields in
  the availability of `setName()` with any instance of `Employee`:
 
 ```php title="Employee.php"
@@ -242,17 +243,17 @@ $employee = new Employee("87i-dsd-89z-978");
 $employe->setName("Thomas Anderson");
 ```
 
-Instead of configuring individual properties of a target class, it is also possible to use the attributes on class level: accessors
+Instead of configuring **individual properties** of a target class, it is also possible to **use the attributes on class level**: The accessors configured with their attribute-representation
 will then automatically be available **for all** properties of the class.
 
 ### 4.2 Conditional Updates of Properties with Guards
 
-Without the need to provide boilerplate-code for `setters`, how can we make sure that data passed to such `setters` matches
-specific criteria so that updating the targeted property does not leave the hosting object in an invalid state? Delegating
-the responsibility to invoke `set*()` by the `AccessorTrait`, we may proxy such calls with an `apply*()`-method,
-which - if available on the host - gets called before the property gets actually assigned a new value. The `apply*()`-method -
-conforming to the naming conventions of `get` and `set` - must then test the passed value against any criteria available,
-then return the new value - indicating a pass, thus a successful update of the property's value.
+Since physical code for `setters` is not available, developers still need to make sure that data passed to _virtual setters_
+does not violates specific criteria that would otherwise leave target objects in an invalid state. Thus, the `AccessorTrait` proxies
+`setters` with `apply*()`-methods (`apply*()` conforming to the [naming conventions](#11-notation) of `get` and `set`).
+These methods are looked up in the classes using the `AccessorTrait` (or extending a hosting class) and -
+ if existing, are called with the value that is provided as the new value for the target property.
+ `apply*()` can then validate the submitted argument and return a value that is actually used with `set*()`.
 
 ```php title="Employee.php"
 class Employee {
@@ -280,7 +281,7 @@ class Employee {
 }
 ```
 
-For making this work, the `AccessorTrait` has a method `applyFromSetter()` implemented:
+The `AccessorTrait` implements a method similar to the following `applyFromSetter()`-method:
 
 ```php title="AccessorTrait.php"
 
@@ -313,20 +314,20 @@ private function applyFromSetter(
 
 ```
 
-The method checks if a **guard** - i.e. an `apply*()`-method is available - calls it with value submited to `set*()`,
-then uses its return value as the new value for the property. If no **guard** is available, the original value
+Iff an  `apply*()`-method for the targeted property is available, such a  **guard** is applied to the `$value`-argument,
+then the `AccessorTrait` uses its return value as the new value for the targeted property. If no **guard** is available, the original value
 will be used as the new value.
 
 :::note
 The new value might by the same as the old value, making it harder to determine whether the returning value is equal to
-the value that was submitted to `set*()` in the first place. Lacking a bottom value in **PHP** like `undefined` requires
-us to introduce a custom type to indicate that updating the value was forbidden.
+the value that was submitted to `set*()` in the first place. The lack of an additional bottom value in **PHP** like `undefined` requires
+us to introduce a custom type to indicate that updating the value was forbidden, if that would be required.
 :::
 
 ### 4.3 Guarding constructor arguments
 To utilize the various `apply`-methods that might be available with the implementation, a constructor can invoke
 the `applyProperties`-method available with the **AccessorTrait**: This will immediately apply any method guarding a property
-and assign the computed value:
+to the submitted value for this property and assign the computed value:
 
 ```
  public function __construct(
@@ -341,21 +342,23 @@ and assign the computed value:
 `applyProperties` expects a numeric array and will identify any property positionally. In the example above, the guard for
  the class-property `$b` will be invoked with the value submitted with the constructor argument `$b`.
 
-### 4.4 Access Modifiers to getters and setters
-To modify the visibility of any accessor created with the `#[Getter]` / `#[Setter]` annotation, modifier configuration can be achieved
-with applying arguments to the attributes themself: **PHP** provides means to pass additional information to attributes which
-end up as constructor arguments when [`newInstance()`](https://www.php.net/manual/en/reflectionattribute.newinstance) is invoked
-on a particular attribute. This does not necessarily mean that an Attribute has to consider constructor arguments - this syntax can
-be adopted for simply tagging an Attribute with additional information:
+### 4.4 Modifying access to `getters` and `setters`
+To modify the visibility of any accessor available through the `#[Getter]` / `#[Setter]` annotation, access configuration can be achieved
+by applying arguments to the attributes: **PHP** provides means to pass additional information to attributes as constructor arguments
+when [`newInstance()`](https://www.php.net/manual/en/reflectionattribute.newinstance) is invoked on the attribute's reflection representative.
+
+:::note
+PHP allows for omitting a constructor in classes representing attributes. The Reflection API will still allow for reading them out, though.
+:::
 
 ```php title="Using tagging Arguments with Attributes"
 #[Attribute(TaggingClass::TagName, AnotherTaggingClass::AnotherTag)]
 ```
 
-Treating such arguments in a semantic context, we can provide a set of modifiers that can be used to further describe
-the access level of a generated getter or setter. Consider the following implementation, where an enum `Modifier` exists
-that provides the values `PUBLIC`, `PRIVATE`, `PROTECTED`. Describing a class that has only private `setters`
-and `public` getters can then be achieved by
+Using such arguments with semantics, a set of user-defined modifiers can be used to further describe
+the access level of a virtual `getter` or `setter`. Consider the following implementation, where an enum `Modifier` exists
+that provides the values `PUBLIC`, `PRIVATE`, `PROTECTED`. Describing a class that has only _private_ `setters`
+and _public_ `getters` can then be achieved by
 
 ```php
 #[Getter(Modifier::PUBLIC)]
@@ -372,8 +375,8 @@ This will provide public access to `getValue()` of instances of `A`, but only pr
 of `$value`. Thus, changing the values is reserved to `A` itself. Changing `#[Setter(Modifier::PRIVATE)]` to `#[Setter(Modifier::PROTECTED)]`
 would then broaden access to `$value` to any instance of classes extending `A`.
 
-The current implementation allows for overriding class level attributes with property level attributes: If one wishes to
-provide `protected` instead of `private` access to the setter of `$value` in the example above, an additional attribute would be required:
+We can easily achieve attribute overriding with additional property level attributes: If one wishes to
+provide `protected` instead of `private` access to the `setter` of `$value`, an additional attribute can be provided:
 
 ```php
 #[Getter(Modifier::PUBLIC)]
@@ -387,35 +390,34 @@ class A
 }
 ```
 
-
 :::info
-Since the `AccessorTrait` implements any conceivable logic and behavior, additional modifiers like `Modifier::PACKAGE`
-could be used for restricting accessor visibility to the namespace the implementing class belongs to.
+Since the `AccessorTrait` implements any conceivable logic and behavior, additional user-defined modifiers like `Modifier::PACKAGE`
+could be used for access based on namespace equality.
 :::
 
 ### 4.5 Inheritance and Scoping
-The implementation allows for defining the `AccessorTrait` once for a class, and all subclasses using the attributes
- provided are then properly considered when the `setter`-/`getter`-automation is invoked.
+The implementation allows for using the `AccessorTrait` in a class, and then all subclasses of this class can use
+`#[Getter]` / `#[Setter]` attributes with accessor automation as the result.
 
- Since traits are basically code templates enabling horizontal code composition without affecting inheritcance,
- the resulting class constructs and their implementation behave just like as if the code of the Trait was part of the source
-  code of the target class. This results in poarticular in challenges for resolving the scope the `setter`/`getter` and - when
-  modifiers such as `PROTECTED` and `PRIVATE` are used on the attributes, challenges for determining whether the calls
-  to the virtual accessors are allowed in the first place.
+ Since `Traits` are basically code templates enabling horizontal code composition without affecting inheritance, the behavior with
+ hosting classes is just like as if the code of the `Trait` was actually physical part of the hosting class.
+ This proves challenging when
+  a. the the scope of the owner of the `setter` / `getter` needs to be resolved and
+  b. when modifiers such as `PROTECTED` and `PRIVATE` are used and access has to be granted or forbidden to interested callers
 
 import Scoping from './img/scoping.png';
 
 <Embed
-    title={"The Trait has to take care of finding attributed properties and scope function calls accordingly.."}
+    title={"The Trait has to take care of finding attributed properties and place the function calls in the proper scope."}
 >
     <img src={Scoping} />
 </Embed>
 
-Specially the calling scope of magic methods [has been discussed](https://github.com/php/php-src/issues/9906) and resulted in a
-[RFC scheduled for 8.3](https://wiki.php.net/rfc/access_scope_from_magic_accessors).
+Gaining information about the calling scope of magic methods [has been discussed](https://github.com/php/php-src/issues/9906)
+is to interest of a broader audience and already resulted in an [RFC scheduled for 8.3](https://wiki.php.net/rfc/access_scope_from_magic_accessors).
 
-In addition, modifiers have to be treated in accordance to the language level behavior of PHP, using `debug_backtrace()`
-for accessing runtime information on the call stack:
+Since modifiers have to be treated in accordance to the language level behavior of PHP, using `debug_backtrace()`
+for accessing runtime information on the call stack exposes required information about the calling contexts.
 
 ```php
  $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
@@ -425,51 +427,53 @@ for accessing runtime information on the call stack:
 ```
 
 This does not severely impact performance, but the need for accessing a rather expensive function belonging to a debugging domain
- shows that **PHP** can benefit from additional runtime information with magic methods as discusses in the RFC quoted above.
- Further optimizations given builds that use code generation are discussed later in this article.
+ shows that **PHP** can benefit from additional runtime information when magic methods are involved.
+ Further possible optimizations facilitating caching and production builds are discussed later in this article.
 
 ### 4.6 Static Code Analysis
 
 The implementation provides extensions for [**PHPStan**](https://github.com/phpstan/phpstan) so that white-box tests on static code
- properly resolves calls to getters and setters not available with the source code.
+ properly resolves calls to virtual getters and setters.
 
-To make this work,several classes have to be implemented, of which the most notabke are:
+To make this work,several classes have to be implemented. The most notable are:
 
-- `PHPStan\Reflection\MethodReflection` <br /> provides information about virtual methods proxied by `__call`. Of interest are the
-function variants returned for the `set`- and `get`-context which futher provide information about parameters accepted and the return value for either `setter` or `getter`: For a `setter`, this must be the declaring class itself; for a `getter`, the type of the property that is quried by the getter.
+- `PHPStan\Reflection\MethodReflection` <br /> provides information about methods-calls intercepted by `__call`. Of interest are the
+function variants returned for `set`- and `get`-contexts which provide further information about valid parameter configurations and
+the return value and its type for either `setter` or `getter`: For a `setter`, this must be the type of the property-declaring class itself; for a `getter`,
+the type of the configured property is required.
 
 - `PHPStan\Reflection\MethodsClassReflectionExtension` <br /> A predefined interface for implementations facilitating `__call`, [MethodsClassReflectionExtension](https://phpstan.org/developing-extensions/class-reflection-extensions#methods-class-reflection-extensions)
-greatly reduces the required effort (e.g. custom rules) for implementing the constraints on magic method calls. The logic
-for that has to be implemented for the interface's `hasMethod()`/ `getMethod()` is similar to that found with the `AccessorTrait`,
-minus the code required for determining the calling scope, which is statically resolved by the engine used by **PHPStan**
+greatly reduces the required effort (e.g. custom rules) for implementing constraints on magic method calls. The logic
+for implemented for the interface's `hasMethod()`/ `getMethod()` is similar to that found with the `AccessorTrait`,
+minus the code required for determining the calling scope, which is statically resolved by **PHPStan**'s engine.
 
 - `PHPStan\Rules\Properties\ReadWritePropertiesExtension` <br /> This extension interface is used to describe always-read or always-written properties to prevent `never read` / `unused`
-warnings.  The extension for **quant** checks whether the attributes property is used with a class that uses the `AccessorTrait`
+warnings.  The extension for **quant** checks whether the attribute's property is used with a class that uses the `AccessorTrait`
 and optimistically returns `true` for the `isAlwaysRead()`-, `isAlwaysWritten()`- and `isInitialized()`- checks.
 
 ## 5 . Performance considerations
 
 The implementation details described in this article require logic and information to be evaluated at runtime, since
-`getters` / `setters` are only virtually existing, not physically: This affects performance to a certain degree which we
- will examine below.
+`getters` / `setters` are only virtually existing, not physically: This affects performance to a certain degree which is
+ examined below.
 
-The following functionality of the `AccessorTrait` was found to impact runtime performance: <a name="performance_impacts"></a>
+In tests, the following functionality of the `AccessorTrait` proved to have an impact on runtime performance: <a name="performance_impacts"></a>
 
  1. Using the [Reflection API](https://www.php.net/manual/en/book.reflection.php) to query properties and classes for properties.
  2. Determining whether an accessor is accessible for the callee based on the modifiers-configuration of the attributes.
- 3. Scoping function calls from the class that hosts the trait to the classes that declare the property.
+ 3. Scoping function calls from the class that hosts the trait to the classes that declare the property. E.g., if the property is declared private, the scope of the owning class must be used for setting the property.
 
 
 ### 5 .1 Benchmark Test Cases
 To get an idea of how the runtime of the `AccessorTrait` compares to related implementations, the following Test Cases
-where measured using [phpbench](https://phpbench.readthedocs.io/en/latest/index.html), and open source benchmark tool for **PHP**:
+where measured using [phpbench](https://phpbench.readthedocs.io/en/latest/index.html), an open source benchmark tool for **PHP**:
 
 1. Calls to a `setter`-method physically existing on a class.
-2. Calls to a method magically resolved by `__call`.
-3. Using [`Doctrine\Common\Annotations::AnnotationReader`](https://www.doctrine-project.org/projects/annotations.html) to parse Docblocks and read annotation, then map the annotation to a method-call intercepted by `__call`
-4. Using `AccessorTrait` to get the Attribute of a property, the map the name of the property to a method-call intercepted by `__call`
-5. Using instances of a class hierarchy with multiple calls to getters and setters physically available with the classes
-6. The same as 5., but getters and setters are only virtually existing; the `AccessorTrait` is part of the root-class
+2. Calls to a method intercepted by `__call`.
+3. Using [`Doctrine\Common\Annotations::AnnotationReader`](https://www.doctrine-project.org/projects/annotations.html) to parse Docblocks and read annotations, then intercept the method call by `__call`.
+4. Using `AccessorTrait` to get the Attribute of a property, then map the name of the property to a method-call intercepted by `__call`.
+5. Using instances of a class hierarchy with multiple calls to physical existing `getters` and `setters`.
+6. The same as 5., but `getters` and `setters` are only virtually existing; the `AccessorTrait` is part of the root-class.
 
 #### 5 .1.1 Benchmark Settings
 For each benchmark, a [Revolution](https://phpbench.readthedocs.io/en/latest/annotributes.html?highlight=revs#revolutions) of `1000` is used that gets [iterated](https://phpbench.readthedocs.io/en/latest/annotributes.html?highlight=revs#iterations) `5` times.
@@ -511,37 +515,39 @@ Not surprisingly, the native implementation of a setter (1.) is the fastest with
 
 The **AnnotationReader** is the slowest benchmark with **1.689ms**, obviously due to the fact that text parsers are involved, conversely to (6.),
 where attribute parsing is natively implemented: The benchmark for the complex test case using the `AccessorTraits` requires **60.786μs** to finish.
-It is worth mentioning that the classes for the benchmark depict more [complex use cases](#performance_impacts) with inheritance, access modifiers and the `AccessorTrait`
-hosted only on the root class.
+(It is worth mentioning that the classes for the benchmark depict more [complex use cases](#performance_impacts) with inheritance, access modifiers and the `AccessorTrait`
+hosted only on the root class.)
 
 This is roughly 3.75 times slower than the implementation that uses the same functionality with a physical implementation.
 
-In all benchmarks, memory consumption was neglectable. It should be obvious that classes using physical getters and setters use up more memory.
+It should be obvious that a sum of n classes using physical getters and setters use up more memory than n classes that use one trait intercepting the calls to such methods. In the provided test cases for the benchmarks, memory consumption was neglectable.
 
 
 ## 6 . Conclusion
-Reducing the physical visibility of getters and setters may have the effect that developers fall back to the ubiquitous language
-of the project and a more domain specific vocabulary when defining methods, instead of placing such methods in facades
-operating on setters and getters of entities. When reducing the relevance of accessors, developers could be encouraged to
- work more closely with the inherent responsibility of an entity, instead of interfacing its properties.
+Reducing the physical visibility of getters and setters can have the effect that developers take more advantage of words and terms
+conceptually related to an entity when defining methods, instead of placing such methods in facades
+operating on setters and getters of such entities. When reducing the relevance of accessors, developers could be encouraged to
+ work more closely with the inherent responsibility of such an entity, instead of simply interfacing its properties.
+ The code becomes more intention revealing, more readable, and the entity's purpose is communicated with its method names.
 
 With the the benchmarks executed for the various testcases, it shows that physical existing code has runtime benefits, but
 impacts memory consumption, conversely to the implementation that only uses magic methods. Although the memory consumption
-for the given benchmarks are neglectable, all and in special regard physical implementation benefit from the
+for the given benchmarks are neglectable, physical implementations greatly benefit from the
 [**opcode cache**](https://www.php.net/manual/en/intro.opcache.php), whereas the logic evaluated with `__call` and the
 virtual `getters` and `setters` cannot be cached in the same way the physical existing `getters` and `setters` are.
-A codebase that requires such getters and setters, but where those accessors are not frequently used, the system will
+In a system whose codebase requires `getters` and `setters`, but where those accessors are not frequently used, the system will
 benefit from lower memory consumption.
 
-With regards to particular caching mechanisms, it should be easy to provide builds of the code that uses an `AccessorTrait`,
-resulting in classes that physically provide getters and setters, if necessary.
+With regards to particular caching mechanisms, it should be easy to provide builds of the code that uses such `AccessorTrait`s,
+resulting in classes that physically provide getters and setters, if necessary, speeding up runtime behavior.
+
 
 
 ---------------------------------------
 ##### Resources
-- [`AccessorTrait` implementation, tests and benchmarks](https://github.com/quant-php/quant)
-- [`AccessorTrait` Benchmark implementation](https://github.com/quant-php/core/tree/main/Tests/Benchmarks)
-- [`AccessorTrait` documentation](https://quant-php.dev/docs/packages/quant/core)
-- [PHP RFC: Access Scope from Magic Accessors](https://wiki.php.net/rfc/access_scope_from_magic_accessors)
-- [Basic accessors implementation (WIP)](https://github.com/php/php-src/pull/6873)
-- [PHP RFC: Property Accessors](https://wiki.php.net/rfc/property_accessors)
+- [**quant/core**: `AccessorTrait` documentation](https://quant-php.dev/docs/packages/quant/core)
+- [**quant/quant**: `AccessorTrait` repository](https://github.com/quant-php/quant)
+- [**quant/core**:` AccessorTrait` Benchmark source code](https://github.com/quant-php/core/tree/main/Tests/Benchmarks)
+- [**PHP RFC**: Access Scope from Magic Accessors](https://wiki.php.net/rfc/access_scope_from_magic_accessors)
+- [**php/php-src**: Basic accessors implementation (WIP)](https://github.com/php/php-src/pull/6873)
+- [**PHP RFC**: Property Accessors](https://wiki.php.net/rfc/property_accessors)
