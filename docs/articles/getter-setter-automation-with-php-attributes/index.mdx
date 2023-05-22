@@ -27,16 +27,16 @@ The impacts of `getter`/ `setter` automation on performance is illustrated with 
 Assume there is a typed property `T $employee`. We may construct setters and getters such that `setEmployee(T $value)` has write-access and `getEmployee(): T`
 has read-access to `$employee`, with the following implications:
 
- **1.1.1** In the following article, the generalization of such `getters`, `setters` and familiar methods use the abbreviations set*()`, `get*()`, `is*()`and `apply*()` where `*` is a list of characters conforming to the regular expression `"\$(A-Z)[a-zA-Z0-9_]*"`.
+ **1.1.1** In this article, the generalization of such `getters`, `setters` and familiar methods use the abbreviations `set*()`, `get*()`, `is*()`and `apply*()` where `*` is a list of characters conforming to the regular expression `\$(A-Z)[a-zA-Z0-9_]*`.
 
  **1.1.1.1** For semantic purposes, we introduce `is*()` as a representant of a method with read-access to a `boolean` property.
 
  **1.1.1.2** `apply*()` will be used as a proxy-method for `set*()`.
 
- **1.1.2** This article mentions "physical" and "virtual" existing methods. In the context of the topic of this article, a "phsical" method
-refers to a method that is explicitly implemented with the source code. A "virtual" method refers to a method that is resolved by
+ **1.1.2** This article mentions "physical" and "virtual" existing methods. In the context of the topic of this article, a "physical" method
+refers to a method that is available with the source code. A "virtual" method refers to a method that is resolved by
 `PHP`'s magic method [`__call`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call). (In this regard _virtual accessors_
-and [`virtual functions`](https://en.cppreference.com/w/cpp/language/virtual) share the similarity that the target function is not known during compile time respectively its runtime engine.)
+and [`virtual functions`](https://en.cppreference.com/w/cpp/language/virtual) share the similarity that the target function is not known during compile time respectively to its runtime engine.)
 
 **1.1.3** _Iff_ means _If, and only if_.
 
@@ -115,7 +115,7 @@ albeit such business logic would have its rightful place in the <GlosRef name="E
 
 But does information hiding encourage a more verbose, intention revealing API? It is long known that visible implementation details will be re-used across module boundaries without further questioning their applicability <BibRef name="MOD" />: There is a chance that a programmer would rather use `setSalaryClass()` and `setRole()` for implementing his/her own routine, instead of applying `promoteTo()`, even if it would fit the use case.
 
-The promoted approach has the advantage that, if such a form of **information hiding** is used, the API could still conform to the needs of data mappers and other programs that use `getter` and `setter` with property discovery. Explicitly declared [**guards**](#43-guarding-constructor-arguments) can be given responsibility for putting constraints on data changes.
+The following approach has the advantage that, if such a form of **information hiding** is used, the API still conforms to the requirements of data mappers and other programs that use `getter` and `setter` with property discovery. Explicitly declared [**guards**](#43-guarding-constructor-arguments) can be given responsibility for putting constraints on data changes. The accessors will not be visible to a developer reading the source code file.
 
 ## 3. PHP Attributes
 [Attributes](https://www.php.net/manual/en/language.attributes.overview.php) were introduced with **PHP8** and can be
