@@ -60,6 +60,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [ADU] **Analyse und Design mit UML 2** (7., aktualisierte Auflage), Oldenbourg Wissenschaftsverlag GmbH, 2005 <a name="adu"></a>
 
+**Parnas, David L.**
+
+- [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="MOD"></a>
+
 **Rumbaugh, James; Ivar Jacobson Grady Booch**
 
 - [UREF] **The Unified Modeling Language Reference Manual**, Addison-Wesley, 1999 <a name="uref"></a>
