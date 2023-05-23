@@ -555,6 +555,8 @@ With regards to particular caching mechanisms, it should be easy to provide buil
 resulting in classes that physically provide getters and setters, increasing runtime execution. However, if custom modifiers
 like the above mentioned [`Modifier::PACKAGE`](#44-modifying-access-to-getters-and-setters) are used, any implementing builder would have the responsibility to properly generate code based on the given information, to prevent accidentally exposure of data.
 
+An attempt to provide native support for accessor automation is currently being made with [**PHP RFC**: Property Hooks](https://wiki.php.net/rfc/property-hooks)
+ targeted for PHP 8.3. The RFC is derived from derived from Nikita Popov's work on [PHP RFC: Property Accessors](https://wiki.php.net/rfc/property_accessors).
 
 
 ---------------------------------------
@@ -564,4 +566,4 @@ like the above mentioned [`Modifier::PACKAGE`](#44-modifying-access-to-getters-a
 - [**quant/core**:` AccessorTrait` Benchmark source code](https://github.com/quant-php/core/tree/main/Tests/Benchmarks)
 - [**PHP RFC**: Access Scope from Magic Accessors](https://wiki.php.net/rfc/access_scope_from_magic_accessors)
 - [**php/php-src**: Basic accessors implementation (WIP)](https://github.com/php/php-src/pull/6873)
-- [**PHP RFC**: Property Accessors](https://wiki.php.net/rfc/property_accessors)
+- [**PHP RFC**: Property Hooks](https://wiki.php.net/rfc/property-hooks) (derived from [PHP RFC: Property Accessors](https://wiki.php.net/rfc/property_accessors))
