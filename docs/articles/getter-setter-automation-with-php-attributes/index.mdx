@@ -29,7 +29,7 @@ has read-access to `$employee`, with the following implications:
 
  **1.1.1** In this article, the generalization of such `getters`, `setters` and familiar methods use the abbreviations `set*()`, `get*()`, `is*()`and `apply*()` where `*` is a list of characters conforming to the regular expression `\$(A-Z)[a-zA-Z0-9_]*`.
 
- **1.1.1.1** For semantic purposes, we introduce `is*()` as a representant of a method with read-access to a `boolean` property.
+ **1.1.1.1** For semantic purposes, we introduce `is*()` as a representative of a method with read-access to a `boolean` property.
 
  **1.1.1.2** `apply*()` will be used as a proxy-method for `set*()`.
 
@@ -45,7 +45,7 @@ and [`virtual functions`](https://en.cppreference.com/w/cpp/language/virtual) sh
 **Property Encapsulation** in object-oriented programming is often connoted with implementing `getters` and `setters` for data,
 and falsely so with **data hiding**: Reducing the visibility of class-properties using access-modifiers like
  `private` and `protected` and later exposing the same with appropriate `get`- and `set`-methods is by no means an act of hiding
-data - it simply is **Encapsulation** in its purest form and, even if rightly so applied - often such classes
+data - it simply is encapsulation in its purest form and, even if rightly so applied - often such classes
  benefit in no way from providing such methods. More so, if the data of a class changes
 and the interface is already used in the system (eventually leaking across module boundaries), it will be hard to change
 the implementation without adding new code and leaving the old one in the class for backward compatibility, leading to code rot:
