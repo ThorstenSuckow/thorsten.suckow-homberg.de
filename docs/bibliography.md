@@ -62,7 +62,7 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Parnas, David L.**
 
-- [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="MOD"></a>
+- [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="mod"></a>
 
 **Rumbaugh, James; Ivar Jacobson Grady Booch**
 

@@ -55,7 +55,7 @@ function MigrationNotice({when, where}) {
     return (<div>
         This article was originally published in {when} at <a target="_blank" href={url}>{name}</a>.
         Some formatting might have get lost during the migration to this site:
-        If you think you spotted an issue caused by malformed formatting, please <a href="mailto:thorsten@suckow-homberg.de">let me know</a>.
+        If you think you spotted an issue caused by malformed formatting, feel free to open a <a href="https://github.com/ThorstenSuckow/thorsten.suckow-homberg.de">Pull Request</a> or <a href="mailto:thorsten@suckow-homberg.de">send me an Email</a>.
     </div>);
 
 }
