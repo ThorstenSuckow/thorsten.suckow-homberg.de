@@ -1,0 +1,76 @@
+---
+title: "Hamilton Cycle Algorithm"
+authors: [thorstensuckow]
+tags: [mathematics, programming]
+enableComments: true
+---
+
+import {Embed} from "../../src/components/Embed.js";
+import {GlosRef} from "../../src/components/References";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Finding Hamilton Cycles in Graphs
+
+
+## Notation
+
+1. $[M]^k$ is the set of all subsets of M such that $\forall E \in [M]^k: |E| = k$.
+1. $G$ is a $Graph$.
+2. A $Graph$ is a pair $G = (V, E)$ of disjoint sets such that $E \subseteq [V]^2$. Elements of $V$ are called _vertices_, elements of $E$ are called _edges_.
+3. $v \in G$ is a _vertex_ (or _node_) of $G$, $e \in G$ is an _edge_ of $G$.
+4. $V(G)$ is the set of all _vertices_ (or _nodes_) of $G$, $E(G)$ is the set of all _edges_ of $G$.
+4. $\emptyset$ is an _empty Graph_ $(\emptyset, \emptyset)$. 
+5. A _finite_ Graph is a Graph whose set of _nodes_ are finite. This article treats _finite_ Graphs.
+6. The _degree_ $d(v)$ of a _vertex_ is the number of _edges_ at $v$. A _node_ $v \in G$ with $d(v) = 0$ is _isolated_.
+7. The _order_ of a Graph is the sum of it's nodes $G(V)$, also denoted by $|G|$.
+8. The number of _edges_ $|E(G)|$ in a graph is denoted by $||G||$
+8. The <GlosRef name="Spanning Tree" file="graphtheory.spanningtree" /> $T$ of $G$ is a _minimal connected graph_ with $G(V) = G(T)$ and $E(T) \sube E(G)$
+9. A _path_ is a non-empty $Graph$ $P = (V, E)$ such that $V = \{x_0, x_1, ..., x_k\}$ and $E=\{x_0x_1, x_1x_2, ..., x_{k-1}x_k\}$. $P$ connects $x_0$ and $x_k$ (the _ends_ of $P$). If $P \sube G$, $P$ is a _path_ in $G$.
+10. If $P = x_0x_1, ... , x_{k-1}$ and $k \ge 3$, then $C:= P + x_{k-1}x_0$ is called a _cycle_.
+
+## Hamilton cycle
+
+A _Hamilton cycle_ of $C \sube G$ is a _cycle_ that contains every _vertex_ of $G$: $|G| = |G´|$ exactly once.
+
+<Tabs>
+<TabItem value="g1" label="Graph Example">
+
+import hamilton_example_1 from "./img/hamilton_example_1.svg.png";
+
+<Embed
+    figure={1}
+    title={"Graph G with |G| = 12"}
+>
+    <img src={hamilton_example_1} />
+
+</Embed>
+
+</TabItem>
+
+<TabItem value="g2" label="w/ Hamilton Cycle">
+
+import hamilton_example_2 from "./img/hamilton_example_2.svg.png";
+
+<Embed
+    figure={2}
+    title={"The Hamilton Cycle in G"}
+>
+    <img src={hamilton_example_2} />
+
+</Embed>
+
+</TabItem>
+</Tabs>
+
+## Algorithm
+
+We will show that the following algorithm is suited to decide whether a (perhaps empty) $Graph$ contains an **Hamilton Path**.
+
+### Prerequisites
+In the following, we assume that the following prerequisites were examined before the algorithm is executed:
+
+1. $\emptyset$ contains no **Hamilton Path**. This check can be done in $\Omicron(1)$.
+2. A $Graph$ $G$ that contains an _isolated node_ contains no **Hamilton Path**. This check can be done in  $\Omicron(n)$, with $n = |G|$
+
+### Description
