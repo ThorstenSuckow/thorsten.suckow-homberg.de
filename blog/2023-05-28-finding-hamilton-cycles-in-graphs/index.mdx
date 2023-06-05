@@ -13,25 +13,29 @@ import TabItem from '@theme/TabItem';
 ## Finding Hamilton Cycles in Graphs
 
 
-## Notation
+## Definitions
 
 1. $[M]^k$ is the set of all subsets of M such that $\forall E \in [M]^k: |E| = k$.
-1. $G$ is a $Graph$.
-2. A $Graph$ is a pair $G = (V, E)$ of disjoint sets such that $E \subseteq [V]^2$. Elements of $V$ are called _vertices_, elements of $E$ are called _edges_.
-3. $v \in G$ is a _vertex_ (or _node_) of $G$, $e \in G$ is an _edge_ of $G$.
-4. $V(G)$ is the set of all _vertices_ (or _nodes_) of $G$, $E(G)$ is the set of all _edges_ of $G$.
-4. $\emptyset$ is an _empty Graph_ $(\emptyset, \emptyset)$. 
-5. A _finite_ Graph is a Graph whose set of _nodes_ are finite. This article treats _finite_ Graphs.
-6. The _degree_ $d(v)$ of a _vertex_ is the number of _edges_ at $v$. A _node_ $v \in G$ with $d(v) = 0$ is _isolated_.
-7. The _order_ of a Graph is the sum of it's nodes $G(V)$, also denoted by $|G|$.
-8. The number of _edges_ $|E(G)|$ in a graph is denoted by $||G||$
-8. The <GlosRef name="Spanning Tree" file="graphtheory.spanningtree" /> $T$ of $G$ is a _minimal connected graph_ with $G(V) = G(T)$ and $E(T) \sube E(G)$
-9. A _path_ is a non-empty $Graph$ $P = (V, E)$ such that $V = \{x_0, x_1, ..., x_k\}$ and $E=\{x_0x_1, x_1x_2, ..., x_{k-1}x_k\}$. $P$ connects $x_0$ and $x_k$ (the _ends_ of $P$). If $P \sube G$, $P$ is a _path_ in $G$.
-10. If $P = x_0x_1, ... , x_{k-1}$ and $k \ge 3$, then $C:= P + x_{k-1}x_0$ is called a _cycle_.
+2. $G$ is a $Graph$.
+3. A $Graph$ is a pair $G = (V, E)$ of disjoint sets such that $E \subseteq [V]^2$. Elements of $V$ are called **_vertices_**, elements of $E$ are called **_edges_**.
+4. $v \in G$ is a _vertex_ (or _node_) of $G$, $e \in G$ is an _edge_ of $G$.
+5. $V(G)$ is the set of all _vertices_ (or _nodes_) of $G$, $E(G)$ is the set of all _edges_ of $G$.
+6. $\emptyset$ is an _empty Graph_ $(\emptyset, \emptyset)$.
+7. A _finite_ Graph is a Graph whose set of _nodes_ are finite. This article treats _finite_ Graphs.
+8. The **_degree_** $d(v)$ of a _vertex_ is the number of _edges_ at $v$. A _vertex_ $v \in G$ with $d(v) = 0$ is **_isolated_**; a node with $d(v) = 0$ is a **_leaf_**
+9. The **_order_** of a Graph is the sum of it's nodes $G(V)$, also denoted by $|G|$.
+10. The number of _edges_ $|E(G)|$ in a graph is denoted by $||G||$
+11. The <GlosRef name="Spanning Tree" file="graphtheory.spanningtree" /> $T$ of $G$ is a **_minimal connected graph_** with $G(V) = G(T)$ and $E(T) \sube E(G)$
+12. A _vertex_ $v \in G$ is **_incident_** with an edge $e \in G$ if $v \in e$; two _vertices_ $v_1, v_2$ incident with $e$ are called its **_ends_**; $v_1, v_2$ are _neighbours_, and called **_adjacent_**.
+13. A **_path_** is a non-empty $Graph$ $P = (V, E)$ such that $V = \{x_0, x_1, ..., x_k\}$ and $E=\{x_0x_1, x_1x_2, ..., x_{k-1}x_k\}$. $P$ connects $x_0$ and $x_k$ (the _ends_ of $P$). If $P \sube G$, $P$ is a _path_ in $G$.
+14. An _edge_ $\{v_1, v_2\}$ (or $v_1v_2$) is a _Path_ $P = v_1, v_2$ is a _Graph_ $G_P = (V, E)$ of the form $V = \{v_1, v_2\}, E = \{v_1v_2\}$
+15. If $P = x_0x_1, ... , x_{k-1}$ and $k \ge 3$, then $C:= P + x_{k-1}x_0$ is called a **_cycle_**.
+16. A non-empty _graph_ $G$ is called _connected_ iff $\forall v_i, v_j \in V(G), i \neq j: v_iv_j \in E(G)$
+17. A _minimal connected graph_ $G$ is a _connected graph_ such that $G' = E(G) \ e$ is not a _connected graph._
 
 ## Hamilton cycle
 
-A _Hamilton cycle_ of $C \sube G$ is a _cycle_ that contains every _vertex_ of $G$: $|G| = |G´|$ exactly once.
+A _Hamilton cycle_ of $C \sube G$ is a _cycle_ that contains every _vertex_ of $G$: $|G| = |G'|$ exactly once.
 
 <Tabs>
 <TabItem value="g1" label="Graph Example">
@@ -57,8 +61,10 @@ import hamilton_example_2 from "./img/hamilton_example_2.svg.png";
     title={"The Hamilton Cycle in G"}
 >
     <img src={hamilton_example_2} />
-
 </Embed>
+
+$C= x_0x_1, x_1x_3, x_3x_2, x_2x_5, x_5x_6, x_6x_4, x_4x_7, x_7x_8, x_8x_9, x_9x_{10}, x_{10}x_{11}, x_{11}x_0$
+
 
 </TabItem>
 </Tabs>
@@ -67,10 +73,21 @@ import hamilton_example_2 from "./img/hamilton_example_2.svg.png";
 
 We will show that the following algorithm is suited to decide whether a (perhaps empty) $Graph$ contains an **Hamilton Path**.
 
-### Prerequisites
-In the following, we assume that the following prerequisites were examined before the algorithm is executed:
+### Find the Spanning Tree
 
-1. $\emptyset$ contains no **Hamilton Path**. This check can be done in $\Omicron(1)$.
-2. A $Graph$ $G$ that contains an _isolated node_ contains no **Hamilton Path**. This check can be done in  $\Omicron(n)$, with $n = |G|$
+1. Choose a vertex $v_i \in G$.
+    - If $d(v_i) \in \{0, 1\}$, then there is no **Hamilton Cycle**, because:
+        - If $d(v_i) = 0$, then $v$ is isolated and $G$ is not a connected _graph_
+        - If $d(v_i) = 1$, $G$ is
+          - $G$ **is** a _minimal connected graph_, hence _cycle free_.
+          - $G$ **is not** a _minimal connected graph_, but $\neg \exists e_i, e_j \in E(G), i \neq j: v \in e_i, e_j$, hence $v$ has only one neighbor and as such $v$ would be visited twice when creating a _cycle_<sup>[[1]](#remark_1)</sup>
+        
 
-### Description
+
+
+### Remarks
+1. An $\emptyset$ contains no **Hamilton Path**. This check can be done in $\Omicron(1)$.
+2. A $Graph$ $G$ that contains an _isolated node_ or a _leaf_ contains no **Hamilton Cycle**. This check can be done in  $\Omicron(n)$, with $n \le |G|$
+
+-------------------------------
+ - **[1]** If we were looking for an _eulerican cycle_, then visiting a vertex twice would be okay for as long as each _edge_ is visted exactly one. <a name="remark_1"></a>
