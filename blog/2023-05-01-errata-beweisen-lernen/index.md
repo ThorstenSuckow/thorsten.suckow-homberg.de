@@ -60,10 +60,10 @@ Stand 20.06.2023. Aktualisiert mit Vergleichslösungen, Metrische Räume und Äq
 
 ### Ideen: Äquivalenzklassen
 
-| Seite                  | Fehlerstelle                                                                    | Korrekturvorschlag                                                                         | Bemerkung                                                                                          |
-|------------------------|---------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------
-| 132 (unten)            | $R([a \cdot u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$ | $R(a \boxdot [u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$          |                                                                                                    |
-| 118 **Definition 4.1** | Sei $\text{\textasciitilde})$ eine Äquivalenzrelation auf einer Menge $X$       | Sei $\text{\textasciitilde})$ eine Äquivalenzrelation auf einer **nicht leeren** Menge $X$ |                                                                 |
+| Seite                  | Fehlerstelle                                                                   | Korrekturvorschlag                                                                        | Bemerkung                                                                                          |
+|------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------
+| 132 (unten)            | $R([a \cdot u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$ | $R(a \boxdot [u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$         |                                                                                                    |
+| 118 **Definition 4.1** | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer Menge $X$       | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer **nicht leeren** Menge $X$ |                                                                 |
 
 #### Rechtschreibung / Grammatik / Druckfehler
 
