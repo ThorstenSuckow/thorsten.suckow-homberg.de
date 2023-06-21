@@ -65,7 +65,7 @@ Lieber Google-Nutzer, das offizielle Errata findet sich unter https://www.math.u
 | Seite                  | Fehlerstelle                                                                   | Korrekturvorschlag                                                                        | Bemerkung                                                                                          |
 |------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------
 | 132 (unten)            | $R([a \cdot u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$ | $R(a \boxdot [u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$         |                                                                                                    |
-| 118 **Definition 4.1** | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer Menge $X$       | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer **nicht leeren** Menge $X$ |                                                                 |
+
 
 
 ### Training
@@ -100,8 +100,8 @@ Lieber Google-Nutzer, das offizielle Errata findet sich unter https://www.math.u
 | Seite                    | Bemerkung                                                                                            |
 |--------------------------|------------------------------------------------------------------------------------------------------
 | 148 **Definition 5.9**   | vielleicht bietet es sich hier bereits an, in der Definition den Begriff "offene Kugel" zu verwenden |
+| 118 **Definition 4.1** | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer **nicht leeren**  Menge $X$                            |
 | 91 **Definition 3.24** | Informatiker würden sich hier über die Erwähnung "partielle Funktion" freuen                         |
-
 
 <sup>*</sup>ML = Musterlösung
 
