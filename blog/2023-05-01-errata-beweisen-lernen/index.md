@@ -17,11 +17,13 @@ Ich hoffe, dass meine Notizen dem Autorenteam zur Überprüfung und ggf. Korrekt
 Zum Hintergrund dieses Blog-Posts gibt es [weiter unten](#hintergrund-aufgabe-178-und-das-kleine-manöver-das-kostete) mehr Informationen.
 
 
-## Errata
 
+## Errata
 
 :::info
 Stand 21.06.2023. Meine gesammelten Notizen habe ich komplett überführt. Das Kapitel "D Tipps zu den Übungen" wurde von mir nicht bearbeitet.
+
+Lieber Google-Nutzer, das offizielle Errata findet sich unter https://www.math.uni-konstanz.de/mmath/de/book/material/errata (abgerufen 21.06.2023). 
 :::
 
 
@@ -46,6 +48,7 @@ Stand 21.06.2023. Meine gesammelten Notizen habe ich komplett überführt. Das K
 | 277 (ML106)        |                                                                                         |                                                                                         | für "$\impliedby$" müsste noch $y \in U$ gezeigt werden   
 | 272 (ML89)         |                                                                                         |                                                                                         | Es wird auf eine Symmetrie von $\le$ Bezug genommen, aber in dem Kontext ist $\le$ Antisymmetrisch (**Satz 3.11** und Ü89)
 | 269 (ML78)         | was auf den Widerspruch $0 \ge 1$ führt                                                 | was auf den Widerspruch $1 \ge 2$ führt                                                 | $x \in \N$, also $x \ne 0$. Im indirekten Beweis wird $x \ge x + 1$ mit $x=0$ verwendet
+| 258 (ML44)         | mit $A$ anstelle von $A$ und $B$ anstelle von $B$                                       | mit $A$ anstelle von $E$ und $B$ anstelle von $F$                                       | 
 
 ### Ideen: Metrische Räume
 
