@@ -21,11 +21,11 @@ Zum Hintergrund dieses Blog-Posts gibt es [weiter unten](#hintergrund-aufgabe-17
 
 
 :::info
-Stand 20.06.2023. Aktualisiert mit Vergleichslösungen, Metrische Räume und Äquivalenzklassen.
+Stand 21.06.2023. Meine gesammelten Notizen habe ich komplett überführt. Das Kapitel "D Tipps zu den Übungen" wurde von mir nicht bearbeitet.
 :::
 
 
-### E Vergleichslösungen
+### Vergleichslösungen
 
 | Seite              | Fehlerstelle                                                                            | Korrekturvorschlag                                                                      | Bemerkung                                                                                                                                                                                                 |
 |--------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -55,7 +55,6 @@ Stand 20.06.2023. Aktualisiert mit Vergleichslösungen, Metrische Räume und Äq
 | 167                   | $B_r(u)$                 | $B_r^d(u)$                        | Mehrfachnennung auf dieser Seite, ohne auf die Metrik Bezug zu nehmen                               |
 | 156 (Ü248)            | $s < sup M$              | $u \in M: u < sup M$              | $s$ ist vorgegeben mit $s \in O_M$, damit gilt ja bereits $s \ge sup M$ und damit auch $s \ge m$    |
 | 154 (Ü240)            | $Min(b)$                 | $Min(B)$                          |                                                                                                     |
-| 148 **Definition 5.9** |                          |                                   | vielleicht bietet es sich hier bereits an, in der Definition den Begriff "offene Kugel" zu verwenden |
 | 147 (Ü226)            | $D: X^n \times X^n$, ... | $D: X^n \times X^n \rarr \R$, ... |  |
 
 ### Ideen: Äquivalenzklassen
@@ -65,21 +64,40 @@ Stand 20.06.2023. Aktualisiert mit Vergleichslösungen, Metrische Räume und Äq
 | 132 (unten)            | $R([a \cdot u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$ | $R(a \boxdot [u]_\text{\textasciitilde}) = R([a \cdot u]_\text{\textasciitilde})$         |                                                                                                    |
 | 118 **Definition 4.1** | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer Menge $X$       | Sei $\text{\textasciitilde}$ eine Äquivalenzrelation auf einer **nicht leeren** Menge $X$ |                                                                 |
 
-#### Rechtschreibung / Grammatik / Druckfehler
+
+### Training
+
+| Seite     | Fehlerstelle                                                       | Korrekturvorschlag                                                 | Bemerkung                                                              |
+|-----------|--------------------------------------------------------------------|--------------------------------------------------------------------|------------------------------------------------------------------------|
+| 94        | $\{t \in U^3: ((t_1 \in A) \land (t_2 \in B)) \land (t_3 \in C)\}$ | $\{t \in U^3: (t_1 \in A) \land (t_2 \in B) \land (t_3 \in C)\}$   |                                                                        | |
+| 83 (oben) | führt zur Langform $U = \{y \in \Z: \exists x \in \Z : y = g(z)\}$ | führt zur Langform $U = \{y \in \Z: \exists x \in \Z : y = g(x)\}$ | in (3.10) wird für die Gleichung ebenfalls die falsche Variable genutzt | |
+| 82 (Ü102) | Zeige $\exists a \in \R : g [R_{\ge 0}] = \R_{\ge a}$.             | Zeige $\exists a \in \R : g [\R_{\ge 0}] = \R_{\ge a}$.            |  | |
+
+### Rechtschreibung / Grammatik / Druckfehler
 
 
-| Seite       | Fehlerstelle                                                       | Korrekturvorschlag                                  | 
-|-------------|--------------------------------------------------------------------|-----------------------------------------------------|
-| 325 (ML259) | Insebsondere ist $dist_d(x,A) = 0$                                 | ~~Insebsondere~~ Insbesondere ist $dist_d(x,A) = 0$ |
-| 295 (ML160) | die Argumentation wurde ist dir eventuell                          | die Argumentation ~~wurde~~ ist dir eventuell       |
-| 294         | zu zeigen ist $P(A)\mid = 2^{\mid A \mid}$                         | zu zeigen ist $\mid P(A)\mid = 2^{\mid A \mid}$     |
-| 290         | ergibt $m = \mid n \mid - \mid A \mid \in \N$                      | ergibt $m = n - \mid A \mid \in \N$                 |
-| 284 (ML132) | und mit Aufgabe 132 ergibt sich schliesslich                       | und mit Aufgabe **131** ergibt sich schliesslich    |
-| 166 (unten) | dass sie sich garnicht scheiden                                    | dass sie sich garnicht ~~scheiden~~ schneiden       |
-| 149         | In einer Kugel mit em Radius                                       | In einer Kugel mit ~~em~~ dem Radius                |
-| 125 (unten) | und mit Aufgabe 179 dann                                           | und mit Aufgabe ~~179~~ 180 dann                    |
-| 120 (oben)  | Mit Teil (b) von Aufgabe 179 folgt hieraus | Mit Teil (b) von Aufgabe ~~179~~ 180 folgt hieraus  |
-| 117         | Ausgangspizza in $a_2 \cdot b_2$ Teile auftritt                    | Ausgangspizza in $a_1 \cdot b_2$ Teile auftritt     |
+| Seite                                               | Fehlerstelle                                                             | Korrekturvorschlag                                                               | 
+|-----------------------------------------------------|--------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| 325 (ML259)                                         | Insebsondere ist $dist_d(x,A) = 0$                                       | ~~Insebsondere~~ Insbesondere ist $dist_d(x,A) = 0$                              |
+| 295 (ML160)                                         | die Argumentation wurde ist dir eventuell                                | die Argumentation ~~wurde~~ ist dir eventuell                                    |
+| 294                                                 | zu zeigen ist $P(A)\mid = 2^{\mid A \mid}$                               | zu zeigen ist $\mid P(A)\mid = 2^{\mid A \mid}$                                  |
+| 290                                                 | ergibt $m = \mid n \mid - \mid A \mid \in \N$                            | ergibt $m = n - \mid A \mid \in \N$                                              |
+| 284 (ML132)                                         | und mit Aufgabe 132 ergibt sich schliesslich                             | und mit Aufgabe **131** ergibt sich schliesslich                                 |
+| 166 (unten)                                         | dass sie sich garnicht scheiden                                          | dass sie sich garnicht ~~scheiden~~ schneiden                                    |
+| 149                                                 | In einer Kugel mit em Radius                                             | In einer Kugel mit ~~em~~ dem Radius                                             |
+| 125 (unten)                                         | und mit Aufgabe 179 dann                                                 | und mit Aufgabe ~~179~~ 180 dann                                                 |
+| 120 (oben)                                          | Mit Teil (b) von Aufgabe 179 folgt hieraus                               | Mit Teil (b) von Aufgabe ~~179~~ 180 folgt hieraus                               |
+| 117                                                 | Ausgangspizza in $a_2 \cdot b_2$ Teile auftritt                          | Ausgangspizza in $a_1 \cdot b_2$ Teile auftritt                                  |
+| 104 (unten)                                         | in Für-Alle-Aussage über $\N_0$ zu verwandeln                            | in Für-Alle-~~Aussage~~Aussagen über $\N_0$ zu verwandeln                        |
+| 102 (oben)                                          | auf $\emptyset$ gibt es nur ein einzige Funktion                         | auf $\emptyset$ gibt es nur ~~ein~~ eine einzige Funktion                        |
+| 37 (unten)                                          | Dies folgt durch Anwendung von Satz 2.11 bei Ersetzung von $A$ durch $E$ | Dies folgt durch Anwendung von Satz ~~2.11~~ 2.9 bei Ersetzung von $A$ durch $E$ |
+| 37 (unten, folgt der vorher erwähnten Fehlerstelle) | Dies folgt durch Anwendung von Satz 2.9 bei Ersetzung                    | Dies folgt durch Anwendung von Satz ~~2.9~~ 2.11 bei Ersetzung                   |
+### Anmerkungen
+
+| Seite                    | Bemerkung                                                                                            |
+|--------------------------|------------------------------------------------------------------------------------------------------
+| 148 **Definition 5.9**   | vielleicht bietet es sich hier bereits an, in der Definition den Begriff "offene Kugel" zu verwenden |
+| 91 **Definition 3.24** | Informatiker würden sich hier über die Erwähnung "partielle Funktion" freuen                         |
 
 
 <sup>*</sup>ML = Musterlösung
