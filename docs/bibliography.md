@@ -64,6 +64,9 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="mod"></a>
 
+**Minsky, M. L. and Papert, S. A**
+ - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
+
 **Rumbaugh, James; Ivar Jacobson Grady Booch**
 
 - [UREF] **The Unified Modeling Language Reference Manual**, Addison-Wesley, 1999 <a name="uref"></a>
