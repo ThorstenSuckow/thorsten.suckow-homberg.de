@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[1144],{8697:e=>{e.exports=JSON.parse('{"label":"perceptron","permalink":"/blog/tags/perceptron","allTagsPath":"/blog/tags","count":1}')}}]);
