@@ -1,0 +1,216 @@
+---
+title: "Constructors"
+---
+
+import {BackButton} from "../../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../../src/components/References";
+
+# Constructors (Java)
+
+::::info
+Some authors treat the term `default constructor` equal to `parameterless constructor`.
+
+In the following text, I understand the **default constructor** as described by the **Java SE 21** language specification[^1]
+as the **implicit default constructor** provided by the compiler if no explicit constructor was declared:
+
+> In the absence of explicit constructors, however, the compiler provides a public, parameterless default constructor. To a user, this constructor is
+indistinguishable from any other. <BibRef name="Blo18" pp="19" />
+
+_Ullenboom_ refers to an _implicit_ and _explicit_ **default constructor**, whereas the _implicit_ is provided by the
+compiler, and the _explicit_ is a parameterless constructor provided by the developer (see <BibRef name="Ull18" pp="515-17" />).
+_Ullenboom_ notes that is is important to understand the author's intend when one simply speaks of **default constructor**
+without differentiating between _implicit_ and _explicit_.
+
+::::
+
+## Default Constructor
+If a Java class contains no constructor, a **default constructor** is implicitly declared[^2].
+
+The **default constructor** <GlosRef name="signature" file="computerscience.methodsignature" />'s formal **parameter list** is empty.
+
+```java
+class A {
+
+    // implicitly declared default constructor
+    // public A() {
+    // }
+
+}
+
+A a = new A(); // calls the implicitly declared default constructor
+```
+
+If an _explicitly_ declared constructor is declared, no **default constructor** will be made available by the compiler.
+
+In the following example, `new A()` yields a compiler error, since no parameterless constructor is explicitly or implicitly
+declared for `A`.
+
+```java
+class A {
+    int a;
+
+    // explicitly declared default constructor
+    // will prevent the implicitly declared default constructor
+    public A(int value) {
+        a = value;
+    }
+
+}
+
+A a1 = new A(i); // calls the explicitly declared default constructor
+A a2 = new A(); // yields a compiler error
+```
+
+
+### Inheritance
+
+If a constructor does not have an explicit call to a parent's constructor, it will implicitly call ```super()```.
+
+If in such cases a parent's class does not have a parameterless constructor declared, a compiler error will be produced.
+
+In the following example, class `B` extends `A` and has a constructor declared. Its formal parameter list
+is `int a`. This constructor will implicitly call `super()`.
+
+```java
+class A {
+
+}
+
+class B extends A {
+
+    int val;
+
+    public B (int a) {
+        // implicitly called:
+        // super();
+        val = a;
+    }
+
+}
+
+B b = new B(1);
+```
+
+::::tip
+Since each class in Java is a **direct or indirect descendant of [`java.lang.Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html)**[^3],
+there is also an implicit call to the `java.lang.Object`'s constructor in `A`
+::::
+
+In the next example, `C` extends the above class `B`. A **default constructor** will implicitly be declared for `C`. Instantiating
+`C` will yield a compiler error, since there is no parameterless constructor declared for `B`:
+
+```java
+class C extends B {
+
+}
+
+C c = new C(1);
+```
+
+`C` requires a constructor with an explicit call to the parent's constructor that should be invoked:
+
+```java
+class C extends B {
+
+    public C() {
+       super(2);
+    }
+
+}
+
+C c = new C(1);
+```
+
+::::tip
+In Java, the first call of a constructor must always be a call to the parent's constructor. If there is no such explicit call,
+an implicit call to the parent's parameterless constructor is made[^4].
+::::
+
+### Example
+
+```java
+class A {
+    // implicit default constructor: available
+
+    // implicit default constructor: calls java.lang.Object's constructor
+}
+
+
+class B extends A {
+
+    // implicit default constructor: available
+
+    // implicit default constructor: calls A's constructor
+}
+
+
+class C {
+
+    // implicit default constructor: not available
+
+    public C() {
+        // implicit call to java.lang.Object's constructor
+        System.out.println("C created.");
+    }
+}
+
+
+class D extends C {
+
+    // implicit default constructor: available
+
+    // implicit default constructor: calls C's constructor
+
+}
+
+
+class E extends D {
+
+    // implicit default constructor: not available
+
+    public E() {
+        // implicit call to D's constructor
+        System.out.println("E created.");
+    }
+}
+
+
+class F extends E {
+
+    // implicit default constructor: not available
+
+    public F(int x) {
+        // implicit call to E's constructor
+        System.out.println("F created");
+    }
+}
+
+
+class G extends F {
+
+    // implicit default constructor: not available
+
+    public G(int x) {
+        super(x); // explicit call to F's constructor
+
+        // commenting the above statement will implicitly call 'super()', which yields an error.
+        // -> since there is no default constructor available in F, we **must** tell this constructor which parent's
+        // constructor is to be called.
+        System.out.println("G created");
+    }
+}
+```
+
+
+
+## Constructor Inheritance
+
+::::note
+In Java, constructors are not members of a class. As such, constructors _are not inherited_ by subclasses[^5].
+::::
+
+[^1]: _The Java Language Specification_ (Oracle): https://docs.oracle.com/javase/specs/jls/se21/html/index.html (retrieved 20 October 2023)
+[^2]: "8.8.9. Default Constructor", _The Java Language Specification_ (Oracle): https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.8.9 (retrieved 20 October 2023)
+[^3]: "Object as a Superclass", _The Java Tutorials_ (Oracle): https://docs.oracle.com/javase/tutorial/java/IandI/objectclass.html (retrieved  20 October 2023)
+[^4]: "8.8.7. Constructor Body", _The Java Language Specification_ (Oracle): https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.8.7 (retrieved  20 October 2023)
+[^5]: "Inheritance", _The Java Tutorials_ (Oracle): https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html (retrieved  20 October 2023)
