@@ -11,6 +11,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
 
+**Bloch, Joshua**:
+
+ - [Blo18] _Effective Java_ (3rd edition), Addison-Wesley, 2018  <a name="blo18"></a>
+
 **Booch, Grady (et al.)**
 
  - [OOA] **Object-oriented analysis and design with applications** (3rd Edition), Pearson Education, 2007 <a name="ooa"></a>
@@ -73,7 +77,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Thomas, David; Hunt, Andrew**
 
-- [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
+- [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020 <a name="pp"></a>
+
+**Ullenboom, Christian**
+
+- [Ull12] _Java ist auch eine Insel_ (10. Auflage), Bonn: Galileo Press, 2012  <a name="ull12"></a>
 
 **Vernon, Vaughn**
 
