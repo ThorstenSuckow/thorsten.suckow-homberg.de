@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[5528],{6355:e=>{e.exports=JSON.parse('{"label":"test","permalink":"/blog/tags/test","allTagsPath":"/blog/tags","count":1}')}}]);
