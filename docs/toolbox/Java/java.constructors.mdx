@@ -69,7 +69,7 @@ If a constructor does not have an explicit call to a parent's constructor, it wi
 If in such cases a parent's class does not have a parameterless constructor declared, a compiler error will be produced.
 
 In the following example, class `B` extends `A` and has a constructor declared. Its formal parameter list
-is `int a`. This constructor will implicitly call `super()`.
+is `int`. This constructor will implicitly call `super()`.
 
 ```java
 class A {
@@ -104,7 +104,7 @@ class C extends B {
 
 }
 
-C c = new C(1);
+C c = new C();
 ```
 
 `C` requires a constructor with an explicit call to the parent's constructor that should be invoked:
@@ -118,7 +118,7 @@ class C extends B {
 
 }
 
-C c = new C(1);
+C c = new C();
 ```
 
 ::::tip
