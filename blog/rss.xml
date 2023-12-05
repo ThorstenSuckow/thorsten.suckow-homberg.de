@@ -4,23 +4,25 @@
         <title>thorsten.suckow-homberg.de Blog</title>
         <link>https://thorsten.suckow-homberg.de/blog</link>
         <description>thorsten.suckow-homberg.de Blog</description>
-        <lastBuildDate>Tue, 31 Oct 2023 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 05 Dec 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[[DE] Lösungshinweise zu Test 1 Modul Prog]]></title>
+            <title><![CDATA[[DE] Lösungshinweise Modul prog (Update 05.12.2023)]]></title>
             <link>https://thorsten.suckow-homberg.de/blog/loesungshinweise-zu-test1-fh-trier</link>
             <guid>https://thorsten.suckow-homberg.de/blog/loesungshinweise-zu-test1-fh-trier</guid>
-            <pubDate>Tue, 31 Oct 2023 00:00:00 GMT</pubDate>
+            <pubDate>Tue, 05 Dec 2023 00:00:00 GMT</pubDate>
             <description><![CDATA[Für das Modul prog im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der]]></description>
-            <content:encoded><![CDATA[<p>Für das Modul <strong>prog</strong><sup id="fnref-1-7d1f7a"><a href="#fn-1-7d1f7a" class="footnote-ref">1</a></sup> im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
-<a href="https://www.hochschule-trier.de/" target="_blank" rel="noopener noreferrer">Hochschule Trier</a> habe ich für <strong>Test 1 - Klassenbasierte Programmierung</strong>
-Lösungshinweise sowie Anmerkungen und Ergänzungen zusammengefasst. Diese können als PDF
-<a target="_blank" href="/assets/files/loesungshinweise-test1-prog-ws-23-24-fh-trier-db49d4c765836c2fe559ae62ec69a5ba.pdf">hier heruntergeladen werden</a>.  </p><div class="footnotes"><hr><ol><li id="fn-1-7d1f7a">Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem <a href="https://discord.gg/NXFKpXmnU" target="_blank" rel="noopener noreferrer">Discord-Server</a> zu finden.<a href="#fnref-1-7d1f7a" class="footnote-backref">↩</a></li></ol></div>]]></content:encoded>
+            <content:encoded><![CDATA[<p>Für das Modul <strong>prog</strong><sup id="fnref-1-587c3c"><a href="#fn-1-587c3c" class="footnote-ref">1</a></sup> im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
+<a href="https://www.hochschule-trier.de/" target="_blank" rel="noopener noreferrer">Hochschule Trier</a> habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefaßt. Diese stehen als PDF zum Download zur Verfügung.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-3---objektorientierung--05122023">Lösungshinweise Test 3 - Objektorientierung  (05.12.2023)<a href="#lösungshinweise-test-3---objektorientierung--05122023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 3 - Objektorientierung  (05.12.2023)" title="Direct link to Lösungshinweise Test 3 - Objektorientierung  (05.12.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test3-prog-ws-23-24-fh-trier-50e7f564ad00114c0097564a3e449314.pdf">hier heruntergeladen werden</a>.</p><p>Die Lösungshinweise beinhalten nicht die Testaufgaben, bei denen eine bestimmte Programmausgabe nachvollzogen werden musste.</p><p>Um Konzepte des Lehrmaterials deutlicher von weiterführenden, für den Kurs
+weniger relevante Themen abzugrenzen, sind diese nun unter Exkurs in den jeweiligen Abschnitten zusammengefasst.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-1---klassenbasierte-programmierung-31102023">Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)<a href="#lösungshinweise-test-1---klassenbasierte-programmierung-31102023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)" title="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test1-prog-ws-23-24-fh-trier-db49d4c765836c2fe559ae62ec69a5ba.pdf">hier heruntergeladen werden</a>.  </p><div class="footnotes"><hr><ol><li id="fn-1-587c3c">Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem <a href="https://discord.gg/KFqnBwU7Ym" target="_blank" rel="noopener noreferrer">Discord-Server</a> zu finden.<a href="#fnref-1-587c3c" class="footnote-backref">↩</a></li></ol></div>]]></content:encoded>
             <category>study</category>
             <category>java</category>
             <category>test</category>
+            <category>programmierung</category>
         </item>
         <item>
             <title><![CDATA[Perceptron Function Plotting with Python]]></title>
