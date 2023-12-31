@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[3756],{9044:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/university","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

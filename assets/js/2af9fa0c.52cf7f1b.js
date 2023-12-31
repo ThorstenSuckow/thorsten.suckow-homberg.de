@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkthorsten_suckow_homberg_de=self.webpackChunkthorsten_suckow_homberg_de||[]).push([[2869],{1932:e=>{e.exports=JSON.parse('{"label":"trier university of applied sciences","permalink":"/blog/tags/trier-university-of-applied-sciences","allTagsPath":"/blog/tags","count":1}')}}]);
