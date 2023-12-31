@@ -27,6 +27,9 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [POSA] **Pattern-Oriented Software Architecture - A system of Patterns Volume 1**, John Wiley & Sons, 1996 <a name="posa"></a>
 
+**Ertel, Wolfgang**
+ - [Ert21] Ertel, W. (2021). **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
+
 **Evans, Eric**
 
 - [DDD] **Domain-Driven Design**, Addison-Wesley, 2004 <a name="ddd"></a>
@@ -68,12 +71,20 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="mod"></a>
 
+**Pfannstiel, Mario**
+
+- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele Und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://10.1007/978-3-658-33597-7.
+
 **Minsky, M. L. and Papert, S. A**
  - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
 
 **Rumbaugh, James; Ivar Jacobson Grady Booch**
 
 - [UREF] **The Unified Modeling Language Reference Manual**, Addison-Wesley, 1999 <a name="uref"></a>
+
+**Russell, Stuart and Norvig, Peter**
+
+ - [RN12] Stuart Russell und Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5.
 
 **Thomas, David; Hunt, Andrew**
 
