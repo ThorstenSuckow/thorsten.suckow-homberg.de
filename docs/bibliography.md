@@ -73,7 +73,7 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Pfannstiel, Mario**
 
-- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele Und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://10.1007/978-3-658-33597-7. <a name="pfa22"></a>
+- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://doi.org/10.1007/978-3-658-33597-7 <a name="pfa22"></a>
 
 **Minsky, M. L. and Papert, S. A**
  - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
