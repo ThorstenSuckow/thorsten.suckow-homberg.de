@@ -73,7 +73,7 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Pfannstiel, Mario**
 
-- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele Und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://10.1007/978-3-658-33597-7.
+- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele Und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://10.1007/978-3-658-33597-7. <a name="pfa22"></a>
 
 **Minsky, M. L. and Papert, S. A**
  - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
@@ -84,7 +84,7 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Russell, Stuart and Norvig, Peter**
 
- - [RN12] Stuart Russell und Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5.
+ - [RN12] Stuart Russell und Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5. <a name="rn12"></a>
 
 **Thomas, David; Hunt, Andrew**
 
