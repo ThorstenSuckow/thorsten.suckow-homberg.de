@@ -1,6 +1,6 @@
 ---
 slug: loesungshinweise-zu-test1-fh-trier
-title: "[DE] Lösungshinweise Modul prog (Update 05.12.2023)"  
+title: "[DE] Lösungshinweise Modul prog (Update 09.01.2024)"  
 authors: [thorstensuckow]
 tags: [study, java, test, programmierung]
 enableComments: true
@@ -9,7 +9,12 @@ enableComments: true
 Für das Modul **prog**[^1] im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
 [Hochschule Trier](https://www.hochschule-trier.de/) habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefaßt. Diese stehen als PDF zum Download zur Verfügung.
 
-### Lösungshinweise Test 3 - Objektorientierung  (05.12.2023)
+### Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)
+Lösungshinweise sowie Anmerkungen und Ergänzungen können
+[hier heruntergeladen werden](./loesungshinweise-test4-prog-ws-23-24-fh-trier.pdf).
+
+
+### Lösungshinweise Test 3 - Objektorientierung (05.12.2023)
 Lösungshinweise sowie Anmerkungen und Ergänzungen können
 [hier heruntergeladen werden](./loesungshinweise-test3-prog-ws-23-24-fh-trier.pdf).
 
@@ -22,4 +27,4 @@ weniger relevante Themen abzugrenzen, sind diese nun unter Exkurs in den jeweili
 Lösungshinweise sowie Anmerkungen und Ergänzungen können
 [hier heruntergeladen werden](./loesungshinweise-test1-prog-ws-23-24-fh-trier.pdf).  
 
-[^1]: Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem [Discord-Server](https://discord.gg/KFqnBwU7Ym) zu finden. 
+[^1]: Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem [Discord-Server](https://discord.gg/3g24RM2qKW) zu finden. 
