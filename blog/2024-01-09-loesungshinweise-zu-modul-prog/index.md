@@ -1,13 +1,17 @@
 ---
-slug: loesungshinweise-zu-test1-fh-trier
-title: "[DE] Lösungshinweise Modul prog (Update 09.01.2024)"  
+slug: loesungshinweise-prog-fh-trier
+title: "[DE] Lösungshinweise Modul prog (Update 23.01.2024)"  
 authors: [thorstensuckow]
 tags: [study, java, test, programmierung]
 enableComments: true
 ---
 
 Für das Modul **prog**[^1] im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
-[Hochschule Trier](https://www.hochschule-trier.de/) habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefaßt. Diese stehen als PDF zum Download zur Verfügung.
+[Hochschule Trier](https://www.hochschule-trier.de/) habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefasst. Diese stehen als PDF zum Download zur Verfügung.
+
+### Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)
+Lösungshinweise sowie Anmerkungen und Ergänzungen können
+[hier heruntergeladen werden](./loesungshinweise-test5-prog-ws-23-24-fh-trier.pdf).
 
 ### Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)
 Lösungshinweise sowie Anmerkungen und Ergänzungen können
