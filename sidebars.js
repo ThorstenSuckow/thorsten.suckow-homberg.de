@@ -8,6 +8,7 @@ const sidebars = {
             link: {type: 'doc', id: 'articles/index'},
             items: [
                 "articles/software-craftsmanship/index",
+                "articles/an-introduction-to-shellsort-running-time-analysis/index",
                 "articles/getter-setter-automation-with-php-attributes/index",
                 {
                     type: 'category',
