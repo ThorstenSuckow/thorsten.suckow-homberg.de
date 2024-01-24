@@ -33,7 +33,7 @@ has read-access to `$employee`, with the following implications:
 
  **1.1.1.2** `apply*()` will be used as a proxy-method for `set*()`.
 
- **1.1.2** This article mentions "physical existing" and "virtual" methods. In the context of the topic of this article, a "physical existing" method
+ **1.1.2** This article mentions "physical existing" and "virtual" methods. In the context of the topic of this article, a "physical existingn" method
 refers to a method that is available with the source code. A "virtual" method refers to a method that is resolved by
 `PHP`'s magic method [`__call`](https://www.php.net/manual/en/language.oop5.overloading.php#object.call). (In this regard _virtual accessors_
 and [`virtual functions`](https://en.cppreference.com/w/cpp/language/virtual) share the similarity that the target function is not known during compile time respectively to its runtime engine.)
@@ -533,7 +533,7 @@ This is roughly 3.75 times slower than the benchmark for the code implementing p
 #### 5.3.1 Memory Consumption
 It should be obvious that, beginning with a given threshold of $n \in \N_{>1}$,  $n$ classes using physical getters and setters use up more memory than $n$ classes
  that discard physical code and use a `Trait` instead. The article is guilty of not providing a value for $n$ where memory consumption would start to become noticeable: In the given
- test cases, memory consumption was neglectable and is therefor not listed.
+ test cases, memory consumption was negligible and is therefor not listed.
 
 
 ## 6. Conclusion
@@ -545,7 +545,7 @@ operating on setters and getters of such entities. When reducing the relevance o
 
 With the benchmarks executed for the various testcases, it shows that physical existing code has runtime benefits, but
 impacts memory consumption, conversely to the implementation that only uses magic methods. Although the memory consumption
-for the given benchmarks are neglectable, physical implementations greatly benefit from the
+for the given benchmarks are negligible, physical implementations greatly benefit from the
 [**opcode cache**](https://www.php.net/manual/en/intro.opcache.php), whereas the logic evaluated with `__call` and the
 virtual `getters` and `setters` cannot be cached in the same way the physical existing `getters` and `setters` are.
 In a system whose codebase requires `getters` and `setters`, but where those accessors are not frequently used, the system will

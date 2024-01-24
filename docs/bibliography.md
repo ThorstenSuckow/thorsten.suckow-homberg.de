@@ -11,6 +11,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
 
+**Bloch, Joshua**:
+
+ - [Blo18] _Effective Java_ (3rd edition), Addison-Wesley, 2018  <a name="blo18"></a>
+
 **Booch, Grady (et al.)**
 
  - [OOA] **Object-oriented analysis and design with applications** (3rd Edition), Pearson Education, 2007 <a name="ooa"></a>
@@ -22,6 +26,9 @@ import {BackButton} from "../src/components/BackButton.js";
 **Buschmann, Frank (et al.)**
 
 - [POSA] **Pattern-Oriented Software Architecture - A system of Patterns Volume 1**, John Wiley & Sons, 1996 <a name="posa"></a>
+
+**Ertel, Wolfgang**
+ - [Ert21] Ertel, W. (2021). **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
 
 **Evans, Eric**
 
@@ -64,13 +71,28 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="mod"></a>
 
+**Pfannstiel, Mario**
+
+- [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://doi.org/10.1007/978-3-658-33597-7 <a name="pfa22"></a>
+
+**Minsky, M. L. and Papert, S. A**
+ - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
+
 **Rumbaugh, James; Ivar Jacobson Grady Booch**
 
 - [UREF] **The Unified Modeling Language Reference Manual**, Addison-Wesley, 1999 <a name="uref"></a>
 
+**Russell, Stuart and Norvig, Peter**
+
+ - [RN12] Stuart Russell und Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5. <a name="rn12"></a>
+
 **Thomas, David; Hunt, Andrew**
 
-- [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020  <a name="pp"></a>
+- [PP] **The Pragmatic Programmer** (20th Anniversary Edition), Pearson Education, 2020 <a name="pp"></a>
+
+**Ullenboom, Christian**
+
+- [Ull12] _Java ist auch eine Insel_ (10. Auflage), Bonn: Galileo Press, 2012  <a name="ull12"></a>
 
 **Vernon, Vaughn**
 
