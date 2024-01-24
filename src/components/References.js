@@ -5,7 +5,7 @@ import React from 'react';
 function Bibliography ({name, pp}) {
     const href = `/docs/bibliography#${name.toLowerCase()}`;
     return (
-        <a href={href}>[<span className="bibRef">📖{name.toUpperCase()}</span>{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
+        <a href={href}>[<span className="bibRef">📖{name}</span>{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
     );
 
 }

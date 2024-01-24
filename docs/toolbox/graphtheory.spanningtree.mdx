@@ -1,0 +1,40 @@
+---
+title: "Spanning Tree"
+---
+
+import {Embed} from "../../src/components/Embed.js";
+
+
+# Spanning Tree (Graph Theory)
+
+If $G$ is a _connected graph_, then the **Spanning Tree** $T \sube G$  is a _minimal connected_ graph with $V(T) = V(G)$.
+
+The edges $E(G) \setminus E(T)$ are called the _chords_ of $T$ in $G$.
+
+## Example
+
+$G$ is a _connected graph_ with $|G| = 7$ and $||G|| = 10$.
+
+import graph from "./img/graphtheory.spanningtree/graph.svg.png";
+
+<Embed
+    figure={1}
+    title={"Graph G"}
+>
+    <img src={graph} />
+</Embed>
+
+Removing edges so that $G$ becomes a _minimal connected_ graph. The _chords_ $E(G) \setminus E(T)$  are depicted as curved lines.
+
+import spanningtree from "./img/graphtheory.spanningtree/spanningtree.svg.png";
+
+<Embed
+    figure={2}
+    title={"Spanning Tree T of G. The curved edges are the chords of T in G."}
+>
+    <img src={spanningtree} />
+</Embed>
+
+<BackButton />
+
+
