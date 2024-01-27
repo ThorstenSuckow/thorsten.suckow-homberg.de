@@ -56,6 +56,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
 
+**Knuth, Donald**
+ -[Knu97c] Donald E. Knuth. **The Art of Computer Programming**, Volume 3 (2nd
+Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1997. isbn: 0201896850. <a name="Knu97c"></a>
+
 **Martin, Robert C.**
 
 - [ASD] **Agile Software Development**, Prentice Hall, 2003 <a name="asd"></a>
@@ -76,6 +80,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79165. isbn: 978-3-662-55650-4. doi:
   10.1007/978-3-662-55650-4_2. url: https://doi.org/10.1007/978-3-662-55650-4_2. <a name="OW17b"></a>
+
+** Papernov, AA und Stasevich, GV**
+
+ - [PS65] AA Papernov und GV Stasevich. ``A method of information sorting in
+computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.<a name="PS65"></a>
 
 **Parnas, David L.**
 

@@ -1,13 +1,12 @@
-# Eine Einführung in den Shellsort-Algorithmus 
+# Laufzeit Analyse anhand des Shellsort-Algorithmus
 
-## Lösung {#lösung .unnumbered}
 
 import {BackButton} from "../../../src/components/BackButton.js";
 import {UmlEmbed, Embed} from "../../../src/components/Embed";
 import {GlosRef, BibRef} from "../../../src/components/References";
 
 
-**Shellsort** ist ein Sortieralgorithmus, der nach *Donald Shell* benannt wurde. _Shell_ hat ihn 1959 in <BibRef name="She59" /> vorgestellt.
+**Shellsort** ist ein Sortieralgorithmus, der nach *Donald Shell* benannt wurde. Er wurde von ihm 1959 in <BibRef name="She59" /> vorgestellt.
 
 Die in dem Algorithmus verwendete Sortiermethode ist auch bekannt als
 *Sortieren mit abnehmenden Inkrementen* <BibRef name="OW17b" pp="88" />, das Verfahren ist eine Variation von **Insertion Sort**:
@@ -16,23 +15,23 @@ Die in dem Algorithmus verwendete Sortiermethode ist auch bekannt als
 > to produce a faster sorting algorithm. <BibRef name="CL22" pp="48" />
 
 
-In der vorliegenden Implementierung werden $t = log_2(n)$ Inkremente[^2]
-$h_t$[^3] der Form $\floor{\frac{n}{2^i}}$ verwendet, um $lg(n)$
+In der vorliegenden Implementierung [Listing 1](#lst:1) werden $t = log_2(n)$ Inkremente[^1]
+$h_t$[^2] der Form $\lfloor {\frac{n}{2^i}} \rfloor$ verwendet, um $lg(n)$
 $h$-sortierte Folgen zu erzeugen. Im letzten Schritt sortiert der
-Algorithmus dann in $h_1$ die Schlüssel mit Abstand=$1$.\
+Algorithmus dann in $h_1$ die Schlüssel mit Abstand=$1$.
+
 Die Effizienz des Sortierverfahrens ist stark abhängig von $h$: So zeigt
 *Knuth*, dass $O(n^{\frac{3}{2}})$ gilt, wenn für $h$ gilt:
-$h_s = 2^{s+1} - 1$ mit $0 \leq s < t = \floor{lg(n)}$ (vgl. [@Knu97b
-91])[^4]. In unserem Fall können wir von $O(n^2)$ ausgehen.\
+$h_s = 2^{s+1} - 1$ mit $0 \leq s < t = \lfloor{lg(n)} \rfloor$ (vgl.  <BibRef name="Knu97c" pp="91" />[^3]. In unserem Fall können wir von $O(n^2)$ ausgehen.
 
-### Aufgabenstellung {#aufgabenstellung .unnumbered}
 
-In der Aufgabe wurde nach der Anzahl der zwischen zwei Feldelementen
-gemachten Vergleiche gefragt (), die für große randomisierte Felder
-durchgeführt werden.
 
-Um die Aufrufe zu zählen, kann wie in
-[Listing 1](#lst:1) eine Zählvariable $c4$ eingesetzt wird, die
+### Anzahl der Aufrufe für Feldvergleiche
+
+Gesucht ist die Anzahl der zwischen zwei Feldelementen gemachte Vergleiche für große randomisierte Felder.
+Wir vermuten hierfür einen Wert zwischen $O(n\ lg\ n)$ und $O(n^2)$,
+
+Um die Aufrufe der Feldvergleiche zu zählen, kann wie in [Listing 1](#lst:1) eine Zählvariable $c3$ eingesetzt wird, die
 jeden Aufruf über ein *increment* protokolliert.
 
 <a name="lst:1"></a>
@@ -58,21 +57,21 @@ while (distanz > 0) {
 }
 ```
 
-Zur Lösung der Aufgabe können randomisierte Felder erzeugt werden, wie
-es der Test-Code in [Listing 2](#lst:2) demonstriert. Dann wird überprüft, in welchen Bereichen sich $c3$ bewegt. Da jeder auf Vergleichsoperationen basierende Sortieralgorithmus zu der Laufzeitklasse $\Omega(n\ log\ n)$
-gehört[^1], kann im Mittel $c3 \geq n\ log\ n$ angenommen werden:
+Zur Bestimmung von $c3$ können randomisierte Felder erzeugt werden, wie
+es der Test-Code in [Listing 2](#lst:2) demonstriert. Dann wird überprüft, in welchen Bereichen sich $c3$ bewegt.
+Da jeder auf Vergleichsoperationen basierende Sortieralgorithmus zu der Laufzeitklasse $\Omega(n\ log\ n)$
+gehört, kann im Mittel $c3 \geq n\ log\ n$ angenommen werden:
 
 > Jedes allgemeine Sortierverfahren benötigt zum Sortieren von N
 > verschiedenen Schlüsseln sowohl im schlechtesten Fall als auch im
 > Mittel wenigstens $\Omega(N\ log\ N)$ Schlüsselvergleiche.
 >
-> [@OW17b 154, Satz 2.4]
+>  <BibRef name="OW17b" pp="154" />
 
-\
+
 Allerdings wird $n^{1.3}$ ab $n=982$ schneller wachsen als $n\ log\ n$
-(siehe Abbildung [1](#fig:lognplot){reference-type="ref"
-reference="fig:lognplot"}), weshalb das in der Auswertung berücksichtigt
-werden muss - man könnte sonst fälschlicherweise meinen, das in dem geg.
+(siehe [Abbildung 1](#fig:lognplot)), was in der Auswertung berücksichtigt
+werden muss. Sonst könnte man fälschlicherweise folgern, das in dem geg.
 Fall die Laufzeit im Durchschnitt $n\ log\ n$ beträgt.
 
 <a name="lst:2"></a>
@@ -110,13 +109,13 @@ import LognPlotPng from "./img/lognplot.png";
 <Embed
     modeAware={true}
     width={640}
-    figure={2}
+    figure={1}
     title={"Ab <i>n=982</i> wächst n<sup>(4/3)</sup> schneller al <i>n log n</i>." }
 ><img src={LognPlotPng}  /></Embed>
 
 
 
-Wegen $\Omega(n\ log\ n)$ interessieren wir uns für die Intervalle[^2]:
+Wegen $\Omega(n\ log\ n)$ interessieren wir uns für die Intervalle:
 
 -   $n\ log\ n \leq c3 \leq n^{1.3}$
 
@@ -126,22 +125,23 @@ Die Ausführung des Tests zeigt, dass die Aufrufanzahl von $c3$ bei
 großen $n$ unterhalb $n^{1.3}$ oder zwischen $n^{1.3}$ und $n^2$ liegt:
 
 > It appears that the time required to sort $n$ elements is proportional
-> to $n^{1.226}$.[^3]
+> to $n^{1.226}$.[^4]
 >
-> [@She59 31]
+> <BibRef name="She59" pp="31" />
 
-## Laufzeitanalyse {#laufzeitanalyse .unnumbered}
+## Laufzeitanalyse
 
 Für die nachfolgenden Betrachtungen sei eine Eingabegröße $n = 2^p$
 gegeben. Die Inkremente $h$ entsprechen der über die Implementierung
 vorgegebenen Folge $h$ mit
-$h_t = \frac{n}{2}, h_{t-1} = \frac{n}{4}, \dots, h_1 = 1$.\
+$h_t = \frac{n}{2}, h_{t-1} = \frac{n}{4}, \dots, h_1 = 1$.
+
 Für die Analyse ist die **Shellsort**-Implementierung in
-Listing [\[lst:shellsort\]](#lst:shellsort){reference-type="ref"
-reference="lst:shellsort"}) gegeben.
+[Listing 3](#lst:shellsort) gegeben.
 
-``` {#lst:shellsort .java language="java" label="lst:shellsort" caption="Implementierung des Shellsort-Algorithmus."}
+<a name="lst:shellsort"></a>
 
+```java title="Listing 3: Implementierung des Shellsort-Algorithmus." showLineNumbers
 public static int[] sort(int[] arr) {
 
     int n = arr.length;
@@ -176,41 +176,44 @@ public static int[] sort(int[] arr) {
 ```
 
 Im Folgenden betrachten wir die Anzahl für die im Code durch Kommentare
-markierten Stellen $c1$ in Zeile 11, $c2$ in Zeile 13 und $c3$ in Zeile
-20.
+markierten Stellen $c1$ in Zeile 8, $c2$ in Zeile 12 und $c3$ in Zeile
+19.
 
-\
+
 Für eine erste *worst-case*-Analyse ist ein Feld der Länge $16$ gegeben,
-in absteigender Reihenfolge sortiert (s.
-Abbildung [2](#fig:bestcase){reference-type="ref"
-reference="fig:bestcase"})
+in absteigender Reihenfolge sortiert (s. [Abbildung 2](#fig:bestcase)):
 
-![](./img/bestcase-sequence.png){#fig:bestcase}
-Die für die Laufzeitabschätzung verwendete Eingabefolge
-$16..1$
 
-\
+import BestcaseSequence from "./img/bestcase-sequence.png";
+
+<a name="fig:bestcase"></a>
+<Embed
+    modeAware={true}
+    figure={2}
+    title={"Die für die Laufzeitabschätzung verwendete Eingabefolge <i>16..1</i>." }
+><img src={BestcaseSequence}  /></Embed>
+
+
+
 Ganz offensichtlich gilt für **c3**, dass es $lg(n)$-mal aufgerufen
-wird[^4].\
+wird[^5].
 **c2** befindet sich im Block der durch die in Zeile 11 definierten
 Zählschleife.
 
-Der Startwert für ist in jedem Durchgang des Blocks $c1$ der aktuelle
-Wert von [^5], und läuft jeweils bis $n - 1$.
+Der Startwert für `i` ist in jedem Durchgang des Blocks $c1$ der aktuelle
+Wert von `delta` [^6], und läuft jeweils bis $n - 1$.
 
-In einem kompletten Durchlauf der Schleife enstpricht die Anzahl der
+In einem kompletten Durchlauf der Schleife entspricht die Anzahl der
 Aufrufe von $c2$ also
 
-$$(n - 1) - delta + 1 = n - delta$$
+$(n - 1) - delta + 1 = n - delta$
 
-::: tcolorbox
-**Hinweis:**\
+:::info
+**Hinweis:**
 Für das Beispiel betrachten wir der Einfachheit halber Feldlängen der
-Form $2^p$.\
-Für den allgemeinen Fall gilt für die Anzahl der Aufrufe von $c2$:\
-$$%\label{eq:dynamic_diag}
-        \nonumber
-        \sum_{i=1}^{\lfloor lg(n) \rfloor} n - \lfloor \frac{n}{2^i} \rfloor = n * lg(n) - \sum_{i=1}^{\lfloor lg(n) \rfloor} \lfloor \frac{n}{2^i} \rfloor$$
+Form $2^p$.
+Für den allgemeinen Fall gilt für die Anzahl der Aufrufe von $c2$:
+$\sum_{i=1}^{\lfloor lg(n) \rfloor} n - \lfloor \frac{n}{2^i} \rfloor = n * lg(n) - \sum_{i=1}^{\lfloor lg(n) \rfloor} \lfloor \frac{n}{2^i} \rfloor$
 :::
 
 Für die Gesamtzahl der Aufrufe von $c2$ ergibt sich somit unter
@@ -228,37 +231,35 @@ $$16 * lg(16) - 16 + 1 = 49$$
 
 ist.
 
-::: center
-::: {#tab:calls}
-      **n**         **c2**      **$O(n^{1.1})$**   **$O(n^{1.3})$**   **$O(n\ log\ n)$**   **$O(n^2)$**  
-  ------------- -------------- ------------------ ------------------ -------------------- -------------- --
-       $8$           $17$             $9$                $14$                $24$              $64$      
-      $16$           $49$             $21$               $36$                $64$             $256$      
-      $32$          $129$             $45$               $90$               $160$             $1024$     
-      $64$          $321$             $97$              $222$               $384$             $4096$     
-      $128$         $769$            $207$              $548$               $896$            $16.384$    
-      $256$         $1793$           $445$              $1351$              $2048$           $65.536$    
-     $1024$         $9217$           $2048$             $8192$             $10240$         $1.048.576$   
-       ..                                                                                                
-     $2156$        $21.565$        $4.645,29$        $21.564,69$         $23.875,84$       $4.648.336$   
-     $2157$        $21.576$        $4.647,66$        $21.577,70$         $23.888,36$       $4.652.649$   
-     $2158$        $21.586$        $4.650,03$        $21.590,70$         $23.900,88$       $4.656.964$   
-       ..                                                                                                
-    $10.000$      $120.005$         $25118$           $158.489$           $132.877$          $1.0E8$     
-    $100000$     $1.500.006$       $316.227$         $3.162.277$         $1.660.964$         $1.0E10$    
-    $200000$     $3.200.006$       $677.849$         $7.786.440$         $3.521.928$         $4.0E10$    
-    $500.000$    $8.500.007$      $1.857.235$         $2.56..E7$         $9.465.784$         $2.5E11$    
-   $1.000.000$   $18.000.007$     $3.981.071$         $6.30..E7$          $1.99..E7$         $1.0E12$    
-
-  : Die Aufrufzahlen für $c2$ für verschiedene $n$. Schlüsselvergleiche
-  spielen an dieser Stelle keine Rolle. Grün hinterlegte Werte sind
-  kleiner als $c2$, rote sind größer. Mit $n > 2156$ wächst
-  $O(n^\frac{4}{3})$ schneller als $c2$ und mit $n >= 982$ schneller als
+:::info
+  Die Aufrufzahlen für $c2$ für verschiedene $n$. Schlüsselvergleiche finden erst später statt.
+  Mit $n > 2156$ wächst $O(n^\frac{4}{3})$ schneller als $c2$ und mit $n >= 982$ schneller als
   $O(n\ log\ n)$.
-:::
+
+
+
+|   **n**   |   **c2**   | **$O(n^{1.1})$** | **$O(n^{1.3})$** | **$O(n\ log\ n)$** | **$O(n^2)$**  |
+|:---------:|:----------:|:---------------:|:---------------:|:-------------------:|:------------:|
+|     8     |     17     |        9        |        14       |          24          |      64      |
+|    16     |     49     |       21        |        36       |          64          |     256      |
+|    32     |    129     |       45        |        90       |         160          |    1024      |
+|    64     |    321     |       97        |       222       |         384          |    4096      |
+|   128     |    769     |      207        |       548       |         896          |   16.384     |
+|   256     |   1793     |      445        |      1351       |        2048          |   65.536     |
+|   1024    |   9217     |      2048       |      8192       |       10240          | 1.048.576    |
+|   2156    |   21.565   |    4.645,29     |    21.564,69    |      23.875,84       | 4.648.336    |
+|   2157    |   21.576   |    4.647,66     |    21.577,70    |      23.888,36       | 4.652.649    |
+|   2158    |   21.586   |    4.650,03     |    21.590,70    |      23.900,88       | 4.656.964    |
+|   ...     |    ...     |      ...        |       ...       |         ...          |     ...      |
+|  10.000   |  120.005   |     25.118      |     158.489     |       132.877        |    1.0E8     |
+| 100.000   | 1.500.006  |     316.227     |    3.162.277    |      1.660.964      |    1.0E10    |
+| 200.000   | 3.200.006  |     677.849     |    7.786.440    |      3.521.928      |    4.0E10    |
+| 500.000   | 8.500.007  |   1.857.235     |    2.56..E7     |      9.465.784      |    2.5E11    |
+| 1.000.000 | 18.000.007 |   3.981.071     |    6.30..E7     |      1.99..E7       |    1.0E12    |
+
 :::
 
-In dem durch die in Zeile 18 definierte -Schleife findet die eigentliche
+In der `while`-Schleife in Zeile 17 findet die eigentliche
 Arbeit des Algorithmus statt: Es wird überprüft, ob $delta$-entfernte
 Elemente in aufsteigender Reihenfolge sortiert angeordnet sind.
 
@@ -266,23 +267,28 @@ Ist das nicht der Fall, werden die Elemente an den Stellen $j$ und
 $j - delta$ ausgetauscht, bis die $h$-Folge sortiert ist.
 
 Für den ersten Durchgang des Algorithmus an dieser Stelle mit $h_4 = 8$
-ergibt sich somit die in
-Abbildung [3](#fig:bestcase-it1){reference-type="ref"
-reference="fig:bestcase-it1"} dargestellte Reihenfolge der Schlüssel:
+ergibt sich somit die in [Abbildung 3](#fig:bestcase-it1) dargestellte Reihenfolge der Schlüssel:
 
-![](./img/bestcase-it1.png){#fig:bestcase-it1}
-Nach dem ersten Durchgang sind die Schlüssel in den Abständen
-$h_4 = 8$ sortiert, es ergeben sich zwei sortierte Teilfolgen der Länge
-$8$
+
+import BestcaseIt1 from "./img/bestcase-it1.png";
+
+<a name="fig:bestcase-it1"></a>
+<Embed
+    modeAware={true}
+    figure={3}
+    title={"Nach dem ersten Durchgang sind die Schlüssel in den Abständen <i>h_4 = 8</i> sortiert, es ergeben sich zwei sortierte Teilfolgen der Länge <i>8</i>." }
+><img src={BestcaseIt1}  /></Embed>
+
+
 
 
 Die weiteren Durchgänge des Algorithmus sortieren das Feld entsprechend
 der Größe $h$: Es sind danach jeweils Schlüssel mit den Abständen $4$
-(Abbildung [4](#fig:bestcase-it2){reference-type="ref"
+(Abbildung [4](#fig:bestcase-it2){reference-type="ref"
 reference="fig:bestcase-it2"}), $2$
-(Abbildung [5](#fig:bestcase-it3){reference-type="ref"
+(Abbildung [5](#fig:bestcase-it3){reference-type="ref"
 reference="fig:bestcase-it3"}), und im letzten Schritt vollständig
-sortiert (Abbildung [6](#fig:bestcase-it4){reference-type="ref"
+sortiert (Abbildung [6](#fig:bestcase-it4){reference-type="ref"
 reference="fig:bestcase-it4"}):
 
 ![](./img/bestcase-it2.png){#fig:bestcase-it2}
@@ -332,11 +338,11 @@ Aufrufen für unser Beispiel führt.\
 ## Nachweis der Komplexitätsklasse {#nachweis-der-komplexitätsklasse .unnumbered}
 
 Um $O$ zu ermitteln, werden nun alle Konstanten der
-Funktion [\[eq:bestcase\]](#eq:bestcase){reference-type="ref"
+Funktion [\[eq:bestcase\]](#eq:bestcase){reference-type="ref"
 reference="eq:bestcase"} eliminiert, und der "dominante" Summand in
 Abhängigkeit von $n$ betrachtet, der in diesem Fall $lg(n) * n$ ist.
 
-Wir vermuten ein $N-log-N$-Wachstum[^6] (vgl. [@OW17a 5]), und wollen
+Wir vermuten ein $N-log-N$-Wachstum[^6] (vgl. [@OW17a 5]), und wollen
 nun zeigen, dass $T(n)$ in $O(n\ log\ n)$ liegt.\
 Hierfür müssen wir ein geeignetes $c$ und ein $n_0$ finden, so dass
 gilt:
@@ -359,7 +365,7 @@ Insgesamt gilt also
 
 $$n_0 = 1, c = \frac{3}{2}: \forall n \geq n_0: \frac{3}{2} * n * lg(n) + lg(n) - n + 1 \leq c * n * lg(n)$$
 
-womit $f = O(n * log(n))$ gezeigt ist. ◻
+womit $f = O(n * log(n))$ gezeigt ist. ◻
 :::
 
 ## Worst-Case-Analyse {#worst-case-analyse .unnumbered}
@@ -381,7 +387,7 @@ Algorithmus die Vorsortierung der $h$-Folgen ermöglicht:\
 \
 Es gilt also, die Vorsortierung auszuhebeln.\
 Für **Insertion-Sort** ist die Laufzeit im worst-case $O(n^2)$
-(vgl. [@OW17b 87]). Da Shellsort mindestens im letzten Schritt diese
+(vgl. [@OW17b 87]). Da Shellsort mindestens im letzten Schritt diese
 Sortiermethoden auf Distanzfolgen der Länge $1$ anwendet, muss der
 Algorithmus eine Folge als Eingabe erhalten, die durch die ersten
 $lg(n) - 1$-Durchgänge (mit $h_s = 2^{s - 1}, 1 <= s < lg(n)$)
@@ -396,7 +402,7 @@ Elemente aus dem Feld $A$:
 
 $$\forall i, j \in \mathbb{N}_{[0, n - 1]}, 2 \mid i, 2 \nmid j:  A[i] < A[j] \land A[i] < A[i + 1] \land A[j] < A[j +1]$$
 
-Abbildung [7](#fig:worstcase-sequence){reference-type="ref"
+Abbildung [7](#fig:worstcase-sequence){reference-type="ref"
 reference="fig:worstcase-sequence"} veranschaulicht die Anordnung.
 
 ![](./img/worstcase-sequence.png){#fig:worstcase-sequence}
@@ -420,7 +426,7 @@ Verschiebungen statt, da keine Inversion gefunden wird. Erst im letzten
 Schritt, in dem direkt benachbarte Elemente miteinander verglichen
 werden, werden die Inversionen ermittelt und die Verschiebung der
 Elemente findet statt (s.
-Abbildung [8](#fig:worstcase-sortsequence){reference-type="ref"
+Abbildung [8](#fig:worstcase-sortsequence){reference-type="ref"
 reference="fig:worstcase-sortsequence"}).
 
 ![](./img/worstcase-sortsequence.png){#fig:worstcase-sortsequence}
@@ -448,32 +454,23 @@ was zu einer Laufzeitabschätzung von $O(n^2)$ führt.
 [^1]: mit $n =$ Länge des zu sortierenden Feldes. Im folgenden $lg$ für
 $log_2$.
 
-[^2]: vgl. [@Knu97b 84]
+[^2]: vgl. <BibRef name="Knu97c" pp="84" />
 
-[^4]: Knuth bezieht sich hier auf die Arbeit von *Papernov und
-Stasevich* ([@PS65]). Weitere Verweise auf Laufzeiten in
-Abhängigkeit von $n$ und $h$ fasst übersichtlich der
-Wikipedia-Artikel zusammen:
-<https://en.wikipedia.org/wiki/Shellsort> auf.
+[^3]: *Knuth* bezieht sich hier auf die Arbeit von *Papernov und Stasevich* (<BibRef name="PS65" />). Weitere Verweise auf
+Laufzeiten in Abhängigkeit von $n$ und $h$ fasst übersichtlich der Wikipedia-Artikel zusammen: [https://en.wikipedia.org/wiki/Shellsort](https://en.wikipedia.org/wiki/Shellsort) (abgerufen 23.01.2024).
 
-
-[^1]: [@OW17b 154], Skript (Teil2) S. 180
-
-[^2]: siehe dazu auch Tabelle [1](#tab:calls){reference-type="ref"
-    reference="tab:calls"}
-
-[^3]: *Shell* führt in seinem Paper keinen Beweis auf. Er stützt seine
+[^4]: *Shell* führt in seinem Paper keinen Beweis auf. Er stützt seine
     Behauptung auf Messungen, die er selber in Tests durchgeführt hat:
     "\[\...\] an analytical determination of the expected speed has
     eluded the writer. However, experimental use has established its
     speed characteristics." (ebenda)
 
-[^4]: hier wie im folgenden ohne Betrachtung der Schleifenbedingung, die
+[^5]: hier wie im folgenden ohne Betrachtung der Schleifenbedingung, die
     an dieser Stelle insgesamt $lg(n) + 1$-mal aufgerufen wird
 
-[^5]: ${8, 4, 2, 1}$ für das gegebene Beispiel
+[^6]: ${8, 4, 2, 1}$ für das gegebene Beispiel
 
-[^6]: mit $O(log\ n)$ bzw $O(n\ log\ n)$ nehmen wir für die $O$-Notation
+[^7]: mit $O(log\ n)$ bzw $O(n\ log\ n)$ nehmen wir für die $O$-Notation
     wieder die in der Fachliteratur gebräuchlichere Schreibweise auf.
     Sowohl *Güting und Dieker* als auch *Ottmann und Widmayer* weisen in
     [@GD18a 15] bzw. [@OW17a 5] darauf hin, dass die Angabe der Basis
@@ -482,4 +479,4 @@ Wikipedia-Artikel zusammen:
     $log_a(x) = \frac{log_b(x)}{log_b(a)}$).
 
 [^7]: in diesem Zusammenhang bedeutet Inversion: *Fehlstellung*
-    (vgl. [@OW17b 87])
+    (vgl. <BibRef name="OW17b" pp="87">)
