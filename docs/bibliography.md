@@ -27,6 +27,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [POSA] **Pattern-Oriented Software Architecture - A system of Patterns Volume 1**, John Wiley & Sons, 1996 <a name="posa"></a>
 
+**Cormen, Thomas H. and Leiserson, Charles E.**
+
+ - [CL22] Thomas H Cormen and Charles E Leiserson. _Introduction to Algorithms_, fourth edition. en. London, England: MIT Press, Apr. 2022.
+   isbn: 9780262046305. <a name="CL22"></a>
+
 **Ertel, Wolfgang**
  - [Ert21] Ertel, W. (2021). **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
 
@@ -67,6 +72,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [ADU] **Analyse und Design mit UML 2** (7., aktualisierte Auflage), Oldenbourg Wissenschaftsverlag GmbH, 2005 <a name="adu"></a>
 
+**Ottmann, Thomas and Widmayer, Peter**
+
+- [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79165. isbn: 978-3-662-55650-4. doi:
+  10.1007/978-3-662-55650-4_2. url: https://doi.org/10.1007/978-3-662-55650-4_2. <a name="OW17b"></a>
+
 **Parnas, David L.**
 
 - [MOD] **On the Criteria To Be Used in Decomposing Systems into Modules**, Communications of the ACM, 15, 12, December 1972, pp. 1053-1058<a name="mod"></a>
@@ -84,7 +94,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 **Russell, Stuart and Norvig, Peter**
 
- - [RN12] Stuart Russell und Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5. <a name="rn12"></a>
+ - [RN12] Stuart Russell and Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5. <a name="rn12"></a>
+
+**Shell, Donald**
+- [She59] D. L. Shell. ``A High-Speed Sorting Procedure``. In: _Commun. ACM 2.7_   (Juli 1959), S. 30-32. ISSN: 0001-0782. DOI: 10.1145/368370.368387. url: https://doi.org/10.1145/368370.368387 <a name="She59"></a>
 
 **Thomas, David; Hunt, Andrew**
 

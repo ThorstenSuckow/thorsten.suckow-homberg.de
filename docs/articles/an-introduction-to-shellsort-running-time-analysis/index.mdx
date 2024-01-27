@@ -2,23 +2,20 @@
 
 ## Lösung {#lösung .unnumbered}
 
-Eine Laufzeitabschätzung führt zu $O(n^{\frac{4}{3}})$ ($= O(n^{1.3})$).
+import {BackButton} from "../../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../../src/components/Embed";
+import {GlosRef, BibRef} from "../../../src/components/References";
 
-## Anmerkungen und Ergänzungen {#anmerkungen-und-ergänzungen .unnumbered}
-[lit](literatur.md)
-Bei dem Algorithmus handelt es sich um einen Sortieralgorithmus, der
-bereits 1959 von *Donald Shell*[^1] vorgestellt wurde, und mit
-**Shellsort** auch nach ihm benannt wurde.\
+
+**Shellsort** ist ein Sortieralgorithmus, der nach *Donald Shell* benannt wurde. _Shell_ hat ihn 1959 in <BibRef name="She59" /> vorgestellt.
+
 Die in dem Algorithmus verwendete Sortiermethode ist auch bekannt als
-*Sortieren mit abnehmenden Inkrementen* [@OW17b 88], das Verfahren ist
-eine Variation von **Insertion Sort**:
+*Sortieren mit abnehmenden Inkrementen* <BibRef name="OW17b" pp="88" />, das Verfahren ist eine Variation von **Insertion Sort**:
 
-> \[Shellsort\] uses insertion sort on periodic subarrays of the input
-> to produce a faster sorting algorithm.
->
-> [@CL22 48]
+> [Shellsort] uses insertion sort on periodic subarrays of the input
+> to produce a faster sorting algorithm. <BibRef name="CL22" pp="48" />
 
-\
+
 In der vorliegenden Implementierung werden $t = log_2(n)$ Inkremente[^2]
 $h_t$[^3] der Form $\floor{\frac{n}{2^i}}$ verwendet, um $lg(n)$
 $h$-sortierte Folgen zu erzeugen. Im letzten Schritt sortiert der
@@ -35,12 +32,12 @@ gemachten Vergleiche gefragt (), die für große randomisierte Felder
 durchgeführt werden.
 
 Um die Aufrufe zu zählen, kann wie in
-Listing [\[lst:counter\]](#lst:counter){reference-type="ref"
-reference="lst:counter"} eine Zählvariable $c4$ eingesetzt wird, die
+[Listing 1](#lst:1) eine Zählvariable $c4$ eingesetzt wird, die
 jeden Aufruf über ein *increment* protokolliert.
 
-``` {#lst:counter .java language="java" caption="Zur Protokollierung der Aufrufe können in dem Code Zählvariablen eingesetzt werden ($c1, .. ,c4$)." label="lst:counter"}
+<a name="lst:1"></a>
 
+```java title="Listing 1: Zur Protokollierung der Aufrufe können in dem Code Zählvariablen eingesetzt werden (c1, ... ,c4)." {2, 5, 7, 9} showLineNumbers
 while (distanz > 0) {
     c1++;
     for (i = distanz; i < feld.length; i++) {
@@ -62,11 +59,7 @@ while (distanz > 0) {
 ```
 
 Zur Lösung der Aufgabe können randomisierte Felder erzeugt werden, wie
-es der Test-Code in
-Listing [\[lst:test\]](#lst:test){reference-type="ref"
-reference="lst:test"} demonstriert. Dann wird überprüft, in welchen
-Bereichen sich $c3$ bewegt. Da jeder auf Vergleichsoperationen
-basierende Sortieralgorithmus zu der Laufzeitklasse $\Omega(n\ log\ n)$
+es der Test-Code in [Listing 2](#lst:2) demonstriert. Dann wird überprüft, in welchen Bereichen sich $c3$ bewegt. Da jeder auf Vergleichsoperationen basierende Sortieralgorithmus zu der Laufzeitklasse $\Omega(n\ log\ n)$
 gehört[^1], kann im Mittel $c3 \geq n\ log\ n$ angenommen werden:
 
 > Jedes allgemeine Sortierverfahren benötigt zum Sortieren von N
@@ -82,7 +75,9 @@ reference="fig:lognplot"}), weshalb das in der Auswertung berücksichtigt
 werden muss - man könnte sonst fälschlicherweise meinen, das in dem geg.
 Fall die Laufzeit im Durchschnitt $n\ log\ n$ beträgt.
 
-```java {#lst:test .java language="java" caption="Code zum Erzeugen randomisierter Felder zum Testen von Shellsort." label="lst:test"}
+<a name="lst:2"></a>
+
+```java title="Listing 2: Code zum Erzeugen randomisierter Felder zum Testen von Shellsort." showLineNumbers
 int epochs = 2000;
 while(epochs-- >= 0) {
     int[] tests = new int[]{10, 100, 1000, 100_000, 1_000_000};
@@ -102,17 +97,24 @@ while(epochs-- >= 0) {
 
 :::info
 Mit einem Wert von $100$ für die Epochen und einer Feldgröße von
-$2.000.000$ liefert der Test in Listing
-[\[lst:test\]](#lst:test){reference-type="ref" reference="lst:test"}
-folgende Ausgabe:
+$2.000.000$ liefert der Test in [Listing 2](#lst:2) folgende Ausgabe:
 
 $nlgn < n^{1.3} < x < n^2: 74$\
 $nlgn < x < n^{1.3}: 26$
 :::
 
-![](./img/lognplot.png){#fig:lognplot}
-Ab $n=982$ wächst $n^{1.3}$ schneller als
-$n\ log\ n$.
+
+import LognPlotPng from "./img/lognplot.png";
+
+<a name="fig:lognplot"></a>
+<Embed
+    modeAware={true}
+    width={640}
+    figure={2}
+    title={"Ab <i>n=982</i> wächst n<sup>(4/3)</sup> schneller al <i>n log n</i>." }
+><img src={LognPlotPng}  /></Embed>
+
+
 
 Wegen $\Omega(n\ log\ n)$ interessieren wir uns für die Intervalle[^2]:
 
@@ -442,12 +444,11 @@ $$f(n) = lg(n) + n * lg(n) - n + 1 +  \frac{n^2 - 2n}{8}$$
 
 was zu einer Laufzeitabschätzung von $O(n^2)$ führt.
 
-[^1]: [@She59]
 
-[^2]: mit $n =$ Länge des zu sortierenden Feldes. Im folgenden $lg$ für
+[^1]: mit $n =$ Länge des zu sortierenden Feldes. Im folgenden $lg$ für
 $log_2$.
 
-[^3]: vgl. [@Knu97b 84]
+[^2]: vgl. [@Knu97b 84]
 
 [^4]: Knuth bezieht sich hier auf die Arbeit von *Papernov und
 Stasevich* ([@PS65]). Weitere Verweise auf Laufzeiten in
