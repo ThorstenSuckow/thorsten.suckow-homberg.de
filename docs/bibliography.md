@@ -78,7 +78,10 @@ Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1
 
 **Ottmann, Thomas and Widmayer, Peter**
 
-- [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79165. isbn: 978-3-662-55650-4. doi:
+- [OW17a] Thomas Ottmann and Peter Widmayer. ``Grundlagen``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 1-78. isbn: 978-3-662-55650-4. doi:
+  10.1007/978-3-662-55650-4_1. url: https://doi.org/10.1007/978-3-662-55650-4_1. <a name="OW17a"></a>
+
+- [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79-165. isbn: 978-3-662-55650-4. doi:
   10.1007/978-3-662-55650-4_2. url: https://doi.org/10.1007/978-3-662-55650-4_2. <a name="OW17b"></a>
 
 ** Papernov, AA und Stasevich, GV**

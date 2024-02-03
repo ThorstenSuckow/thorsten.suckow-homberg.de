@@ -15,7 +15,7 @@ Die in dem Algorithmus verwendete Sortiermethode ist auch bekannt als
 > to produce a faster sorting algorithm. <BibRef name="CL22" pp="48" />
 
 
-In der vorliegenden Implementierung [Listing 1](#lst:1) werden $t = log_2(n)$ Inkremente[^1]
+In der vorliegenden Implementierung (siehe [Listing 1](#lst:1)) werden $t = log_2(n)$ Inkremente[^1]
 $h_t$[^2] der Form $\lfloor {\frac{n}{2^i}} \rfloor$ verwendet, um $lg(n)$
 $h$-sortierte Folgen zu erzeugen. Im letzten Schritt sortiert der
 Algorithmus dann in $h_1$ die Schlüssel mit Abstand=$1$.
@@ -206,7 +206,11 @@ Wert von `delta` [^6], und läuft jeweils bis $n - 1$.
 In einem kompletten Durchlauf der Schleife entspricht die Anzahl der
 Aufrufe von $c2$ also
 
+<center>
+
 $(n - 1) - delta + 1 = n - delta$
+
+</center>
 
 :::info
 **Hinweis:**
@@ -219,15 +223,26 @@ $\sum_{i=1}^{\lfloor lg(n) \rfloor} n - \lfloor \frac{n}{2^i} \rfloor = n * lg(n
 Für die Gesamtzahl der Aufrufe von $c2$ ergibt sich somit unter
 Berücksichtigung von $c1$
 
-$$\sum_{i=1}^{lg(n)} n - \frac{n}{2^{i-1}}$$
+<center>
 
+$\sum_{i=1}^{lg(n)} n - \frac{n}{2^{i-1}}$
+
+</center>
 was nach Auflösen
 
-$$n * lg(n) - n + 1$$
+<center>
+
+$n * lg(n) - n + 1$
+
+</center>
 
 entspricht, und für unser Beispiel
 
-$$16 * lg(16) - 16 + 1 = 49$$
+<center>
+
+$16 * lg(16) - 16 + 1 = 49$
+
+</center>
 
 ist.
 
@@ -261,11 +276,10 @@ ist.
 
 In der `while`-Schleife in Zeile 17 findet die eigentliche
 Arbeit des Algorithmus statt: Es wird überprüft, ob $delta$-entfernte
-Elemente in aufsteigender Reihenfolge sortiert angeordnet sind.
+Elemente in aufsteigender Reihenfolge sortiert angeordnet sind.<br />
 
 Ist das nicht der Fall, werden die Elemente an den Stellen $j$ und
-$j - delta$ ausgetauscht, bis die $h$-Folge sortiert ist.
-
+$j - delta$ ausgetauscht, bis die $h$-Folge sortiert ist. <br />
 Für den ersten Durchgang des Algorithmus an dieser Stelle mit $h_4 = 8$
 ergibt sich somit die in [Abbildung 3](#fig:bestcase-it1) dargestellte Reihenfolge der Schlüssel:
 
@@ -276,78 +290,115 @@ import BestcaseIt1 from "./img/bestcase-it1.png";
 <Embed
     modeAware={true}
     figure={3}
-    title={"Nach dem ersten Durchgang sind die Schlüssel in den Abständen <i>h_4 = 8</i> sortiert, es ergeben sich zwei sortierte Teilfolgen der Länge <i>8</i>." }
+    title={"Nach dem ersten Durchgang sind die Schlüssel in den Abständen <i>h<sub>4</sub> = 8</i> sortiert, es ergeben sich zwei sortierte Teilfolgen der Länge <i>8</i>." }
 ><img src={BestcaseIt1}  /></Embed>
 
 
-
-
 Die weiteren Durchgänge des Algorithmus sortieren das Feld entsprechend
-der Größe $h$: Es sind danach jeweils Schlüssel mit den Abständen $4$
-(Abbildung [4](#fig:bestcase-it2){reference-type="ref"
-reference="fig:bestcase-it2"}), $2$
-(Abbildung [5](#fig:bestcase-it3){reference-type="ref"
-reference="fig:bestcase-it3"}), und im letzten Schritt vollständig
-sortiert (Abbildung [6](#fig:bestcase-it4){reference-type="ref"
-reference="fig:bestcase-it4"}):
-
-![](./img/bestcase-it2.png){#fig:bestcase-it2}
-Die Sortierung für $h_3 = 4$, es sind 4 Folgen, deren Schlüssel
-jeweils den Abstand $4$ haben.
+der Größe $h$: Es sind danach jeweils Schlüssel mit den Abständen $4$ ([Abbildung 4](#fig:bestcase-it2) und $2$
+([Abbildung 5](#fig:bestcase-it3)) sortiert; im letzten Schritt dann vollständig ([Abbildung 6](#fig:bestcase-it4)):
 
 
-![](./img/bestcase-it3.png){#fig:bestcase-it3}
-Im vorletzten Sortierschritt sind $8$ Folgen der Länge $2$ sortiert.
+import BestcaseIt2 from "./img/bestcase-it2.png";
+
+<a name="fig:bestcase-it2"></a>
+<Embed
+    modeAware={true}
+    figure={4}
+    title={"Die Sortierung für <i>h<sub>3</sub> = 4</i>, es sind 4 Folgen deren Schlüssel jeweils den Abstand <i>4</i> zueinander haben." }
+><img src={BestcaseIt2}  /></Embed>
 
 
-![](./img/bestcase-it4.png){#fig:bestcase-it4}
-Der letzte Durchgang des Algorithmus vergleicht Schlüssel mit
-Distanzfolgen der Länge $1$, also direkt benachbarte Schlüssel.
 
-\
+import BestcaseIt3 from "./img/bestcase-it3.png";
+
+<a name="fig:bestcase-it3"></a>
+<Embed
+    modeAware={true}
+    figure={5}
+    title={"Im vorletzten Sortierschritt sind <i>8</i> Folgen der Länge <i>2</i> sortiert." }
+><img src={BestcaseIt3}  /></Embed>
+
+import BestcaseIt4 from "./img/bestcase-it4.png";
+
+<a name="fig:bestcase-it4"></a>
+<Embed
+    modeAware={true}
+    figure={6}
+    title={"Der letzte Durchgang des Algorithmus vergleicht Schlüssel mit Distanzfolgen der Länge <i>1</i>, also direkt benachbarte Schlüssel." }
+><img src={BestcaseIt4}  /></Embed>
+
+
+
+
 Für die Berechnung der Anzahl der Aufrufe von $c3$ stellt man fest, das
 in diesem Fall in jedem Schritt *immer* 2 Elemente, die eine Distanz von
 $h_s$ aufweisen, falsch sortiert sind.
 
-Der Algorithmus tauscht also in diesem Fall in jedem Durchgang alle
-Schlüssel untereinander aus, die er über miteinander vergleicht, was
+Der Algorithmus tauscht daraufhin in jedem Durchgang alle
+Schlüssel untereinander aus, die er über `min < arr[j-delta]` miteinander vergleicht, was
 folglich die maximale Anzahl von Schlüsselvertauschungen in dieser
 vergleichsbasierten Implementierung für ein Feld der Größe $n$ ergibt,
 nämlich $\frac{n}{2}$. Insgesamt finden dadurch für $c3$
 
-$$lg(n) * \frac{n}{2}$$
+<center>
+
+$lg(n) * \frac{n}{2}$
+
+</center>
 
 Aufrufe statt.
 
 Mit der Anzahl der berechneten Aufrufe $c1, c2, c3$ ergibt sich somit
 für die Laufzeit $T(n)$ für diesen Fall
 
-$$lg(n) + n * lg(n) - n + 1 +  lg(n) * \frac{n}{2}$$
+<center>
+
+$lg(n) + n * lg(n) - n + 1 +  lg(n) * \frac{n}{2}$
+
+</center>
 
 und zusammengefasst
 
-$$\label{eq:bestcase}
- f(n) = \frac{3}{2} * n * lg(n) + lg(n) - n + 1$$
+<center>
+
+$f(n) = \frac{3}{2} * n * lg(n) + lg(n) - n + 1$
+
+</center>
 
 was nach Einsetzen zu
 
-$$lg(16) + 16 * lg(16) - 16 + 1 +  lg(16) * \frac{16}{2} = 85$$
+<center>
 
-Aufrufen für unser Beispiel führt.\
+$lg(16) + 16 * lg(16) - 16 + 1 +  lg(16) * \frac{16}{2} = 85$
 
-## Nachweis der Komplexitätsklasse {#nachweis-der-komplexitätsklasse .unnumbered}
+</center>
+
+Aufrufen für unser Beispiel führt.
+
+## Nachweis der Komplexitätsklasse
 
 Um $O$ zu ermitteln, werden nun alle Konstanten der
-Funktion [\[eq:bestcase\]](#eq:bestcase){reference-type="ref"
-reference="eq:bestcase"} eliminiert, und der "dominante" Summand in
-Abhängigkeit von $n$ betrachtet, der in diesem Fall $lg(n) * n$ ist.
+Funktion
 
-Wir vermuten ein $N-log-N$-Wachstum[^6] (vgl. [@OW17a 5]), und wollen
-nun zeigen, dass $T(n)$ in $O(n\ log\ n)$ liegt.\
-Hierfür müssen wir ein geeignetes $c$ und ein $n_0$ finden, so dass
-gilt:
+<center>
 
-$$f \in O(n\ log\ n): \leftrightarrow \exists n_0 \in \mathbb{N}, c \in \mathbb{R}, c > 0: \forall n \geq n_0: f(n) \leq c * n*lg(n)$$
+    $f(n) = \frac{3}{2} * n * lg(n) + lg(n) - n + 1$
+
+</center>
+
+
+eliminiert, und der "dominante" Summand in Abhängigkeit von $n$ betrachtet, der in diesem Fall $lg(n) * n$ ist.
+
+Wir vermuten ein $N-log-N$-Wachstum[^7] (vgl. <BibRef name="OW17a" pp="5" />), und wollen
+nun zeigen, dass $T(n)$ in $O(n\ log\ n)$ liegt.<br />
+Hierfür müssen wir ein geeignetes $c$ und ein $n_0$ finden, so dass gilt:
+
+<center>
+
+$f \in O(n\ log\ n): \leftrightarrow \exists n_0 \in \mathbb{N}, c \in \mathbb{R}, c > 0: \forall n \geq n_0: f(n) \leq c * n*lg(n)$
+
+</center>
 
 (vgl. [@GD18a 11]).
 
