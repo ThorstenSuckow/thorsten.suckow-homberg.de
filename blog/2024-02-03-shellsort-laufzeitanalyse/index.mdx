@@ -1,13 +1,18 @@
-# Laufzeit Analyse anhand des Shellsort-Algorithmus
+---
+slug: shellsort-lauzeitanalyse
+title: "[DE] Shellsort Laufzeitanalyse"
+authors: [thorstensuckow]
+tags: [datastructures, algorithms]
+enableComments: true
+---
 
 
-import {BackButton} from "../../../src/components/BackButton.js";
-import {UmlEmbed, Embed} from "../../../src/components/Embed";
-import {GlosRef, BibRef} from "../../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+import {UmlEmbed, Embed} from "../../src/components/Embed";
+import {GlosRef, BibRef} from "../../src/components/References";
 
 
-**Shellsort** ist ein Sortieralgorithmus, der nach *Donald Shell* benannt wurde. Er wurde von ihm 1959 in <BibRef name="She59" /> vorgestellt.
-
+*Donald Shell* stellt 1959 in <BibRef name="She59" /> einen Sortieralgorithmus vor, der später nach ihm benannt wird: **Shellsort**.<br />
 Die in dem Algorithmus verwendete Sortiermethode ist auch bekannt als
 *Sortieren mit abnehmenden Inkrementen* <BibRef name="OW17b" pp="88" />, das Verfahren ist eine Variation von **Insertion Sort**:
 
@@ -125,9 +130,7 @@ Die Ausführung des Tests zeigt, dass die Aufrufanzahl von $c3$ bei
 großen $n$ unterhalb $n^{1.3}$ oder zwischen $n^{1.3}$ und $n^2$ liegt:
 
 > It appears that the time required to sort $n$ elements is proportional
-> to $n^{1.226}$.[^4]
->
-> <BibRef name="She59" pp="31" />
+> to $n^{1.226}$.[^4] <BibRef name="She59" pp="31" />
 
 ## Laufzeitanalyse
 
@@ -216,8 +219,12 @@ $(n - 1) - delta + 1 = n - delta$
 **Hinweis:**
 Für das Beispiel betrachten wir der Einfachheit halber Feldlängen der
 Form $2^p$.
-Für den allgemeinen Fall gilt für die Anzahl der Aufrufe von $c2$:
+Für den allgemeinen Fall gilt für die Anzahl der Aufrufe von $c2$: <br />
+<center>
+
 $\sum_{i=1}^{\lfloor lg(n) \rfloor} n - \lfloor \frac{n}{2^i} \rfloor = n * lg(n) - \sum_{i=1}^{\lfloor lg(n) \rfloor} \lfloor \frac{n}{2^i} \rfloor$
+</center>
+
 :::
 
 Für die Gesamtzahl der Aufrufe von $c2$ ergibt sich somit unter
@@ -329,8 +336,6 @@ import BestcaseIt4 from "./img/bestcase-it4.png";
 ><img src={BestcaseIt4}  /></Embed>
 
 
-
-
 Für die Berechnung der Anzahl der Aufrufe von $c3$ stellt man fest, das
 in diesem Fall in jedem Schritt *immer* 2 Elemente, die eine Distanz von
 $h_s$ aufweisen, falsch sortiert sind.
@@ -383,7 +388,7 @@ Funktion
 
 <center>
 
-    $f(n) = \frac{3}{2} * n * lg(n) + lg(n) - n + 1$
+$f(n) = \frac{3}{2} * n * lg(n) + lg(n) - n + 1$
 
 </center>
 
@@ -400,72 +405,92 @@ $f \in O(n\ log\ n): \leftrightarrow \exists n_0 \in \mathbb{N}, c \in \mathbb{R
 
 </center>
 
-(vgl. [@GD18a 11]).
+(vgl. <BibRef name="GD18a" pp="11" />).
 
-::: proof
-*Proof.* []{#pr:nlogn label="pr:nlogn"}\
+
 Zu zeigen ist
-$$\frac{3}{2} * n * lg(n) + lg(n) - n + 1 \leq c * n * lg(n)$$
+
+<center>
+
+$\frac{3}{2} * n * lg(n) + lg(n) - n + 1 \leq c * n * lg(n)$
+
+</center>
 
 Wir wählen für $n_0 = 1$ und $c = \frac{3}{2}$, denn es gilt sicher
+
+<center>
+
 $\forall n \geq n_0: \frac{3}{2} * n * lg(n)  \leq \frac{3}{2} * n * lg(n)$.
 
+</center>
+
 Ausserdem gilt stets $\forall n \in \mathbb{N}: lg(n) < n$, woraus
-$lg(n) - n < 0$ folgt, und damit auch $lg(n) - n + 1 \leq 0$.\
+$lg(n) - n < 0$ folgt, und damit auch $lg(n) - n + 1 \leq 0$.
+
 Insgesamt gilt also
 
-$$n_0 = 1, c = \frac{3}{2}: \forall n \geq n_0: \frac{3}{2} * n * lg(n) + lg(n) - n + 1 \leq c * n * lg(n)$$
+<center>
+
+$n_0 = 1, c = \frac{3}{2}: \forall n \geq n_0: \frac{3}{2} * n * lg(n) + lg(n) - n + 1 \leq c * n * lg(n)$
+
+</center>
 
 womit $f = O(n * log(n))$ gezeigt ist. ◻
-:::
+
 
 ## Worst-Case-Analyse {#worst-case-analyse .unnumbered}
 
 Unter der Annahme, dass ein in umgekehrter Reihenfolge sortiertes Feld
 zu einer Laufzeit von $O(n^2)$ bei dem **Shellsort**-Algorithmus führt,
 konnten wir mit dem in dem vorherigen Abschnitt gewählten Parametern nur
-eine Laufzeit von $O(n\ log\ n)$ nachweisen.\
-Tatsächlich stellt der Anwendungsfall nicht den worst-case für den
+eine Laufzeit von $O(n\ log\ n)$ nachweisen.<br />
+Tatsächlich stellt der Anwendungsfall _nicht_ den worst-case für den
 Algorithmus dar, da ja gerade diese Form von Sortierreihenfolge dem
-Algorithmus die Vorsortierung der $h$-Folgen ermöglicht:\
+Algorithmus die Vorsortierung der $h$-Folgen ermöglicht:
 
 > The idea underlying Shellsort is that moving elements of A long
 > distances at each swap in the early stages, then shorter distances
-> later, may reduce this $O(n^2)$ bound.
->
-> [@Pra72 3]
+> later, may reduce this $O(n^2)$ bound. <BibRef name="Pra72" pp="3" />
 
-\
-Es gilt also, die Vorsortierung auszuhebeln.\
+
+Es gilt also, die Vorsortierung auszuhebeln.<br />
 Für **Insertion-Sort** ist die Laufzeit im worst-case $O(n^2)$
-(vgl. [@OW17b 87]). Da Shellsort mindestens im letzten Schritt diese
-Sortiermethoden auf Distanzfolgen der Länge $1$ anwendet, muss der
+(vgl. <BibRef name="OW17b" pp="87" />). Da Shellsort mindestens im letzten Schritt diese
+Sortiermethode auf Distanzfolgen der Länge $1$ anwendet, muss der
 Algorithmus eine Folge als Eingabe erhalten, die durch die ersten
-$lg(n) - 1$-Durchgänge (mit $h_s = 2^{s - 1}, 1 <= s < lg(n)$)
-[keine]{.underline} Änderungen an der Schlüsselfolge vornimmt, um dann
-im allerletzten Schritt [alle]{.underline} Daten zu sortieren, was
-maximal $\frac{n}{2}$ Inversionen bedeutet zuzüglich der benötigten
-Verschiebe-Operationen.\
+$lg(n) - 1$-Durchgänge (mit $h_s = 2^{s - 1}, 1 \leq s < lg(n)$)
+**keine Änderungen** erfährt, um dann
+im allerletzten Schritt **auf einen Schlag** sortiert wird, was
+maximal $\frac{n}{2}$ Inversionen[^8] bedeutet, und damit ebenso viele Vertauschungen (zuzüglich der benötigten
+Verschiebe-Operationen).<br />
 Hierzu kann wie im vorherigen Beispiel für $n=16$ ein Feld mit folgender
 Schlüsselanordnung verwendet werden: Felder mit geradem Index enthalten
 kleinere Schlüssel als Felder mit ungeradem Index. Hier gilt für alle
 Elemente aus dem Feld $A$:
 
-$$\forall i, j \in \mathbb{N}_{[0, n - 1]}, 2 \mid i, 2 \nmid j:  A[i] < A[j] \land A[i] < A[i + 1] \land A[j] < A[j +1]$$
+<center>
 
-Abbildung [7](#fig:worstcase-sequence){reference-type="ref"
-reference="fig:worstcase-sequence"} veranschaulicht die Anordnung.
+$\forall i, j \in \mathbb{N}_{[0, n - 1]}, 2 \mid i, 2 \nmid j:  A[i] < A[j] \land A[i] < A[i + 1] \land A[j] < A[j +1]$
 
-![](./img/worstcase-sequence.png){#fig:worstcase-sequence}
-Eine *worst-case* Schlüsselfolge für Shellsort. Felder mit geradem
-Index enthalten kleinere Schlüssel als Felder mit ungeradem
-Index.
+</center>
+
+[Abbildung 7](#fig:worstcase-sequence) veranschaulicht die Anordnung.
+
+import WorstcaseSeq from "./img/worstcase-sequence.png";
+
+<a name="fig:worstcase-sequence.png"></a>
+<Embed
+    modeAware={true}
+    figure={7}
+    title={"Eine <b>worst-case</b> Schlüsselfolge für Shellsort. Felder mit geradem Index enthalten kleinere Schlüssel als Felder mit ungeradem Index." }
+><img src={WorstcaseSeq}  /></Embed>
+
 
 Markiert sind die direkt benachbarten Felder, die eine *Inversion*
-aufweisen[^7], die im letzten Schritt des Algorithmus eine bzw. mehrere
-Verschiebungen bedingen.\
+aufweisen, die im letzten Schritt des Algorithmus eine bzw. mehrere
+Verschiebungen bedingen.<br/>
 In den vorherigen Schritten - also bei den Durchgängen mit Distanzfolgen
-$h_s > 1$, findet der Algorithmus jeweils Schlüssel in korrekter
+$h_s > 1$  - findet der Algorithmus jeweils Schlüssel in korrekter
 Sortierreihenfolge vor.
 
 Mit $h_4 = 8$ werden die Felder $A[0..7]$ mit den Feldern $A[8..15]$
@@ -476,28 +501,40 @@ Auch im darauffolgenden Durchgang ($h_3 = 4, j - i = 4$) finden keine
 Verschiebungen statt, da keine Inversion gefunden wird. Erst im letzten
 Schritt, in dem direkt benachbarte Elemente miteinander verglichen
 werden, werden die Inversionen ermittelt und die Verschiebung der
-Elemente findet statt (s.
-Abbildung [8](#fig:worstcase-sortsequence){reference-type="ref"
-reference="fig:worstcase-sortsequence"}).
+Elemente findet statt (s. [Abbildung 8](#fig:worstcase-sortsequence).
 
-![](./img/worstcase-sortsequence.png){#fig:worstcase-sortsequence}
-Für die *worst-case* Schlüsselfolge werden im letzten Schritt 7
-Fehlstellungen festgestellt. Jede Fehlstellung bedingt eine Verschiebung
-um die angegebene Anzahl von
-Positionen.
+import WorstcaseSortSeq from "./img/worstcase-sortsequence.png";
 
-In diesem Fall wird $c3$ insgesamt $32$ mal aufgerufen.\
+<a name="fig:worstcase-sortsequence.png"></a>
+<Embed
+    modeAware={true}
+    figure={8}
+    title={"Für die <b>worst-case</b> Schlüsselfolge werden im letzten Schritt 7 Inversionen festgestellt. Jede dieser Fehlstellung bedingt eine Verschiebung um die angegebene Anzahl von Positionen." }
+><img src={WorstcaseSortSeq}  /></Embed>
+
+
+In diesem Fall wird $c3$ insgesamt $32$ mal aufgerufen.
+
 Da jeweils zwei Schlüssel bereits korrekt sortiert sind ($A[0]$ und
 $A[n-1]$) existieren noch $\frac{n}{2} - 1$ Inversionen. Jede Inversion
 erzwingt eine Verschiebung des größten Elements um $\frac{i}{2}$
-Positionen nach links.\
+Positionen nach links.
+
 Für die Berechnung der Laufzeitkomplexität ergibt sich somit der Term
 
-$$\sum_{i=1}^{\frac{n}{2} - 1} i = \frac{\frac{n}{2}(\frac{n}{2} - 1)}{2} = \frac{n^2 - 2n}{8}$$
+<center>
+
+$\sum_{i=1}^{\frac{n}{2} - 1} i = \frac{\frac{n}{2}(\frac{n}{2} - 1)}{2} = \frac{n^2 - 2n}{8}$
+
+</center>
 
 und unter Berücksichtigung der Terme für $c1$, $c2$, $c3$ die Funktion
 
-$$f(n) = lg(n) + n * lg(n) - n + 1 +  \frac{n^2 - 2n}{8}$$
+<center>
+
+$f(n) = lg(n) + n * lg(n) - n + 1 +  \frac{n^2 - 2n}{8}$
+
+</center>
 
 was zu einer Laufzeitabschätzung von $O(n^2)$ führt.
 
@@ -523,11 +560,10 @@ Laufzeiten in Abhängigkeit von $n$ und $h$ fasst übersichtlich der Wikipedia-A
 
 [^7]: mit $O(log\ n)$ bzw $O(n\ log\ n)$ nehmen wir für die $O$-Notation
     wieder die in der Fachliteratur gebräuchlichere Schreibweise auf.
-    Sowohl *Güting und Dieker* als auch *Ottmann und Widmayer* weisen in
-    [@GD18a 15] bzw. [@OW17a 5] darauf hin, dass die Angabe der Basis
+    Sowohl *Güting und Dieker* als auch *Ottmann und Widmayer* weisen in <BibRef name="GD18a" pp="15" /> bzw. <BibRef name="OW17a" pp="5" /> darauf hin,
+        dass die Angabe der Basis
     keine Rolle spielt, da sich Logarithmen mit verschiedenen Basen
-    ohnehin nur durch einen konstanten Faktor unterscheiden (es gilt
-    $log_a(x) = \frac{log_b(x)}{log_b(a)}$).
+    ohnehin nur durch einen konstanten Faktor unterscheiden (es gilt $log_a(x) = \frac{log_b(x)}{log_b(a)}$).
 
-[^7]: in diesem Zusammenhang bedeutet Inversion: *Fehlstellung*
-    (vgl. <BibRef name="OW17b" pp="87">)
+[^8]: in diesem Zusammenhang bedeutet Inversion: *Fehlstellung*
+    (vgl. <BibRef name="OW17b" pp="87" />)
