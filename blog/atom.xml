@@ -2,11 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://thorsten.suckow-homberg.de/blog</id>
     <title>thorsten.suckow-homberg.de Blog</title>
-    <updated>2024-02-03T00:00:00.000Z</updated>
+    <updated>2024-03-15T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://thorsten.suckow-homberg.de/blog"/>
     <subtitle>thorsten.suckow-homberg.de Blog</subtitle>
     <icon>https://thorsten.suckow-homberg.de/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[[DE] Lösungshinweise Modul prog (Update 15.03.2024)]]></title>
+        <id>https://thorsten.suckow-homberg.de/blog/loesungshinweise-prog-fh-trier</id>
+        <link href="https://thorsten.suckow-homberg.de/blog/loesungshinweise-prog-fh-trier"/>
+        <updated>2024-03-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Für das Modul prog im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der]]></summary>
+        <content type="html"><![CDATA[<p>Für das Modul <strong>prog</strong><sup id="fnref-1-fa6763"><a href="#fn-1-fa6763" class="footnote-ref">1</a></sup> im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
+<a href="https://www.hochschule-trier.de/" target="_blank" rel="noopener noreferrer">Hochschule Trier</a> habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefasst. Diese stehen als PDF zum Download zur Verfügung.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="repetitorium-und-lösungshinweise-musterklausur-15032024">Repetitorium und Lösungshinweise Musterklausur (15.03.2024)<a href="#repetitorium-und-lösungshinweise-musterklausur-15032024" class="hash-link" aria-label="Direct link to Repetitorium und Lösungshinweise Musterklausur (15.03.2024)" title="Direct link to Repetitorium und Lösungshinweise Musterklausur (15.03.2024)">​</a></h3><ul><li>Das Repetitorium zu dem Modul PROG im WS 23/24 <a target="_blank" href="/assets/files/repetitorium-prog-ws-23-24-fh-trier-3dd6a1ce7ad57169ea80861287815816.pdf">kann hier heruntergeladen werden</a></li><li>Lösungsvorschläge, Anmerkungen und Ergänzungen zu der Musterklausur können
+<a target="_blank" href="/assets/files/loesungsvorschlag-musterklausur-prog-ws-23-24-fh-trier-347427950e5a7f4740ccf19fe6a173ef.pdf">hier heruntergeladen werden</a>.</li></ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-5---such-undsortieralgorithmen-23012024">Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)<a href="#lösungshinweise-test-5---such-undsortieralgorithmen-23012024" class="hash-link" aria-label="Direct link to Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)" title="Direct link to Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test5-prog-ws-23-24-fh-trier-3c878da81490c2c0a03443638bdc67de.pdf">hier heruntergeladen werden</a>.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-4---dynamische-datenstrukturen-und-spezifische-algorithmen-09012024">Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)<a href="#lösungshinweise-test-4---dynamische-datenstrukturen-und-spezifische-algorithmen-09012024" class="hash-link" aria-label="Direct link to Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)" title="Direct link to Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test4-prog-ws-23-24-fh-trier-57f4cc3142752527da552ac1446d8e59.pdf">hier heruntergeladen werden</a>.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-3---objektorientierung-05122023">Lösungshinweise Test 3 - Objektorientierung (05.12.2023)<a href="#lösungshinweise-test-3---objektorientierung-05122023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 3 - Objektorientierung (05.12.2023)" title="Direct link to Lösungshinweise Test 3 - Objektorientierung (05.12.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test3-prog-ws-23-24-fh-trier-50e7f564ad00114c0097564a3e449314.pdf">hier heruntergeladen werden</a>.</p><p>Die Lösungshinweise beinhalten nicht die Testaufgaben, bei denen eine bestimmte Programmausgabe nachvollzogen werden musste.</p><p>Um Konzepte des Lehrmaterials deutlicher von weiterführenden, für den Kurs
+weniger relevante Themen abzugrenzen, sind diese nun unter Exkurs in den jeweiligen Abschnitten zusammengefasst.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-1---klassenbasierte-programmierung-31102023">Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)<a href="#lösungshinweise-test-1---klassenbasierte-programmierung-31102023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)" title="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
+<a target="_blank" href="/assets/files/loesungshinweise-test1-prog-ws-23-24-fh-trier-db49d4c765836c2fe559ae62ec69a5ba.pdf">hier heruntergeladen werden</a>.  </p><div class="footnotes"><hr><ol><li id="fn-1-fa6763">Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem <a href="https://discord.gg/3g24RM2qKW" target="_blank" rel="noopener noreferrer">Discord-Server</a> zu finden.<a href="#fnref-1-fa6763" class="footnote-backref">↩</a></li></ol></div>]]></content>
+        <author>
+            <name>Thorsten Suckow-Homberg</name>
+            <uri>https://thorsten.suckow-homberg.de</uri>
+        </author>
+        <category label="study" term="study"/>
+        <category label="java" term="java"/>
+        <category label="test" term="test"/>
+        <category label="programmierung" term="programmierung"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[[DE] Shellsort Laufzeitanalyse]]></title>
         <id>https://thorsten.suckow-homberg.de/blog/shellsort-lauzeitanalyse</id>
@@ -125,28 +148,6 @@ ohnehin nur durch einen konstanten Faktor unterscheiden (es gilt <span class="ma
         </author>
         <category label="datastructures" term="datastructures"/>
         <category label="algorithms" term="algorithms"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[[DE] Lösungshinweise Modul prog (Update 23.01.2024)]]></title>
-        <id>https://thorsten.suckow-homberg.de/blog/loesungshinweise-prog-fh-trier</id>
-        <link href="https://thorsten.suckow-homberg.de/blog/loesungshinweise-prog-fh-trier"/>
-        <updated>2024-01-09T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Für das Modul prog im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der]]></summary>
-        <content type="html"><![CDATA[<p>Für das Modul <strong>prog</strong><sup id="fnref-1-dfdeb0"><a href="#fn-1-dfdeb0" class="footnote-ref">1</a></sup> im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
-<a href="https://www.hochschule-trier.de/" target="_blank" rel="noopener noreferrer">Hochschule Trier</a> habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefasst. Diese stehen als PDF zum Download zur Verfügung.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-5---such-undsortieralgorithmen-23012024">Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)<a href="#lösungshinweise-test-5---such-undsortieralgorithmen-23012024" class="hash-link" aria-label="Direct link to Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)" title="Direct link to Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
-<a target="_blank" href="/assets/files/loesungshinweise-test5-prog-ws-23-24-fh-trier-3c878da81490c2c0a03443638bdc67de.pdf">hier heruntergeladen werden</a>.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-4---dynamische-datenstrukturen-und-spezifische-algorithmen-09012024">Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)<a href="#lösungshinweise-test-4---dynamische-datenstrukturen-und-spezifische-algorithmen-09012024" class="hash-link" aria-label="Direct link to Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)" title="Direct link to Lösungshinweise Test 4 - Dynamische Datenstrukturen und spezifische Algorithmen (09.01.2024)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
-<a target="_blank" href="/assets/files/loesungshinweise-test4-prog-ws-23-24-fh-trier-57f4cc3142752527da552ac1446d8e59.pdf">hier heruntergeladen werden</a>.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-3---objektorientierung-05122023">Lösungshinweise Test 3 - Objektorientierung (05.12.2023)<a href="#lösungshinweise-test-3---objektorientierung-05122023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 3 - Objektorientierung (05.12.2023)" title="Direct link to Lösungshinweise Test 3 - Objektorientierung (05.12.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
-<a target="_blank" href="/assets/files/loesungshinweise-test3-prog-ws-23-24-fh-trier-50e7f564ad00114c0097564a3e449314.pdf">hier heruntergeladen werden</a>.</p><p>Die Lösungshinweise beinhalten nicht die Testaufgaben, bei denen eine bestimmte Programmausgabe nachvollzogen werden musste.</p><p>Um Konzepte des Lehrmaterials deutlicher von weiterführenden, für den Kurs
-weniger relevante Themen abzugrenzen, sind diese nun unter Exkurs in den jeweiligen Abschnitten zusammengefasst.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lösungshinweise-test-1---klassenbasierte-programmierung-31102023">Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)<a href="#lösungshinweise-test-1---klassenbasierte-programmierung-31102023" class="hash-link" aria-label="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)" title="Direct link to Lösungshinweise Test 1 - Klassenbasierte Programmierung (31.10.2023)">​</a></h3><p>Lösungshinweise sowie Anmerkungen und Ergänzungen können
-<a target="_blank" href="/assets/files/loesungshinweise-test1-prog-ws-23-24-fh-trier-db49d4c765836c2fe559ae62ec69a5ba.pdf">hier heruntergeladen werden</a>.  </p><div class="footnotes"><hr><ol><li id="fn-1-dfdeb0">Modulbegleitende Diskussions- und Lerngruppen sind auch auf unserem <a href="https://discord.gg/3g24RM2qKW" target="_blank" rel="noopener noreferrer">Discord-Server</a> zu finden.<a href="#fnref-1-dfdeb0" class="footnote-backref">↩</a></li></ol></div>]]></content>
-        <author>
-            <name>Thorsten Suckow-Homberg</name>
-            <uri>https://thorsten.suckow-homberg.de</uri>
-        </author>
-        <category label="study" term="study"/>
-        <category label="java" term="java"/>
-        <category label="test" term="test"/>
-        <category label="programmierung" term="programmierung"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[[DE] Zulassungsarbeit M.Sc. Informatik]]></title>
