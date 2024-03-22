@@ -10,7 +10,7 @@ Für das Modul **prog**[^1] im Wintersemester 2023/2024 des Fernstudiengangs Inf
 [Hochschule Trier](https://www.hochschule-trier.de/) habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefasst. Diese stehen als PDF zum Download zur Verfügung.
 
 
-### Repetitorium und Lösungshinweise Musterklausur (15.03.2024)
+### Repetitorium und Lösungshinweise Musterklausur (22.03.2024)
 - Das Repetitorium zu dem Modul PROG im WS 23/24 [kann hier heruntergeladen werden](./repetitorium-prog-ws-23-24-fh-trier.pdf)
 - Lösungsvorschläge, Anmerkungen und Ergänzungen zu der Musterklausur können
 [hier heruntergeladen werden](./loesungsvorschlag-musterklausur-prog-ws-23-24-fh-trier.pdf).
