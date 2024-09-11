@@ -1,0 +1,31 @@
+---
+slug: contracted-events-for-micro-frontend-communication
+title: "Contracted Events for Micro Frontend Communication"
+authors: [thorstensuckow]
+tags: [frontend, programming]
+enableComments: true
+---
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+
+## Contracted Events for Micro Frontend Communication
+
+### A non-formal approach to non-breaking events for displaying information in distributed Frontend Fragments
+
+Schema Versioning and Consumer-driven contracts play critical roles in the world of distributed systems, where data structures often evolve across releases. These concepts can be applied to Micro Frontends, where messages need to be exchanged across system boundaries: Release-agnostic systems, which can dynamically enter and exit the system of concern, must be able to properly respond to event messages: Updated message structures must not introduce breaking changes.
+
+*In a frontend, provide contracts for data structures consumed by conceptually related modules and process the data according to the individual requirements of the consuming context.*
+
+### Motivation
+
+Using a Micro Frontend architecture does not require to plan a specific tech stack ahead. Quite the contrary, developers and architects can agree on different approaches that allow for embedding complete parts of applications, or components provided by these applications, into a web frontend.
+
+What matters is that each of the Micro Frontends strive for low coupling and strong cohesion, just as any building block of a modularized software system does. Low coupling doesn’t necessarily mean that a µFrontend is lashed and stowed within its domain, as it often needs to take part in sending and consuming messages within a frontend application: The big picture shows itself when conceptually related modules process broadcasted messages and offer the data in an informational context, updating visual elements with it. Here, the emphasis is clearly on “visual”, since triggering business or domain logic would mean a higher degree of coupling between the sender and the receiver. We want to avoid this.
+
+The attempt to process data from events often results in inconsistent visual representation throughout the application, or even worse, runtime errors when the consuming API does not understand the format or the structure of the data the API is expected to process, sometimes due to unintentionally and accidentally changes made to the sender’s API.
+
+Providing contracts for consumers with the help of shared source, versioned events and a *must ignore* policy lowers the risk of breaking functionality during runtime when messages of arbitrary source are processed by autonomously developed and independently deployed frontends, while keeping integrity and consistency high and coupling and lockstep release cycles low.
+
+[...continue reading](docs/articles/contracted-events-for-micro-frontend-communication/)

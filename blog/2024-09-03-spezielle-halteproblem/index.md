@@ -20,10 +20,12 @@ $$
 ist entscheidbar.  
 
 Sei $T'$ ist die Turingmaschine, die $K'$ entscheidet.  
-Sei $w = \langle T \rangle$ die Codierung einer Turingmaschine, die wie folgt arbeitet:
+Sei $w = \langle T \rangle$ die Codierung[^3] einer Turingmaschine, die wie folgt arbeitet:
 - $T$ simuliert das Verhalten von $T'$ bei der Eingabe $w$:
     - $T$ stoppt, wenn $T'$ die Eingabe $w$ verwirft ($w \notin K'$)
     - $T$ stoppt nicht, wenn $T'$ die Eingabe $w$ akzeptiert ($w \in K'$)
+
+[^3]: Anstatt _Gödelnummer_ wird im Folgenden auch einfach der Begriff _Codierung_ verwendet, wobei streng genommen $\tau(T)$ die Codierung einer normierten Turingmaschine ist, bevor ihr eine Gödelnummer zugewiesen wird  
 
 Damit folgt:
 $T$ stoppt bei Eingabe $w$ $\Leftrightarrow$ $T'$ verwirft $w$ $\Leftrightarrow$ $w \notin K'$ $\Leftrightarrow$ $T$ stoppt nicht
