@@ -1,0 +1,523 @@
+---
+title: "Approaching Contracted Events for Micro Frontend Communication"
+description: Non-breaking events for displaying information in distributed Frontend Fragments
+---
+
+_A non-formal approach to non-breaking events for displaying information in distributed Frontend Fragments._
+
+import {Embed, ExternalCodeBlock} from "../../../src/components/Embed";
+
+Schema Versioning and Consumer-driven contracts play critical roles in the world of distributed systems, where data structures often evolve across releases. These concepts can be applied to Micro Frontends, where messages need to be exchanged across system boundaries: Release-agnostic systems, which can dynamically enter and exit the system of concern, must be able to properly respond to event messages: Updated message structures must not introduce breaking changes.
+
+*In a frontend, provide contracts for data structures consumed by conceptually related modules and process the data according to the individual requirements of the consuming context.*
+
+
+### Motivation
+
+Using a Micro Frontend architecture does not require to plan a specific tech stack ahead. Quite the contrary, developers and architects can agree on different approaches that allow for embedding complete parts of applications, or components provided by these applications, into a web frontend.
+
+What matters is that each of the Micro Frontends strive for low coupling and strong cohesion, just as any building block of a modularized software system does. Low coupling doesn’t necessarily mean that a µFrontend is lashed and stowed within its domain, as it often needs to take part in sending and consuming messages within a frontend application: The big picture shows itself when conceptually related modules process broadcasted messages and offer the data in an informational context, updating visual elements with it. Here, the emphasis is clearly on “visual”, since triggering business or domain logic would mean a higher degree of coupling between the sender and the receiver. We want to avoid this.
+
+The attempt to process data from events often results in inconsistent visual representation throughout the application, or even worse, runtime errors when the consuming API does not understand the format or the structure of the data the API is expected to process, sometimes due to unintentionally and accidentally changes made to the sender’s API.
+
+Providing contracts for consumers with the help of shared source, versioned events and a *must ignore* policy lowers the risk of breaking functionality during runtime when messages of arbitrary source are processed by autonomously developed and independently deployed frontends, while keeping integrity and consistency high and coupling and lockstep release cycles low.
+
+
+### Challenges and Obstacles
+
+Low coupling between modules that need to exchange data can be realized with the help of a [Message Bus](https://learn.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber). µFrontends have specific needs though, since they represent modules in the presentation layer; they are, amongst others, responsible for providing visual representations of data, such as rows in a table, or nodes in a tree. Renderer is ambiguous in this context: A renderer can be used to return the data in HTML or a specific data type the low level API expects, for forwarding it to framework specific components tasked with representing this data in some form, accessibility features included.
+
+Taking the visual representation as an example, there is usually no global CSS available during development that provides the final look-and-feel for the end-product (that’s just one reason to run integration tests more often to make sure the frontend doesn’t break in production). Furthermore, if no shared UI libraries are used with the project, visual components are more likely to be replaced in between releases: The teams work independently and are free to decide what suits their vision of an interactive UI best. Functions have to be implemented that should understand the incoming message and its structured data as a never-changing point of truth, then transform it to something the rendering component can work with.
+
+Blindly adding data transformators or renderers to the modules results in unwanted coupling with data structures the teams have agreed upon. Taking the nature of software into account, this structure will change in future iterations: Requirements change and implementations change, long gone are the days where code was locked with the requirements found in specifications written in good faith. If the expected format changes throughout the project, development and deployment is impeded because all the external consumers have to be updated with working code and — depending on their nature — tests have to be adjusted. This just calls for one big lockstep release event.
+
+In a perfect world though, all teams get a note of this change, just right in time. Agile as they are, they are able to adopt quickly and will release a new working version soon after. But that’s an idea where software development does not fit: In the real world, some teams will neither be able or willing to adopt, nor are they getting notified. Not every company can use a simple
+
+```bash
+$ npm deprecate @ourcomp/ModuleA@1.1.4 "package is deprecated"
+```
+
+Because even infrastructures cannot keep up with changes sometimes.
+
+import MessageBusA from "./img/messagebus_a.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 1.1"}
+    title={
+        "Module A is released and deployed with V2.0.0, of which each application is aware of, except for Module D. The updated structure cannot be processed by its consumer."
+    }
+>
+    <img src={MessageBusA}  />
+</Embed>
+
+```javascript
+// In V1.1.4, Module A encapsulated event details in an object
+// that was assigned to the field "productDetails":
+MessageBus.postMessage(ModuleA, "com.shopme.ShoppingCart.events.CartAdd", {
+    "productDetails": {
+        "item": "7875687",
+        "name": "Apple Air Pods 2",
+        "price": "199",
+        "currency": "Euro",
+        "productImage": "https://cdn.shopme/api/v2/products/7875687/image"
+    }
+});
+```
+
+Module B and C caught up with the changes…
+
+
+```javascript
+// Module B updated its implementation
+ModuleB.onCartAdd({item, displayName, price, currency, productImage}) {
+  return `<div>${displayName} $this.getCurrencySymbol(currency) ${price}</div>`;
+});
+
+// ... so did Module C
+ModuleC.onCartAdd({item, displayName, price, currency, productImage}) {
+  return {id: item, text: displayName, date: new Date()};
+});
+```
+
+… but Module D still expects the outdated event details:
+
+```javascript
+// Module D still expects the data structure from V1.1.4.
+ModuleD.onCartAdd({productDescription: article}) {
+  return {id: article.item, name: article.displayName};
+});
+```
+
+Something's likely to break in the frontend.
+
+### The Online-Shop example
+
+import shop_example from "./img/shop_example.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.1"}
+    title={
+        "The Online Shop"
+    }
+>
+    <img src={shop_example}  />
+</Embed>
+
+
+Imagine an online shop’s frontend assembled by at least two separate views: The Shop with its articles and a Shopping Cart frontend. The first provides the interface for browsing and searching through categories and listing shop articles, the latter provides the interface for managing the cart’s contents and invoking the purchase process.
+
+The use case I’m referring to is an action invoked by a user when adding some article from the shop to the shopping cart:
+
+```
+put-into-cart:
+Whenever the user wishes to buy an item with the "Add to cart" button,
+update the shopping cart on the article detail page with information
+about the item without invoking server roundtrips.
+```
+
+The following image highlights the components the article detail page consists of. The grey part is part of the container application that embeds the various frontend fragments and is responsible for routing into the frontends based on user interactions; pinkish highlights the Shop-Frontend’s UI, the yellowish part is a component the Shopping Cart-Frontend provides.
+
+
+import shop_frontend_decomposed from "./img/shop_frontend_decomposed.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.2"}
+    title={
+        "The Shop Frontend with the Shopping Cart Widget."
+    }
+>
+    <img src={shop_frontend_decomposed}  />
+</Embed>
+
+The integration pattern used for embedding the frontends into the article details page is not important right now — what matters though is that both frontends are unaware of each other.
+
+### Shopping Cart Widget responsibilities
+
+import shopping_cart from "./img/shopping_cart.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.3"}
+    title={
+        "The empty Shopping Cart Widget."
+    }
+>
+    <img src={shopping_cart}  />
+</Embed>
+
+The shopping cart widget is provided by the Shopping Cart Frontend. It’s responsible for providing information and interaction:
+
+ - interaction: after tapping/clicking the widget, send a message to notify any interested consumer that the client wishes to inspect the shopping cart’s contents in detail; provide options for removing an article from the cart
+ - information: keep the widget up to date with information about the articles that were added to the shopping cart during the user’s session
+
+Inspecting the Shopping Cart should be fairly easy, as this is a task that would most likely get consumed by the Application Container, routing to the main view of the Shopping Cart Frontend.
+
+### Sending ShoppingItem-data with the Message-Bus
+
+Given the scenario described at the beginning of this article, let's see how a basic implementation of an event that describes the "put into cart"-action looks like.
+Let's first have a glimpse at how the backend is involved: Assuming we have an Order Service and a Cart Service in the backend, adding an item to the cart will create an Order. The Order consists of a Line Item that has to be claimed from the Warehouse Service, which tells the Order if there are enough items left for the client so the order can be fulfilled. If the Warehouse Service green-lights the action, and the invariant of the Order Aggregate (which is part of the the Order Domain) is something in the like of `order.itemCount ≤ lineItem.availableQuantity`, the Order is created and reserved for the client.
+Once the client receives the HTTP-response indicating a successful operation, the Shop Frontend sends a message:
+
+
+```javascript
+// Shopping Frontend
+/**
+ * Callback for the response of the addtocart-endpoint.
+ *
+ * @param {ShoppingItem} item
+ * @param {Response} response
+ */
+onAddItemToCartResponse(item, response)
+{
+    if (response.status !== 200) {
+        // ... here be failure handling
+        return;
+    }
+    this.messageBus.postMessage(
+        "CartAdd",
+        Object.assign({}, item.data)
+    );
+}
+```
+
+ - `messageBus` is a reference to the Message Bus used by the application, injected during the creation of the Article Detail Page
+ - Since `onAddItemToCartResponse()` is part of the Shop Frontend and therefore totally aware of the ShoppingItem data type, it expects the item's data details in the property `data`: Knowing that `item.data` is a JavaScript Object that is modelled in the likes of a DTO, it plays nicely and makes sure it does not pass a reference of it to the message broker, avoiding accidental edits to the ShoppingItem itself: It removes all references from it by creating a copy of the key-/value-pairs
+ - Contrary to the example above, we do not add the source of the sender to the message, since this would mean we would break the rules of information-hiding and leak details about the sending domain: We want to expose just the information required for constructing the message
+ - finally, we ingest the data into the message bus by calling the `postMessage`-method, letting the application know that the buys-item User Journey is about to begin.
+
+### Handling the event by the Shopping Cart Frontend
+
+import empty_shopping_cart from "./img/empty_shopping_cart.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.4"}
+>
+    <img src={empty_shopping_cart}  />
+</Embed>
+
+The Shopping Cart has a second responsibility:
+
+ - information: keep the widget up to date with information about the articles that were added to the shopping cart during the user's session
+
+The Shopping Cart Frontend needs to know the information made available by the event, and by the start of the project, the information is exchanged between the Shop and the Shopping Cart team.
+
+import frontend_teams from "./img/frontend_teams.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.5"}
+    title={"The moment the Shopping Cart and the Shop Frontend Teams agree on implementation details, using \"hearsay\", the worst of all agile methodologies. To noones surprise, the quality of the communication will be reflected in the software, according to Conway's Law."}
+>
+    <img src={frontend_teams}  />
+</Embed>
+
+
+Surely the agreement was made in good faith. But poor decisions are likely to follow, by the programmer adding the feature and during project communication:
+
+import dev from "./img/dev.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.6"}
+>
+    <img src={dev}  />
+</Embed>
+
+`addItemDataToCart` was updated to process the updated `CartAdd`-event that is consumed by the Message Bus:
+
+
+```javascript
+// Shopping Cart Frontend:
+// CartWidgetComponent
+init()
+{
+    this.messageBus.on(
+        "CartAdd",
+        this.onCartAddEvent
+    )
+},
+
+/**
+ * @param {Object} cartAddEvent Event details object, fields as follows.
+ * @param {String} cartAddEvent.id The article's id.
+ * @param {String} cartAddEvent.text Article info to display.
+ * @param {Float} cartAddEvent.price The price of the item.
+ * @param {String} cartAddEvent.currency The name of the currency used.
+ *
+ */
+onCartAddEvent(cartAddEvent)
+{
+    this.addItemDataToCart(eventData);
+},
+
+/**
+ * Delegating to render() so it can pass the generated HTML to the root
+ * node.
+ */
+addItemDataToCart(item)
+{
+     const html = this.createItemHtml(item);
+     this.render(tpl);
+},
+
+/**
+ * Creates a new item template based on the information available
+ * with "data".
+ *
+ * @param {Object} data
+ * @param {String} data.name The display name of the item
+ * @param {String} data.id The article's id.
+ * @param {Number} data.price The price of the item
+ * @param {String} data.currency The currency of the price
+ *
+ * @return {String}
+ */
+createItemHtml (data) {
+     const tpl = this.getItemHtmlTemplate();
+     tpl.update({
+         name: Frontend.encoder(item.name, Encoder.NO_HTML),
+         valueNode: this.priceForCurrency(
+             Frotend.NumberFormat.decimals(item.price, 2)
+             item.currency
+         ),
+         tools: [
+            this.makeRemoveIconForArticle(data.id)
+         ]
+    });
+    return tpl.toString();
+}
+```
+
+### Implementation Flaws
+
+Of course the example exaggerates: Way too often development teams do not invest the time to choose the right design when they have to overcome subtle challenges, and instead fall back to solutions that are more or less likely to break, particularly if preconditions change during development and those preconditions are not validated.
+So, what happens with the code above if
+fields get added to the event object
+fields get removed from the event object
+the data types send with the event object change
+semantics of the event object field names become ambiguous (e.g. text/description)
+
+The only interface that exists between the event and the Shopping Cart ist `onCartAddEvent`, a monadic function that receives an object. The only information available with the object are available with the documentation, and we all now, documentation lies: Even if you live documentation through source code, you just can't guess an object internals and have to inspect it.
+The Shopping Cart widget changes during iterations. The first version of the widget is very much straightforward: It shows the item name, the individual price, the total sum of all articles in the card and a checkout button that redirects the user to the Shopping Cart Frontend.
+
+import checkout_cart from "./img/checkout_cart.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.7"}
+>
+    <img src={checkout_cart}  />
+</Embed>
+
+Then suddenly, things go wrong in production. The Shop Team is asked to change the data sent with the attribute text of the event object, as it is required by another consumer of exactly this event type.
+
+import troubleshooting_devs from "./img/troubleshooting_devs.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.8"}
+>
+    <img src={troubleshooting_devs}  />
+</Embed>
+
+```javascript
+eventDetails.text = [
+    articleRecord.get("name"),
+    articleRecord.get("description")
+].join(" ");
+
+this.messageBus.postMessage(
+    "CartAdd",
+    eventDetails
+);
+```
+
+Long forgotten any previous agreements. The next time Jeff from the Frontend Team strolls through the Shop, he's confronted with this:
+
+import broken_shopping_cart from "./img/broken_shopping_cart.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.9"}
+    title={"A simple change of the event specifications wreaks havoc."}
+>
+    <img src={broken_shopping_cart}  />
+</Embed>
+
+Oh, and did we forget to tell you about the changes made with to the attribute id of the event object? That's not the id of the article anymore, it's now a UUID generated for the event itself, as it has to be tracked by the State Management in the frontend. Trying to remove an article from the cart will yield the following
+
+
+import error_message from "./img/error_message.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.10"}
+    title={"The save-money-with-our-100-cleaning-rags-value-pack you have accidentally put into your cart will now forever stay there."}
+>
+    <img src={error_message}  />
+</Embed>
+
+Let's try turning it on and off again...
+
+import no_versioning from "./img/no_versioning.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 2.11"}
+    title={"The current situation. No agreements on the versioning between the Modules exist. Specifications rely on hearsay, where it should be formal specifications."}
+>
+    <img src={no_versioning}  />
+</Embed>
+
+### Dependency Management and Shared Source
+
+The developers decide to establish inner source in the organisation. An internal repository (or registry) is installed and used used by the various software departments and their frontends. They add dependencies from the shared source and and tie their releases to specific version numbers of this shared source. The version number becomes the contract, and the repository managing the shared source becomes the custodian. The goal is to make sure that each client understands each event strolling through the system.
+
+import central_repository from "./img/central_repository.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 3.1"}
+    title={"Modules receive the event specification from a central repository."}
+>
+    <img src={central_repository}  />
+</Embed>
+
+The code within the shared repository (Figure 3.1) can be independently tested and developed. It provides event specifications and mappers that can be used to properly parse event information. Clients implement try/catch as a last resort if something goes awry, to throw an Exception or return a Special Case object so that a system can properly react to a fail state and reset itself into a functional one.
+
+```javascript
+class CartAddEventMapper {
+
+  map (eventData) {
+    const result = this.validateWithSchema(eventData);
+    // conforms to the expected structure of the specification
+    if (result.isValid()) {
+      return CartAddEventSpecification(eventData);
+    }
+
+    // throw result.getValidationError();
+
+    // or return a Special Case object instead
+    return NullCartAddEventSpecification();
+  }
+
+class CartWidgetComponent {
+
+  onCartAddEvent(cartAddEvent) {
+
+    const mapper = this.eventMapperFactory.buildFor("CartAddEvent");
+
+    // if the event is not understood, a special case is returned,
+    // providing the default API of the CartAddEventSpecification
+    const eventSpec = mapper.map(cartAddEvent);
+
+  }
+
+}
+```
+
+Data Mappers (adapting to event details) are now maintained in a separate module. Implementing frontends must keep their code in sync with the API of the various Event Specifications. The team understands that it is not eliminating coupling, but instead leveraging it in another form to another layer: Providing the data mapper now as a shared code dependency, systems can automate their build process and prevent (runtime) errors by pulling the latest version from the repository, then run their tests with the updated code, adjust their sources if necessary, stick the shared source's version to their release, then deploy. However, a **coordinated upgrade processes** is required to make sure all teams and applications belonging to the system's ecosystem use the latest specifications provided by the contract and do not introduce breaking changes into their frontends because of version mismatch.
+
+This unfortunately results in more rigid release cycles: A module can be build and deployed if its working with the latest changes made to the event specifications, but the **whole system only works if all of its modules adhere to the same version of the event specification**. In the worst case, parts of the system use an outdated module that is not capable of processing the event data. In this case, developers have to provide means to bring the whole system back into equilibrium by updating all subsystem to the new specification.
+
+import central_repository_broken from "./img/central_repository_broken.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 3.2"}
+    title={"All modules except for Module D updated to the latest event specifications. Functionality is bound to break."}
+>
+    <img src={central_repository_broken}  />
+</Embed>
+
+Checked exceptions can be used to prepare the source for this kind of errors, reacting gracefully to any unexpected issue with the event API. Any Module must adapt to a newer event specification existing in the system. So if the team of Module A agrees to adapt to a new event specification available with the shared source, Module B, Module C and Module D must adapt to this specification, too: If any Module uses a newer version of the event specification, and another Module expects an older installment, we find ourselves quickly back to where we were before using shared source (see **Figure 3.2** and **Figure 1.1**).
+
+### The monorepo
+
+Although the advantage is the agreement on a central place that all projects use, coupling exists now between the implementing frontends and the shared source and the version used with the shared source. To prevent further overhead of orchestrated releases and problems incurred by version mismatch, the team discusses to abandon the current scm-strategy.
+
+import shared_source from "./img/shared_source.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 3.3"}
+    title={"The source control management strategy used with the shared source. Each system can be autonomously developed and deployed."}
+>
+    <img src={shared_source}  />
+</Embed>
+
+
+The idea of independently developing modules for the software where each team is responsible for deploying and maintaining their own modules provides obstacles when it comes to dependency management and communication between the teams and obviously between the modules. A reasonable solution would be to merge the modules into a monorepo: If independently developed modules are deployed only to be re-integrated again into a system the organisation itself has control of, why shouldn't the organisation begin with maintaining the modules as an integrated whole?
+
+
+import monorepo from "./img/monorepo.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 3.4"}
+    title={"Bringing the monorepo back into the game. The team now has 1 repository, 1 build pipeline and 1 system that gets deployed."}
+>
+    <img src={monorepo}  />
+</Embed>
+
+The system is maintained in a central repository. The system has dependencies that the embedded modules are aware of: It prescribes the event specifications that should be used by all the modules. Since the teams of the various modules run their tests on a daily basis, communication errors are now detected before the system is deployed. With all the data that requires validation, Chains of Responsibility are used that pass the data through various levels of validation. These validators are developed and tested with the system, and the modules integrated into the vc-system use exactly these validators and mappers to get a hold of the specification of the current version of the event objects.
+
+All goes well, until the team decides to open their infrastructure for external system. Once more, the team is faced with the fact that it has no control over the communication specifications.
+
+**``Any external system may fail as soon as it crosses system boundaries.``**
+
+External systems depict unknown event origins. The team cannot cover external systems with their tests: They must understand that any external system can corrupt communication if it crosses system boundaries: If the external system uses an outdated version of the event specification, the external system must adapt to the organisations system event specification, and the same problems arise the team thought would have been taken care of.
+
+import monorepo_ext from "./img/monorepo_ext.png";
+
+<Embed
+    modeAware={false}
+    figure={"Figure 3.5"}
+    title={"External systems might still expect older versions of the event specification and can not adopt so quickly with the release cycles of our organisations development."}
+>
+    <img src={monorepo_ext}  />
+</Embed>
+
+### Mitigating the problem
+
+The following can mitigate, yet not eliminate problems induced with autonomously developed micro frontends. The emphasis is clearly on the first bullet point, integration testing.
+
+1. Build integration tests when autonomously developed modules are used in a system
+2. Make sure event specifications do not introduce breaking changes in between minor releases.
+3. Do not require a newer major module version without thoroughly running the integration tests
+4. If an event specification introduces breaking changes, orchestrate a lockstep release.
+
+**Whenever you need to share information between frontends, agree on an initial contract that agrees on the fields sent with the information and the contents of the fields, which includes type and format of the values of the fields. Do not remove or add fields specified with the contract over time. Provide additional information due to changed requirements with additional fields that are exclusively marked for this intend. Establish a custodian that is responsible for mediating contracts for messages between producer and consumer of those messages.**
+
+If we can agree upon a Message Bus as the transportation layer for the frontends' messages, we should also agree on a minimal, initial set of attributes of the messages that will never change. A set of very generic attributes will do. For example, we could define an identifier for an event, such as a unique name that will come in handy when spotted in the source code so we know what we're dealing with, and of course attributes reflecting the event's domain.
+
+What we want to prevent with this specification is to expose any kind of domain related behavior or logic. Keeping the events as generic as possible helps in making sure contracts do not violate boundaries. We do not want any information leaking except the information that is absolutely necessary for processing the event: Developers must fall back to well-formed APIs if the need additional information related to the event, maybe discovering flaws in the current design.
+
+### ... or is it?
+
+Specifications for the details of cross-application events can easily be agreed upon by the teams implementing a Micro Frontend architecture:
+
+:::info Specifications
+A _MESSAGE DETAIL_ object **MUST** contain the following top-level members:
+ - `id<string>`
+ - `type<string>`
+ - `fields<int, string>`
+
+In addition, a _MESSAGE DETAIL_ **MAY** contain additional and non-standard meta-information for the message with the field `meta`.
+:::
+
+Instead of providing a contract of the structure used for the data — which could result in even more dependencies, as producer and receiver and all behavioral implementations used within would have to know the incoming type of the data — the data send through the message bus should follow a simple specification set up for all messages used within the project (schema validation). Simple DTOs in the form of POJSO (Plain Old JavaScript Objects) are known to work very well; providing meta-fields for information not fitting into the specification, but optionally required by the consumers, can be added to the DTOs; this should be handled with care, though, so resulting implementations do not unintentionally weaken the specifications: At some point developers will rely on the meta-attribute and not care about the initial contract anymore, yielding another article by another developer dealing with this issue, who humbly wants to make the world a better place.
+
+If a meta field is used, the api’s name of the event together with the event-version. e.g npm package name can be used to make sure the consumer is using an adapter capable of transforming the event. If that is not the case, the consumer can silently fail. This results in inconsistency, of course, but the application is still usable (reassuring dispatch).
+
+If messages contain representations of ENTITIES, and consumers need to process these entities with the help of Data Mappers, boundaries between the modules have to be re-evaluated: Either the consumer is inappropriately placed, or functionality should be bundled closer together into the same module.
+
+
+### Further Reading
+
+ - Consumer-Driven Contracts (martinfowler.com): https://martinfowler.com/articles/consumerDrivenContracts.html
+ - How to (not) do the event versioning? (Oskar Dudycz): https://event-driven.io/en/how_to_do_event_versioning/
