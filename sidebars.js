@@ -8,6 +8,16 @@ const sidebars = {
             link: {type: 'doc', id: 'articles/index'},
             items: [
                 "articles/software-craftsmanship/index",
+                {
+                    type: 'category',
+                    label: 'Computer Graphics',
+
+                    link: {type: 'doc', id: 'articles/computer-graphics/index'},
+                    items: [
+                        'articles/computer-graphics/dot-product'
+                    ],
+                    "collapsed": false
+                },
                 "articles/contracted-events-for-micro-frontend-communication/index",
                 "articles/getter-setter-automation-with-php-attributes/index",
                 {

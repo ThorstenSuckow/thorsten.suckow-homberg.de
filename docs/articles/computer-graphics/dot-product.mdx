@@ -1,0 +1,321 @@
+---
+title: "Dot Product"
+---
+
+import {BackButton} from "../../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+
+import sinecosine from "./img/dot-product/sinecosine.png";
+import lawofcosine from "./img/dot-product/lawofcosine.png";
+
+import CodeBlock from '@theme/CodeBlock';
+import sinecosine_code from '!!raw-loader!./plots/dot-product/sinecosine.py?raw';
+import lawofcosine_code from '!!raw-loader!./plots/dot-product/lawofcosine.py?raw';
+
+# Dot Product
+
+:::note
+In the following text, we will abbreviate the dot product of a vector with itself using _exponent notation_, i.e.
+
+$$
+    \vec{v}^2 \coloneqq \vec{v} \cdot \vec{v}
+$$
+:::
+
+## Introduction
+
+The dot-product takes two vectors and returns the sum of the component-wise products of the vector's components. Given two vectors
+
+$$
+
+\vec{a}, \vec {b} \in \mathbb{R}^n, \vec{a} = \begin{pmatrix} a_1 \\ a_2 \\ \vdots \\ a_{n} \end{pmatrix}, \vec{b} = \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_{n} \end{pmatrix}
+
+$$
+the dot product yields a **scalar** value.
+
+$$
+
+ \vec{a} \cdot \vec{b} = \sum_{i=1}^{n} a_ib_i
+
+$$
+
+
+
+## Geometric Interpretation
+
+If  $\vec{a} \cdot \vec{b} = 0$, the two vectors are perpendicular to each other.
+We will derive this in the following.
+
+
+### Orthogonality of Unit Vectors
+
+We will first have a look at a special case, namely when $\vec{a}, \vec{b}$ are both _unit vectors_.
+
+In [Figure 1](#fig:sinecosine), the radius of the _unit circle_ is represented by the vectors $\vec{a}$ and $\vec{b}$. Thus, for both $\vec{a}$ and $\vec{b}$ the following trivially holds:
+
+$$
+
+|\vec{a}| = 1 \\
+|\vec{b}| = 1
+
+$$
+
+<a name="fig:sinecosine" />
+<Embed
+    modeAware={true}
+    figure={1}
+    title={
+        "Unit Circle with two vectors a and b, which both have a magnitude of 1"}>
+    <img src={sinecosine}  />
+</Embed>
+
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {sinecosine_code}
+</CodeBlock>
+
+</details>
+
+Clearly, $\vec{b} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
+
+Additionally $\vec{a} = \begin{pmatrix} cos(\Theta) \\ sin(\Theta) \end{pmatrix}$ can easily be shown since
+
+ - the _cosine_ represents the quotient of the adjacency and the hypothenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
+ - the _sine_ represents the quotient of the opposite and the hypothenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
+
+Solving for $u$ respective $v$ gives us
+
+$$
+
+    cos(\Theta) |\vec{a}| = cos(\Theta) \cdot 1 = cos(\Theta) = u\\
+
+    sin(\Theta) |\vec{a}| = sin(\Theta) \cdot 1 = sin(\Theta) = v
+$$
+
+For $\Theta = 90 \degree$, we can therefore deduce $cos(90) = 0$.
+
+### Orthogonality of Vectors with arbitrary length
+
+Let's take a look at the common case when $\vec{a}$ and $\vec{b}$ are of arbitrary length and recap the **Law of Cosine**:
+
+$$
+
+    c^2 = a^2 + b^2 - 2ab \cos(\Theta)
+
+$$
+
+This relationship is shown in [Figure 2](#fig:lawofcosine)
+
+
+
+<a name="fig:lawofcosine" />
+<Embed
+    modeAware={true}
+    figure={2}
+    title={
+        "Three vectors a, b, c. The angle Theta between a and b can be calculated with the help of the dot-product."}>
+    <img src={lawofcosine}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {lawofcosine_code}
+</CodeBlock>
+
+
+</details>
+
+First of all, lets substitute the variables with scalar values of our vectors $\vec{a}, \vec{b}$ and $\vec{c}$:
+
+$$
+
+    |\vec{c}|^2 = |\vec{a}|^2 + |\vec{b}|^2 - 2|\vec{a}||\vec{b}| \cos(\Theta)
+
+$$
+
+Note that $\vec{c} = \vec{b} - \vec{a}$, so we can substitute this, too. Additionally, $|c|^2 = \vec{c}^2$:
+
+$$
+
+    (\vec{b} - \vec{a})^2 = |\vec{a}|^2 + |\vec{b}|^2 - 2|\vec{a}||\vec{b}| \cos(\Theta)
+
+$$
+
+We will start with simplifying the terms:
+
+
+$$
+\begin{align*}
+    - 2|\vec{a}||\vec{b}| \cos(\Theta) &= (\vec{b} - \vec{a})^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
+    &= \vec{b}^2 - 2 \vec{a}\vec{b} + \vec{a}^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
+    &= |\vec{b}|^2 - 2 \vec{a}\vec{b} + |\vec{a}|^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
+    &=  - 2 \cdot (\vec{a} \cdot \vec{b})
+\end{align*}
+$$
+
+Observe that the resulting term on the right side represents the **dot product** (set in parentheses for clarity).
+
+Finally, solve for $\cos(\Theta)$:
+
+$$
+\begin{alignat*}{}
+    & -2|\vec{a}||\vec{b}| \cos(\Theta) &&= - 2 \vec{a}\vec{b} \\
+
+    \Leftrightarrow \qquad & |\vec{a}||\vec{b}| \cos(\Theta) &&=  \vec{a} \cdot \vec{b} \\
+
+    \Leftrightarrow  \qquad  & \cos(\Theta) &&=  \frac{\vec{a} \cdot \vec{b}}{|\vec{a}||\vec{b}|} \\
+\end{alignat*}{}
+$$
+
+Clearly, this holds for any vector except for $\vec{a} = \vec{0} \lor \vec{b} = \vec{0}$.
+
+We can now solve for the dot product:
+
+$$
+\begin{alignat*}{}
+    \vec{a} \cdot \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|
+\end{alignat*}{}
+$$
+
+The relation between the orthogonality of $\vec{a}$ and $\vec{b}$ and $\Theta = 90 \degree$ becomes more apparent when we consider
+$$
+\begin{alignat*}{}
+     \cos(90\degree) = 0 = \frac{\vec{a} \cdot \vec{b}}{|\vec{a}||\vec{b}|}
+\end{alignat*}{}
+$$
+
+Since $|\vec{a}| \neq 0 \land |\vec{b}| \neq 0$ by definition, it follows that $\vec{a} \cdot \vec{b} = 0$.
+We obtain the _equivalence_:
+
+$$
+    \vec{a} \cdot \vec{b} = 0 \Leftrightarrow \cos{\Theta} = 0
+$$
+
+
+:::info
+The dot product $\vec{a} \cdot \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|$ beautifully shows that $\Theta$
+is invariant under changes in the magnitude of the related vectors: Using the _associativity_ of the dot product and scalar multiplication,
+we can derive:
+
+$$
+\begin{align*}
+    \frac{\vec{a} \cdot \vec{b}}{|\vec{a}| \cdot |\vec{b}|}
+    &= (\vec{a} \cdot \vec{b}) \cdot \frac{1}{|\vec{a}| \cdot |\vec{b}|}\\[1.2em]
+    &= \vec{a} \cdot \frac{1}{|\vec{a}|} \cdot \vec{b} \cdot \frac{1}{|\vec{b}|}\\[1.2em]
+    &= \frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|}\\[0.5em]
+\end{align*}
+$$
+
+Hence, the cosine of the angle between $\vec{a}$ and $\vec{b}$
+
+$$
+\begin{align*}
+    \cos{\Theta} = \frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|}\\[0.5em]
+\end{align*}
+$$
+
+is simply the **dot product** of the corresponding unit vectors.
+:::
+
+## Proofs
+### Proof 1
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \cdot \vec{b} = 0$.
+
+**Claim**: There exists no $\vec{v}$ such that $\vec{v} \neq \vec{a}$, $\vec{v} \cdot \vec{v} = 1$  and $\vec{v} \cdot \vec{b} = 0$
+
+
+
+**Disproof by counterexample**:
+
+Choose
+
+ <center>
+
+$\vec{a} = \begin{pmatrix} 1 \\ 0  \end{pmatrix}$, $\vec{b} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$, $\vec{v} = \begin{pmatrix} -1 \\ 0 \end{pmatrix}$.
+
+</center>
+
+Clearly, $\vec{v} \neq \vec{a}$ and $\vec{v} \cdot \vec{v} = (-1 \cdot -1) + (0 \cdot 0) = 1$. Moreover,
+
+ <center>
+
+ $\vec{a} \cdot \vec{b} = (1 \cdot 0) + (0 \cdot 1) = 0$ and $\vec{v} \cdot \vec{b} = (-1 \cdot 0) + (0 \cdot 1) = 0$
+
+ </center>
+
+ This **contradicts the assumption** that no such vector $\vec{v}$ exists  with $\vec{a} \neq \vec{v}$ and $\vec{b} \cdot \vec{v} = 0$.  $\Box$
+
+### Proof 2
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \cdot \vec{b} = 0$.
+
+**Claim**: There exists a $\vec{v}$ such that $\vec{v} \cdot \vec{v} = 1$, $\vec{v} \cdot \vec{a} = 0$ and  $\vec{v} \cdot \vec{b} = 0$
+
+
+**Proof by contradiction**:
+
+It is clear that $\vec{a}, \vec{b}$ must be perpendicular, or otherwise $\vec{a} \cdot \vec{b} \neq 0$.
+
+**Lemma 1:**
+
+$\vec{a}$ and $\vec{b}$ are an **orthonormal** basis of $\mathbb{R}^2$.
+
+**Proof of Lemma 1**:
+
+For $\vec{a}$, $\vec{b}$ (and $\vec{v}$), the following holds:
+
+<center>
+
+   $\vec{a} \cdot \vec{a} = (a_x \cdot a_x) + (a _y \cdot a_y) = a^2_x + a^2_y = \sqrt{a^2_x + a^2_y} \cdot \sqrt{a^2_x + a^2_y} = \|a\|^2$
+
+</center>
+
+Because of $\vec{a} \cdot \vec{a} = 1$ and $\sqrt{1} = 1$, it follows that $\vec{a}$, $\vec{b}$ must be unit vectors. Since they are perpendicular, they also provide an orthonormal base for $\mathbb{R}^2$. $\Box$
+
+Thus, we can write $\vec{v}$ as a **linear combination** of $\vec{a}$ and $\vec{b}$:
+
+<center>
+
+   $\vec{v} = x\vec{a} + y\vec{b}$
+
+</center>
+
+
+We now show that
+
+<center>
+
+   $\vec{v} \cdot \vec{a} = 0$
+
+   $\vec{v} \cdot \vec{b} = 0$
+
+</center>
+
+cannot hold:
+
+$\vec{v}$ is perpendicular to both $\vec{a}$ and $\vec{b}$, which are basis vectors of $\mathbb{R}^2$, thus perpendicular to each other.
+For $\vec{v}$ to be perpendicular to both basis vectors, it follows that $\vec{v}$ itself must be $\vec{0}$, **contrary to the assumption** that $\vec{v} \cdot \vec{v} = 1$, which implies $\vec{v} \neq \vec{0}$.
+
+
+:::info
+Additionally, note how $\vec{v}$ is a linear combination of $\vec{a}$ and $\vec{b}$:
+
+<center>
+
+   $\vec{v} = x\vec{a} + y\vec{b}$
+
+</center>
+
+For $\vec{v} \cdot \vec{a} = 0$ and $\vec{v} \cdot \vec{b} = 0$ to hold, $\vec{v}$ must be perpendicular to $\vec{a}$ and to $\vec{b}$.
+
+Since $\vec{a} \ne 0$, but $\vec{v} \cdot \vec{a} = 0$, it follows that $x = 0$, which implies that $\vec{v} = y \vec{b}$.
+In this case, $\vec{v} \cdot \vec{b} = 0$ must hold, which can only be true if $y = 0$ since $\vec{b} \ne \vec{0}$.
+This also shows that $\vec{v}$ must be $\vec{0}$.
+:::
+
+$\Box$
+
+
