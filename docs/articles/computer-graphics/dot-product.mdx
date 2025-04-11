@@ -36,7 +36,7 @@ the dot product yields a **scalar** value.
 
 $$
 
- \vec{a} \cdot \vec{b} = \sum_{i=1}^{n} a_ib_i
+ \vec{a} \boldsymbol{\cdot} \vec{b} = \sum_{i=1}^{n} a_ib_i
 
 $$
 
@@ -44,7 +44,7 @@ $$
 
 ## Geometric Interpretation
 
-If  $\vec{a} \cdot \vec{b} = 0$, the two vectors are perpendicular to each other.
+If  $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$, the two vectors are perpendicular to each other.
 We will derive this in the following.
 
 
@@ -83,8 +83,8 @@ Clearly, $\vec{b} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
 
 Additionally $\vec{a} = \begin{pmatrix} cos(\Theta) \\ sin(\Theta) \end{pmatrix}$ can easily be shown since
 
- - the _cosine_ represents the quotient of the adjacency and the hypothenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
- - the _sine_ represents the quotient of the opposite and the hypothenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
+ - the _cosine_ represents the quotient of the adjacent side and the hypothenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
+ - the _sine_ represents the quotient of the opposite side and the hypothenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
 
 Solving for $u$ respective $v$ gives us
 
@@ -129,7 +129,7 @@ This relationship is shown in [Figure 2](#fig:lawofcosine)
 
 </details>
 
-First of all, lets substitute the variables with scalar values of our vectors $\vec{a}, \vec{b}$ and $\vec{c}$:
+First of all, let's substitute the variables with scalar values of our vectors $\vec{a}, \vec{b}$ and $\vec{c}$:
 
 $$
 
@@ -153,7 +153,7 @@ $$
     - 2|\vec{a}||\vec{b}| \cos(\Theta) &= (\vec{b} - \vec{a})^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
     &= \vec{b}^2 - 2 \vec{a}\vec{b} + \vec{a}^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
     &= |\vec{b}|^2 - 2 \vec{a}\vec{b} + |\vec{a}|^2 - |\vec{a}|^2 - |\vec{b}|^2 \\
-    &=  - 2 \cdot (\vec{a} \cdot \vec{b})
+    &=  - 2 \cdot (\vec{a} \boldsymbol{\cdot} \vec{b})
 \end{align*}
 $$
 
@@ -165,9 +165,9 @@ $$
 \begin{alignat*}{}
     & -2|\vec{a}||\vec{b}| \cos(\Theta) &&= - 2 \vec{a}\vec{b} \\
 
-    \Leftrightarrow \qquad & |\vec{a}||\vec{b}| \cos(\Theta) &&=  \vec{a} \cdot \vec{b} \\
+    \Leftrightarrow \qquad & |\vec{a}||\vec{b}| \cos(\Theta) &&=  \vec{a} \boldsymbol{\cdot} \vec{b} \\
 
-    \Leftrightarrow  \qquad  & \cos(\Theta) &&=  \frac{\vec{a} \cdot \vec{b}}{|\vec{a}||\vec{b}|} \\
+    \Leftrightarrow  \qquad  & \cos(\Theta) &&=  \frac{\vec{a} \boldsymbol{\cdot} \vec{b}}{|\vec{a}||\vec{b}|} \\
 \end{alignat*}{}
 $$
 
@@ -177,34 +177,34 @@ We can now solve for the dot product:
 
 $$
 \begin{alignat*}{}
-    \vec{a} \cdot \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|
+    \vec{a} \boldsymbol{\cdot} \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|
 \end{alignat*}{}
 $$
 
 The relation between the orthogonality of $\vec{a}$ and $\vec{b}$ and $\Theta = 90 \degree$ becomes more apparent when we consider
 $$
 \begin{alignat*}{}
-     \cos(90\degree) = 0 = \frac{\vec{a} \cdot \vec{b}}{|\vec{a}||\vec{b}|}
+     \cos(90\degree) = 0 = \frac{\vec{a} \boldsymbol{\cdot} \vec{b}}{|\vec{a}||\vec{b}|}
 \end{alignat*}{}
 $$
 
-Since $|\vec{a}| \neq 0 \land |\vec{b}| \neq 0$ by definition, it follows that $\vec{a} \cdot \vec{b} = 0$.
+Since $|\vec{a}| \neq 0 \land |\vec{b}| \neq 0$ by definition, it follows that $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 We obtain the _equivalence_:
 
 $$
-    \vec{a} \cdot \vec{b} = 0 \Leftrightarrow \cos{\Theta} = 0
+    \vec{a} \boldsymbol{\cdot} \vec{b} = 0 \Leftrightarrow \cos(\Theta) = 0
 $$
 
 
 :::info
-The dot product $\vec{a} \cdot \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|$ beautifully shows that $\Theta$
+The dot product $\vec{a} \boldsymbol{\cdot} \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}|$ beautifully shows that $\Theta$
 is invariant under changes in the magnitude of the related vectors: Using the _associativity_ of the dot product and scalar multiplication,
 we can derive:
 
 $$
 \begin{align*}
-    \frac{\vec{a} \cdot \vec{b}}{|\vec{a}| \cdot |\vec{b}|}
-    &= (\vec{a} \cdot \vec{b}) \cdot \frac{1}{|\vec{a}| \cdot |\vec{b}|}\\[1.2em]
+    \frac{\vec{a} \boldsymbol{\cdot} \vec{b}}{|\vec{a}| \cdot |\vec{b}|}
+    &= (\vec{a} \boldsymbol{\cdot} \vec{b}) \cdot \frac{1}{|\vec{a}| \cdot |\vec{b}|}\\[1.2em]
     &= \vec{a} \cdot \frac{1}{|\vec{a}|} \cdot \vec{b} \cdot \frac{1}{|\vec{b}|}\\[1.2em]
     &= \frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|}\\[0.5em]
 \end{align*}
@@ -214,16 +214,24 @@ Hence, the cosine of the angle between $\vec{a}$ and $\vec{b}$
 
 $$
 \begin{align*}
-    \cos{\Theta} = \frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|}\\[0.5em]
+    \cos(\Theta) = \frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|}\\[0.5em]
 \end{align*}
 $$
 
 is simply the **dot product** of the corresponding unit vectors.
+
+Referring back to the introductory example involving the unit circle, observe that $|\vec{a}| = |\vec{b}| = 1$. In this case, the dot product conveniently simplifies:
+
+$$
+\begin{align*}
+    \vec{a} \boldsymbol{\cdot} \vec{b} = \cos(\Theta) \cdot |\vec{a}||\vec{b}| = \cos(\Theta) \cdot 1 = \cos(\Theta)
+\end{align*}
+$$
 :::
 
 ## Proofs
 ### Proof 1
-Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \cdot \vec{b} = 0$.
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists no $\vec{v}$ such that $\vec{v} \neq \vec{a}$, $\vec{v} \cdot \vec{v} = 1$  and $\vec{v} \cdot \vec{b} = 0$
 
@@ -243,21 +251,21 @@ Clearly, $\vec{v} \neq \vec{a}$ and $\vec{v} \cdot \vec{v} = (-1 \cdot -1) + (0 
 
  <center>
 
- $\vec{a} \cdot \vec{b} = (1 \cdot 0) + (0 \cdot 1) = 0$ and $\vec{v} \cdot \vec{b} = (-1 \cdot 0) + (0 \cdot 1) = 0$
+ $\vec{a} \boldsymbol{\cdot} \vec{b} = (1 \cdot 0) + (0 \cdot 1) = 0$ and $\vec{v} \cdot \vec{b} = (-1 \cdot 0) + (0 \cdot 1) = 0$
 
  </center>
 
  This **contradicts the assumption** that no such vector $\vec{v}$ exists  with $\vec{a} \neq \vec{v}$ and $\vec{b} \cdot \vec{v} = 0$.  $\Box$
 
 ### Proof 2
-Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \cdot \vec{b} = 0$.
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists a $\vec{v}$ such that $\vec{v} \cdot \vec{v} = 1$, $\vec{v} \cdot \vec{a} = 0$ and  $\vec{v} \cdot \vec{b} = 0$
 
 
 **Proof by contradiction**:
 
-It is clear that $\vec{a}, \vec{b}$ must be perpendicular, or otherwise $\vec{a} \cdot \vec{b} \neq 0$.
+It is clear that $\vec{a}, \vec{b}$ must be perpendicular, or otherwise $\vec{a} \boldsymbol{\cdot} \vec{b} \neq 0$.
 
 **Lemma 1:**
 
