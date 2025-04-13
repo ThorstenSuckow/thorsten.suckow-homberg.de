@@ -1,11 +1,10 @@
 
 
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import l8 from "@l8js/l8";
 import CodeBlock from '@theme/CodeBlock';
 import fetch from 'cross-fetch';
-import ReactEmbedGist from "react-embed-gist";
-import Loading from "@theme/Loading";
+import Gist from "react-gist";
 
 function Embed ({width, children, title, figure, modeAware}) {
 
