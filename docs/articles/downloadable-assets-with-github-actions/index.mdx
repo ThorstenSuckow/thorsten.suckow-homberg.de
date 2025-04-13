@@ -77,7 +77,7 @@ It all boils down to the following two commands that have to be executed before 
    $ npm config set //npm.sencha.com/:_authToken=${{secrets.TOKEN}}
 ```
 
-… whereas ${{secrets.TOKEN}} is the authentication token that can be used for authenticating a registered user with the Sencha NPM repository. The variable makes sure that no login credentials (better: the token) is stored as cleartext in the build script. We now have to tell the GitHub Actions where it can find the secret.
+… whereas ```${{secrets.TOKEN}}``` is the authentication token that can be used for authenticating a registered user with the Sencha NPM repository. The variable makes sure that no login credentials (better: the token) is stored as cleartext in the build script. We now have to tell the GitHub Actions where it can find the secret.
 
 1. Active and valid tokens can be found in the users [.npmrc](https://docs.npmjs.com/cli/v8/configuring-npm/npmrc) on the user’s machine. The first step would be to locate the *.npmrc*-file (on Windows, it’s usually store under %HOMEPATH%) and find the authentication token used with the Sencha NPM repository. Copy it to the clipboard.
 
@@ -150,11 +150,11 @@ We have previously seen how to use actions/create-release- a predefined action f
 
 Again, GitHub provides the necessary action so we do not have to write it ourselves: [actions/upload-release-asset](https://github.com/actions/upload-release-asset) is now used with a few additional configurations:
 
-1. upload_url — the url to upload the asset to. This is the location of the release we have created with our create-release-step, and can be identified by ${{steps.create_release.outputs.upload_url}}
+1. upload_url — the url to upload the asset to. This is the location of the release we have created with our create-release-step, and can be identified by ```${{steps.create_release.outputs.upload_url}}```
 
 2. asset_path — the path to the asset we want to upload
 
-3. asset_name — the name used for the asset. It’s a good practice to refer to the tag used with this release in its name: myproject.build.${{github.ref}}.zip
+3. asset_name — the name used for the asset. It’s a good practice to refer to the tag used with this release in its name: ```myproject.build.${{github.ref}}.zip```
 
 4. asset_content_type — the content-type of the asset. In our case, it will be application/zip
 
