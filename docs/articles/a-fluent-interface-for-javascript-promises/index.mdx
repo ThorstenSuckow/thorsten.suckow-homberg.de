@@ -5,7 +5,7 @@ description: Use JavaScript Proxies to create fluent interfaces for Promises
 
 import {BibRef} from "../../../src/components/References";
 import {Embed, MigrationNotice} from "../../../src/components/Embed";
-
+import Gist from "react-gist";
 
 :::info
 <MigrationNotice
@@ -59,8 +59,6 @@ To get to the point: I wanted my browser based test suites to be magically boots
 
 And while this approach eliminated almost completely the tedious re-creation of callback hell, I was wondering: Is there a way of getting rid of the - then again - (pun intended) tedious task of explicitly typing `then` and passing `onFulfilled`- and `onRejected`-callbacks as arguments each time I wanted to add another asynchronous task to the Promise chain? How could I make the **somewhat fluent** interface **more liquid**?
 
-
-import Gist from "react-gist";
 
 <Embed
     modeAware={false}

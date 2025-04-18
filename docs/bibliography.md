@@ -7,6 +7,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 # Bibliography
 
+### **Asteroth, Alexander; Baier, Christel**
+
+ - [BA02] Asteroth, Alexander u Baier, Christel, **Theoretische Informatik**, Pearson Deutschland, 2002, url: https://elibrary.pearson.de/book/99.150005/9783863266646  <a name="ba02"></a>
+
+
 ### **Alur, Deepak; John Crupi; Dan Malks**
 
  - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
@@ -88,7 +93,7 @@ Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1
 - [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79-165. isbn: 978-3-662-55650-4. doi:
   10.1007/978-3-662-55650-4_2. url: https://doi.org/10.1007/978-3-662-55650-4_2. <a name="OW17b"></a>
 
-### ** Papernov, AA und Stasevich, GV**
+### **Papernov, AA und Stasevich, GV**
 
  - [PS65] AA Papernov und GV Stasevich. ``A method of information sorting in
 computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.<a name="PS65"></a>
@@ -116,8 +121,16 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 
  - [RN12] Stuart Russell and Peter Norvig. **Künstliche Intelligenz.** 3. Afl. Pearson Studium - IT. Munich, Germany: Pearson Studium ein Imprint von Pearson Deutschland, Juni 2012. isbn: 978-3-86894-098-5. <a name="rn12"></a>
 
+### **Schöning, Uwe**
+
+ - [Sch08] Uwe Schöning. **Theoretische Informatik - kurzgefasst**, Spektrum Akademischer Verlag, 2008, isbn: 9783827418241  <a name="sch08"></a>
+
 ### **Shell, Donald**
 - [She59] D. L. Shell. ``A High-Speed Sorting Procedure``. In: _Commun. ACM 2.7_   (Juli 1959), S. 30-32. ISSN: 0001-0782. DOI: 10.1145/368370.368387. url: https://doi.org/10.1145/368370.368387 <a name="She59"></a>
+
+### **Sipser, Michael**
+
+- [Sip12] Sipser, Michael, **Introduction to the Theory of Computation**, Cengage Learning, 2012, isbn: 9781133187813 <a name="sip12"></a>
 
 ### **Thomas, David; Hunt, Andrew**
 
@@ -131,5 +144,7 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 
 - [IDDD] **Implementing Domain-Driven Design**, Pearson Education, 2013 <a name="iddd"></a>
 
+### **Vossen, Gottfried; Witt, Kurt-Ulrich**
 
-<BackButton />
+- [VW16] Vossen, Gottfried u. Witt, Kurt-Ulrich, **Grundkurs Theoretische Informatik**, Springer Vieweg, 2016, https://doi.org/10.1007/978-3-8348-2202-4 <a name="vw16"></a>
+

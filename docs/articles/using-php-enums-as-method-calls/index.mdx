@@ -5,6 +5,7 @@ title: "Using PHP enums as method calls"
 import Gist from "react-gist";
 import {Embed, MigrationNotice} from "../../../src/components/Embed";
 
+
 _Dynamically mapping method calls to existing typed values._
 
 
@@ -33,7 +34,7 @@ The following represents a request for all emails that have a date set to the *9
     GET /MessageItems?filter={"<":{"date":1665375431}} HTTP/1.1
 ```
 
-The above example has a *relational *operator (<, *less than*), and has two *operands*: A name representing the name of the field the filter applies to (date), and an integer value representing the timestamp for comparison (1665375431).
+The above example has a *relational *operator (```<```, *less than*), and has two *operands*: A name representing the name of the field the filter applies to (date), and an integer value representing the timestamp for comparison (1665375431).
 
 ## The OOP modelling approach
 
@@ -43,7 +44,7 @@ Mathematical expressions are fairly easy to model. Their symbols can be abstract
 
 An expression can be a
 
-* a **Relational Expression** providing relational operators: <, >, <=, >=, ==, !=
+* a **Relational Expression** providing relational operators: ```<, >, <=, >=, ==, !=```
 
 * a **Logical Expression** providing logical operators: &&, ||, !
 
@@ -86,7 +87,7 @@ The above example is — while still readable and maintainable — too verbose. 
 
 This would allow us to omit calls to the constructor of the **RelationalExpression**, while still getting an expression as a return value from the factory method .
 
-However, this would make it also necessary to implement static methods matching available operators used by the Expression-specific we’re currently using. Given six relational operators >, <, >=, <=,=, != , we’d have to add six factory methods to our class (while prototyping, without refactoring and code optimizations):
+However, this would make it also necessary to implement static methods matching available operators used by the Expression-specific we’re currently using. Given six relational operators ```>, <, >=, <=,=, !=``` , we’d have to add six factory methods to our class (while prototyping, without refactoring and code optimizations):
 
 ```php
     class RelationalExpression extends Expression {

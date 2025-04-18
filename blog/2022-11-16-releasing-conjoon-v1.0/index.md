@@ -32,7 +32,9 @@ Besides the features already introduced with the release candidates, the followi
 
 The installation for lumen-app-email has been simplified with the help of Artisan and CLI commands. To get an instance of lumen-app-email running, use
 
+```bash
     $ composer create-project conjoon/lumen-app-email {targetDir} {version}
+```
 
 which will start the installation process. For more information, refer to the [official guide](https://www.conjoon.org/docs/api/backends/@conjoon/lumen-app-email#installation-1).
 

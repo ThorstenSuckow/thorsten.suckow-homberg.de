@@ -1,6 +1,6 @@
 ---
 slug: loesungshinweise-prog-fh-trier
-title: "[DE] Lösungshinweise Modul prog (Update 23.01.2024)"  
+title: "[DE] Lösungshinweise Modul prog (Update 15.03.2024)"  
 authors: [thorstensuckow]
 tags: [study, java, test, programmierung]
 enableComments: true
@@ -8,6 +8,12 @@ enableComments: true
 
 Für das Modul **prog**[^1] im Wintersemester 2023/2024 des Fernstudiengangs Informatik (M.C.Sc.) der
 [Hochschule Trier](https://www.hochschule-trier.de/) habe ich hier Lösungshinweise zu ausgewählten Tests zusammengefasst. Diese stehen als PDF zum Download zur Verfügung.
+
+
+### Repetitorium und Lösungshinweise Musterklausur (22.03.2024)
+- Das Repetitorium zu dem Modul PROG im WS 23/24 [kann hier heruntergeladen werden](./repetitorium-prog-ws-23-24-fh-trier.pdf)
+- Lösungsvorschläge, Anmerkungen und Ergänzungen zu der Musterklausur können
+[hier heruntergeladen werden](./loesungsvorschlag-musterklausur-prog-ws-23-24-fh-trier.pdf).
 
 ### Lösungshinweise Test 5 - Such-undSortieralgorithmen (23.01.2024)
 Lösungshinweise sowie Anmerkungen und Ergänzungen können

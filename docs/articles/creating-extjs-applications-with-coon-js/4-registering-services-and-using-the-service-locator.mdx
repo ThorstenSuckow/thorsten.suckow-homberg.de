@@ -96,7 +96,8 @@ The following code block is part of an application configuration. The services-k
     }
 ```
 
-In the given example, the application registers coon.core.service.GravatarService — a specific of coon.core.service.Service for abstracts of the type coon.core.service.UserImageService. Whenever the ServiceLocator needs to resolve coon.core.service.UserImageService , one and the same instance of coon.core.service.GravatarService is returned — which was initially created with the constructor arguments {parameters:{d:"blank"}} :
+In the given example, the application registers coon.core.service.GravatarService — a specific of coon.core.service.Service for abstracts of the type coon.core.service.UserImageService.
+Whenever the ServiceLocator needs to resolve coon.core.service.UserImageService , one and the same instance of coon.core.service.GravatarService is returned — which was initially created with the constructor arguments ```{parameters:{d:"blank"}}``` :
 
 ```javascript
     // registering the GravatarService with the ServiceLocator
