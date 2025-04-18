@@ -8,10 +8,12 @@ import {Embed} from "../../../src/components/Embed";
 
 import sinecosine from "./img/dot-product/sinecosine.png";
 import lawofcosine from "./img/dot-product/lawofcosine.png";
+import fov from "./img/dot-product/fov.png";
 
 import CodeBlock from '@theme/CodeBlock';
 import sinecosine_code from '!!raw-loader!./plots/dot-product/sinecosine.py?raw';
 import lawofcosine_code from '!!raw-loader!./plots/dot-product/lawofcosine.py?raw';
+import fov_code from '!!raw-loader!./plots/dot-product/fov.py?raw';
 
 # Dot Product
 
@@ -234,6 +236,38 @@ $$
  \hat{a} \boldsymbol{\cdot} \hat{b} = \cos(\Theta)
 $$
 :::
+
+## Example Applications
+
+In **Commandos Origins**, \ldots
+
+### Math
+In the following example (see [Figure 3](#fig:fov)), the NPC has the following parameters:
+
+ - position $p = (3, 7)$
+ - view direction $v = (2, -3)
+ - field of view $f = 80 \degree$
+ - length of visibility cone $|v| = \sqrt{13}$
+
+
+
+<a name="fig:fov" />
+<Embed
+    modeAware={true}
+    figure={1}
+    title={
+        "To determine if a point lies within the field of view of a npc, the dot product can be used to calculate the required angles"}>
+    <img src={fov}  />
+</Embed>
+
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {fov_code}
+</CodeBlock>
+
+</details>
 
 ## Proofs
 ### Proof 1
