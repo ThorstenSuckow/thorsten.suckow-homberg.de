@@ -19,12 +19,16 @@ import rotation_code from '!!raw-loader!./plots/dot-product/rotation.py?raw';
 
 # Dot Product
 
-:::note
-In the following text, we will abbreviate the dot product of a vector with itself using _exponent notation_, i.e.
+:::caution Notation
+- In the following, we will use _exponent notation_ to abbreviate the dot product of a vector with itself , i.e.
 
 $$
-    \vec{v}^2 \coloneqq \vec{v} \cdot \vec{v}
+    \vec{v}^2 = \vec{v} \cdot \vec{v} = |\vec{v}|^2
 $$
+
+- Where appropriate, for any vector $\vec{x}$ with $|\vec{x}| = 1$, we will alternatively use _hat_ notation, $\hat{x}$, to explicitly indicate that we're dealing with a unit vector.
+
+- We will use _column-based_ notation for vectors and, where applicable, treat them implicitly as $2 \times 1$-matrices.
 :::
 
 ## Introduction
@@ -87,8 +91,8 @@ Clearly, $\vec{b} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
 
 Additionally $\vec{a} = \begin{pmatrix} cos(\Theta) \\ sin(\Theta) \end{pmatrix}$ can easily be shown since
 
- - the _cosine_ represents the quotient of the adjacent side and the hypothenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
- - the _sine_ represents the quotient of the opposite side and the hypothenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
+ - the _cosine_ represents the quotient of the adjacent side and the hypotenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
+ - the _sine_ represents the quotient of the opposite side and the hypotenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
 
 Solving for $u$ respective $v$ gives us
 
@@ -249,21 +253,22 @@ In the following example (see [Figure 3](#fig:fov)), the NPC has the following p
  - position $p = (3, 7)$
  - view direction $v = (2, -3)
  - field of view $f = 80 \degree$
- - length of visibility cone $|v| = \sqrt{13}$
+ - length of visibility cone $|\vec{v}| = \sqrt{13}$
 
 :::tip How to construct a second vector at a given angle to a known vector
 
 In the previous example, the view direction of the NPC was given by the vector $\vec{v}$.
-By using the vector notation, it was also possible to specify the length of the visibility cone, i.e. the maximum range the NPC could see for detecting obstacles or other NPCs-
-By appliyng the dot product to the target's vector $\vec{t}$, we have seen that there is no need for calculating the visibility cone itself - but what if we would like to do so?
+By using the vector notation, it was also possible to specify the length of the visibility cone, i.e. the maximum range the NPC could see for detecting objects.
+By applying the dot product to the target's vector $\vec{t}$, we have seen that there is no need for calculating the visibility cone itself - but what if we would like to do so?
 
-One way to obtain vectors at a given angle to a known vector is to take advantage of $\hat{v}$ - the **uniform** vector - in this case, the uniform vector of $\vec{v}$:
+One way to obtain vectors at a given angle to a known vector is to take advantage of $\hat{v}$ - the **unit vector** - in this case, the unit vector of $\vec{v}$:
 
 $$
-\hat{v} = \frac{\vec{v}}{|v|}
+\hat{v} = \frac{\vec{v}}{|\vec{v}|}
 $$
 
-In [Figure 1](#fig:sinecosine), we have shown the relationship between the sine and cosine as the quotient of the opposite respective adjacent side in atriangle, where the hypothenuse - the radius of the unit circle, is always $1$.
+In [Figure 1](#fig:sinecosine), we have shown the relationship between sine and cosine as the ratios of the opposite and adjacent sides to the hypotenuse,
+which represents the radius of the unit circle and is therefore always equal to $1$.
 
 We can use this fact to our advantage by computing a second vector $\vec{p}$ that has the angle $\alpha$ to $\vec{v}$.
 All we need are the equations
@@ -275,7 +280,7 @@ $$
 \end{split}
 $$
 
-1. We start with  $\cos(\theta + \alpha)$:
+1. We start with $\cos(\theta + \alpha)$:
    Since we are using the unit vector $\hat{v}$, we can directly treat $cos(\theta)$ as the $x$-component of $\vec{v}$, and $\sin(\theta)$ as the $y$-component of $\hat{v}$:
     $$
     \cos(\theta + \alpha) = \hat{v}_x \cdot \cos(\alpha) -  \hat{v}_y \cdot \sin(\alpha)
@@ -291,7 +296,7 @@ $$
     \end{split}
     $$
 
-2. Analogously solve $\sin(\theta + \alpha)$:
+2. Compute $\sin(\theta + \alpha)$ analogously:
     $$
     \begin{split}
     \sin(\theta + 40\degree) &= y\cdot \cos(40\degree) +  x \cdot \sin(40\degree)\\
@@ -300,7 +305,7 @@ $$
     \end{split}
     $$
 
-The values represent the $\cos(\theta + \alpha) = x$ and $\sin(\theta + \alpha) = y$ components of the desired vector $\vec{p}$, i.e. the ratio between adjacent side and hypothenuse ($x$-direction) and oppenent side and hypothenuse ($y$-direction), whereas the hypothenuse is represented by $\hat{v}$.
+The values represent the $\cos(\theta + \alpha) = x$ and $\sin(\theta + \alpha) = y$ components of the desired vector $\vec{p}$, i.e. the ratio between adjacent side and hypotenuse ($x$-direction) and opposite side and hypotenuse ($y$-direction), whereas the hypotenuse is represented by $\hat{v}$.
 Since we have operated on a unit vector, we obtain a unit vector.
 Multiplying with any scalar will change the vector's length:
 
@@ -313,7 +318,7 @@ $$
     modeAware={true}
     figure={3}
     title={
-        "Rotating vector v around 40°. Note that θ is ≈ -56° "}>
+        "Rotating vector v around the origin by 40°. Note that θ is ≈ -56° "}>
     <img src={rotation}  />
 </Embed>
 <details>
@@ -325,16 +330,37 @@ $$
 
 </details>
 
-For the other half of the visibility cone, we simple have to plug $-40\degree$ into the equation.
+For the other half of the visibility cone, we simply have to plug $-40\degree$ into the equation.
 
-Rotations of points around a specific axis are  performed with the help of **rotation matrices**. In our 2D-example, the matrix for rotation around the origin is:
+Rotations of points around a specific axis are performed with the help of **rotation matrices**. In our 2D-example, the matrix $R$ for rotation around the origin is:
 
 $$
-\begin{pmatrix}
+R = \begin{pmatrix}
 \cos(\alpha)  & -\sin(\alpha) \\
 \sin(\alpha) & \cos(\alpha)
 \end{pmatrix}
 $$
+
+By multiplying $R$ with $\vec{v}$[^matrix-multiplication], we obtain a new vector rotated $\alpha\degree$ _ccw_ (_counterclockwise_) around the origin:
+
+$$
+\begin{pmatrix}
+\cos(40\degree)  & -\sin(40\degree) \\
+\sin(40\degree) & \cos(40\degree)
+\end{pmatrix} \cdot \begin{pmatrix} 2\\-3\end{pmatrix} = \begin{pmatrix}
+\cos(40\degree) \cdot 2 &+ \sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
+\end{pmatrix}
+$$
+
+When applying the cosine/sine addition identity, we first constructed the unit vector $\hat{v}$, rotated it by $40\degree$, and obtained $\hat{p}$.
+We then scaled $\hat{p}$ by $|\vec{v}|$: This step effectively cancelled out the denominator in the $x$- and $y$-components of $\hat{p}$.
+It is therefore easy to see that the following holds  (in general):
+
+$$
+R \cdot \vec{v} = R \cdot |\vec{v}| \cdot \hat{v} = |\vec{v}| \cdot R \cdot \hat{v} = |\vec{v}| \cdot \hat{p}
+$$
+
+
 
 :::
 
@@ -400,7 +426,7 @@ $\vec{a}$ and $\vec{b}$ are an **orthonormal** basis of $\mathbb{R}^2$.
 
 **Proof of Lemma 1**:
 
-For $\vec{a}$, $\vec{b}$ (and $\vec{v}$), the following holds:
+For vectors with two components $x, y \in \mathbb{R}$, the following holds in general:
 
 <center>
 
@@ -454,3 +480,4 @@ This also shows that $\vec{v}$ must be $\vec{0}$.
 $\Box$
 
 
+[^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix.
