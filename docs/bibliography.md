@@ -11,10 +11,13 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [BA02] Asteroth, Alexander u Baier, Christel, **Theoretische Informatik**, Pearson Deutschland, 2002, url: https://elibrary.pearson.de/book/99.150005/9783863266646  <a name="ba02"></a>
 
-
 ### **Alur, Deepak; John Crupi; Dan Malks**
 
  - [J2EE] **Core J2EE Patterns**, Second Edition, Prentice Hall, 2008 <a name="j2ee"></a>
+
+### **Axler, Sheldon**
+
+ - [Axl23] **Linear Algebra Done Right**, 4th Edition, Germany, Springer International Publishing. <a name="axl23"></a>
 
 ### **Bloch, Joshua**:
 

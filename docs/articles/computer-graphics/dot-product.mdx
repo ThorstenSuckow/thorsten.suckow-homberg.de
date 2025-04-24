@@ -383,7 +383,7 @@ $$
 </details>
 
 ## Proofs
-### Proof 1
+### Uniqueness of Orthogonal Unit Vectors in 2D
 Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists no $\vec{v}$ such that $\vec{v} \neq \vec{a}$, $\vec{v} \cdot \vec{v} = 1$  and $\vec{v} \cdot \vec{b} = 0$
@@ -410,7 +410,7 @@ Clearly, $\vec{v} \neq \vec{a}$ and $\vec{v} \cdot \vec{v} = (-1 \cdot -1) + (0 
 
  This **contradicts the assumption** that no such vector $\vec{v}$ exists  with $\vec{a} \neq \vec{v}$ and $\vec{b} \cdot \vec{v} = 0$.  $\Box$
 
-### Proof 2
+### No Third Orthogonal Unit Vector in 2D
 Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists a $\vec{v}$ such that $\vec{v} \cdot \vec{v} = 1$, $\vec{v} \cdot \vec{a} = 0$ and  $\vec{v} \cdot \vec{b} = 0$
@@ -480,4 +480,46 @@ This also shows that $\vec{v}$ must be $\vec{0}$.
 $\Box$
 
 
-[^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix.
+### Linear Independence of Orthogonal Vectors in 2D
+
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \neq \vec{0}, \vec{b} \neq \vec{0}, \vec{a} \cdot \vec{b} = 0$, $\vec{a}$ and $\vec{b}$ are perpendicular to each other.
+
+**Claim**: $\vec{a}$ and $\vec{b}$ are linearly independent, i.e. $\nexists x, y \neq 0: x\vec{a} + y \vec{b} = \vec{0}$[^trivial-solution].
+
+**Proof by contradiction**:
+
+Assume the contrary:
+
+$$
+\exists x, y \in \mathbb{R}, x, y \neq 0: x\vec{a} + y\vec{b} = \vec{0}
+$$
+
+Then the following holds:
+
+$$
+\begin{alignat*}{2}
+                  & \qquad \vec{a} \cdot \vec{0} && = 0\\
+\Leftrightarrow  & \qquad \vec{a} \cdot (x \vec{a} + y \vec{b}) && = 0\\
+\Leftrightarrow  &\qquad  x \vec{a} \cdot \vec{a} + y \vec{a} \cdot \vec{b} && = 0 \\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  - y \vec{a} \cdot \vec{b}\\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  - y \cdot 0\\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  0
+\end{alignat*}
+$$
+
+$|a| > 0$ since $\vec{a} \neq \vec{0}$.
+This **contradicts** the assumption $x \neq 0$.
+It follows immediately that, if $x = 0$,  $y$ must equally be $0$, or otherwise  $x\vec{a} + y\vec{b} = \vec{0}$ cannot hold, since $\vec{b} \neq \vec{0}$. $\Box$
+
+:::info
+In general, the following holds: If two vectors $\vec{a}, \vec{b} \in \mathbb{R}^2$ are perpendicular, then they are **linearly independent**.
+
+Linear combinations of independent vectors **span** the vector space they belong to - in this case, they create a **span** for the vector space over $\mathbb{R}^2$ (i.e., the **plane** $\mathbb{R}^2$).
+
+Note that orthogonality is a sufficient, but not a necessary condition for linear independence: It can be shown that the number of pairs of linearly independent vectors that are **not** orthogonal, yet create a span over $\mathbb{R}^2$, is infinite (see <BibRef name="Axl23" pp="27 ff."/>).
+:::
+
+------
+
+[^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix
+[^trivial-solution]: the equation has only the **trivial solution** $x=0, y=0$
