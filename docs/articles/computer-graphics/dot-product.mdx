@@ -1,5 +1,6 @@
 ---
-title: "Dot Product"
+title: "The Geometry of the Dot Product"
+description: "The Geometry of the Dot Product and Applications to Visibility Modeling"
 ---
 
 import {BackButton} from "../../../src/components/BackButton.js";
@@ -8,24 +9,44 @@ import {Embed} from "../../../src/components/Embed";
 
 import sinecosine from "./img/dot-product/sinecosine.png";
 import lawofcosine from "./img/dot-product/lawofcosine.png";
+import fov from "./img/dot-product/fov.png";
+import fov_solved from "./img/dot-product/fov_solved.png";
+import rotation from "./img/dot-product/rotation.png";
+import commandos from "./img/dot-product/commandos_origins.png";
 
 import CodeBlock from '@theme/CodeBlock';
 import sinecosine_code from '!!raw-loader!./plots/dot-product/sinecosine.py?raw';
 import lawofcosine_code from '!!raw-loader!./plots/dot-product/lawofcosine.py?raw';
+import fov_code from '!!raw-loader!./plots/dot-product/fov.py?raw';
+import fov_solved_code from '!!raw-loader!./plots/dot-product/fov_solved.py?raw';
+import rotation_code from '!!raw-loader!./plots/dot-product/rotation.py?raw';
+export const figures = {
+    sinecosine:  1,
+    lawofcosine: 2,
+    commandos_origins: 3,
+    fov: 4,
+    fov_solved: 5,
+    rotation: 6
+};
 
-# Dot Product
+# The Geometry of the Dot Product
 
-:::note
-In the following text, we will abbreviate the dot product of a vector with itself using _exponent notation_, i.e.
+:::caution Notation
+- In the following, we will use _exponent notation_ to abbreviate the dot product of a vector with itself , i.e.
 
 $$
-    \vec{v}^2 \coloneqq \vec{v} \cdot \vec{v}
+    \vec{v}^2 = \vec{v} \cdot \vec{v} = |\vec{v}|^2
 $$
+
+- Where appropriate, for any vector $\vec{x}$ with $|\vec{x}| = 1$, we will alternatively use _hat_ notation, $\hat{x}$, to explicitly indicate that we're dealing with a unit vector.
+
+- We will use _column-based_ notation for vectors and, where applicable, treat them implicitly as $2 \times 1$-matrices.
 :::
 
-## Introduction
+## Geometric Interpretation
 
-The dot-product takes two vectors and returns the sum of the component-wise products of the vector's components. Given two vectors
+The dot-product takes two vectors and returns the sum of the products of their corresponding components.
+Given two vectors
 
 $$
 
@@ -41,9 +62,6 @@ $$
 $$
 
 
-
-## Geometric Interpretation
-
 If  $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$, the two vectors are perpendicular to each other.
 We will derive this in the following.
 
@@ -52,7 +70,7 @@ We will derive this in the following.
 
 We will first have a look at a special case, namely when $\vec{a}, \vec{b}$ are both _unit vectors_.
 
-In [Figure 1](#fig:sinecosine), the radius of the _unit circle_ is represented by the vectors $\vec{a}$ and $\vec{b}$. Thus, for both $\vec{a}$ and $\vec{b}$ the following trivially holds:
+In [Figure {figures.sinecosine}](#fig:sinecosine), the radius of the _unit circle_ is represented by the vectors $\vec{a}$ and $\vec{b}$. Thus, for both $\vec{a}$ and $\vec{b}$ the following trivially holds:
 
 $$
 
@@ -64,7 +82,7 @@ $$
 <a name="fig:sinecosine" />
 <Embed
     modeAware={true}
-    figure={1}
+    figure={figures.sinecosine}
     title={
         "Unit Circle with two vectors a and b, which both have a magnitude of 1"}>
     <img src={sinecosine}  />
@@ -83,10 +101,10 @@ Clearly, $\vec{b} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
 
 Additionally $\vec{a} = \begin{pmatrix} cos(\Theta) \\ sin(\Theta) \end{pmatrix}$ can easily be shown since
 
- - the _cosine_ represents the quotient of the adjacent side and the hypothenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
- - the _sine_ represents the quotient of the opposite side and the hypothenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
+ - the _cosine_ represents the quotient of the adjacent side and the hypotenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
+ - the _sine_ represents the quotient of the opposite side and the hypotenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
 
-Solving for $u$ respective $v$ gives us
+Solving for $u$ and $v$ respectively gives us
 
 $$
 
@@ -99,7 +117,7 @@ For $\Theta = 90 \degree$, we can therefore deduce $cos(90) = 0$.
 
 ### Orthogonality of Vectors with arbitrary length
 
-Let's take a look at the common case when $\vec{a}$ and $\vec{b}$ are of arbitrary length and recap the **Law of Cosine**:
+Let's take a look at the common case when $\vec{a}$ and $\vec{b}$ are of arbitrary length and recap the **Law of Cosines**:
 
 $$
 
@@ -107,14 +125,14 @@ $$
 
 $$
 
-This relationship is shown in [Figure 2](#fig:lawofcosine)
+This relationship is shown in [Figure {figures.lawofcosine}](#fig:lawofcosine)
 
 
 
 <a name="fig:lawofcosine" />
 <Embed
     modeAware={true}
-    figure={2}
+    figure={figures.lawofcosine}
     title={
         "Three vectors a, b, c. The angle Theta between a and b can be calculated with the help of the dot-product."}>
     <img src={lawofcosine}  />
@@ -235,8 +253,201 @@ $$
 $$
 :::
 
+## Application: Visibility Modeling
+
+When a game needs to indicate an NPC's **Field Of View** and its **visible range** to the player, **visibility cones** are often used.<br />
+A prominent example is **Commandos: Behind Enemy Lines**[^commandos]. [Figure {figures.commandos_origins}](#fig:commandos) shows a screenshot of its recent sequel, [Commandos: Origins](https://store.steampowered.com/app/1479730/Commandos_Origins/), where a visibility cone is rendered as a _green wedge_.
+
+<a name="fig:commandos" />
+<Embed
+    modeAware={false}
+    figure={figures.commandos_origins}
+    title={
+        "An NPC's field of view rendered as a green wedge. The player's character lies directly within the cone. Screenshot grabbed from the IGN review of Commandos: Origins, available at \<a target=\"_blank\" href=\"https://www.youtube.com/watch?v=PL_IXuNe1wI\"\>Youtube\</a\>"}>
+    <img src={commandos}  />
+</Embed>
+
+Without considering raytracing for collision detection[^collision], the problem of determining whether a given object lies within the visibility cone (and is therefore detected by the game AI) can be simplified to a calculation based solely on the dot product.
+
+In the following example (see [Figure {figures.fov}](#fig:fov)), the NPC has the following parameters:
+
+ - position $p = (3, 7)$
+ - view direction $v = (2, -3)
+ - field of view $f = 80 \degree$
+ - maximum view distance $|\vec{v}| = \sqrt{13}$
+
+There are two additional characters $A$ $(2, 4)$ and $B$ $(5, 5)$, where $A$ is clearly _outside_ the cone, and $B$ is directly _within_ (similar to the scene shown in [Figure {figures.commandos_origins}](#fig:commandos)).
+
+<a name="fig:fov" />
+<Embed
+    modeAware={true}
+    figure={figures.fov}
+    title={
+        "To determine if a point lies within the field of view of an NPC, the dot product can be used to calculate the required angles"}>
+    <img src={fov}  />
+</Embed>
+
+<details>
+    <summary>Plot-Code (Python)</summary>
+
+    <CodeBlock language="python">
+        {fov_code}
+    </CodeBlock>
+
+</details>
+
+We can now construct two vectors that point from $p$ to $A$ and $B$:
+
+$$
+\begin{equation}\notag
+\begin{split}
+\vec{A} &= A - p = (-1, -3)\\
+\vec{B} &= B - p = (2, 2)
+\end{split}
+\end{equation}
+$$
+
+Once we obtain $\hat{A}$, $\hat{B}$, $\hat{v}$, we can utilize the dot product and calculate the cosine of $\alpha$ and $\beta$, i.e. the angles between $\vec{A}$ and $\vec{v}$ and $\vec{B}$ and $\vec{v}$ (see [Figure {figures.fov_solved}](#fig:fov_solved)).
+
+We solve for $\beta$;
+
+$$
+\begin{equation}\notag
+\hat{B} \cdot \hat{v} = \cos(\beta) \approx 0.98
+\end{equation}
+$$
+
+We know that $f/2 = 40\degree$, so $\cos(40\degree) \approx 0.76$.
+
+Since $0.98 > 0.76$[^cosrel], we conclude that $B$ is within the angular limits defined by the FOV.
+However, since the length of $\vec{v}$ must also be considered (i.e., the **maximum view distance** as shown in [Figure {figures.fov}](#fig:fov)), we have to verify whether $|\vec{B}| \le |\vec{v}|$. In this case, the condition holds, and thus $B$ is confirmed to be **within** the visibility cone.
+
+<a name="fig:fov_solved" />
+<Embed
+    modeAware={true}
+    figure={figures.fov_solved}
+    title={
+        "Using the dot product to calculate angles between the various vectors."}>
+    <img src={fov_solved}  />
+</Embed>
+<details>
+    <summary>Plot-Code (Python)</summary>
+
+    <CodeBlock language="python">
+        {fov_solved_code}
+    </CodeBlock>
+
+</details>
+
+## Excursus: Constructing a second vector at a specific angle to an existing vector
+:::tip &nbsp;
+In the previous example, the view direction of the NPC was given by the vector $\vec{v}$.
+By using the vector notation, it was also possible to specify the length of the visibility cone, i.e. the maximum range the NPC could see for detecting objects.
+By applying the dot product to the target's vector $\vec{t}$, we have seen that there is no need for calculating the visibility cone itself - but what if we would like to do so?
+
+One way to obtain vectors at a given angle to a known vector is to take advantage of $\hat{v}$ - the **unit vector** - in this case, the unit vector of $\vec{v}$:
+
+$$
+\hat{v} = \frac{\vec{v}}{|\vec{v}|}
+$$
+
+In [Figure {figures.sinecosine}](#fig:sinecosine), we have shown the relationship between sine and cosine as the ratios of the opposite and adjacent sides to the hypotenuse,
+which represents the radius of the unit circle and is therefore always equal to $1$.
+
+We can use this fact to our advantage by computing a second vector $\vec{p}$ that has the angle $\alpha$ to $\vec{v}$.
+All we need are the equations
+
+$$
+\begin{split}
+\cos(\theta \pm \alpha) &= \cos(\theta)\cos(\alpha) \mp \sin(\theta)\sin(\alpha)\\
+\sin(\theta \pm \alpha) &= \sin(\theta)\cos(\alpha) \pm \cos(\theta)\sin(\alpha)
+\end{split}
+$$
+
+1. We start with $\cos(\theta + \alpha)$:
+   Since we are using the unit vector $\hat{v}$, we can directly treat $cos(\theta)$ as the $x$-component of $\vec{v}$, and $\sin(\theta)$ as the $y$-component of $\hat{v}$:
+    $$
+    \cos(\theta + \alpha) = \hat{v}_x \cdot \cos(\alpha) -  \hat{v}_y \cdot \sin(\alpha)
+    $$
+    Since the FOV $f$ in the given example is $80 \degree$, we divide $f$ by $2$ to obtain one half of the visibility cone and compute the corresponding direction $\vec{p}$ as follows:
+
+    $$
+    \begin{split}
+    \cos(\theta + 40\degree) &= x\cdot \cos(40\degree) -  y \cdot \sin(40\degree)\\
+                             &\approx \hat{v}_x \cdot 0.77 - \hat{v}_y \cdot 0.64\\
+                             &\approx 0.55 \cdot 0.77 - (-0.83 \cdot 0.64)\\
+                             &\approx 0.96
+    \end{split}
+    $$
+
+2. Compute $\sin(\theta + \alpha)$ analogously:
+    $$
+    \begin{split}
+    \sin(\theta + 40\degree) &= y\cdot \cos(40\degree) +  x \cdot \sin(40\degree)\\
+    &\approx \hat{v}_y \cdot 0.77 +  \hat{v}_x \cdot 0.64\\
+    &\approx -0.28
+    \end{split}
+    $$
+
+The values represent the $\cos(\theta + \alpha) = x$ and $\sin(\theta + \alpha) = y$ components of the desired vector $\vec{p}$, i.e. the ratio between adjacent side and hypotenuse ($x$-direction) and opposite side and hypotenuse ($y$-direction), whereas the hypotenuse is represented by $\hat{v}$.
+Since we have operated on a unit vector, we obtain a unit vector.
+Multiplying with any scalar will change the vector's length:
+
+$$
+\vec{p} = \begin{pmatrix} \cos(\theta + \alpha) \\ \sin(\theta + \alpha) \end{pmatrix} \cdot |\vec{v}|
+$$
+
+<a name="fig:rotation" />
+<Embed
+    modeAware={true}
+    figure={figures.rotation}
+    title={
+        "Rotating vector v around the origin by 40°. Note that θ is ≈ -56° "}>
+    <img src={rotation}  />
+</Embed>
+<details>
+    <summary>Plot-Code (Python)</summary>
+
+    <CodeBlock language="python">
+        {rotation_code}
+    </CodeBlock>
+
+</details>
+
+For the other half of the visibility cone, we simply have to plug $-40\degree$ into the equation.
+
+Rotations of points around a specific axis are performed with the help of **rotation matrices**. In our 2D-example, the matrix $R$ for rotation around the origin is:
+
+$$
+R = \begin{pmatrix}
+\cos(\alpha)  & -\sin(\alpha) \\
+\sin(\alpha) & \cos(\alpha)
+\end{pmatrix}
+$$
+
+By multiplying $R$ with $\vec{v}$[^matrix-multiplication], we obtain a new vector rotated $\alpha\degree$ _ccw_ (_counterclockwise_) around the origin:
+
+$$
+\begin{pmatrix}
+\cos(40\degree)  & -\sin(40\degree) \\
+\sin(40\degree) & \cos(40\degree)
+\end{pmatrix} \cdot \begin{pmatrix} 2\\-3\end{pmatrix} = \begin{pmatrix}
+\cos(40\degree) \cdot 2 & +\sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
+\end{pmatrix}
+$$
+
+When applying the cosine/sine addition identity, we first constructed the unit vector $\hat{v}$, rotated it by $40\degree$, and obtained $\hat{p}$.
+We then scaled $\hat{p}$ by $|\vec{v}|$: This step effectively cancelled out the denominator in the $x$- and $y$-components of $\hat{p}$.
+It is therefore easy to see that the following holds  (in general):
+
+$$
+R \cdot \vec{v} = R \cdot |\vec{v}| \cdot \hat{v} = |\vec{v}| \cdot R \cdot \hat{v} = |\vec{v}| \cdot \hat{p}
+$$
+
+:::
+
 ## Proofs
-### Proof 1
+### Uniqueness of Orthogonal Unit Vectors in 2D
 Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists no $\vec{v}$ such that $\vec{v} \neq \vec{a}$, $\vec{v} \cdot \vec{v} = 1$  and $\vec{v} \cdot \vec{b} = 0$
@@ -263,7 +474,7 @@ Clearly, $\vec{v} \neq \vec{a}$ and $\vec{v} \cdot \vec{v} = (-1 \cdot -1) + (0 
 
  This **contradicts the assumption** that no such vector $\vec{v}$ exists  with $\vec{a} \neq \vec{v}$ and $\vec{b} \cdot \vec{v} = 0$.  $\Box$
 
-### Proof 2
+### No Third Orthogonal Unit Vector in 2D
 Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \cdot \vec{a} = 1$, $\vec{b} \cdot \vec{b} = 1$, $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$.
 
 **Claim**: There exists a $\vec{v}$ such that $\vec{v} \cdot \vec{v} = 1$, $\vec{v} \cdot \vec{a} = 0$ and  $\vec{v} \cdot \vec{b} = 0$
@@ -279,7 +490,7 @@ $\vec{a}$ and $\vec{b}$ are an **orthonormal** basis of $\mathbb{R}^2$.
 
 **Proof of Lemma 1**:
 
-For $\vec{a}$, $\vec{b}$ (and $\vec{v}$), the following holds:
+For vectors with two components $x, y \in \mathbb{R}$, the following holds in general:
 
 <center>
 
@@ -287,7 +498,7 @@ For $\vec{a}$, $\vec{b}$ (and $\vec{v}$), the following holds:
 
 </center>
 
-Because of $\vec{a} \cdot \vec{a} = 1$ and $\sqrt{1} = 1$, it follows that $\vec{a}$, $\vec{b}$ must be unit vectors. Since they are perpendicular, they also provide an orthonormal base for $\mathbb{R}^2$. $\Box$
+Because of $\vec{a} \cdot \vec{a} = 1$ and $\sqrt{1} = 1$, it follows that $\vec{a}$, $\vec{b}$ must be unit vectors. Since they are perpendicular, they also provide an orthonormal basis for $\mathbb{R}^2$. $\Box$
 
 Thus, we can write $\vec{v}$ as a **linear combination** of $\vec{a}$ and $\vec{b}$:
 
@@ -333,3 +544,49 @@ This also shows that $\vec{v}$ must be $\vec{0}$.
 $\Box$
 
 
+### Linear Independence of Orthogonal Vectors in 2D
+
+Let $\vec{a}, \vec{b} \in \mathbb{R}^2$, $\vec{a} \neq \vec{0}, \vec{b} \neq \vec{0}, \vec{a} \cdot \vec{b} = 0$, $\vec{a}$ and $\vec{b}$ are perpendicular to each other.
+
+**Claim**: $\vec{a}$ and $\vec{b}$ are linearly independent, i.e. $\nexists x, y \neq 0: x\vec{a} + y \vec{b} = \vec{0}$[^trivial-solution].
+
+**Proof by contradiction**:
+
+Assume the contrary:
+
+$$
+\exists x, y \in \mathbb{R}, x, y \neq 0: x\vec{a} + y\vec{b} = \vec{0}
+$$
+
+Then the following holds:
+
+$$
+\begin{alignat*}{2}
+                  & \qquad \vec{a} \cdot \vec{0} && = 0\\
+\Leftrightarrow  & \qquad \vec{a} \cdot (x \vec{a} + y \vec{b}) && = 0\\
+\Leftrightarrow  &\qquad  x \vec{a} \cdot \vec{a} + y \vec{a} \cdot \vec{b} && = 0 \\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  - y \vec{a} \cdot \vec{b}\\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  - y \cdot 0\\
+\Leftrightarrow  & \qquad x |\vec{a}|^2 && =  0
+\end{alignat*}
+$$
+
+$|a| > 0$ since $\vec{a} \neq \vec{0}$.
+This **contradicts** the assumption $x \neq 0$.
+It follows immediately that, if $x = 0$,  $y$ must equally be $0$, or otherwise  $x\vec{a} + y\vec{b} = \vec{0}$ cannot hold, since $\vec{b} \neq \vec{0}$. $\Box$
+
+:::info
+In general, the following holds: If two vectors $\vec{a}, \vec{b} \in \mathbb{R}^2$ are perpendicular, then they are **linearly independent**.
+
+Linear combinations of independent vectors **span** the vector space they belong to - in this case, they create a **span** for the vector space over $\mathbb{R}^2$ (i.e., the **plane** $\mathbb{R}^2$).
+
+Note that orthogonality is a sufficient, but not a necessary condition for linear independence: It can be shown that the number of pairs of linearly independent vectors that are **not** orthogonal, yet create a span over $\mathbb{R}^2$, is infinite (see <BibRef name="Axl23" pp="27 ff."/>).
+:::
+
+------
+
+[^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix
+[^trivial-solution]: the equation has only the **trivial solution** $x=0, y=0$
+[^commandos]: see https://en.wikipedia.org/wiki/Commandos:_Behind_Enemy_Lines
+[^collision]: [_Akenine-Möller et al._](https://www.realtimerendering.com) provide a comprehensive overview of collision detection techniques, available in the freely available appendix of <BibRef name="RTR"/>, [Real-Time Rendering - Collision Detection](https://www.realtimerendering.com/Real-Time_Rendering_4th-Collision_Detection.pdf), on this subject
+[^cosrel]: $\cos(0\degree) = 1, \cos{90\degree} = 0$. Therefore, the relation $\alpha\degree \le \beta\degree$ is equivalent to $\cos(\alpha\degree) \ge \cos(\beta\degree)$ for $\alpha, \beta \in [0, 90]$
