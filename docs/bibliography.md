@@ -7,9 +7,12 @@ import {BackButton} from "../src/components/BackButton.js";
 
 # Bibliography
 
+### Akenine-Möller, Thomas et al.
+ - [RTR] **Real-Time Rendering**, Fourth Edition, A. K. Peters, Ltd., USA, 2018 <a name="rtr"></a>
+
 ### **Asteroth, Alexander; Baier, Christel**
 
- - [BA02] Asteroth, Alexander u Baier, Christel, **Theoretische Informatik**, Pearson Deutschland, 2002, url: https://elibrary.pearson.de/book/99.150005/9783863266646  <a name="ba02"></a>
+ - [BA02] **Theoretische Informatik**, Pearson Deutschland, 2002, url: https://elibrary.pearson.de/book/99.150005/9783863266646  <a name="ba02"></a>
 
 ### **Alur, Deepak; John Crupi; Dan Malks**
 

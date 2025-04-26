@@ -61,9 +61,43 @@ circle_red = plt.Circle((2, 4), 0.2, color='green', fill=True)
 ax.add_patch(circle_green)
 ax.add_patch(circle_red)
 
+A = np.array([-1, -3])
+ax.quiver(x, y, A[0], A[1], angles='xy', scale_units='xy', scale=1, color='black')
+B = np.array([2, -2])
+ax.quiver(x, y, B[0], B[1], angles='xy', scale_units='xy', scale=1, color='black')
+
+cos_alpha = np.dot(A, npc) / (np.linalg.norm(A) * np.linalg.norm(npc))
+alpha = np.arccos(cos_alpha)
+alpha_deg = np.degrees(alpha)
+arc_radius_alpha = 3.2
+arc_alpha = Arc((3, 7), arc_radius_alpha, arc_radius_alpha,
+          angle=np.degrees(np.arctan2(npc[1], npc[0])),
+          theta1=-alpha_deg,
+          theta2=0,
+          edgecolor='black')
+ax.add_patch(arc_alpha)
+
+cos_beta = np.dot(B, npc) / (np.linalg.norm(B) * np.linalg.norm(npc))
+beta = np.arccos(cos_beta)
+beta_deg = np.degrees(beta)
+arc_radius_beta = 4.2
+arc_beta = Arc((3, 7), arc_radius_beta, arc_radius_beta,
+          angle=np.degrees(np.arctan2(npc[1], npc[0])),
+          theta1=0,
+          theta2=beta_deg,
+          edgecolor='black')
+ax.add_patch(arc_beta)
+
 # texts
 ax.text(2.5, 7 , 'p', color='black', fontsize=12)
+ax.text(4, 4.2 , r'$\vec{v}$', color='black', fontsize=12)
+ax.text(1.8, 4.8 , r'$\vec{A}$', color='black', fontsize=12)
+ax.text(4.3, 5.8 , r'$\vec{B}$', color='black', fontsize=12)
 ax.text(1.5, 4 , 'A', color='black', fontsize=12)
 ax.text(5.2, 5 , 'B', color='black', fontsize=12)
+ax.text(3, 6, rf'$\alpha$', color='black', fontsize=12)
+ax.text(4, 5.6, rf'$\beta$', color='black', fontsize=10)
+ax.text(0.5, 6.5, rf'$\alpha = {alpha_deg:.2f}^\circ$', color='black', fontsize=12)
+ax.text(0.5, 6, rf'$\beta = {beta_deg:.2f}^\circ$', color='black', fontsize=12)
 
 plt.show()
