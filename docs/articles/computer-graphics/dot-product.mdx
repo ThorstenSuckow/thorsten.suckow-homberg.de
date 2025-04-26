@@ -1,5 +1,6 @@
 ---
-title: "Dot Product"
+title: "The Geometry of the Dot Product"
+description: "The Geometry of the Dot Product and Applications to Visibility Modeling"
 ---
 
 import {BackButton} from "../../../src/components/BackButton.js";
@@ -44,7 +45,8 @@ $$
 
 ## Introduction
 
-The dot-product takes two vectors and returns the sum of the component-wise products of the vector's components. Given two vectors
+The dot-product takes two vectors and returns the sum of the products of theior corresponding components.
+Given two vectors
 
 $$
 
@@ -593,5 +595,5 @@ Note that orthogonality is a sufficient, but not a necessary condition for linea
 [^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix
 [^trivial-solution]: the equation has only the **trivial solution** $x=0, y=0$
 [^commandos]: see https://en.wikipedia.org/wiki/Commandos:_Behind_Enemy_Lines
-[^collision]: [_Akenine-Möller et al._](https://www.realtimerendering.com) provide an exhaustive overview of the various techniques used with collision detection, see the freely available appendix of <BibRef name="RTR"/>, [Real-Time Rendering - Collision Detection](https://www.realtimerendering.com/Real-Time_Rendering_4th-Collision_Detection.pdf), on this subject
+[^collision]: [_Akenine-Möller et al._](https://www.realtimerendering.com) offer a comprehensive overview of collision detection techniques, presented in the freely available appendix of <BibRef name="RTR"/>, [Real-Time Rendering - Collision Detection](https://www.realtimerendering.com/Real-Time_Rendering_4th-Collision_Detection.pdf), on this subject
 [^cosrel]: $\cos(0\degree) = 1, \cos{90\degree} = 0$. Therefore, the relation $\alpha\degree \le \beta\degree$ is equivalent to $\cos(\alpha\degree) \ge \cos(\beta\degree)$ for $\alpha, \beta \in [0, 90]$
