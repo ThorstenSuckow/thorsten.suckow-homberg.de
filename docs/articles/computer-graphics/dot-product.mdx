@@ -43,7 +43,7 @@ $$
 - We will use _column-based_ notation for vectors and, where applicable, treat them implicitly as $2 \times 1$-matrices.
 :::
 
-## Introduction
+## Geometric Interpretation
 
 The dot-product takes two vectors and returns the sum of the products of their corresponding components.
 Given two vectors
@@ -61,9 +61,6 @@ $$
 
 $$
 
-
-
-## Geometric Interpretation
 
 If  $\vec{a} \boldsymbol{\cdot} \vec{b} = 0$, the two vectors are perpendicular to each other.
 We will derive this in the following.
@@ -107,7 +104,7 @@ Additionally $\vec{a} = \begin{pmatrix} cos(\Theta) \\ sin(\Theta) \end{pmatrix}
  - the _cosine_ represents the quotient of the adjacent side and the hypotenuse: $cos(\Theta) = \frac{u}{|\vec{a}|}$
  - the _sine_ represents the quotient of the opposite side and the hypotenuse:  $sin(\Theta) = \frac{v}{|\vec{a}|}$
 
-Solving for $u$ respective $v$ gives us
+Solving for $u$ and $v$ respectively gives us
 
 $$
 
@@ -342,8 +339,8 @@ However, since the length of $\vec{v}$ must also be considered (i.e., the **maxi
 
 </details>
 
-:::tip How to construct a second vector at a given angle to a known vector
-
+## Excursus: Constructing a second vector at a specific angle to an existing vector
+:::tip &nbsp;
 In the previous example, the view direction of the NPC was given by the vector $\vec{v}$.
 By using the vector notation, it was also possible to specify the length of the visibility cone, i.e. the maximum range the NPC could see for detecting objects.
 By applying the dot product to the target's vector $\vec{t}$, we have seen that there is no need for calculating the visibility cone itself - but what if we would like to do so?
@@ -435,7 +432,7 @@ $$
 \cos(40\degree)  & -\sin(40\degree) \\
 \sin(40\degree) & \cos(40\degree)
 \end{pmatrix} \cdot \begin{pmatrix} 2\\-3\end{pmatrix} = \begin{pmatrix}
-\cos(40\degree) \cdot 2 & \sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
+\cos(40\degree) \cdot 2 & +\sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
 \end{pmatrix}
 $$
 
@@ -447,11 +444,7 @@ $$
 R \cdot \vec{v} = R \cdot |\vec{v}| \cdot \hat{v} = |\vec{v}| \cdot R \cdot \hat{v} = |\vec{v}| \cdot \hat{p}
 $$
 
-
-
 :::
-
-
 
 ## Proofs
 ### Uniqueness of Orthogonal Unit Vectors in 2D
@@ -505,7 +498,7 @@ For vectors with two components $x, y \in \mathbb{R}$, the following holds in ge
 
 </center>
 
-Because of $\vec{a} \cdot \vec{a} = 1$ and $\sqrt{1} = 1$, it follows that $\vec{a}$, $\vec{b}$ must be unit vectors. Since they are perpendicular, they also provide an orthonormal base for $\mathbb{R}^2$. $\Box$
+Because of $\vec{a} \cdot \vec{a} = 1$ and $\sqrt{1} = 1$, it follows that $\vec{a}$, $\vec{b}$ must be unit vectors. Since they are perpendicular, they also provide an orthonormal basis for $\mathbb{R}^2$. $\Box$
 
 Thus, we can write $\vec{v}$ as a **linear combination** of $\vec{a}$ and $\vec{b}$:
 
@@ -595,5 +588,5 @@ Note that orthogonality is a sufficient, but not a necessary condition for linea
 [^matrix-multiplication]: treating the vector as a $2 \times 1$ matrix
 [^trivial-solution]: the equation has only the **trivial solution** $x=0, y=0$
 [^commandos]: see https://en.wikipedia.org/wiki/Commandos:_Behind_Enemy_Lines
-[^collision]: [_Akenine-Möller et al._](https://www.realtimerendering.com) offer a comprehensive overview of collision detection techniques, presented in the freely available appendix of <BibRef name="RTR"/>, [Real-Time Rendering - Collision Detection](https://www.realtimerendering.com/Real-Time_Rendering_4th-Collision_Detection.pdf), on this subject
+[^collision]: [_Akenine-Möller et al._](https://www.realtimerendering.com) provide a comprehensive overview of collision detection techniques, available in the freely available appendix of <BibRef name="RTR"/>, [Real-Time Rendering - Collision Detection](https://www.realtimerendering.com/Real-Time_Rendering_4th-Collision_Detection.pdf), on this subject
 [^cosrel]: $\cos(0\degree) = 1, \cos{90\degree} = 0$. Therefore, the relation $\alpha\degree \le \beta\degree$ is equivalent to $\cos(\alpha\degree) \ge \cos(\beta\degree)$ for $\alpha, \beta \in [0, 90]$
