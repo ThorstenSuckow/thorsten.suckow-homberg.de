@@ -45,7 +45,7 @@ $$
 
 ## Introduction
 
-The dot-product takes two vectors and returns the sum of the products of theior corresponding components.
+The dot-product takes two vectors and returns the sum of the products of their corresponding components.
 Given two vectors
 
 $$
@@ -120,7 +120,7 @@ For $\Theta = 90 \degree$, we can therefore deduce $cos(90) = 0$.
 
 ### Orthogonality of Vectors with arbitrary length
 
-Let's take a look at the common case when $\vec{a}$ and $\vec{b}$ are of arbitrary length and recap the **Law of Cosine**:
+Let's take a look at the common case when $\vec{a}$ and $\vec{b}$ are of arbitrary length and recap the **Law of Cosines**:
 
 $$
 
@@ -256,7 +256,7 @@ $$
 $$
 :::
 
-## Application: Visibility Cone
+## Application: Visibility Modeling
 
 When a game needs to indicate an NPC's **Field Of View** and its **visible range** to the player, **visibility cones** are often used.<br />
 A prominent example is **Commandos: Behind Enemy Lines**[^commandos]. [Figure {figures.commandos_origins}](#fig:commandos) shows a screenshot of its recent sequel, [Commandos: Origins](https://store.steampowered.com/app/1479730/Commandos_Origins/), where a visibility cone is rendered as a _green wedge_.
@@ -286,7 +286,7 @@ There are two additional characters $A$ $(2, 4)$ and $B$ $(5, 5)$, where $A$ is 
     modeAware={true}
     figure={figures.fov}
     title={
-        "To determine if a point lies within the field of view of an npc, the dot product can be used to calculate the required angles"}>
+        "To determine if a point lies within the field of view of an NPC, the dot product can be used to calculate the required angles"}>
     <img src={fov}  />
 </Embed>
 
@@ -322,7 +322,7 @@ $$
 
 We know that $f/2 = 40\degree$, so $\cos(40\degree) \approx 0.76$.
 
-Since $0.98 > 0.76$[^cosrel], we conclude that $B$ is within the anglular limits defined by the FOV.
+Since $0.98 > 0.76$[^cosrel], we conclude that $B$ is within the angular limits defined by the FOV.
 However, since the length of $\vec{v}$ must also be considered (i.e., the **maximum view distance** as shown in [Figure {figures.fov}](#fig:fov)), we have to verify whether $|\vec{B}| \le |\vec{v}|$. In this case, the condition holds, and thus $B$ is confirmed to be **within** the visibility cone.
 
 <a name="fig:fov_solved" />
@@ -388,7 +388,7 @@ $$
     \begin{split}
     \sin(\theta + 40\degree) &= y\cdot \cos(40\degree) +  x \cdot \sin(40\degree)\\
     &\approx \hat{v}_y \cdot 0.77 +  \hat{v}_x \cdot 0.64\\
-    &\approx -0,28
+    &\approx -0.28
     \end{split}
     $$
 
@@ -435,7 +435,7 @@ $$
 \cos(40\degree)  & -\sin(40\degree) \\
 \sin(40\degree) & \cos(40\degree)
 \end{pmatrix} \cdot \begin{pmatrix} 2\\-3\end{pmatrix} = \begin{pmatrix}
-\cos(40\degree) \cdot 2 &+ \sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
+\cos(40\degree) \cdot 2 & \sin(40\degree) \cdot 3\\ \sin(40\degree) \cdot 2 &- \cos(40\degree) \cdot 3
 \end{pmatrix}
 $$
 
