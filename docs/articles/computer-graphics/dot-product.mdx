@@ -31,6 +31,14 @@ export const figures = {
 
 # The Geometry of the Dot Product
 
+The Dot Product is a fundamental building block for vector operations in games and simulations. A solid understanding  is crucial for applications involving view-related coordinate transformations and even physical modeling within a game world. For many practical use cases, the dot product offers an elegant alternative to constructing explicit visibility cones or relying on computationally expensive raytracing algorithms.
+
+This article provides an introductory exploration of the theory of the dot product and its geometric interpretation.
+
+An example involving field-of-view-calculations illustrates how the dot product can simplify visibility modeling and decision-making in games.
+
+Additional proofs establish key lemmas that support further applications of the dot product and related operations in both 2D and 3D.
+
 :::caution Notation
 - In the following, we will use _exponent notation_ to abbreviate the dot product of a vector with itself , i.e.
 
@@ -40,7 +48,7 @@ $$
 
 - Where appropriate, for any vector $\vec{x}$ with $|\vec{x}| = 1$, we will alternatively use _hat_ notation, $\hat{x}$, to explicitly indicate that we're dealing with a unit vector.
 
-- We will use _column-based_ notation for vectors and, where applicable, treat them implicitly as $2 \times 1$-matrices.
+- We will use _column-based_ notation for vectors.
 :::
 
 ## Geometric Interpretation
