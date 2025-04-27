@@ -17,10 +17,10 @@
             <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-geometry-of-the-dot-product">The Geometry of the Dot Product<a href="https://thorsten.suckow-homberg.de/blog/the-geometry-of-the-dot-product#the-geometry-of-the-dot-product" class="hash-link" aria-label="Direct link to The Geometry of the Dot Product" title="Direct link to The Geometry of the Dot Product">​</a></h2>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="-and-applications-to-visibility-modeling">... and Applications to Visibility Modeling<a href="https://thorsten.suckow-homberg.de/blog/the-geometry-of-the-dot-product#-and-applications-to-visibility-modeling" class="hash-link" aria-label="Direct link to ... and Applications to Visibility Modeling" title="Direct link to ... and Applications to Visibility Modeling">​</a></h4>
 <p>The Dot Product is a fundamental building block for vector operations in games and simulations. A solid understanding  is crucial for applications involving view-related coordinate transformations and even physical modeling within a game world. For many practical use cases, the dot product offers an elegant alternative to constructing explicit visibility cones or relying on computationally expensive raytracing algorithms.</p>
-<p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/dot-product">article</a> provides an introductory exploration of the theory of the dot product and offers a detailed look at its geometric interpretation.</p>
+<p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/dot-product">article</a> provides an introductory exploration of the theory of the dot product and its geometric interpretation.</p>
 <p>An example involving field-of-view-calculations illustrates how the dot product can simplify visibility modeling and decision-making in games.</p>
 <p>Additional proofs establish key lemmas that support further applications of the dot product and related operations in both 2D and 3D.</p>
-<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/dot-product">Continue reading.</a></p>]]></content:encoded>
+<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/dot-product">Continue reading...</a></p>]]></content:encoded>
             <category>frontend</category>
             <category>programming</category>
         </item>
