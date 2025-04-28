@@ -1,0 +1,194 @@
+---
+title: "Vector Rotation"
+description: ""
+---
+
+import {BackButton} from "../../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+
+import sinecosine from "./img/dot-product/sinecosine.png";
+import lawofcosine from "./img/dot-product/lawofcosine.png";
+import fov from "./img/dot-product/fov.png";
+import fov_solved from "./img/dot-product/fov_solved.png";
+import rotation from "./img/dot-product/rotation.png";
+import commandos from "./img/dot-product/commandos_origins.png";
+
+import CodeBlock from '@theme/CodeBlock';
+import sinecosine_code from '!!raw-loader!./plots/dot-product/sinecosine.py?raw';
+import lawofcosine_code from '!!raw-loader!./plots/dot-product/lawofcosine.py?raw';
+import fov_code from '!!raw-loader!./plots/dot-product/fov.py?raw';
+import fov_solved_code from '!!raw-loader!./plots/dot-product/fov_solved.py?raw';
+import rotation_code from '!!raw-loader!./plots/dot-product/rotation.py?raw';
+export const figures = {
+};
+
+# Vector Rotation
+
+Given an orthonomal basis in $\mathbb{R}^3$, we now derive a matrix for rotating a vector $\vec{v}$ around the $x$-axis.
+Recall the rotation matrix $\boldsymbol{R}_x$
+
+$$
+
+\boldsymbol{R}_x = \begin{pmatrix}
+ &1 &0 &0 \\
+ &0 &\cos &-\sin \\
+ &0 &\sin &\cos
+\end{pmatrix}
+
+$$
+
+We can think of $x$ as the stationary axis the other two axis $y$ and $z$ rotate around.
+
+Since the $x$-component of the rotated vector stays the same, the only components that change are $\vec{v}_y$ and $\vec{v}_z$.
+This is clearly shown by the rotation matrix when multiplying it with an arbitrary vector:
+
+$$
+
+\begin{pmatrix}
+&1 &0 &0 \\
+&0 &\cos &-\sin \\
+&0 &\sin &\cos
+\end{pmatrix} \cdot \begin{pmatrix}\vec{v}_x \\ \vec{v}_y \\ \vec{v}_z\end{pmatrix} = \begin{pmatrix}\vec{v}_x \\ \vec{v}_y \cos - \vec{v}_z \cos \\ \vec{v}_y \sin + \vec{v}_z \cos\end{pmatrix}
+
+$$
+
+
+## Proofs
+
+### Expressing a Unit Vector in an Orthonormal Basis with $\cos$ and $\sin$
+
+
+Let $\vec{x}, \vec{y} \in \mathbb{R}^2$, $\vec{x} \cdot \vec{y} = 0$, $|\vec{x}| = |\vec{y}| = 1$, $a, b \in \mathbb{R}_{[0, 1]}$, $a^2 + b ^2 = 1$.
+
+**Claim**: The linear combination $a\vec{x} + b\vec{y}$ can be written as $\cos(\theta)\vec{x} + \sin(\theta)\vec{y}$ and yields a normalized vector $\vec{v}$:
+
+$$
+\hat{v} = \cos(\theta)\vec{x} + \sin(\theta)\vec{y}
+$$
+
+
+**Proof**:
+
+We compute the dot products $\vec{v} \cdot \vec{x}$, $\vec{v} \cdot \vec{y}$ to relate the cosines of the angles $\theta$ (between $\vec{x}$ and $\vec{v}$) and $\varphi$ (between $\vec{y}$ and $\vec{v}$), respectively:
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}| |\vec{x}| \\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| |\vec{y}|
+\end{alignat*}
+$$
+
+Since $|\vec{x}| = |\vec{y}| = 1$, we find
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}|\\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}|
+\end{alignat*}
+$$
+
+We now solve for $a$ and $b$. Since $\vec{v} = a\vec{x} + b \vec{y}$, we have
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{x} &= (a\vec{x} + b \vec{y}) \cdot \vec{x}  \\
+                      &= a(|\vec{x}|^2)   + b( \vec{x} \cdot \vec{y}) \\
+\end{split}
+$$
+
+Since $\vec{x} \cdot \vec{y} = 0$ and $|\vec{x}| = 1$, we have
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{x} = a \\
+\end{split}
+$$
+
+Solving analogously for $b$, we obtain
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{y} = b \\
+\end{split}
+$$
+
+We have shown that
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}| &&= a\\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| && = b
+\end{alignat*}
+$$
+
+and substitute into the linear combination:
+
+$$
+\begin{alignat*}{3}
+\vec{v} &= a \vec{x} + b \vec{y} \\
+        &= \cos(\theta)  |\vec{v}| \vec{x} + \cos(\varphi) |\vec{v}| \vec{y}
+\end{alignat*}
+$$
+
+From $\angle(\vec{x}, \vec{y}) = \frac{\pi}{2} \degree$ we can derive
+
+$$
+\begin{equation}\notag
+\begin{split}
+\cos(\varphi) &= \cos(\frac{\pi}{2} - \theta) \\
+              &= \cos(\frac{\pi}{2})\cos(\theta) + \sin(\frac{\pi}{2})\sin(\theta)\\
+              &= \sin(\theta)
+\end{split}
+\end{equation}
+$$
+
+
+
+and finally rewrite the linear combination as
+
+$$
+\vec{v} = \cos(\theta)  |\vec{v}| \vec{x} + \sin(\theta) |\vec{v}| \vec{y}
+$$
+
+Dividing by $|\vec{v}|$ yields the normalized vector $\hat{v}$. We therefore receive
+
+
+$$
+\frac{\vec{v}}{|\vec{v}|} = \hat{v} = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+$$
+
+:::info Verifying the normalization
+Under the given assumptions, we show that
+
+$$
+   |\hat{v}| = 1
+$$
+
+to verify that $\hat{v}$ is normalized:
+
+$$
+\begin{equation}\notag
+\begin{split}
+|\hat{v}| &= |a \vec{x} + b \vec{y}| \\
+          &= |a (x_1, x_2)^T + b (y_1, y_2)^T| \\
+          &=  \sqrt{(ax_1 + by_1)^2 + (ax_2 + by_2)^2} \\
+          &=  \sqrt{a^2x_1^2 + a^2x_2^2 + b^2y_1^2  + b^2y_2^2 + 2abx_1y_1 + 2abx_2y_2 } \\
+          &=  \sqrt{a^2(x_1^2 + x_2^2) + b^2(y_1^2 + y_2^2) + 2ab(x_1y_1 + x_2y_2)} \\
+          &=  \sqrt{a^2(\vec{x} \cdot \vec{x} ) + b^2(\vec{y} \cdot \vec{y}) + 2ab(\vec{x} \cdot \vec{y})} \\
+          &=  \sqrt{a^2 + b^2 + 2ab0} \\
+          &=  \sqrt{a^2 + b^2}
+\end{split}
+\end{equation}
+$$
+
+In order for $|\hat{v}| = 1$ to hold, it is required that $a^2 + b^2 = 1$, as given by the assumption.
+
+Substituting $a =\cos(\theta)$ and $b = \sin(\theta)$, we confirm that
+
+$$
+\cos^2(\theta) + \sin^2(\theta) = 1
+$$
+:::
+
+$\Box$
