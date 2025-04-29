@@ -1,29 +1,21 @@
 ---
-title: "Vector Rotation"
-description: ""
+title: "Rotations as a Special Case of Vector Transformations"
+description: "Rotations as a Special Case of Vector Transformations, with Applications to Game World Modeling"
 ---
 
 import {BackButton} from "../../../src/components/BackButton.js";
 import {BibRef, GlosRef} from "../../../src/components/References";
 import {Embed} from "../../../src/components/Embed";
-
-import sinecosine from "./img/dot-product/sinecosine.png";
-import lawofcosine from "./img/dot-product/lawofcosine.png";
-import fov from "./img/dot-product/fov.png";
-import fov_solved from "./img/dot-product/fov_solved.png";
-import rotation from "./img/dot-product/rotation.png";
-import commandos from "./img/dot-product/commandos_origins.png";
-
 import CodeBlock from '@theme/CodeBlock';
-import sinecosine_code from '!!raw-loader!./plots/dot-product/sinecosine.py?raw';
-import lawofcosine_code from '!!raw-loader!./plots/dot-product/lawofcosine.py?raw';
-import fov_code from '!!raw-loader!./plots/dot-product/fov.py?raw';
-import fov_solved_code from '!!raw-loader!./plots/dot-product/fov_solved.py?raw';
-import rotation_code from '!!raw-loader!./plots/dot-product/rotation.py?raw';
+
+import sinecosine from "./img/vector-rotation/sinecosine.png";
+import sinecosine_code from '!!raw-loader!./plots/vector-rotation/sinecosine.py?raw';
+
 export const figures = {
+    sinecosine: 1
 };
 
-# Vector Rotation
+# Rotation
 
 Given an orthonomal basis in $\mathbb{R}^3$, we now derive a matrix for rotating a vector $\vec{v}$ around the $x$-axis.
 Recall the rotation matrix $\boldsymbol{R}_x$
@@ -54,10 +46,70 @@ $$
 $$
 
 
-## Proofs
+## Vector Rotation as a Linear Combination
 
-### Expressing a Unit Vector in an Orthonormal Basis with $\cos$ and $\sin$
+In an orthonormal basis with the **standard basis vectors** $\vec{x} = \begin{pmatrix} 1\\0\end{pmatrix}$, $\vec{y} = \begin{pmatrix} 0\\1\end{pmatrix}$, any vector of unit length can be expressed as
 
+$$
+\vec{v} = \begin{pmatrix} \cos \theta \\ \sin \theta \end{pmatrix}
+$$
+
+This follows directly by $\cos \theta, \sin \theta$ when writing $\vec{v}$ as a linear combination of the two linear independent vectors $\vec{x}, \vec{y}$:
+
+$$
+\vec{v} = a \vec{x} + b \vec{y} 
+$$
+
+Substituting $a, b$ with $\cos \theta$, $\sin \theta$, we have:
+
+
+$$
+\vec{v} = \cos \theta \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \sin \theta  \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} \cos \theta \\ \sin \theta \end{pmatrix}
+$$
+
+or, as a matrix multiplication
+
+$$
+\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} cos \theta \\\sin \theta \end{pmatrix} = \vec{v}
+$$
+
+(Observe how $\vec{x}, \vec{y}$ represent the identity matrix $I_{2}$).
+
+
+
+In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\theta$ represents the amount of rotation of $\vec{a}$ around the origin[^dot_product]. 
+
+[^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
+
+
+<a name="fig:sinecosine" />
+<Embed
+    modeAware={true}
+    figure={figures.sinecosine}
+    title={
+        "The vector v is rotated around the origin by θ degree, resulting in vector v'."}>
+    <img src={sinecosine}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {sinecosine_code}
+</CodeBlock>
+
+</details>
+
+We claim that 
+
+$$
+\vec{v} = a \vec{x} + b \vec{y}
+$$
+
+holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim). 
+
+We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by chosing $a=\cos \theta, b = \sin \theta$, as derived in the following proof.
+
+### Expressing the linear combination with cosine and sine
 
 Let $\vec{x}, \vec{y} \in \mathbb{R}^2$, $\vec{x} \cdot \vec{y} = 0$, $|\vec{x}| = |\vec{y}| = 1$, $a, b \in \mathbb{R}_{[0, 1]}$, $a^2 + b ^2 = 1$.
 
@@ -158,8 +210,10 @@ $$
 \frac{\vec{v}}{|\vec{v}|} = \hat{v} = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
 $$
 
-:::info Verifying the normalization
-Under the given assumptions, we show that
+$\Box$
+
+### Verifying the normalization
+Under the given assumptions, we verify that
 
 $$
    |\hat{v}| = 1
@@ -184,11 +238,60 @@ $$
 
 In order for $|\hat{v}| = 1$ to hold, it is required that $a^2 + b^2 = 1$, as given by the assumption.
 
-Substituting $a =\cos(\theta)$ and $b = \sin(\theta)$, we confirm that
+Substituting $a$ and $b$ by $\cos(\theta)$ and $\sin(\theta)$, respectively, we confirm that
 
 $$
 \cos^2(\theta) + \sin^2(\theta) = 1
 $$
-:::
+$\Box$
+
+### Determining the angle θ between the vectors
+
+**Claim**: $\theta$ is the angle between $\hat{v}, \vec{x}$.
+
+This follows trivially since we have already shown that both $\hat{v}$ and $\vec{x}$ are unit vectors.
+By definition of the dot product, we have:
+
+$$
+\begin{alignat*}{3}
+\hat{v} \cdot \vec{x} &= \cos(\theta) |\hat{v}| |\vec{x}| \\
+                      &= \cos(\theta)
+\end{alignat*}
+$$
+which is illustrated in [Figure {figures.sinecosine}](#fig:sinecosine).
 
 $\Box$
+
+
+### Generalization to Arbitrary Lengths
+
+
+One particular result of the previous proof - which will be useful when applying rotations in $\mathbb{R}^3$ around arbitrary axes -  is the fact that, for any perpendicular vectors $\vec{x}, \vec{y} \in \mathbb{R}^2$, where $|\vec{x}| = |\vec{y}|$, the linear combination
+
+$$
+\vec{v} = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+$$
+
+yields a vector $\vec{v}$ satisfying 
+
+$$ 
+|\vec{v}| = |\vec{x}| = |\vec{y}|
+$$
+
+To prove this, we treat $\vec{x}, \vec{y}$ as vectors with arbitrary, but equal length, resulting in the (normalized) linear combination
+
+$$
+\hat{v} = \cos(\theta) \frac{\vec{x}}{|\vec{x}|} + \sin(\theta)\frac{\vec{y}}{|\vec{y}|}
+$$
+
+To cancel out the denominators on the right-hand side, we multiply the equation by $|\vec{x}|$[^denominator], yielding
+
+$$
+\hat{v}|\vec{x}| = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+$$
+
+Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.
+
+[^denominator]: Since $|\vec{x}| = |\vec{y}|$, we can also chose $|\vec{y}|$  
+
+------------------------
