@@ -10,6 +10,21 @@ function Bibliography ({name, pp}) {
 
 }
 
+function citation ({name, pp}) {
+    const href = `/docs/bibliography#${name.toLowerCase()}`;
+    return (
+        <a href={href}>[<span className="bibRef">📖{name}</span>{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
+    );
+
+}
+
+function Abbildung ({idx}) {
+    return (
+        <a href="#fig_{idx}">[<span className="bibRef">Abbildung {idx}</span></a>
+    );
+
+}
+
 function toolbox ({name, file}) {
 
     const mappings = {
@@ -33,4 +48,4 @@ function toolbox ({name, file}) {
 }
 
 export {toolbox as GlosRef};
-export {Bibliography as BibRef};
+export {Abbildung, citation as Cite, Bibliography as BibRef};
