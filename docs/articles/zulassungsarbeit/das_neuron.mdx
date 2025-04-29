@@ -1,0 +1,225 @@
+---
+title: "2. Das Neuron"
+slug: "mathematische-modelle-der-biologischen-nervenzelle/das-biologische-neuron"
+description: ""
+---
+
+import {CiteEmbed, Embed} from "../../../src/components/Embed";
+import {Abbildung, BibRef, Cite} from "../../../src/components/References";
+import nervenzelle from "./images/neuron/nervenzelle.png";
+import ionenverteilung from "./images/neuron/ionenverteilung.png";
+import aktionspotenzial from "./images/neuron/aktionspotenzial.png";
+
+export const figures = {
+    nervenzelle: 1,
+    ionenverteilung: 2,
+    aktionspotenzial: 3
+}
+
+## Signalweiterleitung im biologischen Neuron
+
+Eingehende Signale empfängt eine Nervenzelle über seine **Dendriten**: Baumförmige Fortsätze, die um den Zellkörper – das **Soma** – herum gelagert sind[^soma].  
+Sie fungieren *postsynaptisch* und empfangen über **Rezeptoren** afferente[^affere] Signale in Form von **Neurotransmittern**[^neuro] (siehe <Abbildung idx={figures.nervenzelle} />).
+Oft stehen tausende Neuronen in Verbindung mit den Dendriten eines einzelnen Neurons (vgl. <Cite pp="42" name="SD07" />).  
+Die Anzahl der Neuronen im menschlichen Gehirn beziffert sich auf mindestens $10^{11}$ (vgl. <Cite pp="175" name="KSJ+13" />).
+
+[^soma]: siehe Anhang
+[^affere]: *"afferre"* (lat.): herbeibringen, melden, bringen
+[^neuro]: vgl. <Cite pp="61" name="Eil19" />.
+
+<a name="fig_{figures:nervenzelle}" />
+<CiteEmbed
+    modeAware={true}
+    figure={figures.nervenzelle}
+    title={'Schematische Darstellung einer Nervenzelle. Die Dendriten leiten afferente Signale zum Soma, dem Zellkörper. Das Axon leitet ein efferentes ("efferre" (lat.): hinaustragen, mitnehmen) Nervensignal über präsynaptische Endigungen (auch "Axonterminale") an (häufig weit entfernte) Effektoren wie Muskeln, Drüsen oder nachgeschaltete Neuronen weiter.'}
+    pp="43 Tafel 2.1" 
+    name="SD07"
+> 
+    <img src={nervenzelle}  />
+</CiteEmbed>
+
+
+
+Dendriten leiten die Signale weiter an das Soma, in dem sich, durch die **Neuronenmembran**[^fn-membran] von der Umgebung getrennt, **Zytosol** befindet: Eine salzige, wässrige Flüssigkeit mit einem hohen Anteil von Kalium[^fn-kalium].
+
+Ob das Neuron Signale weiterleitet, entscheidet sich in der Nähe des **Axonhügels**[^fn-axonhuegel]: Hier entspringt das **Axon**[^fn-axon], das in einer "salzigen extrazellulären Flüssigkeit mit hoher Leitfähigkeit" liegt <Cite pp="61" name="BCP18" />[^fn-metapher].
+
+Reicht die Integration der an den postsynaptischen Endigungen eingehenden Signale aus, kann eine *Depolarisation*[^fn-depol] der Membran an dieser Stelle[^fn-eil] erfolgen. Wird ein gewisser **Schwellenwert** übertroffen, wird ein **Aktionspotenzial** ausgelöst <Cite pp="142 f." name="BCP18" />, was in den präsynaptischen Endigungen die **Exozytose**[^fn-exo] auslöst.
+
+[^fn-membran]: Membrandicke ca. 5nm (<Cite pp="66" name="FE19" />)  
+[^fn-kalium]: vgl. <Cite pp="29" name="BCP18" />. Siehe hierzu auch "Ionenkonzentrationen" in Tabelle [ionenkonzentration].  
+[^fn-axonhuegel]: ca. 20–50µm vom Soma entfernt (<Cite pp="77" name="Jon19" />)  
+[^fn-axon]: *axon* (lat.): Achse; Axone können sich im menschlichen Körper über Entfernungen von bis zu über 1m ausstrecken (<Cite pp="28" name="BCP18" />)  
+[^fn-metapher]: *Bear et al.* führen das Axon metaphorisch mit einer Telefonleitung zusammen (<Cite pp="43" name="BCP18" />). Aufgrund der signalempfangenden Eigenschaften und der dünnen Spitzen der Dendriten werden diese auch mit Antennen verglichen (<Cite pp="28" name="BCP18" />)  
+[^fn-depol]: *Depolarisation* bezeichnet die Verringerung des Membranpotenzials von einem negativen Wert auf einen weniger negativen oder gar einen positiven Wert (<Cite pp="95 f." name="McC13" />)  
+[^fn-eil]: vgl. <Cite pp="61" name="Eil19" />  
+[^fn-exo]: bezeichnet den Stofftransport aus der Zelle heraus.
+
+### Ionenkonzentrationen und Membranspannungen
+
+Ein Neuron weist *in Ruhe*[^fn-ruhe] eine ungleiche Ionenverteilung zwischen der durch die Zellmembran getrennten intrazellulären Flüssigkeit (das Zytosol, im Folgenden auch IZF) und der extrazellulären Flüssigkeit (im Folgenden EZF) auf.  
+In der IZF befinden sich mehr positiv geladene Natrium-Ionen ($Na^+$), und in der EZF mehr positiv geladene Kalium- und Calcium-Ionen ($K^+$ und $Ca^{2+}$) sowie mehr negativ geladene Chlorid-Ionen ($Cl^-$).
+
+Das Membranpotenzial des Neurons wird durch die Verteilung der Ionen in der IZF und EZF bestimmt: In der Membran befinden sich Ionenkanäle, von denen viele **selektiv permeabel**[^fn-permeabel] sind.  
+Daneben existieren Ionenpumpen wie die $Ca^{2+}$- und $Na^+$-$K^+$-ATPasen. Sie sorgen dafür, dass im Neuron laufend $Ca^{2+}$ und $Na^+$ aus der Zelle und $K^+$ in die Zelle befördert wird (<Cite pp="44" name="SD07" />).  
+Zusammen mit den selektiv permeablen Ionenkanälen entstehen so die Ionenkonzentrationen in folgender Tabelle (Quelle: <Cite pp="75, Abb. 3.15" name="BCP18" />):
+
+
+| **Ion**   | **Konz. EZF (mmol/l)** | **Konz. IZF (mmol/l)** | **Verhältnis** |
+|----------|------------------------|------------------------|----------------|
+| $K^+$    | 5                      | 100                    | 1 : 20         |
+| $Na^+$   | 150                    | 15                     | 10 : 1         |
+| $Ca^{2+}$| 2                      | 0.0002                 | 10000 : 1      |
+| $Cl^-$   | 150                    | 13                     | 11.5 : 1       |
+
+
+Wenn kein postsynaptisches Potenzial (PSP) wirkt und das Neuron selber keinen Impuls abgibt, liegt das Ruhepotenzial $V_r$ der Zelle zwischen −70mV und −90mV[^fn-ruhewert].  
+Das Zytosol weist entlang der Membranoberfläche in der IZF eine negative Ladung auf[^fn-negladung].  
+Diese **Membranspannung** $V_m$ wird durch eine ungleiche Ionenverteilung bewirkt, verursacht durch die Ladung der Teilchen in der IZF und EZF in Membrannähe[^fn-verteilung] (siehe <Abbildung idx={figures.ionenverteilung} />).
+
+<a name="fig_{figures:ionenverteilung}" />
+<CiteEmbed
+    modeAware={true}
+    figure={figures.ionenverteilung}
+    title={'Aufgrund der elektrostatischen Anziehungskraft ziehen sich Anionen (neg. geladen) und Kationen (pos. geladen) in der Nähe der Membran gegenseitig an, es kommt zu einer negativen Spannung in Membrannähe (zwischen −70mV und −90mV in Ruhe). Dadurch ist die negative Ladung nicht gleichmässig im Zytosol verteilt. Bear et al. weisen darauf hin, dass trotzdem der gröÿte Teil des Zytosols und der EZF elektrisch neutral ist.'}
+    pp="72, Abb. 3.13" 
+    name="BCP18"
+> 
+    <img src={ionenverteilung}  />
+</CiteEmbed>
+
+In Ruhe ist die Leitfähigkeit der Membran für $Na^+$ gering, für $K^+$ hingegen hoch (<Cite pp="44" name="SD07" />).  
+$K^+$-Ionen folgen ihrem **Konzentrationsgradienten** und gelangen über die Ionenkanäle in die EZF, bis die **Potenzialdifferenz** entlang der Neuronenmembran ausströmende $K^+$-Ionen zurückhält:  
+Wenn diese Differenz den Konzentrationsgradienten für $K^+$ kompensiert, ist das **Gleichgewichtspotenzial** erreicht, und es findet keine Nettoionenbewegung statt[^fn-gleichgewicht].
+
+[^fn-ruhe]: vgl. *Membranpotenzial*: "die Spannung an der Nervenzellmembran zu einem beliebigen Zeitpunkt" <Cite pp="70" name="BCP18" />; *Ruhepotenzial*: "the electrical potential across the membrane in the absence of signaling" <Cite pp="126" name="KSJ+13" />
+[^fn-permeabel]: von *permeare* (lat.) "durchwandern". Ein selektiv permeabler Kanal ist nur für bestimmte Ionen durchlässig (ionenselektiv). Kaliumkanäle sind durchlässig für $K^+$-Ionen, Natriumkanäle durchlässig für $Na^+$-Ionen usw. (<Cite pp="66" name="BCP18" />). Die Kanäle können über Änderungen in der Umgebung des Neurons geöffnet oder geschlossen werden (*Gating*, <Cite pp="108" name="KSJ+13" />).
+[^fn-ruhewert]: <Cite pp="47, Tafel 2.3 (A.1)" name="SD07" />. *Bear et al.* geben −65mV an. Es wird von einer 40-mal höheren Ionenpermeabilität für $K^+$ gegenüber $Na^+$ ausgegangen (<Cite pp="74, Exkurs 3.2" name="BCP18" />, <Cite pp="70" name="BCP18" />).
+[^fn-negladung]: <Cite pp="61" name="BCP18" />. Das Membranpotenzial $V_m$ ergibt sich als die Differenz der Spannungen $V_{IZF}$ und $V_{EZF}$. Wenn die Zelle in Ruhe ist, wird $V_{EZF}$ mit 0V festgelegt (<Cite pp="127" name="KSJ+13" />).
+[^fn-verteilung]: <Cite pp="66" name="FE19" />. *Bear et al.*: "Die negativen Ladungen im Inneren des Neurons und die positiven Ladungen außerhalb des Neurons ziehen sich in Richtung Zellmembran gegenseitig an [...] Dementsprechend ist die negative Nettoladung im Inneren der Zelle nicht gleichmäßig im Cytosol verteilt, sondern an der Innenseite der Membran lokalisiert." (<Cite pp="72, Punkt 2" name="BCP18" />)
+[^fn-gleichgewicht]: <Cite pp="72" name="BCP18" />. *Kandel et al.*: "the equilibrium potential of any ion that is present on both sides of a membrane permeable to that ion" (<Cite pp="130" name="KSJ+13" />)
+
+Es gilt, dass sich das Membranpotenzial dem Gleichgewichtspotenzial desjenigen Ions annähert, für das die Membran besonders permeabel ist (<Cite pp="145 f." name="Kan+13" />): Bestimmen lässt sich das Gleichgewichtspotenzial für individuelle Ionen mit der Nernst-Gleichung (<Cite pp="67" name="FE19" />) (siehe Gleichung 2.1).
+
+Bear et al. definieren (<Cite pp="74, Exkurs 3.2" name="BCP18" />):
+
+$$
+E_{Ion} = 2,303 \times \frac{RT}{zF} \times \log_{10} \left( \frac{[Ion]_{EZF}}{[Ion]_{IZF}} \right)
+\tag{2.1}
+$$
+
+Für eine Körpertemperatur von 37° lässt sich die Nernst-Gleichung für das Gleichgewichtspotenzial $E_K$ wie folgt vereinfachen:
+
+$$
+E_K = 61,54\,\text{mV} \times \log_{10} \left( \frac{[K^+]_{EZF}}{[K^+]_{IZF}} \right)
+\tag{2.2}
+$$
+
+Mit den Werten aus nachfolgender Tabelle[^table] erhalten wir:
+
+[^table]: _E_: *Equilibrium* ("Gleichgewicht"); *Faraday-Konstante*: elektrische Ladung eines Mols einfach geladener Ionen; 1 Mol = $6{,}02214076 \times 10^{23}$ Teilchen.
+
+$$
+E_K = 61,54\,\text{mV} \times \log_{10} \left( \frac{1}{20} \right) \approx -80\,\text{mV}
+\tag{2.3}
+$$
+
+
+
+| Variable / Konstante | Bedeutung |
+|:---------------------|:----------|
+| $E_{ion}$            | Gleichgewichtspotenzial für das jeweilige Ion |
+| $R$                  | Gaskonstante |
+| $T$                  | absolute Temperatur |
+| $z$                  | Ladungszahl des Ions |
+| $F$                  | Faraday-Konstante |
+| $[Ion]_{EZF}$        | Ionenkonzentration außerhalb der Zelle |
+| $[Ion]_{IZF}$        | Ionenkonzentration innerhalb der Zelle |
+
+
+
+Zur Bestimmung von $V_m$ einer für mehrere Ionen permeablen Membran kann die Goldman-Gleichung verwendet werden:
+
+$$
+V_r = \frac{RT}{F} \times \ln \left( \frac{P_{Na} [Na^+]_{EZF} + P_K [K^+]_{EZF} + P_{Cl} [Cl^-]_{IZF}}{P_{Na} [Na^+]_{IZF} + P_K [K^+]_{IZF} + P_{Cl} [Cl^-]_{EZF}} \right)
+\tag{2.4}
+$$
+
+
+Eine weitere wichtige Eigenschaft der Membran ist die elektrische Leitfähigkeit $g_{Ion}$; für sie gilt, dass sie proportional zu der Anzahl der offenen Ionenkanäle für das jeweilige Ion ist (<Cite pp="93" name="BCP18" />).
+
+
+### Das Aktionspotenzial
+
+In Ruhe ist die Ladung in Membrannähe in der IZF negativ, in der EZF positiv.  
+Durch eine schnelle Umkehrung dieser Verhältnisse ist eine Nervenzelle dazu in der Lage, ein Signal auszulösen (<Cite pp="86" name="BCP18" />).  
+Hierzu bedarf es eines **Aktionspotenzials**, das durch Ionenbewegungen entsteht. Die Ionenbewegungen selbst sind auf die Änderung des Membranpotenzials zurückzuführen, wodurch ein Öffnen oder Schließen von ionenspezifischen Kanälen verursacht wird (<Cite pp="96" name="BCP18" />).
+
+Kandel et al. führen vier wichtige Eigenschaften des Aktionspotenzials auf (<Cite pp="148 f." name="Kan+13" />):
+
+1. Es gibt einen **Schwellenwert** für die Auslösung des Potenzials.
+2. Das Aktionspotenzial ist ein **Alles-oder-Nichts**-Ereignis.
+3. Das Aktionspotenzial wird **ohne Verlust weitergeleitet**.
+4. Nach dem Auslösen des Aktionspotenzials kommt es zu einer **Refraktärzeit**,  
+   in der zunächst kein weiteres Aktionspotenzial ausgelöst werden kann (**absolute Refraktärzeit**).  
+   Bevor $V_r$ wieder erreicht ist, wird für eine kurze Dauer ein stärkeres Signal benötigt,  
+   um das Aktionspotenzial erneut auszulösen (**relative Refraktärzeit**)[^ref].
+
+[^ref]: beide Zeitabschnitte sind Teil der Nachhyperpolarisation, dargestellt in <Abbildung idx={figures.aktionspotenzial} />. Bei der "Hyperpolarisation" ändert sich das Membranpotenzial auf negative Werte in Richtung $V_r$ und darunter und wird in diesem Kontext als Hemmung verstanden
+
+#### Auslösung eines Aktionspotenzials
+
+
+<a name="fig_{figures:aktionspotenzial}" />
+<CiteEmbed
+    modeAware={true}
+    figure={figures.aktionspotenzial}
+    title={'Aktionspotenzial.'}
+    pp="47 Tafel 2.3" 
+    name="SD07"
+> 
+    <img src={aktionspotenzial}  />
+</CiteEmbed>
+
+
+Die Initiationszone des Aktionspotenzials ist der Axonhügel. Hier findet sich
+eine besonders dichte Anhäufung von spannungsabhängigen Na⁺-Kanälen[^bcp18-99], deren
+Aktivierungskurve um ca. 10mV zu den negativen Membranpotenzialen verschoben ist, was die Initiierung des Signals begünstigt (<Cite pp="77" name="Jon19" />).
+
+Damit ein Aktionspotenzial ausgelöst werden kann, muss die Membran nahe
+der Initiationszone über ihren Schwellenwert $ V_t $ ($ \gt V_r $) depolarisiert werden
+(<Cite pp="111" name="BCP18" />).
+
+[^nachhyper]: Beide Zeitabschnitte sind Teil der Nachhyperpolarisation, dargestellt in Abbildung 2.3. Bei der "Hyperpolarisation" ändert sich das Membranpotenzial auf negative Werte in Richtung $ V_r $ und darunter und wird in diesem Kontext als Hemmung verstanden.
+
+Als Schwellenwert wird das Membranpotenzial bezeichnet, bei dem die Permeabilität für Na⁺ größer als für K⁺ ist (<Cite pp="103" name="BCP18" />)[^vr-ek]. $ V_t $ liegt bei ca.
+$-50\,\text{mV}$, unabhängig vom Typ des Neurons (<Cite pp="75" name="Jon19" />). Damit sich $ V_r $ an
+$ V_t $ annähert, bedarf es einer Erregung der Zelle durch postsynaptische Potenziale
+(<Cite pp="69" name="FE19" />) oder "eine aus der Umgebung weitergeleitete (elektrotonische)
+Erregung" (<Cite pp="46" name="SD07" />).
+
+[^bcp18-99]: Pro Quadratmikrometer (µm²) kann eine Membran viele tausend Natriumkanäle enthalten (<Cite pp="99" name="BCP18" />).
+[^vr-ek]: $ V_r $ ist in Ruhe nahe an $ E_K $.
+
+Die Stärke der Erregung der Zelle ist entscheidend für das Auslösen eines Aktionspotenzials. Es muss mehr Na⁺ in die Zelle einströmen, als K⁺ aus der Zelle ausströmen kann <Cite pp="69" name="FE19" />. Versuche zeigen, dass die Potenzialänderung der Membran in einem Bereich von −80mV zu −65mV in dieser Hinsicht kaum Änderung bewirkt <Cite pp="99" name="BCP18" />. $g_{\text{Na}}$ erhöht sich, aber wenn $V_r$ nicht erreicht wird, bleibt es bei dieser "lokalen Antwort" <Cite pp="46" name="SD07" />. Erst eine Depolarisation der Membran hin über diesen Wert[^fn25] kann die Initiationsphase[^fn26] des Aktionspotenzials einleiten: Es öffnen sich mehr Natrium-Kanäle, und durch die negative Ladung der Membran-Innenseite gibt es eine starke elektrochemische Triebkraft für Na⁺-Ionen <Cite pp="103" name="BCP18" />.
+
+Die Triebkraft ist zu diesem Zeitpunkt die Differenz des Membranpotenzials $V_m$ und $E_{\text{Na}}$. Bei −60mV beträgt die Triebkraft[^fn27]:
+
+$$
+V_m - E_{\text{Na}} = -60\,\text{mV} - 61{,}54\,\text{mV} = -121{,}54\,\text{mV}
+$$
+
+Da sich durch zunehmende Öffnung der Natrium-Kanäle $g_{\text{Na}}$ erhöht, strömen aufgrund der hohen Triebkraft für Na⁺ mehr Na⁺-Ionen in das Zellinnere. Es kommt zu einem Rückkopplungseffekt, denn die zunehmend weniger negative Membranspannung öffnet weitere Natrium-Kanäle, die Leitfähigkeit der Membran wird weiter erhöht und es kommt zu einem exponentiellen Anstieg der Na⁺-Konzentration in der IZF. Der "explosionsartige" Natriumeinstrom bewirkt die Depolarisation der Membranspannung und das Aktionspotenzial wird ausgelöst <Cite pp="69" name="FE19" />[^fn28].
+
+Die Stärke des Signals selber ist unabhängig von dem Wert, der zu der überschwelligen Reizung des Neurons geführt hat: Amplitude und Zeitverlauf des Signals im Axon hängen nicht von Intensität und Dauer des Reizes ab <Cite pp="75" name="Jon19" />. Entweder kommt es zu einem Aktionspotenzial, oder es bleibt bei einer lokalen Antwort. Aus diesem Grund funktionieren Aktionspotenziale nach dem Alles-oder-Nichts-Prinzip[^fn29]:
+
+ "A fraction of a millivolt can be the difference between a subthreshold stimulus and a stimulus that generates a full-sized action potential.” <Cite pp="157" name="Kan+13" />
+
+[^fn25]: Ab −60mV gehen die Natrium-Kanäle in den Offen-Zustand über <Cite pp="69" name="FE19" />.  
+[^fn26]: Siehe <Cite pp="68" name="FE19" />.  
+[^fn27]: <Cite pp="39" name="Fak19" />.  
+[^fn28]: Siehe hierzu auch Anhang A.1.  
+[^fn29]: <Cite pp="89" name="BCP18" />. Außerdem: "Im Computerzeitalter bezeichnet man das axonale Aktionspotenzial auch als 'digitales' Signal." <Cite pp="75" name="Jon19" />. Frank bietet eine Übersicht über die Erforschung des Alles-oder-Nichts-Prinzips in <Cite name="Fra94" />. Dort wird Lucas erwähnt, der bereits 1905 in <Cite name="Luc05" /> die Kontraktionen von Muskelfasern unter diesem Gesichtspunkt untersucht hat (vgl. <Cite pp="210" name="Fra94" />).
+
+
+-----------------

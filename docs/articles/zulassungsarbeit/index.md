@@ -1,0 +1,27 @@
+---
+title: "[DE] Mathematische Modelle der biologischen Nervenzelle"
+slug: "mathematische-modelle-der-biologischen-nervenzelle"
+description: "Eine Einführung in mathematische Modelle der
+biologischen Nervenzelle als Bausteine künstlicher
+neuronaler Netze und deren Anwendung im
+Gesundheitswesen"
+---
+
+Neuronale Netze sind in den vergangenen Jahren ein wesentlicher Bestandteil von Forschung und Anwendung in der Medizin geworden.
+
+Die vorliegende Arbeit stellt einige solcher Netze sowie deren theoretischen Unterbauten vor und trägt hierfür Ergebnisse aus Wissenschaft und Forschung zusammen.
+
+Der erste Teil konzentriert sich zunächst auf die Fachlichkeit, die Grundlage künstlicher neuronaler Netze ist: Das biologische Neuron mit seinen komplexen biochemischen Vorgängen, die Signalverarbeitung und -weiterleitung in einem Netz aus Nervenzellen ermöglichen.
+
+Darauf aufbauend bietet der zweite Teil eine Einführung in das mathematische Gerüst des McCulloch-Pitts-Neurons und Rosenblatt-Perzeptrons, zwei frühe Modelle künstlicher Neuronen, die wesentlich zur Entwicklung künstlicher neuronaler Netze beigetragen haben. Hierfür werden die Forschungsarbeiten der Autoren in Auszügen vorgestellt, und Anwendungsbeispiele beleuchten die unterschiedlichen Eigenschaften hinsichtlich Statik des McCulloch-Pitts-Neurons und Anpassungsfähigkeit des Rosenblatt-Perzeptrons.
+
+Im dritten Teil werden einige wegweisende Architekturen und Algorithmen künstlicher neuronaler Netze vorgestellt, darunter Backpropagation sowie Faltungsoperationen, die in den tiefen Netzen Anwendung finden, die heutzutage u.a. in der Medizin große Erfolge vorweisen können.
+
+In diesem Zusammenhang bezeugen im vierten und abschliessenden Teil ausgewählte Forschungsarbeiten und -Ergebnisse aus den Bereichen Gesundheitswirtschaft, der Pharmaforschung sowie der Diagnostik und Therapie die Leistungsfähigkeit künstlicher neuronaler Netze.
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
+```

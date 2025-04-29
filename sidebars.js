@@ -19,6 +19,18 @@ const sidebars = {
                     ],
                     "collapsed": false
                 },
+                {
+                    type: 'category',
+                    label: '[DE] Mathematische Modelle der biologischen Nervenzelle',
+
+                    link: {type: 'doc', id: 'articles/zulassungsarbeit/index'},
+                    items: [
+                        'articles/zulassungsarbeit/einfuehrung',
+                        'articles/zulassungsarbeit/das_neuron',
+                        'articles/zulassungsarbeit/bibliography'
+                    ],
+                    "collapsed": false
+                },
                 "articles/contracted-events-for-micro-frontend-communication/index",
                 "articles/getter-setter-automation-with-php-attributes/index",
                 {
