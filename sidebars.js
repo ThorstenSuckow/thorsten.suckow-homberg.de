@@ -28,7 +28,7 @@ const sidebars = {
                         'articles/zulassungsarbeit/das_neuron',
                         'articles/zulassungsarbeit/bibliography'
                     ],
-                    "collapsed": false
+                    "collapsed": true
                 },
                 "articles/contracted-events-for-micro-frontend-communication/index",
                 "articles/getter-setter-automation-with-php-attributes/index",
