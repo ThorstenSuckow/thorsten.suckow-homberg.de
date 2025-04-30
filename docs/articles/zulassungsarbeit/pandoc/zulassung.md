@@ -1,15 +1,3 @@
-Eine Einführung in mathematische Modelle der biologischen Nervenzelle als Bausteine künstlicher neuronaler Netze und deren Anwendung im Gesundheitswesen
-
-Thorsten Suckow-Homberg
-
-Aachen, 28.09.2023
-
-#### Eidesstattliche Erklärung
-
-Hiermit versichere ich, die vorliegende Zulassungsarbeit selbstständig und nur unter Verwendung der von mir angegebenen Quellen und Hilfsmittel verfasst zu haben. Dies umfasst auch die Verwendung von KI-Anwendungen, die nach bestimmten Vorgaben automatisiert Inhalte erstellen können. Sowohl inhaltlich als auch wörtlich entnommene sowie von KI-Anwendungen generierte Inhalte wurden als solche kenntlich gemacht.Die Arbeit wurde bisher keiner anderen Prüfungsbehörde vorgelegt und auch noch nicht veröentlicht.
-
-> Thorsten Suckow-Homberg Aachen, 28.09.2023
-
 # Kurzfassung
 
 Neuronale Netze sind in den vergangenen Jahren ein wesentlicher Bestandteil von Forschung und Anwendung in der Medizin geworden.
@@ -23,74 +11,6 @@ Darauf aufbauend bietet der zweite Teil eine Einführung in das mathematische Ge
 Im dritten Teil werden einige wegweisende Architekturen und Algorithmen künstlicher neuronaler Netze vorgestellt, darunter Backpropagation sowie Faltungsoperationen, die in den tiefen Netzen Anwendung nden, die heutzutage u.a. in der Medizin groÿe Erfolge vorweisen können.
 
 In diesem Zusammenhang bezeugen im vierten und abschliessenden Teil ausgewählte Forschungsarbeiten und -Ergebnisse aus den Bereichen Gesundheitswirtschaft, der Pharmaforschung sowie der Diagnostik und Therapie die Leistungsfähigkeit künstlicher neuronaler Netze.
-
-# Inhaltsverzeichnis
-
-|                     |                                            | 1                                                                                                                               |          |  |
-|---------------------|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|--|
-|                     | Signalweiterleitung im biologischen Neuron |                                                                                                                                 |          |  |
-| 2.1                 |                                            | Ionenkonzentrationen und Membranspannungen<br>3                                                                                 |          |  |
-|                     |                                            | Das Aktionspotential .<br>6                                                                                                     |          |  |
-|                     |                                            | Auslösung eines Aktionspotenzials .<br>7                                                                                        |          |  |
-|                     |                                            | Signalweiterleitung über das Axon .<br>9                                                                                        |          |  |
-|                     |                                            | Synaptische Übertragung und Integration .<br>9                                                                                  |          |  |
-|                     | 2.3.1                                      | Synaptische Übertragung .<br>9                                                                                                  |          |  |
-|                     | 2.3.2                                      | Synaptische Integration .<br>10                                                                                                 |          |  |
-| Künstliche Neuronen |                                            |                                                                                                                                 |          |  |
-|                     |                                            | 12<br>Das McCulloch-Pitts-Neuron .<br>12                                                                                        |          |  |
-|                     |                                            | Der Kalkül<br>12                                                                                                                |          |  |
-|                     |                                            | Anwendung des Modells<br>13                                                                                                     |          |  |
-|                     |                                            | Aktivierungs- und Eingabefunktion<br>14                                                                                         |          |  |
-|                     |                                            | McCulloch-Pitts-Netz als Graph .<br>16                                                                                          |          |  |
-|                     |                                            | Implementierung von Booleschen Funktionen .<br>16                                                                               |          |  |
-|                     |                                            | Das Rosenblatt-Perzeptron .<br>21                                                                                               |          |  |
-|                     |                                            | Das Perzeptron - ein linearer Klassifizierer<br>21                                                                              |          |  |
-|                     |                                            | Das Modell<br>21                                                                                                                |          |  |
-|                     |                                            | Lineare Trennbarkeit<br>23                                                                                                      |          |  |
-|                     |                                            | Die Lernregel<br>25                                                                                                             |          |  |
-|                     | 3.2.5                                      | Die XOR-Funktion<br>28                                                                                                          |          |  |
-|                     |                                            | Künstliche Neuronale Netze<br>30                                                                                                |          |  |
-|                     |                                            | Renaissance der neuronalen Netze .<br>30                                                                                        |          |  |
-|                     | Mehrschichtige neuronale Netze             |                                                                                                                                 |          |  |
-|                     |                                            | 31<br>Backpropagation<br>31                                                                                                     |          |  |
-|                     |                                            |                                                                                                                                 |          |  |
-|                     |                                            |                                                                                                                                 |          |  |
-|                     | 4.2.2<br>4.2.3                             | Hopeld-Netz<br>33<br>Neocognitron<br>35                                                                                         |          |  |
-|                     | 2.2<br>2.3<br>3.1<br>3.2<br>4.1<br>4.2     | Einführung<br>2.2.1<br>2.2.2<br>2.3.1<br>3.1.1<br>3.1.2<br>3.1.3<br>3.1.4<br>3.1.5<br>3.2.1<br>3.2.2<br>3.2.3<br>3.2.4<br>4.2.1 |          |  |
-| 5                   | Neuronale Netze im Gesundheitswesen        |                                                                                                                                 |          |  |
-|                     | 5.1                                        | Automatisierung in der Gesundheitswirtschaft                                                                                    | 39<br>40 |  |
-|                     | 5.2                                        | Pharmaforschung                                                                                                                 | 40       |  |
-|                     | 5.3                                        | Diagnostik                                                                                                                      | 41       |  |
-|                     | 5.4                                        | Therapie und Prognose                                                                                                           | 43       |  |
-| 6                   |                                            | Zusammenfassung und Bemerkung                                                                                                   | 45       |  |
-|                     | Anhang A                                   | Begriffe und Ergänzungen                                                                                                        | 51       |  |
-|                     | A.1                                        | Aktionspotenzial                                                                                                                | 51       |  |
-|                     |                                            | A.1.1<br>Übertragungsgeschwindigkeit von Signalen in Nervenzellen                                                               | 52       |  |
-|                     | A.2                                        | ATPasen                                                                                                                         | 53       |  |
-|                     | A.3                                        | Dendriten                                                                                                                       | 53       |  |
-|                     | A.4                                        | Diffusion                                                                                                                       | 53       |  |
-|                     | A.5                                        | Effekten                                                                                                                        | 53       |  |
-|                     | A.6                                        | Expertensysteme                                                                                                                 | 54       |  |
-|                     | A.7                                        | Goldman-Gleichung                                                                                                               | 54       |  |
-|                     | A.8                                        | KI Winter                                                                                                                       | 55       |  |
-|                     | A.9                                        | LeNet                                                                                                                           | 55       |  |
-|                     |                                            | A.10 Lernrate                                                                                                                   | 56       |  |
-|                     |                                            | A.11 Neurotransmitter und ihre Rezeptoren                                                                                       | 56       |  |
-|                     |                                            | A.12 Perzeptron                                                                                                                 | 57       |  |
-|                     |                                            | A.13 Shunting Inhibition                                                                                                        | 58       |  |
-|                     |                                            | A.14 Soma                                                                                                                       | 58       |  |
-|                     |                                            | A.15 Umkehrpotenzial                                                                                                            | 58       |  |
-|                     | Anhang B                                   | Personen                                                                                                                        | 60       |  |
-|                     | B.1                                        | Bernstein, Julius                                                                                                               | 60       |  |
-|                     | B.2                                        | Hebb, Donald                                                                                                                    | 61       |  |
-|                     | B.3                                        | Hodgkin, Alan und Huxley, Andrew                                                                                                | 62       |  |
-|                     | B.4                                        | Hubel, David und Wiesel, Torsten                                                                                                | 63       |  |
-|                     | B.5                                        | Loewi, Otto                                                                                                                     | 63       |  |
-|                     | B.6                                        | McCulloch, Warren und Pitts, Walter                                                                                             | 64       |  |
-|                     | B.7                                        | Nernst, Walther                                                                                                                 | 65       |  |
-|                     | B.8                                        | Wiener, Norbert                                                                                                                 | 66       |  |
-|                     | Anhang C                                   | Die Paradoxe Hitzeempfindung als MCP-Netz                                                                                       | 67       |  |
-|                     | Anhang D                                   | Perzeptron-Implementierung in Python                                                                                            | 72       |  |
 
 # <span id="page-5-0"></span>Einführung
 
