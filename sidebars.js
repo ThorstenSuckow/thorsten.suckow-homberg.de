@@ -14,24 +14,11 @@ const sidebars = {
 
                     link: {type: 'doc', id: 'articles/computer-graphics/index'},
                     items: [
-                        'articles/computer-graphics/dot-product',
-                        'articles/computer-graphics/vector-rotation'
+                        'articles/computer-graphics/dot-product'
                     ],
                     "collapsed": false
                 },
-                /*{
-                    type: 'category',
-                    label: '[DE] Mathematische Modelle der biologischen Nervenzelle',
-
-                    link: {type: 'doc', id: 'articles/zulassungsarbeit/index'},
-                    items: [
-                        'articles/zulassungsarbeit/einfuehrung',
-                        'articles/zulassungsarbeit/das_neuron',
-                        'articles/zulassungsarbeit/mcpneuron',
-                        'articles/zulassungsarbeit/bibliography'
-                    ],
-                    "collapsed": false
-                },*/
+                'articles/modeling-biological-neurons/index',
                 "articles/contracted-events-for-micro-frontend-communication/index",
                 "articles/getter-setter-automation-with-php-attributes/index",
                 {
