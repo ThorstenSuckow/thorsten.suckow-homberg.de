@@ -7,13 +7,14 @@ import fetch from 'cross-fetch';
 import Gist from "react-gist";
 import {Cite} from "./References";
 
-function Embed ({width, children, title, figure, modeAware}) {
+function Embed ({width, children, title, figure, figref, modeAware}) {
 
     return (
         <div style={{width, textAlign:"center",margin:20}}>
+            {figref && <a name={`fig_${figref}`} />}
             <div className={modeAware !== false ? "umlImg" : ""}>{children}</div>
             <div style={{textAlign:"center"}}>
-                <sup ><b>{l8.isString(figure) ? figure : `Figure ${figure ?? 1}`}</b> <span dangerouslySetInnerHTML={{__html: title}}></span></sup>
+                <sup ><b>{l8.isString(figure) ? figure : `Figure ${figure ?? (figref ?? 1)}`}</b> <span dangerouslySetInnerHTML={{__html: title}}></span></sup>
             </div>
         </div>
     );

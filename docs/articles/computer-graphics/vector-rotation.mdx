@@ -4,15 +4,23 @@ description: "Rotations as a Special Case of Vector Transformations, with Applic
 ---
 
 import {BackButton} from "../../../src/components/BackButton.js";
-import {BibRef, GlosRef} from "../../../src/components/References";
+import {Figure, BibRef, GlosRef} from "../../../src/components/References";
 import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
 import sinecosine from "./img/vector-rotation/sinecosine.png";
 import sinecosine_code from '!!raw-loader!./plots/vector-rotation/sinecosine.py?raw';
 
+import rotation_origin from "./img/vector-rotation/rotation_origin.png";
+import rotation_origin_code from '!!raw-loader!./plots/vector-rotation/rotation_origin.py?raw';
+
+import rotation_point from "./img/vector-rotation/rotation_point.png";
+import rotation_point_code from '!!raw-loader!./plots/vector-rotation/rotation_point.py?raw';
+
 export const figures = {
-    sinecosine: 1
+    sinecosine: 1,
+    rotation_origin : 2,
+    rotation_point : 3
 };
 
 # Rotation
@@ -257,7 +265,7 @@ which is illustrated in [Figure {figures.sinecosine}](#fig:sinecosine).
 $\Box$
 
 
-### Generalization to Arbitrary Lengths
+### Generalization to arbitrary lengths
 
 
 One particular result we get from this - and which will be useful when applying rotations in $\mathbb{R}^3$ around arbitrary axes -  is the fact that, for any perpendicular vectors $\vec{x}, \vec{y} \in \mathbb{R}^2$, where $|\vec{x}| = |\vec{y}|$, the linear combination
@@ -287,5 +295,128 @@ $$
 Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\Box$
 
 [^denominator]: Since $|\vec{x}| = |\vec{y}|$, we can also chose $|\vec{y}|$  
+
+## Rotation around arbitrary points
+
+When rotating a point by a given angle, the transformation depends on the chosen center of rotation.
+
+<Figure idx={figures.rotation_origin} /> illustrates the point $p = (6, 4)$ rotated by $\theta = 20 \degree$.
+However, instead of using $r = (2, 3)$ as its center of rotation, $p$ is rotated around the origin $(0, 0)$ of the coordinate plane, yielding $p'$.
+
+<Embed
+    modeAware={true}
+    figref={figures.rotation_origin}
+    title={"The point p is rotated around the origin by θ degree, yielding p'."}>
+    <img src={rotation_origin}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_origin_code}
+</CodeBlock>
+</details>
+
+
+Using the rotation matrix $\boldsymbol{R}(\Theta)$, we can rotate $\vec{p} = (3, 2)^T$ around **the origin** to obtain $\vec{p'}$:
+
+$$
+\boldsymbol{R}(\theta) \cdot \vec{p} = \vec{p'}
+$$
+
+where[^excursus]
+
+$$
+\boldsymbol{R}(\theta) = \begin{pmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{pmatrix}
+$$
+
+The correct transformation is illustrated in <Figure idx={figures.rotation_point} />. 
+$\vec{p'}$ is computed such that
+ - the rotation center $r$ becomes the origin of all points in the coordinate plane
+ - rotation is applied 
+ - the rotated point is translated back.
+
+Using $\vec{r} = r^T$, we get the expression:
+
+$$
+\boldsymbol{R}(\theta) (\vec{p} - \vec{r}) + \vec{r}
+$$
+
+<Embed
+modeAware={true}
+figref={figures.rotation_code}
+title={"The point p gets translated, then rotated around the origin, then translated back."}>
+<img src={rotation_point}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_origin_code}
+</CodeBlock>
+</details>
+
+### Constructing an orthogonal basis for linear combination
+As an alternative to explicitely translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as [shown previously](#expressing-the-linear-combination-with-cosine-and-sine):
+
+$$
+\vec{p'} = \cos(\theta) \vec{rp} + \sin(\theta) \vec{rp}_{\perp} 
+$$
+
+Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same magnitude, i.e. $|\vec{rp}_{\perp}| = |\vec{rp}|$.
+
+To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
+
+1. Using the **cross product**:<br />
+    The cross product $\vec{w} \times \vec{rp}$ yields a vector $\vec{rp}_{\perp}$ orthogonal to both $\vec{rp}$ and $\vec{w}$.
+
+    $\vec{w}$ is unknown and therefor has to be computed.
+
+    Since the cross product is inherently an operation defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
+
+    For $\vec{w}$, we choose a unit vector along the $z$-axis, $(0, 0 , 1)^T$, which is perpendicular to our 2-dimensional plane.
+    We then calculate
+
+   $$
+   \vec{rp}_{\perp} = \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix} \times \begin{pmatrix}\vec{rp}_x \\ \vec{rp}_y \\ 0\end{pmatrix} = \begin{pmatrix} - \vec{rp}_y \\ \vec{rp}_x \\ 0\end{pmatrix}
+   $$
+    Dropping the third component in the resulting vector, we end up with $\vec{rp}_{\perp} = (- \vec{rp}_y, \vec{rp}_x)^T$, which is perpendicular to $\vec{rp}$, as verified by their dot product:
+
+   $$
+   (- \vec{rp}_y, \vec{rp}_x)^T \cdot (\vec{rp}_x, \vec{rp}_y)^T = -\vec{rp}_y \vec{rp}_x + \vec{rp}_x \vec{rp}_y = 0
+   $$
+
+    In fact, the resulting vector $\vec{rp}_{\perp}$ is simply $\vec{rp}$ rotated by $90\degree$ **counterclockwise**, which will be formally verified with the next option.
+
+2. Using the **rotation matrix**:<br />
+    By substituting $\theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\theta)$, we get:
+        
+    $$
+        \boldsymbol{R}(\frac{\pi}{2}) = \begin{pmatrix}\cos \frac{\pi}{2} & -sin \frac{\pi}{2} \\ \sin \frac{\pi}{2} & \cos \frac{\pi}{2} \end{pmatrix} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix}
+    $$
+    
+    Multiplying $\boldsymbol{R}(\frac{\pi}{2})$ with $\vec{rp}$, we obtain the perpendicular vector:
+
+   $$
+   \boldsymbol{R}(\frac{\pi}{2}) \vec{rp} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} \vec{rp}_x \\ \vec{rp}_y  \end{pmatrix} = \begin{pmatrix} -\vec{rp}_y \\ \vec{rp}_x  \end{pmatrix} =  \vec{rp}_{\perp}
+   $$
+        
+    which also confirms the claim abive: $\vec{rp}_{\perp}$ represents $\vec{rp}$ rotated by $90\degree$ **ccw**.
+
+In both cases, $\vec{rp}_\perp$ can be used for finalizing the linear combination as
+
+$$
+\vec{p'} = \cos(\theta) \vec{rp} + \sin(\theta) \vec{rp}_{\perp}
+$$
+$\Box$
+
+Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address shortly.
+
+
+[^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
+
 
 ------------------------

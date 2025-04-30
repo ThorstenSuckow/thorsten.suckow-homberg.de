@@ -25,6 +25,13 @@ function Abbildung ({idx}) {
 
 }
 
+function Figure ({idx}) {
+    return (
+        <a href={`#fig_${idx}`}>[<span className="bibRef">Figure {idx}</span>]</a>
+    );
+
+}
+
 function toolbox ({name, file}) {
 
     const mappings = {
@@ -48,4 +55,4 @@ function toolbox ({name, file}) {
 }
 
 export {toolbox as GlosRef};
-export {Abbildung, citation as Cite, Bibliography as BibRef};
+export {Figure, Abbildung, citation as Cite, Bibliography as BibRef};
