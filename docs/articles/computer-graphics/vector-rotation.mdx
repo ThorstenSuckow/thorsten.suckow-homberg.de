@@ -85,7 +85,7 @@ $$
 
 
 
-In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\theta$ represents the amount of rotation of $\vec{a}$ around the origin[^dot_product]. 
+In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product]. 
 
 [^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
 
@@ -280,7 +280,7 @@ $$
 |\vec{v}| = |\vec{x}| = |\vec{y}|
 $$
 
-Following the previous proof, we now treat $\vec{x}, \vec{y}$ as vectors with arbitrary, but equal length, resulting in the (normalized) linear combination
+Following the previous proof, we now treat $\vec{x}, \vec{y}$ as vectors with arbitrary, but **equal length**, resulting in the (normalized) linear combination
 
 $$
 \hat{v} = \cos(\theta) \frac{\vec{x}}{|\vec{x}|} + \sin(\theta)\frac{\vec{y}}{|\vec{y}|}
@@ -348,7 +348,7 @@ $$
 <Embed
 modeAware={true}
 figref={figures.rotation_code}
-title={"The point p gets translated, then rotated around the origin, then translated back."}>
+title={"The point p gets translated, then rotated around the origin, then translated back to p'."}>
 <img src={rotation_point}  />
 </Embed>
 <details>
@@ -389,7 +389,7 @@ To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
    (- \vec{rp}_y, \vec{rp}_x)^T \cdot (\vec{rp}_x, \vec{rp}_y)^T = -\vec{rp}_y \vec{rp}_x + \vec{rp}_x \vec{rp}_y = 0
    $$
 
-    In fact, the resulting vector $\vec{rp}_{\perp}$ is simply $\vec{rp}$ rotated by $90\degree$ **counterclockwise**, which will be formally verified with the next option.
+    In fact, the resulting vector $\vec{rp}_{\perp}$ is simply $\vec{rp}$ rotated by $90\degree$ **counterclockwise**, which will be formally verified with the next method.
 
 2. Using the **rotation matrix**:<br />
     By substituting $\theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\theta)$, we get:
@@ -404,7 +404,7 @@ To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
    \boldsymbol{R}(\frac{\pi}{2}) \vec{rp} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} \vec{rp}_x \\ \vec{rp}_y  \end{pmatrix} = \begin{pmatrix} -\vec{rp}_y \\ \vec{rp}_x  \end{pmatrix} =  \vec{rp}_{\perp}
    $$
         
-    which also confirms the claim abive: $\vec{rp}_{\perp}$ represents $\vec{rp}$ rotated by $90\degree$ **ccw**.
+    which also confirms the claim above: $\vec{rp}_{\perp}$ represents $\vec{rp}$ rotated by $90\degree$ **ccw**.
 
 In both cases, $\vec{rp}_\perp$ can be used for finalizing the linear combination as
 
@@ -413,7 +413,7 @@ $$
 $$
 $\Box$
 
-Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address shortly.
+Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address in the next section.
 
 
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
