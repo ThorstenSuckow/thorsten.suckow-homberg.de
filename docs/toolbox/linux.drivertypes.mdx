@@ -1,0 +1,29 @@
+---
+title: "System Drivers Types (Linux)"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../src/components/References";
+
+## User Space Driver
+
+When full access to a device's resources is not required, a **User Space Driver** (*USD*) can utilize system interfaces for limited access to the device's memory space and handling interrupts[^kernel-user-space]. 
+
+If the driver needs to access privileged functions, such as [`ioperm()`](https://man7.org/linux/man-pages/man2/ioperm.2.html) system calls to access x86 I/O ports, `root`-privileges are necessary. 
+
+User Space Drivers offer a restricted alternative to **Kernel Space Drivers**. Their key advantage lies in improved system stability: If a bug slips into the User Space Driver, only the corresponding process is at risk of crashing, not the whole system.
+
+## Kernel Space Driver
+
+**Kernel Space Drivers** are embedded into the **kernel space** and provide full access to a device's memory and I/O ports. They can be statically linked into the kernel, requiring a full kernel compilation whenever the implementation of the driver changes. Errors in the driver itself will most likely negatively affect the stability of the the whole system. 
+
+As an alternative, **Loadable Kernel Modules** (*LKM*) allow drivers to be dynamically inserted into a running kernel without recompilation[^lkm-wiki]. System directives such as [`insmod`](https://man7.org/linux/man-pages/man8/insmod.8.html) can be used for loading these modules.
+
+LKMs help reduce kernel size and compile times, accelerating development cycles (`load` $\rightarrow$ `test` $\rightarrow$ `unload`).
+However, they might introduce a slight performance overhead due to the additional abstraction layer between the module and the kernel.
+
+----------------------------
+
+
+[^kernel-user-space]: https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html, retrieved 01.05.2025
+[^lkm-wiki]: https://en.wikipedia.org/wiki/Loadable_kernel_module, retrieved 01.05.2025
