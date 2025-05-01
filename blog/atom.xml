@@ -24,8 +24,8 @@
             <name>Thorsten Suckow-Homberg</name>
             <uri>https://thorsten.suckow-homberg.de</uri>
         </author>
-        <category label="frontend" term="frontend"/>
-        <category label="programming" term="programming"/>
+        <category label="computer graphics" term="computer graphics"/>
+        <category label="linear algebra" term="linear algebra"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Contracted Events for Micro Frontend Communication]]></title>

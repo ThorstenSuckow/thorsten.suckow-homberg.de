@@ -21,8 +21,8 @@
 <p>An example involving field-of-view-calculations illustrates how the dot product can simplify visibility modeling and decision-making in games.</p>
 <p>Additional proofs establish key lemmas that support further applications of the dot product and related operations in both 2D and 3D.</p>
 <p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/dot-product">Continue reading...</a></p>]]></content:encoded>
-            <category>frontend</category>
-            <category>programming</category>
+            <category>computer graphics</category>
+            <category>linear algebra</category>
         </item>
         <item>
             <title><![CDATA[Contracted Events for Micro Frontend Communication]]></title>
