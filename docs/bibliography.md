@@ -71,6 +71,9 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
 
+### **Kerningham, Brian W. and Ritchie, Dennis M.**
+ - [KR88] Kernighan, Brian W. and Ritchie, Dennis M. **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
+
 ### **Knuth, Donald**
  - [Knu97c] Donald E. Knuth. **The Art of Computer Programming**, Volume 3 (2nd
 Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1997. isbn: 0201896850. <a name="Knu97c"></a>
