@@ -15,15 +15,96 @@ User Space Drivers offer a restricted alternative to **Kernel Space Drivers**. T
 
 ## Kernel Space Driver
 
-**Kernel Space Drivers** are embedded into the **kernel space** and provide full access to a device's memory and I/O ports. They can be statically linked into the kernel, requiring a full kernel compilation whenever the implementation of the driver changes. Errors in the driver itself will most likely negatively affect the stability of the the whole system. 
+**Kernel Space Drivers** are embedded into the **kernel space** and provide full access to a device's memory and I/O ports. They can be statically linked into the kernel, requiring a full kernel compilation whenever the implementation of the driver changes. Errors in the driver itself will most likely negatively affect the stability of the whole system. 
 
-As an alternative, **Loadable Kernel Modules** (*LKM*) allow drivers to be dynamically inserted into a running kernel without recompilation[^lkm-wiki]. System directives such as [`insmod`](https://man7.org/linux/man-pages/man8/insmod.8.html) can be used for loading these modules.
+As an alternative, **Loadable Kernel Modules** (*LKM*) allow drivers to be dynamically inserted into a running kernel without recompilation[^lkm-wiki]. System directives such as [`insmod`](#insmod--rmmod) can be used for loading these modules.
 
 LKMs help reduce kernel size and compile times, accelerating development cycles (`load` $\rightarrow$ `test` $\rightarrow$ `unload`).
 However, they might introduce a slight performance overhead due to the additional abstraction layer between the module and the kernel.
+
+### `insmod` / `rmmod`
+
+ - [`insmod`](https://man7.org/linux/man-pages/man8/insmod.8.html) is used for **loading** an LKM into the kernel. 
+
+ - [`rmmod`](https://man7.org/linux/man-pages/man8/rmmod.8.html) is used for **unloading** an LKM[^modprobe].
+
+The following excerpt from a bash script demonstrates the usage of `insmod` / `rmmod`: The call to `rmmod`
+removes the specific module if it was already loaded[^devnull], `insmod` loads it accordingly.
+
+[^modprobe]: The man-pages specifically point to [`modprobe`](https://man7.org/linux/man-pages/man8/modprobe.8.html) which takes care of unloading interdependent modules  
+[^devnull]: while ignoring possible error messages like `rmmod: ERROR: Module is not currently loaded` 
+
+```shell
+#! /bin/bash
+
+sudo rmmod ${MODULE} 2>/dev/null
+
+# loads the module
+sudo insmod ${MODULE}.ko || { echo "Error loading ${MODULE}.ko"; exit 1; }
+```
+
+### `init_module` / `cleanup_module`
+
+Additionally, there exist two functions in the Linux-Kernel library [`<linux/module.h>`](https://github.com/torvalds/linux/blob/master/include/linux/module.h) that can be used as callbacks when the LKM has been loaded / unloaded for further bootstrapping module functionality, requesting system resources and freeing them, respectively:
+
+ - `init_module`: Called when the module is initialized (`insmod`)
+
+ - `cleanup_module`: Called when the module is unloaded (`rmmod`)
+
+
+The following listing[^clanguage] shows the usage of `init_module()` and `cleanup_module()`. Take note that
+ - `device_major` specifies the major device number[^identity] associated with the device implemented by the module. We set this to `0` and expect the kernel to dynamically allocate a device identifier.
+ - [`register_chrdev` / `unregister_chrdev`](https://github.com/torvalds/linux/blob/master/include/linux/fs.h) takes care of (un)registering the module with the kernel: `register_chrdev` provides information to the kernel which file-operations are mapped to which functions in the specific module. `unregister_chrdev` de-registers this information accordingly.
+
+
+```c
+#include <linux/module.h>
+#include <linux/fs.h>
+...
+
+#define MODULE_NAME "myModule"
+
+static int device_major = 0;
+
+struct file_operations module_fops = {
+    .owner = THIS_MODULE,
+    // ...
+};
+
+
+int init_module(void) {
+    
+    printk(KERN_INFO "%s init start:\n", MODULE_NAME);
+    int result = register_chrdev(device_major, MODULE_NAME, &module_fops);
+
+    if (result < 0) {
+        printk(KERN_ERR " Failed to register %s: Error %d\n", MODULE_NAME, result);
+        return result;
+    }
+    
+    if (device_major == 0) {
+        device_major = result;
+    }
+    ... 
+    
+    return 0;
+}
+
+
+void cleanup_module(void) {
+    printk(KERN_INFO "%s cleanup start:\n", MODULE_NAME);
+    unregister_chrdev(device_major, MODULE_NAME);
+    
+    ...
+    
+}
+```
+
 
 ----------------------------
 
 
 [^kernel-user-space]: https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html, retrieved 01.05.2025
 [^lkm-wiki]: https://en.wikipedia.org/wiki/Loadable_kernel_module, retrieved 01.05.2025
+[^identity]: 'Device nodes and major/minor numbers': https://www.ibm.com/docs/en/linux-on-systems?topic=hdaa-device-nodes-numbers, retrieved 02.05.2025
+[^clanguage]: `static int device_major` takes care of limiting the scope of `device_major` to the compilation unit (<BibRef pp="83" name="KR88" />)
