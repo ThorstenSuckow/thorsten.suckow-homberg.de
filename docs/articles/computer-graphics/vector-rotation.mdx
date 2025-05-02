@@ -318,7 +318,7 @@ However, instead of using $r = (2, 3)$ as its center of rotation, $p$ is rotated
 </details>
 
 
-Using the rotation matrix $\boldsymbol{R}(\Theta)$, we can rotate $\vec{p} = (3, 2)^T$ around **the origin** to obtain $\vec{p'}$:
+Using the rotation matrix $\boldsymbol{R}(\Theta)$, we can rotate $\vec{p} = (6, 4)^T$ around **the origin** to obtain $\vec{p'}$:
 
 $$
 \boldsymbol{R}(\theta) \cdot \vec{p} = \vec{p'}
@@ -333,7 +333,8 @@ $$
 \end{pmatrix}
 $$
 
-The correct transformation is illustrated in <Figure idx={figures.rotation_point} />. 
+#### Choosing a different center of rotation
+The rotation around $r$ is illustrated in <Figure idx={figures.rotation_point} />. 
 $\vec{p'}$ is computed such that
  - the rotation center $r$ becomes the origin of all points in the coordinate plane
  - rotation is applied 
@@ -375,7 +376,7 @@ To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
 
     $\vec{w}$ is unknown and therefor has to be computed.
 
-    Since the cross product is inherently an operation defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
+    Since the cross product is an operation inherently defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
 
     For $\vec{w}$, we choose a unit vector along the $z$-axis, $(0, 0 , 1)^T$, which is perpendicular to our 2-dimensional plane.
     We then calculate
