@@ -20,7 +20,11 @@ import rotation_point_code from '!!raw-loader!./plots/vector-rotation/rotation_p
 export const figures = {
     sinecosine: 1,
     rotation_origin : 2,
-    rotation_point : 3
+    rotation_point : 3,
+    rodrigues: 4,
+    axis_rotation: 5,
+    vector_projection: 6,
+    rotation_discrepancy: 7
 };
 
 # Rotation
@@ -417,5 +421,62 @@ Without delving into the complexity of the involved operations, it should be evi
 
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
 
+## 3D Rotation about an Arbitrary Axis 
+
+Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and using a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues Formula**[^rodrigues]:
+
+$$
+ \vec{v'} = (\vec{v} \cdot \vec{n}) \cdot \vec{v} + \cos(\Theta) (\vec{v} - ((\vec{v} \cdot \vec{n}) \cdot \vec{v})) + \sin\Theta (\vec{v} \cdot \vec{n})
+$$
+
+We will now proceed to derive the formula.
+
+In <Figure idx={figures.rodrigues} />, the vector $\vec{v}$ is rotated about the axis $\vec{n}$. 
+Since we do not care about the magnitude of $\vec{n}$, but rather it's direction, we normalize the vector and obtain $\hat{n}$, which will be the **center of rotation** for $\vec{v}$ in the following derivation.
+
+Clearly, rotating one vector about another vector in 3D must preserve at least one component of the vector that never changes, specifically the one aligned with the axis of rotation (see <Figure idx={figures.axis_rotation} />).
+To illustrate this, consider the special case of rotation about one of the standard basis vectors in $\mathbb{R}^3$:
+
+$$
+\vec{x} = \begin{pmatrix}1 \\ 0 \\ 0\end{pmatrix}, 
+\vec{y} = \begin{pmatrix}0 \\ 1 \\ 0\end{pmatrix}, 
+\vec{z} = \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix}
+$$
+
+For example, rotation of a point $(x, y)$ in the Euclidean plane corresponds to rotating the point  $(x, y, s)$ in three-dimensional space about the $z$-axis: Here, the $z$-component $s$ always stays unchanged, e.g. 
+
+$$
+\boldsymbol{R}_z(\Theta) \begin{pmatrix}x\\ y\\ s\end{pmatrix} = \begin{pmatrix}x'\\ y'\\ s\end{pmatrix}
+$$
+Analogous reasoning applies to rotation about the $x$-axis and $y$-axis, where the respective components remain constant.
+
+Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis-length, as we will see shortly - helps us identify the components of a vector that remain unchanged under rotation. 
+Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a vector $\vec{a}$ onto another vector $\vec{b}$.
+    
+$$
+\vec{a}_{\parallel} = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}
+$$
+
+Here, $\vec{a}_{\parallel}$ represents the $x$-component of vector $\vec{a}$ in the direction of $\vec{b}$, while the **orthogonal** (or "sifted out") $y$-component is given by $\vec{a}_{\perp}$:
+
+$$
+\vec{a}_{\perp} = \vec{a} - \vec{a}_{\parallel}
+$$
+
+:::note
+It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant - in three dimensions, that is. This raises the question: Where is the rotation axis located in the Euclidean space?
+
+This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
+
+As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, perpendicular to the $z$-axis. 
+Here, the _parallel projection_ of any rotated vector onto the rotation axis will be $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. 
+
+However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_discrepancy}/>).
+
+Informally speaking, the fixed projection of a rotated vector is not absent, its just that it's not "visible" within the plane of rotation.
+:::
+
+[^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
+_Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
 ------------------------
