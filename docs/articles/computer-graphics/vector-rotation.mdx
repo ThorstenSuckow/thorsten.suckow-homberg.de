@@ -301,7 +301,20 @@ Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\
 When rotating a point by a given angle, the transformation depends on the chosen center of rotation.
 
 <Figure idx={figures.rotation_origin} /> illustrates the point $p = (6, 4)$ rotated by $\theta = 20 \degree$.
-However, instead of using $r = (2, 3)$ as its center of rotation, $p$ is rotated around the origin $(0, 0)$ of the coordinate plane, yielding $p'$.
+Here, $p$ is rotated around the origin $(0, 0)$ of the coordinate plane, resulting in $p'$, which can be obtained via the matrix-vector product
+
+$$
+\boldsymbol{R}(\theta) \cdot \vec{p} = \vec{p'}
+$$
+
+where[^excursus]
+
+$$
+\boldsymbol{R}(\theta) = \begin{pmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{pmatrix}
+$$
 
 <Embed
     modeAware={true}
@@ -317,21 +330,6 @@ However, instead of using $r = (2, 3)$ as its center of rotation, $p$ is rotated
 </CodeBlock>
 </details>
 
-
-Using the rotation matrix $\boldsymbol{R}(\Theta)$, we can rotate $\vec{p} = (6, 4)^T$ around **the origin** to obtain $\vec{p'}$:
-
-$$
-\boldsymbol{R}(\theta) \cdot \vec{p} = \vec{p'}
-$$
-
-where[^excursus]
-
-$$
-\boldsymbol{R}(\theta) = \begin{pmatrix}
-\cos \theta & -\sin \theta \\
-\sin \theta & \cos \theta
-\end{pmatrix}
-$$
 
 #### Choosing a different center of rotation
 The rotation around $r$ is illustrated in <Figure idx={figures.rotation_point} />. 
@@ -371,12 +369,12 @@ Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same
 
 To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
 
-1. Using the **cross product**:<br />
-    The cross product $\vec{w} \times \vec{rp}$ yields a vector $\vec{rp}_{\perp}$ orthogonal to both $\vec{rp}$ and $\vec{w}$.
+1. Using the **vector cross product**:<br />
+    The vector cross product $\vec{w} \times \vec{rp}$ yields a vector $\vec{rp}_{\perp}$ orthogonal to both $\vec{rp}$ and $\vec{w}$.
 
     $\vec{w}$ is unknown and therefor has to be computed.
 
-    Since the cross product is an operation inherently defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
+    Since the vector cross product is an operation inherently defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
 
     For $\vec{w}$, we choose a unit vector along the $z$-axis, $(0, 0 , 1)^T$, which is perpendicular to our 2-dimensional plane.
     We then calculate
