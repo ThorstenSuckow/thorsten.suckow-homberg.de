@@ -63,33 +63,33 @@ $$
 In an orthonormal basis with the **standard basis vectors** $\vec{x} = \begin{pmatrix} 1\\0\end{pmatrix}$, $\vec{y} = \begin{pmatrix} 0\\1\end{pmatrix}$, any vector of unit length can be expressed as
 
 $$
-\vec{v} = \begin{pmatrix} \cos \theta \\ \sin \theta \end{pmatrix}
+\vec{v} = \begin{pmatrix} \cos \Theta \\ \sin \Theta \end{pmatrix}
 $$
 
-This follows directly by $\cos \theta, \sin \theta$ when writing $\vec{v}$ as a linear combination of the two linear independent vectors $\vec{x}, \vec{y}$:
+This follows directly by $\cos \Theta, \sin \Theta$ when writing $\vec{v}$ as a linear combination of the two linear independent vectors $\vec{x}, \vec{y}$:
 
 $$
 \vec{v} = a \vec{x} + b \vec{y} 
 $$
 
-Substituting $a, b$ with $\cos \theta$, $\sin \theta$, we have:
+Substituting $a, b$ with $\cos \Theta$, $\sin \Theta$, we have:
 
 
 $$
-\vec{v} = \cos \theta \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \sin \theta  \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} \cos \theta \\ \sin \theta \end{pmatrix}
+\vec{v} = \cos \Theta \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \sin \Theta  \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} \cos \Theta \\ \sin \Theta \end{pmatrix}
 $$
 
 or, as a matrix multiplication
 
 $$
-\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} cos \theta \\\sin \theta \end{pmatrix} = \vec{v}
+\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} cos \Theta \\\sin \Theta \end{pmatrix} = \vec{v}
 $$
 
 (Observe how $\vec{x}, \vec{y}$ represent the identity matrix $I_{2}$).
 
 
 
-In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product]. 
+In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product]. 
 
 [^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
 
@@ -119,26 +119,26 @@ $$
 
 holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim). 
 
-We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by chosing $a=\cos \theta, b = \sin \theta$, as derived in the following proof.
+We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by chosing $a=\cos \Theta, b = \sin \Theta$, as derived in the following proof.
 
 ### Expressing the linear combination with cosine and sine
 
 Let $\vec{x}, \vec{y} \in \mathbb{R}^2$, $\vec{x} \cdot \vec{y} = 0$, $|\vec{x}| = |\vec{y}| = 1$, $a, b \in \mathbb{R}_{[0, 1]}$, $a^2 + b ^2 = 1$.
 
-**Claim**: The linear combination $a\vec{x} + b\vec{y}$ can be written as $\cos(\theta)\vec{x} + \sin(\theta)\vec{y}$ and yields a normalized vector $\vec{v}$:
+**Claim**: The linear combination $a\vec{x} + b\vec{y}$ can be written as $\cos(\Theta)\vec{x} + \sin(\Theta)\vec{y}$ and yields a normalized vector $\vec{v}$:
 
 $$
-\hat{v} = \cos(\theta)\vec{x} + \sin(\theta)\vec{y}
+\hat{v} = \cos(\Theta)\vec{x} + \sin(\Theta)\vec{y}
 $$
 
 
 **Proof**:
 
-We compute the dot products $\vec{v} \cdot \vec{x}$, $\vec{v} \cdot \vec{y}$ to relate the cosines of the angles $\theta$ (between $\vec{x}$ and $\vec{v}$) and $\varphi$ (between $\vec{y}$ and $\vec{v}$), respectively:
+We compute the dot products $\vec{v} \cdot \vec{x}$, $\vec{v} \cdot \vec{y}$ to relate the cosines of the angles $\Theta$ (between $\vec{x}$ and $\vec{v}$) and $\varphi$ (between $\vec{y}$ and $\vec{v}$), respectively:
 
 $$
 \begin{alignat*}{3}
-\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}| |\vec{x}| \\
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}| |\vec{x}| \\
 \vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| |\vec{y}|
 \end{alignat*}
 $$
@@ -147,7 +147,7 @@ Since $|\vec{x}| = |\vec{y}| = 1$, we find
 
 $$
 \begin{alignat*}{3}
-\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}|\\
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}|\\
 \vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}|
 \end{alignat*}
 $$
@@ -181,7 +181,7 @@ We have shown that
 
 $$
 \begin{alignat*}{3}
-\vec{v} \cdot \vec{x} &= \cos(\theta)  |\vec{v}| &&= a\\
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}| &&= a\\
 \vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| && = b
 \end{alignat*}
 $$
@@ -191,7 +191,7 @@ and substitute into the linear combination:
 $$
 \begin{alignat*}{3}
 \vec{v} &= a \vec{x} + b \vec{y} \\
-        &= \cos(\theta)  |\vec{v}| \vec{x} + \cos(\varphi) |\vec{v}| \vec{y}
+        &= \cos(\Theta)  |\vec{v}| \vec{x} + \cos(\varphi) |\vec{v}| \vec{y}
 \end{alignat*}
 $$
 
@@ -200,9 +200,9 @@ From $\angle(\vec{x}, \vec{y}) = \frac{\pi}{2}$ we can derive
 $$
 \begin{equation}\notag
 \begin{split}
-\cos(\varphi) &= \cos(\frac{\pi}{2} - \theta) \\
-              &= \cos(\frac{\pi}{2})\cos(\theta) + \sin(\frac{\pi}{2})\sin(\theta)\\
-              &= \sin(\theta)
+\cos(\varphi) &= \cos(\frac{\pi}{2} - \Theta) \\
+              &= \cos(\frac{\pi}{2})\cos(\Theta) + \sin(\frac{\pi}{2})\sin(\Theta)\\
+              &= \sin(\Theta)
 \end{split}
 \end{equation}
 $$
@@ -212,14 +212,14 @@ $$
 and finally rewrite the linear combination as
 
 $$
-\vec{v} = \cos(\theta)  |\vec{v}| \vec{x} + \sin(\theta) |\vec{v}| \vec{y}
+\vec{v} = \cos(\Theta)  |\vec{v}| \vec{x} + \sin(\Theta) |\vec{v}| \vec{y}
 $$
 
 Dividing by $|\vec{v}|$ yields the normalized vector $\hat{v}$. We therefore receive
 
 
 $$
-\frac{\vec{v}}{|\vec{v}|} = \hat{v} = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+\frac{\vec{v}}{|\vec{v}|} = \hat{v} = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
 $$
 
 $\Box$
@@ -244,24 +244,24 @@ $$
 
 In order for $|\hat{v}| = 1$ to hold, it is required that $a^2 + b^2 = 1$, as given by the assumption.
 
-Substituting $a$ and $b$ by $\cos(\theta)$ and $\sin(\theta)$, respectively, we confirm that
+Substituting $a$ and $b$ by $\cos(\Theta)$ and $\sin(\Theta)$, respectively, we confirm that
 
 $$
-\cos^2(\theta) + \sin^2(\theta) = 1
+\cos^2(\Theta) + \sin^2(\Theta) = 1
 $$
 $\Box$
 
 ### Determining the angle θ between the vectors
 
-**Claim**: $\theta$ is the angle between $\hat{v}, \vec{x}$.
+**Claim**: $\Theta$ is the angle between $\hat{v}, \vec{x}$.
 
 This follows trivially since we have already shown that both $\hat{v}$ and $\vec{x}$ are unit vectors.
 By definition of the dot product, we have:
 
 $$
 \begin{alignat*}{3}
-\hat{v} \cdot \vec{x} &= \cos(\theta) |\hat{v}| |\vec{x}| \\
-                      &= \cos(\theta)
+\hat{v} \cdot \vec{x} &= \cos(\Theta) |\hat{v}| |\vec{x}| \\
+                      &= \cos(\Theta)
 \end{alignat*}
 $$
 which is illustrated in [Figure {figures.sinecosine}](#fig:sinecosine).
@@ -275,7 +275,7 @@ $\Box$
 One particular result we get from this - and which will be useful when applying rotations in $\mathbb{R}^3$ around arbitrary axes -  is the fact that, for any perpendicular vectors $\vec{x}, \vec{y} \in \mathbb{R}^2$, where $|\vec{x}| = |\vec{y}|$, the linear combination
 
 $$
-\vec{v} = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+\vec{v} = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
 $$
 
 yields a vector $\vec{v}$ satisfying 
@@ -287,13 +287,13 @@ $$
 Following the previous proof, we now treat $\vec{x}, \vec{y}$ as vectors with arbitrary, but **equal length**, resulting in the (normalized) linear combination
 
 $$
-\hat{v} = \cos(\theta) \frac{\vec{x}}{|\vec{x}|} + \sin(\theta)\frac{\vec{y}}{|\vec{y}|}
+\hat{v} = \cos(\Theta) \frac{\vec{x}}{|\vec{x}|} + \sin(\Theta)\frac{\vec{y}}{|\vec{y}|}
 $$
 
 To cancel out the denominators on the right-hand side, we multiply the equation by $|\vec{x}|$[^denominator], yielding
 
 $$
-\hat{v}|\vec{x}| = \cos(\theta) \vec{x} + \sin(\theta) \vec{y}
+\hat{v}|\vec{x}| = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
 $$
 
 Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\Box$
@@ -304,19 +304,19 @@ Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\
 
 When rotating a point by a given angle, the transformation depends on the chosen center of rotation.
 
-<Figure idx={figures.rotation_origin} /> illustrates the point $p = (6, 4)$ rotated by $\theta = 20 \degree$.
+<Figure idx={figures.rotation_origin} /> illustrates the point $p = (6, 4)$ rotated by $\Theta = 20 \degree$.
 Here, $p$ is rotated around the origin $(0, 0)$ of the coordinate plane, resulting in $p'$, which can be obtained via the matrix-vector product
 
 $$
-\boldsymbol{R}(\theta) \cdot \vec{p} = \vec{p'}
+\boldsymbol{R}(\Theta) \cdot \vec{p} = \vec{p'}
 $$
 
 where[^excursus]
 
 $$
-\boldsymbol{R}(\theta) = \begin{pmatrix}
-\cos \theta & -\sin \theta \\
-\sin \theta & \cos \theta
+\boldsymbol{R}(\Theta) = \begin{pmatrix}
+\cos \Theta & -\sin \Theta \\
+\sin \Theta & \cos \Theta
 \end{pmatrix}
 $$
 
@@ -345,7 +345,7 @@ $\vec{p'}$ is computed such that
 Using $\vec{r} = r^T$, we get the expression:
 
 $$
-\boldsymbol{R}(\theta) (\vec{p} - \vec{r}) + \vec{r}
+\boldsymbol{R}(\Theta) (\vec{p} - \vec{r}) + \vec{r}
 $$
 
 <Embed
@@ -366,7 +366,7 @@ title={"The point p gets translated, then rotated around the origin, then transl
 As an alternative to explicitely translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as [shown previously](#expressing-the-linear-combination-with-cosine-and-sine):
 
 $$
-\vec{p'} = \cos(\theta) \vec{rp} + \sin(\theta) \vec{rp}_{\perp} 
+\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp} 
 $$
 
 Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same magnitude, i.e. $|\vec{rp}_{\perp}| = |\vec{rp}|$.
@@ -395,7 +395,7 @@ To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
     In fact, the resulting vector $\vec{rp}_{\perp}$ is simply $\vec{rp}$ rotated by $90\degree$ **counterclockwise**, which will be formally verified with the next method.
 
 2. Using the **rotation matrix**:<br />
-    By substituting $\theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\theta)$, we get:
+    By substituting $\Theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\Theta)$, we get:
         
     $$
         \boldsymbol{R}(\frac{\pi}{2}) = \begin{pmatrix}\cos \frac{\pi}{2} & -sin \frac{\pi}{2} \\ \sin \frac{\pi}{2} & \cos \frac{\pi}{2} \end{pmatrix} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix}
@@ -412,11 +412,11 @@ To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
 In both cases, $\vec{rp}_\perp$ can be used for finalizing the linear combination as
 
 $$
-\vec{p'} = \cos(\theta) \vec{rp} + \sin(\theta) \vec{rp}_{\perp}
+\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp}
 $$
 $\Box$
 
-Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address in the next section.
+Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\Theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address in the next section.
 
 
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
@@ -464,7 +464,7 @@ $$
 $$
 
 :::note
-It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant - in three dimensions, that is. This raises the question: Where is the rotation axis located in the Euclidean space?
+It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant. This raises the question: Where is the rotation axis located in the Euclidean space?
 
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
@@ -473,8 +473,34 @@ Here, the _parallel projection_ of any rotated vector onto the rotation axis wil
 
 However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_discrepancy}/>).
 
-Informally speaking, the fixed projection of a rotated vector is not absent, its just that it's not "visible" within the plane of rotation.
+Informally speaking, the fixed projection of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
 :::
+
+With the given explanation, we can conclude:
+
+ - $\vec{v}_{\parallel}$ is the **parallel projection** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed via
+    $$
+       \vec{v}_{\parallel} = (\vec{v} \cdot \hat{n}) \cdot \hat{n}
+    $$
+ - $\vec{v}_{\perp}$ is the orthogonal projection of $\vec{v}$ onto the plane perpendicular to $\hat{n}$. $\vec{v}_{\perp}$ is obtained by computing
+   $$
+   \vec{v}_{\perp} = \vec{v} - \vec{v}_{\parallel}
+   $$
+ - While the parallel projection of $\vec{v}$ stays fixed under rotation, the vector represented by the orthogonal projection changes.
+   It can be expressed by the linear combination
+   $$
+   \vec{v}'_{\perp} = \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}
+   $$
+   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to satisfy the condition that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and represent $\vec{v}_{\perp}$ rotated by $90^\circ$ **counterclockwise**. 
+   The existence of such a vector was shown in the [previous section](#generalization-to-arbitrary-lengths). We can obtain the orthogonal basis by computing $\vec{w}$ via
+   $$
+   \vec{w} = \hat{n} \times \vec{v}_{\perp}
+   $$
+    Since $|\hat{n}| = 1$ and $\angle{ \hat{n}, \vec{v}_{\perp}} = \frac{\pi}{2}$, the length of $\vec{w}$ is verified with the **vector cross product**
+
+   $$
+   |\vec{w}| = |\hat{n} \times \vec{v}_{\perp}|= \sin(\frac{\pi}{2}) \cdot |\hat{n}| \cdot |\vec{v}_{\perp}| = |\vec{v}_{\perp}|
+   $$
 
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
