@@ -14,7 +14,7 @@ Fixing missing favicon.ico in Ext JS applications.
 ### The issue
 
 I’m not quite sure *when *and *why *it broke, but it looks like production builds of Sencha Ext JS applications do not contain any **favicon.ico** originally existing in the development build (*anymore*).
-
+<!--truncate-->
 While everything seems to be okay with development builds (that’s easy, they refer to the development’s root folder in most cases and do not copy and move files around like the production build does), deploying to production will show the default icon coming with your vendor’s browser for any Sencha ExtJS application, at least when your environment is using the following package versions:
 
 ```

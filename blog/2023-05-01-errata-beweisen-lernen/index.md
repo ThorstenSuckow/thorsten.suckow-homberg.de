@@ -16,7 +16,7 @@ Ich hoffe, dass meine Notizen dem Autorenteam zur Überprüfung und ggf. Korrekt
 
 Zum Hintergrund dieses Blog-Posts gibt es [weiter unten](#hintergrund-aufgabe-178-und-das-kleine-manöver-das-kostete) mehr Informationen.
 
-
+<!--truncate-->
 
 ## Errata
 

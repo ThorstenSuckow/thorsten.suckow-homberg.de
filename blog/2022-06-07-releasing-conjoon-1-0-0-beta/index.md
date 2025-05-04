@@ -17,7 +17,7 @@ $ npx create-conjoon@latest
 ```
 
 then follow the instructions on screen.
-
+<!--truncate-->
 Don’t miss out on the [documentation](https://www.conjoon.org/docs) for more information about available install and build types.
 
 While I’m confident that conjoon can take its first steps in a production environment, expect a stable first release to be available in the coming days. Until then, a few additions to the documentation and the [guides](https://www.conjoon.org/docs/category/guides) will be made.
