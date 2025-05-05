@@ -17,6 +17,9 @@ import rotation_origin_code from '!!raw-loader!./plots/vector-rotation/rotation_
 import rotation_point from "./img/vector-rotation/rotation_point.png";
 import rotation_point_code from '!!raw-loader!./plots/vector-rotation/rotation_point.py?raw';
 
+import rodrigues from "./img/vector-rotation/rodrigues.png";
+import rodrigues_code from '!!raw-loader!./plots/vector-rotation/rodrigues.py?raw';
+
 export const figures = {
     sinecosine: 1,
     rotation_origin : 2,
@@ -27,7 +30,6 @@ export const figures = {
     rotation_discrepancy: 7
 };
 
-# Rotation
 
 Given an orthonomal basis in $\mathbb{R}^3$, we now derive a matrix for rotating a vector $\vec{v}$ around the $x$-axis.
 Recall the rotation matrix $\boldsymbol{R}_x$
@@ -82,7 +84,7 @@ $$
 or, as a matrix multiplication
 
 $$
-\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} cos \Theta \\\sin \Theta \end{pmatrix} = \vec{v}
+\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} \cos \Theta \\\sin \Theta \end{pmatrix} = \vec{v}
 $$
 
 (Observe how $\vec{x}, \vec{y}$ represent the identity matrix $I_{2}$).
@@ -336,7 +338,7 @@ $$
 
 
 #### Choosing a different center of rotation
-The rotation around $r$ is illustrated in <Figure idx={figures.rotation_point} />. 
+<Figure idx={figures.rotation_point} /> illustrates the rotation around $r$. 
 $\vec{p'}$ is computed such that
  - the rotation center $r$ becomes the origin of all points in the coordinate plane
  - rotation is applied 
@@ -422,17 +424,31 @@ Without delving into the complexity of the involved operations, it should be evi
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
 
 ## 3D Rotation about an Arbitrary Axis 
-
-Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and using a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues Formula**[^rodrigues]:
+### The Rodrigues Formula
+Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues formula**[^rodrigues]:
 
 $$
- \vec{v'} = (\vec{v} \cdot \vec{n}) \cdot \vec{v} + \cos(\Theta) (\vec{v} - ((\vec{v} \cdot \vec{n}) \cdot \vec{v})) + \sin\Theta (\vec{v} \cdot \vec{n})
+ \vec{v'} = \vec{v}_{\parallel} + \cos(\Theta) \vec{v}_{\perp} + \sin(\Theta) \vec{w}
 $$
 
-We will now proceed to derive the formula.
+We will now proceed to derive the formula, with a special focus on obtaining $\vec{w}$ which represents a coordinate axis in a locally defined orthogonal basis with equal-length axes.
 
 In <Figure idx={figures.rodrigues} />, the vector $\vec{v}$ is rotated about the axis $\vec{n}$. 
-Since we do not care about the magnitude of $\vec{n}$, but rather it's direction, we normalize the vector and obtain $\hat{n}$, which will be the **center of rotation** for $\vec{v}$ in the following derivation.
+Since we do not care about the magnitude of $\vec{n}$, but rather its direction, we normalize the vector and obtain $\hat{n}$, which will be the **center of rotation** for $\vec{v}$ in the following derivation.
+
+<Embed modeAware={true}
+figref={figures.rodrigues}
+title={"Visualization of the Rodrigues formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the orthogonal projection undergoes rotation in the locally defined two-dimensional plane."}>
+<img src={rodrigues}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rodrigues_code}
+</CodeBlock>
+</details>
+
 
 Clearly, rotating one vector about another vector in 3D must preserve at least one component of the vector that never changes, specifically the one aligned with the axis of rotation (see <Figure idx={figures.axis_rotation} />).
 To illustrate this, consider the special case of rotation about one of the standard basis vectors in $\mathbb{R}^3$:
@@ -450,7 +466,7 @@ $$
 $$
 Analogous reasoning applies to rotation about the $x$-axis and $y$-axis, where the respective components remain constant.
 
-Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis-length, as we will see shortly - helps us identify the components of a vector that remain unchanged under rotation. 
+Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis lengths, as we will see shortly - helps us isolate the component of a vector that remains unchanged under rotation. 
 Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a vector $\vec{a}$ onto another vector $\vec{b}$.
     
 $$
@@ -469,38 +485,107 @@ It might at first seem confusing that both the orthogonal and the parallel proje
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
 As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, perpendicular to the $z$-axis. 
-Here, the _parallel projection_ of any rotated vector onto the rotation axis will be $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. 
+Here, the _parallel projection_ of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. 
 
 However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_discrepancy}/>).
 
 Informally speaking, the fixed projection of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
 :::
 
-With the given explanation, we can conclude:
+Knowing that the vector-components parallel to the rotation axis stay fixed and only the orthogonal projection changes, we conclude:
 
- - $\vec{v}_{\parallel}$ is the **parallel projection** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed via
+ - $\vec{v}_{\parallel}$ is the **parallel projection** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed as
     $$
        \vec{v}_{\parallel} = (\vec{v} \cdot \hat{n}) \cdot \hat{n}
     $$
+    This is the part that never changes during rotation. Thus, the rotated vector $\vec{v}'$ is the vector sum of the parallel projection and the orthogonal projection after rotation.
  - $\vec{v}_{\perp}$ is the orthogonal projection of $\vec{v}$ onto the plane perpendicular to $\hat{n}$. $\vec{v}_{\perp}$ is obtained by computing
    $$
    \vec{v}_{\perp} = \vec{v} - \vec{v}_{\parallel}
    $$
- - While the parallel projection of $\vec{v}$ stays fixed under rotation, the vector represented by the orthogonal projection changes.
+ - While the parallel projection of $\vec{v}$ stays fixed under rotation, the orthogonal projection itself changes.
    It can be expressed by the linear combination
    $$
    \vec{v}'_{\perp} = \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}
    $$
-   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to satisfy the condition that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and represent $\vec{v}_{\perp}$ rotated by $90^\circ$ **counterclockwise**. 
+   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to ensure that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and correspond to a $90^\circ$ **counterclockwise** rotation of $\vec{v}_{\perp}$. 
    The existence of such a vector was shown in the [previous section](#generalization-to-arbitrary-lengths). We can obtain the orthogonal basis by computing $\vec{w}$ via
    $$
    \vec{w} = \hat{n} \times \vec{v}_{\perp}
    $$
-    Since $|\hat{n}| = 1$ and $\angle{ \hat{n}, \vec{v}_{\perp}} = \frac{\pi}{2}$, the length of $\vec{w}$ is verified with the **vector cross product**
+    Since $|\hat{n}| = 1$ and $\angle( \hat{n}, \vec{v}_{\perp}) = \frac{\pi}{2}$, the length of $\vec{w}$ is verified with the **vector cross product**
 
    $$
    |\vec{w}| = |\hat{n} \times \vec{v}_{\perp}|= \sin(\frac{\pi}{2}) \cdot |\hat{n}| \cdot |\vec{v}_{\perp}| = |\vec{v}_{\perp}|
    $$
+
+### Deriving the Rotation Matrices
+
+We now derive $\vec{v}'$ as the result of rotating the vector $\vec{v}$ by an angle $\Theta$ about the rotation axis $\vec{n}$ using the locally defined two-dimensional orthogonal basis, with coordinate axes $\vec{v}_{\perp}$ and $\vec{w}$.
+
+Using a specific rotation axis, we also verify that $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &= \vec{v}_{\parallel} + \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - \vec{v}_{\parallel}) + \sin(\Theta)(\hat{n} \times \vec{v}_{\perp})\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - \vec{v}_{\parallel}))\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}))\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)((\hat{n} \times \vec{v}) - (\hat{n} \times ((\vec{v} \cdot \hat{n}) \cdot \hat{n})))\\
+        &= (\vec{v} - (\vec{v} \cdot \hat{n})\cdot \hat{n}) + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times \vec{v}))\\
+\end{alignat*}
+$$
+
+Solving componentwise, we obtain 
+
+$$
+\begin{alignat*}{3}
+\vec{v}_{\parallel} &= (\vec{v} \cdot \hat{n})\cdot \hat{n} &&=  \begin{pmatrix} (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_x  \\ (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_y \\ (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_z \end{pmatrix}\\
+\\ \
+\vec{v}_{\perp} &= \vec{v} - \vec{v}_{\parallel} &&= \begin{pmatrix} \vec{v}_x - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_x  \\ \vec{v}_y - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_y \\ \vec{v}_z - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_z \end{pmatrix}\\
+\\ \
+\vec{w} &= \hat{n} \times \vec{v} &&= \begin{pmatrix} \hat{n}_y\vec{v}_z - \hat{n}_z\vec{v}_y \\ \hat{n}_z\vec{v}_x - \hat{n}_x\vec{v}_z \\ \hat{n}_x\vec{v}_y - \hat{n}_y\vec{v}_x  \end{pmatrix}
+\end{alignat*}
+$$
+
+
+We rotate $\vec{v}$ by $\Theta$ around the $z$-axis of the orthonormal standard basis in $\mathbb{R}^3$.
+
+Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the Rodrigues formula, we derive $\vec{v}'$:
+
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &= \begin{pmatrix} (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0  \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0 \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  1 \end{pmatrix} + 
+\cos(\Theta) \begin{pmatrix} \vec{v}_x - (\vec{v}_x \cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0  \\ \vec{v}_y - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0 \\ \vec{v}_z - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot  1 \end{pmatrix} +
+\sin(\Theta)\begin{pmatrix} 0 \cdot \vec{v}_z - 1 \cdot \vec{v}_y \\ 1\cdot\vec{v}_x - 0\cdot\vec{v}_z \\ 0\cdot\vec{v}_y - 0\cdot\vec{v}_x  \end{pmatrix}\\
+\\ \
+ &= \begin{pmatrix} 0  \\  0 \\ \vec{v}_z \end{pmatrix} +
+\cos(\Theta) \begin{pmatrix} \vec{v}_x \\ \vec{v}_y \\ 0 \end{pmatrix} +
+\sin(\Theta)\begin{pmatrix} -  \vec{v}_y \\ \vec{v}_x  \\ 0 \end{pmatrix}\\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\  \cos(\Theta) \vec{v}_y + \sin(\Theta)\vec{v}_x \\ \vec{v}_z \end{pmatrix}
+\end{alignat*}
+$$
+
+which corresponds to the matrix-vector product of $\boldsymbol{R}_z(\Theta)$ and $\vec{v}$
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &=  \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\  \cos(\Theta) \vec{v}_y + \sin(\Theta)\vec{v}_x \\ \vec{v}_z \end{pmatrix} \\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\ \sin(\Theta)\vec{v}_x + \cos(\Theta) \vec{v}_y  \\ \vec{v}_z \end{pmatrix}\\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) & -\sin(\Theta) & 0 \\ \sin(\Theta) & \cos(\Theta) & 0 \\ 0 & 0 & 1 \end{pmatrix} \cdot  \begin{pmatrix} \vec{v}_x \\ \vec{v}_y \\ \vec{v}_z \end{pmatrix}\\
+\\ \
+&= \boldsymbol{R}_z(\Theta) \vec{v}
+\end{alignat*}
+$$
+
+This confirms that the rotation matrix $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
+
+Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\Theta)$.
+
 
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
