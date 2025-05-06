@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Arc
+from matplotlib.patches import Arc, FancyArrowPatch
 
 fig, ax = plt.subplots(figsize=(6, 6))
 
