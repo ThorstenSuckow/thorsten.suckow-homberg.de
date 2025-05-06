@@ -1,0 +1,138 @@
+---
+title: "X.509 Certificate"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {BibRef, GlosRef} from "../../src/components/References";
+
+# X.509 Certificate (CSEC)
+
+The **X.509 Certificate** is a standardised certificate format and is commonly used by _Public Key Infrastructures_ (_PKI_) to ensure interoperability between systems.
+
+**X.509 v3** is specified in [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280), where the certificate is structured as a sequence consisting of three required fields (`tbsCertificate`[^tobesigned], `signatureAlgorithm`, `signatureValue`). Within those fields, the following properties are found:
+
+| Field                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **signatureValue**            | The _digital signature_ of the certificate.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Version**                   | The version number of the certificate, e.g. `v3` for an X.509 v3 certificate. Different versions support different fields, e.g. the **Extensions** are only available with v3.                                                                                                                                                                                                                                                                                                                                                                                                |
+| **Serial Number**             | The serial number is used to identify a certificate. _Certificate Revocation Lists_ (CRL) use the serial numbers of certificates that are revoked. Also helps with search queries. **Issuer** and **Serial Number** uniquely identify a certificate.                                                                                                                                                                                                                                                                                                                          |
+| **Signature (in tbsCertificate)** | Contains the _identifier_ of the algorithm used by the CA to sign the certificate[^redundant].                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Issuer**                    | Identifies the entity that signed and issued the certificate. The value is a _distinguished name_ following [x.501](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.4) specifications.                                                                                                                                                                                                                                                                                                                                                                            |
+| **Validity**                  | Provides information about the certificate's validity period, i.e. start and end date.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **Subject**                   | The name of the entity the certificate refers to, i.e. the subject and public key owner (in the same format as **Issuer**).                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Subject Public Key Info**   | The public key of the subject, along with the identifier of the algorithm used with the key.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Extensions**                | Extensions used with the certificate. Provides flags to indicate whether the extension is _critical_. If an extension is marked as _critical_ and the extension cannot be processed, the validating entity is advised to discard the certificate. Examples of extensions are:<br/>- _Basic Constraints_: Helps with identifying the certificate's subject as a CA<br />- _Key Usage_: The purpose of the public key contained in the certificate, e.g. signing, encryption [etc.](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3) |
+
+## Example Certificate
+
+Here is an example x.509 certificate as raw OpenSSL data[^example]. It uses RSA as the public key algorithm. The **Subject Public Key Info**-section includes the public exponent and the modulus.
+
+```
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            06:43:ce:64:db:c3:68:3f:5b:59:e4:b7:9e:d5:a6:09:f1:b1
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = US, O = Let's Encrypt, CN = R11
+        Validity
+            Not Before: Apr 26 19:01:08 2025 GMT
+            Not After : Jul 25 19:01:07 2025 GMT
+        Subject: CN = thorsten.suckow-homberg.de
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:98:98:58:eb:ec:cb:b6:77:81:e8:70:0e:87:22:
+                    31:ef:d2:63:63:67:01:9c:90:4e:10:16:94:9c:f5:
+                    19:b6:05:30:56:b6:82:41:62:d4:31:0b:79:c0:d4:
+                    e1:c1:36:13:1f:5c:70:16:21:d0:1c:53:13:8c:3c:
+                    0c:8c:5d:15:47:f8:c7:94:29:41:8f:c2:e3:b2:29:
+                    b6:1b:77:8d:a8:73:ea:d8:63:91:37:d2:26:50:61:
+                    a1:04:bd:fa:76:22:06:a5:a0:3d:dc:07:4b:8f:b7:
+                    06:24:b6:17:92:2e:c9:ae:dc:16:2c:2c:c3:6c:94:
+                    23:2d:9f:9d:d4:40:da:98:26:3d:67:87:37:b6:4c:
+                    a4:a3:ee:52:31:e3:87:2c:ed:38:ee:70:a5:b5:98:
+                    7d:c3:87:96:fb:2e:45:6c:a2:6c:24:ff:63:42:b6:
+                    e4:7c:d4:5f:6b:96:73:24:7a:0c:a5:89:68:86:f1:
+                    71:03:79:53:0e:88:1c:6e:5a:a5:f0:80:0c:66:0d:
+                    a4:a2:20:b5:b9:09:1c:00:35:8f:3c:89:a7:8a:8c:
+                    4e:57:fd:1e:28:19:3a:63:d0:56:03:e9:f5:32:0d:
+                    37:40:3f:9a:90:71:33:d7:d7:b4:7e:41:48:b4:05:
+                    aa:8e:f7:65:36:87:87:66:ca:ff:6d:83:43:ef:48:
+                    ac:8d
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                58:C9:B2:AA:68:E6:A5:48:CC:D8:2B:E8:42:B2:BF:7F:BE:45:66:68
+            X509v3 Authority Key Identifier: 
+                keyid:C5:CF:46:A4:EA:F4:C3:C0:7A:6C:95:C4:2D:B0:5E:92:2F:26:E3:B9
+
+            Authority Information Access: 
+                OCSP - URI:http://r11.o.lencr.org
+                CA Issuers - URI:http://r11.i.lencr.org/
+
+            X509v3 Subject Alternative Name: 
+                DNS:thorsten.suckow-homberg.de
+            X509v3 Certificate Policies: 
+                Policy: 2.23.140.1.2.1
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:http://r11.c.lencr.org/50.crl
+
+            CT Precertificate SCTs: 
+                Signed Certificate Timestamp:
+                    Version   : v1 (0x0)
+                    Log ID    : 0D:E1:F2:30:2B:D3:0D:C1:40:62:12:09:EA:55:2E:FC:
+                                47:74:7C:B1:D7:E9:30:EF:0E:42:1E:B4:7E:4E:AA:34
+                    Timestamp : Apr 26 19:59:38.393 2025 GMT
+                    Extensions: none
+                    Signature : ecdsa-with-SHA256
+                                30:46:02:21:00:C2:E2:B1:FE:BD:4E:96:B5:D3:26:D2:
+                                E4:18:94:87:2F:30:F9:58:4F:A0:34:61:12:70:15:DA:
+                                69:93:9B:8D:A5:02:21:00:95:44:FB:37:A3:A1:C1:E1:
+                                56:1A:51:E1:01:17:16:7F:A6:FE:64:6D:12:2A:93:09:
+                                F3:DE:58:E2:B0:4F:CA:4E
+                Signed Certificate Timestamp:
+                    Version   : v1 (0x0)
+                    Log ID    : AF:18:1A:28:D6:8C:A3:E0:A9:8A:4C:9C:67:AB:09:F8:
+                                BB:BC:22:BA:AE:BC:B1:38:A3:A1:9D:D3:F9:B6:03:0D
+                    Timestamp : Apr 26 19:59:38.624 2025 GMT
+                    Extensions: none
+                    Signature : ecdsa-with-SHA256
+                                30:45:02:20:1E:86:F9:C9:DC:EB:5B:42:60:81:80:4F:
+                                1D:D7:EC:2C:3C:21:B6:FE:D3:61:9B:75:7F:EC:74:A7:
+                                D2:F7:6F:7C:02:21:00:B6:15:AE:CC:DF:4C:47:AF:89:
+                                53:B4:10:8D:81:5B:84:70:F1:2A:55:0D:8D:40:51:E4:
+                                BE:28:B9:FC:66:C3:E2
+    Signature Algorithm: sha256WithRSAEncryption
+         0b:23:74:7e:1a:5e:83:a7:84:a3:af:85:d1:70:83:5e:f7:f0:
+         38:3c:fd:1e:8a:42:4d:cd:6b:ca:88:83:9c:6d:7f:c6:80:92:
+         51:e8:5a:42:18:b3:b4:c2:ea:df:63:58:28:71:20:29:27:09:
+         e4:f6:9b:6f:41:4a:32:8d:43:f7:bf:d1:53:25:12:76:17:77:
+         34:8c:fc:a7:cc:78:2a:14:cc:20:dc:38:7b:cf:a6:b0:bc:4d:
+         10:bc:a3:59:40:a9:08:4b:81:49:9c:ee:2c:86:3e:65:64:25:
+         87:4e:0f:6e:05:4f:9d:0e:be:9f:0c:09:d4:36:dc:2f:c3:54:
+         0c:19:d1:34:06:a9:61:31:64:c9:e5:a7:36:39:f3:70:84:55:
+         4e:b0:d9:6b:4a:f7:f7:ce:35:f6:f4:14:26:29:b9:64:d1:66:
+         15:a9:31:73:d1:25:a0:bd:43:68:10:83:4f:a9:9e:4d:b6:11:
+         8d:1a:cd:4b:49:d0:d8:ea:90:52:e3:c6:d0:9e:50:b1:99:d0:
+         28:9e:84:9c:47:e7:66:05:18:d4:e8:ea:e2:3c:d3:0b:bd:de:
+         69:81:6e:2e:25:db:61:9d:bd:f2:77:db:dd:4c:ae:31:14:fe:
+         ad:01:ec:b1:a4:6b:31:dd:84:c7:f7:05:b1:d4:bf:88:62:5b:
+         19:4f:de:60
+```
+
+----------------------------
+
+[^redundant]: redundant to **signatureAlgorithm**, an identifier of the algorithm used to create the signature with the help of the **Issuer**'s private key.
+[^tobesigned]: _tbs_ = [_to be signed_](https://datatracker.ietf.org/doc/html/rfc5280#section-5.1.2)
+[^example]: retrieved 06.05.2025 from **this** website, https://thorsten.suckow-homberg.de
