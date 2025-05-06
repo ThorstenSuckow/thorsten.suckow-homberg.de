@@ -20,6 +20,10 @@ import rotation_point_code from '!!raw-loader!./plots/vector-rotation/rotation_p
 import rodrigues from "./img/vector-rotation/rodrigues.png";
 import rodrigues_code from '!!raw-loader!./plots/vector-rotation/rodrigues.py?raw';
 
+import vector_projection from "./img/vector-rotation/vector_projection.png";
+import vector_projection_code from '!!raw-loader!./plots/vector-rotation/vector_projection.py?raw';
+
+
 export const figures = {
     sinecosine: 1,
     rotation_origin : 2,
@@ -472,6 +476,21 @@ Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a
 $$
 \vec{a}_{\parallel} = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}
 $$
+
+
+<Embed modeAware={true}
+figref={figures.vector_projection}
+title={"Parallel and orthogonal projection of a vector a onto a vector b. The parallel projection represents the component of vector a into the direction of vector b, the orthogonal projection the component perpendicular to b."}>
+<img src={vector_projection}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {vector_projection_code}
+</CodeBlock>
+</details>
+
 
 Here, $\vec{a}_{\parallel}$ represents the $x$-component of vector $\vec{a}$ in the direction of $\vec{b}$, while the **orthogonal** (or "sifted out") $y$-component is given by $\vec{a}_{\perp}$:
 
