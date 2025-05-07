@@ -23,15 +23,20 @@ import rodrigues_code from '!!raw-loader!./plots/vector-rotation/rodrigues.py?ra
 import vector_projection from "./img/vector-rotation/vector_projection.png";
 import vector_projection_code from '!!raw-loader!./plots/vector-rotation/vector_projection.py?raw';
 
+import rotation_disc1 from "./img/vector-rotation/rotation_disc1.png";
+import rotation_disc1_code from '!!raw-loader!./plots/vector-rotation/rotation_disc1.py?raw';
+
+import rotation_disc2 from "./img/vector-rotation/rotation_disc2.png";
+import rotation_disc2_code from '!!raw-loader!./plots/vector-rotation/rotation_disc2.py?raw';
 
 export const figures = {
     sinecosine: 1,
     rotation_origin : 2,
     rotation_point : 3,
     rodrigues: 4,
-    axis_rotation: 5,
-    vector_projection: 6,
-    rotation_discrepancy: 7
+    vector_projection: 5,
+    rotation_disc1: 6,
+    rotation_disc2: 7
 };
 
 
@@ -100,10 +105,9 @@ In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents
 [^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
 
 
-<a name="fig:sinecosine" />
 <Embed
     modeAware={true}
-    figure={figures.sinecosine}
+    figref={figures.sinecosine}
     title={
         "The vector v is rotated around the origin by θ degree, resulting in vector v'."}>
     <img src={sinecosine}  />
@@ -454,7 +458,7 @@ title={"Visualization of the Rodrigues formula applied to vector v, rotated 45°
 </details>
 
 
-Clearly, rotating one vector about another vector in 3D must preserve at least one component of the vector that never changes, specifically the one aligned with the axis of rotation (see <Figure idx={figures.axis_rotation} />).
+Clearly, rotating one vector about another vector in 3D must preserve at least one component of the vector that never changes, specifically the one aligned with the axis of rotation.
 To illustrate this, consider the special case of rotation about one of the standard basis vectors in $\mathbb{R}^3$:
 
 $$
@@ -503,10 +507,40 @@ It might at first seem confusing that both the orthogonal and the parallel proje
 
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
-As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, perpendicular to the $z$-axis. 
-Here, the _parallel projection_ of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. 
+As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, **perpendicular to the $z$-axis** (see <Figure idx={figures.rotation_disc1}/>). 
 
-However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_discrepancy}/>).
+
+<Embed
+modeAware={true}
+figref={figures.rotation_disc1}
+title={"Vector a lies in the xy-plane and is rotated around the z-axis. Any projection of a onto the z-axis must be zero since a is perpendicular to z."}>
+<img src={rotation_disc1}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_disc1_code}
+</CodeBlock>
+</details>
+
+Here, the _parallel projection_ of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. This follows directly from the dot product.
+
+However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_disc2}/>).
+
+<Embed
+modeAware={true}
+figref={figures.rotation_disc2}
+title={"The xy-plane is now tilted. Vector a rotates around the z-axis. Unlike before, its projection onto the z-axis is non-zero, yet it remains fixed under rotation."}>
+<img src={rotation_disc2}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_disc2_code}
+</CodeBlock>
+</details>
 
 Informally speaking, the fixed projection of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
 :::
