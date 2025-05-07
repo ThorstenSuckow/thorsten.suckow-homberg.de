@@ -3,7 +3,14 @@ title: "X.509 Certificate"
 ---
 
 import {BackButton} from "../../src/components/BackButton.js";
-import {BibRef, GlosRef} from "../../src/components/References";
+import {Figure, BibRef, GlosRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+import certpath from "./img/csec.x509/certificationpath.png";
+
+export const figures = {
+    certpath: 1
+}
 
 # X.509 Certificate (CSEC)
 
@@ -36,6 +43,28 @@ Signing entities and public key holders have responsibilities in certificate man
  - **Certification Authority (CA)**: Issues and maintains certificates and Certificate Revocation Lists (CRLs).
  - **Directory**: Provides directory services that publish certificates and CRLs.
 
+## Certification Path
+
+<Figure idx={figures.certpath} /> visualizes a **certification path** from a signed document up to the root-CA. 
+The root certificate is self signed (as indicated by `Basic Constraints: CA`). 
+The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`. 
+`entity` signs the `document` with its private key and publishes its public key via a directory service.
+
+A relying party receiving the document validates the signature using the entity's public key. 
+The signature is only trusted if the entity's certificate is valid.
+To ensure this, the verifier checks the certificate's validity period and retrieves the certificate of the issuing authority along with its public key.
+This process repeats recursively until the root of the certification path is reached - the self-signed root certificate.
+
+Different validation models apply. [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6) specifies path validation procedures.
+Additional requirements for constraints in path validation may be imposed by national laws, regulatory frameworks or institutional policies[^bsi]. 
+
+
+<Embed
+modeAware={true}
+figref={figures.certpath}
+title={"An entity signs a document. The signature is validated by checking all involved instances up to the root."}>
+<img src={certpath}  />
+</Embed>
 
 ## Example Certificate
 
@@ -150,3 +179,4 @@ Certificate:
 [^redundant]: redundant to **signatureAlgorithm**, an identifier of the algorithm used to create the signature with the help of the **Issuer**'s private key.
 [^tobesigned]: _tbs_ = [_to be signed_](https://datatracker.ietf.org/doc/html/rfc5280#section-5.1.2)
 [^example]: retrieved 06.05.2025 from **this** website, https://thorsten.suckow-homberg.de
+[^bsi]: for example, BSI Germany describes _hybrid_ and _shell_ validation model: [BSI TR-03145-5 Secure CA Operation Version 1.0.1](https://www.bsi.bund.de/dok/TR-03145) (retrieved 07.05.2025)

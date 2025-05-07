@@ -18,9 +18,16 @@ function citation ({name, pp}) {
 
 }
 
+function Figure ({idx}) {
+    return (
+        <a href={`#fig_${idx}`}><span className="bibRef">Figure {idx}</span></a>
+    );
+
+}
+
 function Abbildung ({idx}) {
     return (
-        <a href={`#fig_${idx}`}>[<span className="bibRef">Abbildung {idx}</span>]</a>
+        <a href={`#fig_${idx}`}><span className="bibRef">Abbildung {idx}</span></a>
     );
 
 }
@@ -48,4 +55,4 @@ function toolbox ({name, file}) {
 }
 
 export {toolbox as GlosRef};
-export {Abbildung, citation as Cite, Bibliography as BibRef};
+export {Figure, Abbildung, citation as Cite, Bibliography as BibRef};
