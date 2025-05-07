@@ -12,7 +12,7 @@ enableComments: true
 Creating a custom labeled version of [conjoon](https://conjoon.org) has never been easier.
 
 The installer (i.e. [initializer](https://docs.npmjs.com/cli/v8/commands/npm-init)) for conjoon received an update to make setting up a local installation of the frontend more convenient and more intuitive.
-
+<!--truncate-->
 The installer requires [Node.js](https://nodejs.org/) 16.14 or above and is started by typing
 
 ```bash

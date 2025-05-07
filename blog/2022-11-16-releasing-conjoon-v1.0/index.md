@@ -11,7 +11,7 @@ enableComments: true
 I’m happy to announce conjoon 1.0, the very first major release of the Open Source JavaScript Email client.
 
 For updating to the latest version, simply use our [installer](https://www.conjoon.org/blog/2022/11/14/docs/api/misc/@conjoon/create-conjoon). It will let you select the latest release when opting for the version to install.
-
+<!--truncate-->
 ![](https://cdn-images-1.medium.com/max/3126/0*0A2MPF6zRkH3ks2E.png)
 
 ## Highlights[​](https://www.conjoon.org/blog/2022/11/14/1.0.0-release#highlights)

@@ -10,7 +10,7 @@ import {GlosRef, BibRef} from "../../src/components/References";
 import {BackButton} from "../../src/components/BackButton.js";
 
 
-:::info 
+
 Oft wird der Nachweis, dass das Halteproblem nicht entscheidbar ist, in der Fachliteratur (_Schöning_ <BibRef name="Sch08" pp="119 f." />, _Asteroth und Baier_ <BibRef name="BA02" pp="106 f." />, _Sipser_ <BibRef name="Sip12" pp="216 f." />) mithilfe einer Turingmaschine und einem Widerspruchsbeweis gezeigt, in etwa:
 
 Angenommen,
@@ -31,11 +31,11 @@ Damit folgt:
 $T$ stoppt bei Eingabe $w$ $\Leftrightarrow$ $T'$ verwirft $w$ $\Leftrightarrow$ $w \notin K'$ $\Leftrightarrow$ $T$ stoppt nicht
 
 **Widerspruch!**
-
+<!--truncate-->
 
 Bei _Vossen und Witt_ wird der Beweis anhand unentscheidbarer Mengen gezeigt - hierzu wird in dem Abschnitt über **Berechenbarkeit** die Abzählbarkeit von Turingmaschinen und analog dazu die Standardnummerierung von $\mathcal{P}$[^1] als theoretischer Unterbau festgelegt, um darauf aufbauend den Nachweis der Semi-Entscheidbarkeit und Unentscheidbarkeit zu führen. 
 Im Folgenden findet sich die Beweisführung nach _Vossen und Witt_ <BibRef name="VW16" pp="360 ff." /> mit ergänzenden Kommentaren. 
-:::
+
 
 [^1]: $\mathcal{P}$ bezeichnet die Menge der partiell-rekursiven Funktionen. Es gilt $\mathcal{PR} \subset \mathcal{R} \subset \mathcal{P}$, mit $\mathcal{PR}$ als die Menge der primitiv-rekursiven Funktionen, die eine echte Teilmenge der total berechenbaren Funktionen $\mathcal{R}$ sind
 

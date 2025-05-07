@@ -10,7 +10,7 @@ enableComments: true
 I recently stumbled upon a mean error that was hard to track down. Luckily, the issue was caused by a simple carelessness regarding fully configured response-objects of Simlets used in the dev-environment of the conjoon-project and did not require any large refactoring.
 
 *The original issue is tracked here: [https://github.com/conjoon/extjs-app-webmail/issues/196](https://github.com/conjoon/extjs-app-webmail/issues/196)*
-
+<!--truncate-->
 ### The issue
 
 The problem was related to batch-operations in Ext JS: When any operation of the batch fails, the pauseonexception-setting is considered and further processing of any remaining operation is halted. The user then has the option to retry the last failed operation, continuing with the remaining operations if this was finally successful.

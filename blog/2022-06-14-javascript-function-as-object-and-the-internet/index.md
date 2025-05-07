@@ -8,7 +8,7 @@ enableComments: true
 ## JavaScript, function-as-object and the internet
 
 The internet ™️ has caught up on an ad by [FERCHAU](https://www.linkedin.com/company/ferchau/), found — amongst others — somewhere within the depths of the Berlin subway.
-
+<!--truncate-->
 [![](./img/kitze-twitter.png)](https://twitter.com/thekitze/status/1535951647477846016)
 
 

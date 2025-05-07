@@ -17,7 +17,7 @@ The source-code can be found at https://github.com/ThorstenSuckow/pylabs.
 ## Usage
 
 Create input data and the associated output values. As an example, the following represents the logical **AND**-function:
-
+<!--truncate-->
 ```python
 import numpy as np
 from Perceptron import Perceptron
