@@ -50,12 +50,15 @@ The root certificate is self signed (as indicated by `Basic Constraints: CA`).
 The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`. 
 `entity` signs the `document` with its private key and publishes its public key via a directory service.
 
-A relying party receiving the document validates the signature using the entity's public key. 
-The signature is only trusted if the entity's certificate is valid.
-To ensure this, the verifier checks the certificate's validity period and retrieves the certificate of the issuing authority along with its public key.
-This process repeats recursively until the root of the certification path is reached - the self-signed root certificate.
+A relying party receiving the document builds the certification path starting with the entity's certificate up to the root CA.
+The full chain of trust must then be validated to verify the document's signature.
 
-Different validation models apply. [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6) specifies path validation procedures.
+ 1. Starting with the root CA, its public key is used to verify the signature of TSP$_1$: Its `signatureValue`-field contains the signature of the `tbsCertificate`-section.
+ 2. This step repeats with the public key of TSP$_1$ to verify the entity's `signatureValue`.  
+ 3. Only after all certificates were validated, the signature of the document is verified using the entity's public key.
+
+Depending on the context, different validation models apply.
+[RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6) specifies the path validation procedures outlined above in full technical detail.
 Additional requirements for constraints in path validation may be imposed by national laws, regulatory frameworks or institutional policies[^bsi]. 
 
 
