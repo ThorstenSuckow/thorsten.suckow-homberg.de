@@ -3,11 +3,20 @@ title: "X.509 Certificate"
 ---
 
 import {BackButton} from "../../src/components/BackButton.js";
-import {BibRef, GlosRef} from "../../src/components/References";
+import {Figure, BibRef, GlosRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+import certpath from "./img/csec.x509/certificationpath.png";
+
+export const figures = {
+    certpath: 1
+}
 
 # X.509 Certificate (CSEC)
 
 The **X.509 Certificate** is a standardised certificate format and is commonly used by _Public Key Infrastructures_ (_PKI_) to ensure interoperability between systems.
+
+## Structure
 
 **X.509 v3** is specified in [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280), where the certificate is structured as a sequence consisting of three required fields (`tbsCertificate`[^tobesigned], `signatureAlgorithm`, `signatureValue`). Within those fields, the following properties are found:
 
@@ -22,6 +31,40 @@ The **X.509 Certificate** is a standardised certificate format and is commonly u
 | **Subject**                   | The name of the entity the certificate refers to, i.e. the subject and public key owner (in the same format as **Issuer**).                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Subject Public Key Info**   | The public key of the subject, along with the identifier of the algorithm used with the key.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Extensions**                | Extensions used with the certificate. Provides flags to indicate whether the extension is _critical_. If an extension is marked as _critical_ and the extension cannot be processed, the validating entity is advised to discard the certificate. Examples of extensions are:<br/>- _Basic Constraints_: Helps with identifying the certificate's subject as a CA<br />- _Key Usage_: The purpose of the public key contained in the certificate, e.g. signing, encryption [etc.](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3) |
+
+
+## Roles and Responsibilites
+Signing entities and public key holders have responsibilities in certificate management. The following roles are commonly involved:
+
+ - **Key Generation Authority**: 
+    Responsible for generating key pairs. May be a dedicated system of the certificate issuer or the chip card of the public key holder, in which case the private key never leaves the secure environment.
+ - **Registration Authority (RA)**: Handles registration of subjects requesting certificates, and handles validation of data and identities.
+ - **Naming Authority**: Ensures that entities are assigned unique and unambiguous names.
+ - **Certification Authority (CA)**: Issues and maintains certificates and Certificate Revocation Lists (CRLs).
+ - **Directory**: Provides directory services that publish certificates and CRLs.
+
+## Certification Path
+
+<Figure idx={figures.certpath} /> visualizes a **certification path** from a signed document up to the root-CA. 
+The root certificate is self signed (as indicated by `Basic Constraints: CA`). 
+The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`. 
+`entity` signs the `document` with its private key and publishes its public key via a directory service.
+
+A relying party receiving the document validates the signature using the entity's public key. 
+The signature is only trusted if the entity's certificate is valid.
+To ensure this, the verifier checks the certificate's validity period and retrieves the certificate of the issuing authority along with its public key.
+This process repeats recursively until the root of the certification path is reached - the self-signed root certificate.
+
+Different validation models apply. [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6) specifies path validation procedures.
+Additional requirements for constraints in path validation may be imposed by national laws, regulatory frameworks or institutional policies[^bsi]. 
+
+
+<Embed
+modeAware={true}
+figref={figures.certpath}
+title={"An entity signs a document. The signature is validated by checking all involved instances up to the root."}>
+<img src={certpath}  />
+</Embed>
 
 ## Example Certificate
 
@@ -136,3 +179,4 @@ Certificate:
 [^redundant]: redundant to **signatureAlgorithm**, an identifier of the algorithm used to create the signature with the help of the **Issuer**'s private key.
 [^tobesigned]: _tbs_ = [_to be signed_](https://datatracker.ietf.org/doc/html/rfc5280#section-5.1.2)
 [^example]: retrieved 06.05.2025 from **this** website, https://thorsten.suckow-homberg.de
+[^bsi]: for example, BSI Germany describes _hybrid_ and _shell_ validation model: [BSI TR-03145-5 Secure CA Operation Version 1.0.1](https://www.bsi.bund.de/dok/TR-03145) (retrieved 07.05.2025)
