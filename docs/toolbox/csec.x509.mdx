@@ -18,7 +18,10 @@ The **X.509 Certificate** is a standardised certificate format and is commonly u
 
 ## Structure
 
-**X.509 v3** is specified in [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280), where the certificate is structured as a sequence consisting of three required fields (`tbsCertificate`[^tobesigned], `signatureAlgorithm`, `signatureValue`). Within those fields, the following properties are found:
+**X.509 v3** is specified in [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280), which defines the certificate's structure as a sequence of three fields `tbsCertificate`[^tobesigned], `signatureAlgorithm`, `signatureValue`.
+Notably, `signatureValue` contains the digital signature over the data in `tbsCertificate`.
+
+The following information is typically provided by a certificate:
 
 | Field                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
