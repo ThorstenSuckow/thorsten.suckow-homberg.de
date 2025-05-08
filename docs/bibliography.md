@@ -7,7 +7,7 @@ import {BackButton} from "../src/components/BackButton.js";
 
 # Bibliography
 
-### Akenine-Möller, Thomas et al.
+### **Akenine-Möller, Thomas et al.**
  - [RTR] **Real-Time Rendering**, Fourth Edition, A. K. Peters, Ltd., USA, 2018 <a name="rtr"></a>
 
 ### **Asteroth, Alexander; Baier, Christel**
@@ -43,12 +43,12 @@ import {BackButton} from "../src/components/BackButton.js";
  - [CL22] Thomas H Cormen and Charles E Leiserson. _Introduction to Algorithms_, fourth edition. en. London, England: MIT Press, Apr. 2022.
    isbn: 9780262046305. <a name="CL22"></a>
 
-### **Dieker, R.H. und Dieker, S**
+### **Dieker, Ralf Hartmut and Dieker, Stefan**
 
-- [GD18a] Ralf Hartmut Güting und Stefan Dieker. ``Einführung``. In: _Datenstrukturen und Algorithmen_.Wiesbaden: SpringerFachmedien Wiesbaden, 2018, S. 1-38. isbn:978-3-658-04676-7. doi:10.1007/978-3-658-04676-7_1. url: https://doi.org/10.1007/978-3-658-04676-7_1 <a name="gd18a"></a>
+- [GD18a] ``Einführung``. In: **Datenstrukturen und Algorithmen**. Wiesbaden: SpringerFachmedien Wiesbaden, 2018, S. 1-38. isbn:978-3-658-04676-7. doi:10.1007/978-3-658-04676-7_1. url: https://doi.org/10.1007/978-3-658-04676-7_1 <a name="gd18a"></a>
 
 ### **Ertel, Wolfgang**
- - [Ert21] Ertel, W. (2021). **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
+ - [Ert21]  **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
 
 ### **Evans, Eric**
 
@@ -71,12 +71,20 @@ import {BackButton} from "../src/components/BackButton.js";
 
  - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
 
+### **Hughes, John F. and van Dam, Andries and McGuire, Morgan and  Sklar, David F. and Foley, James D. and Feiner, Steven K.  and Akeley, Kurt**
+
+- [HDMS+14] **Computer Graphics - Principles and Practice**, 3rd Edition, Addison-Wesley Educational, 2014<a name="hdms+14"></a>
+
 ### **Kerningham, Brian W. and Ritchie, Dennis M.**
- - [KR88] Kernighan, Brian W. and Ritchie, Dennis M. **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
+ - [KR88] **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
 
 ### **Knuth, Donald**
  - [Knu97c] Donald E. Knuth. **The Art of Computer Programming**, Volume 3 (2nd
 Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1997. isbn: 0201896850. <a name="Knu97c"></a>
+
+### **Lengyel, Eric**
+
+- [Len16] **Foundations of Game Engine Development, Volume 1: Mathematics**. Terathon Software LLC, 2016. <a name="len16" />
 
 ### **Martin, Robert C.**
 
@@ -96,10 +104,10 @@ Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1
 
 ### **Ottmann, Thomas and Widmayer, Peter**
 
-- [OW17a] Thomas Ottmann and Peter Widmayer. ``Grundlagen``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 1-78. isbn: 978-3-662-55650-4. doi:
+- [OW17a] ``Grundlagen``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 1-78. isbn: 978-3-662-55650-4. doi:
   10.1007/978-3-662-55650-4_1. url: https://doi.org/10.1007/978-3-662-55650-4_1. <a name="OW17a"></a>
 
-- [OW17b] Thomas Ottmann and Peter Widmayer. ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79-165. isbn: 978-3-662-55650-4. doi:
+- [OW17b] ``Sortieren``. In: _Algorithmen und Datenstrukturen_. Berlin, Heidelberg: Springer Berlin Heidelberg, 2017, S. 79-165. isbn: 978-3-662-55650-4. doi:
   10.1007/978-3-662-55650-4_2. url: https://doi.org/10.1007/978-3-662-55650-4_2. <a name="OW17b"></a>
 
 ### **Papernov, AA und Stasevich, GV**

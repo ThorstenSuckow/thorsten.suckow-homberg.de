@@ -40,33 +40,41 @@ export const figures = {
 };
 
 
-Given an orthonomal basis in $\mathbb{R}^3$, we now derive a matrix for rotating a vector $\vec{v}$ around the $x$-axis.
-Recall the rotation matrix $\boldsymbol{R}_x$
+Given an angle $\Theta$ and an orthonormal basis in three-dimensional space, rotating a vector $\vec{v}$ around one of the cardinal axes can be computed with a **rotation matrix** $\boldsymbol{R}(\Theta)$.
+
+The following matrices define rotations about the $x$, $y$ and $z$ axes, respectively:
 
 $$
-
-\boldsymbol{R}_x = \begin{pmatrix}
+\boldsymbol{R}_x(\Theta) = \begin{pmatrix}
  &1 &0 &0 \\
- &0 &\cos &-\sin \\
- &0 &\sin &\cos
+ &0 &\cos \Theta &-\sin \Theta\\
+ &0 &\sin \Theta &\cos \Theta
 \end{pmatrix}
-
 $$
 
-We can think of $x$ as the stationary axis the other two axis $y$ and $z$ rotate around.
-
-Since the $x$-component of the rotated vector stays the same, the only components that change are $\vec{v}_y$ and $\vec{v}_z$.
-This is clearly shown by the rotation matrix when multiplying it with an arbitrary vector:
 
 $$
+\boldsymbol{R}_y(\Theta) = \begin{pmatrix}
+&\cos \Theta & 0 &\sin \Theta\\
+&0 &1 &0\\
+&-\sin \Theta & 0 &\cos \Theta
+\end{pmatrix}
+$$
 
-\begin{pmatrix}
-&1 &0 &0 \\
-&0 &\cos &-\sin \\
-&0 &\sin &\cos
-\end{pmatrix} \cdot \begin{pmatrix}\vec{v}_x \\ \vec{v}_y \\ \vec{v}_z\end{pmatrix} = \begin{pmatrix}\vec{v}_x \\ \vec{v}_y \cos - \vec{v}_z \cos \\ \vec{v}_y \sin + \vec{v}_z \cos\end{pmatrix}
+
 
 $$
+\boldsymbol{R}_z(\Theta) = \begin{pmatrix}
+&\cos \Theta &-\sin \Theta &0\\
+&\sin \Theta &\cos \Theta &0\\
+&0 &0 &1 
+\end{pmatrix}
+$$
+
+
+The matrix $\boldsymbol{R}_x$ directly arises from rotating a vector in the two-dimensional $xy$-plane. This connection will be established in the following.
+
+We will then introduce **Rodrigues' rotation formula** which provides a general expression for rotation matrices. We verify that the standard rotation matrices emerge as special cases from this general form.
 
 
 ## Vector Rotation as a Linear Combination
@@ -129,7 +137,7 @@ $$
 
 holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim). 
 
-We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by chosing $a=\cos \Theta, b = \sin \Theta$, as derived in the following proof.
+We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by choosing $a=\cos \Theta, b = \sin \Theta$, as derived in the following proof.
 
 ### Expressing the linear combination with cosine and sine
 
@@ -373,7 +381,7 @@ title={"The point p gets translated, then rotated around the origin, then transl
 </details>
 
 ### Constructing an orthogonal basis for linear combination
-As an alternative to explicitely translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as [shown previously](#expressing-the-linear-combination-with-cosine-and-sine):
+As an alternative to explicitly translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as shown in the [previous section](#expressing-the-linear-combination-with-cosine-and-sine):
 
 $$
 \vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp} 
@@ -381,7 +389,7 @@ $$
 
 Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same magnitude, i.e. $|\vec{rp}_{\perp}| = |\vec{rp}|$.
 
-To obtain $\vec{rp}_{\perp}$, we present two pratical methods:
+To obtain $\vec{rp}_{\perp}$, we present two practical methods:
 
 1. Using the **vector cross product**:<br />
     The vector cross product $\vec{w} \times \vec{rp}$ yields a vector $\vec{rp}_{\perp}$ orthogonal to both $\vec{rp}$ and $\vec{w}$.
@@ -432,12 +440,20 @@ Without delving into the complexity of the involved operations, it should be evi
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
 
 ## 3D Rotation about an Arbitrary Axis 
-### The Rodrigues Formula
-Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues formula**[^rodrigues]:
+### Rodrigues' Rotation Formula
+Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as **Rodrigues' formula**[^rodrigues]:
 
 $$
- \vec{v'} = \vec{v}_{\parallel} + \cos(\Theta) \vec{v}_{\perp} + \sin(\Theta) \vec{w}
+\vec{v'} = \vec{v}_{\parallel} + \cos(\Theta) \vec{v}_{\perp} + \sin(\Theta) \vec{w}
 $$
+
+or, in its commonly used compact form
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
+$$
+
+
 
 We will now proceed to derive the formula, with a special focus on obtaining $\vec{w}$ which represents a coordinate axis in a locally defined orthogonal basis with equal-length axes.
 
@@ -446,7 +462,7 @@ Since we do not care about the magnitude of $\vec{n}$, but rather its direction,
 
 <Embed modeAware={true}
 figref={figures.rodrigues}
-title={"Visualization of the Rodrigues formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the orthogonal projection undergoes rotation in the locally defined two-dimensional plane."}>
+title={"Visualization of Rodrigues' rotation formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the orthogonal projection undergoes rotation in the locally defined two-dimensional plane."}>
 <img src={rodrigues}  />
 </Embed>
 <details>
@@ -503,7 +519,9 @@ $$
 $$
 
 :::note
-It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant. This raises the question: Where is the rotation axis located in the Euclidean space?
+It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant. This raises the question: Where is the rotation axis located in the Euclidean space[^no-rotation-in-2d]?
+
+[^no-rotation-in-2d]: There is none, as _Foley et al._ point out. In addition, they provide the proof that rotations in three-dimensional space always have an axis (<BibRef name="HDMS+14" pp="267"/>).
 
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
@@ -583,8 +601,13 @@ $$
          &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - \vec{v}_{\parallel}))\\
          &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}))\\
          &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)((\hat{n} \times \vec{v}) - (\hat{n} \times ((\vec{v} \cdot \hat{n}) \cdot \hat{n})))\\
-        &= (\vec{v} - (\vec{v} \cdot \hat{n})\cdot \hat{n}) + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times \vec{v}))\\
 \end{alignat*}
+$$
+
+which leads to the commonly used compact form of Rodrigues' formula:
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
 $$
 
 Solving componentwise, we obtain 
@@ -599,10 +622,10 @@ $$
 \end{alignat*}
 $$
 
-Using a specific rotation axis, we verify that $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
+Using a specific rotation axis, we verify that $\boldsymbol{R}_z(\Theta)$ follows directly from **Rodrigues' formula**.
 We rotate $\vec{v}$ by $\Theta$ around the $z$-axis of the orthonormal standard basis in $\mathbb{R}^3$.
 
-Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the Rodrigues formula, we derive $\vec{v}'$:
+Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the Rodrigues' formula, we derive $\vec{v}'$:
 
 
 $$
@@ -633,7 +656,7 @@ $$
 \end{alignat*}
 $$
 
-This confirms that the rotation matrix $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
+This confirms that the rotation matrix $\boldsymbol{R}_z(\Theta)$ follows directly from **Rodrigues' rotation formula**.
 
 Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\Theta)$.
 
@@ -641,4 +664,7 @@ Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
+## Application: Scene Graphs and Active Object Transformations 
+
+[^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrived 08.05.2025
 ------------------------
