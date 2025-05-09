@@ -2,7 +2,8 @@
 title: "Rotations as a Special Case of Vector Transformations"
 description: "Rotations as a Special Case of Vector Transformations, with Applications to Game World Modeling"
 ---
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import {BackButton} from "../../../src/components/BackButton.js";
 import {Figure, BibRef, GlosRef} from "../../../src/components/References";
 import {Embed} from "../../../src/components/Embed";
@@ -29,6 +30,13 @@ import rotation_disc1_code from '!!raw-loader!./plots/vector-rotation/rotation_d
 import rotation_disc2 from "./img/vector-rotation/rotation_disc2.png";
 import rotation_disc2_code from '!!raw-loader!./plots/vector-rotation/rotation_disc2.py?raw';
 
+import clairobscur from "./img/vector-rotation/clairobscur.png";
+import scenegraph from "./img/vector-rotation/scenegraph.png";
+import anim_rotation_dynamic from "./img/vector-rotation/anim_rotation_dynamic.gif";
+import anim_rotation_static from "./img/vector-rotation/anim_rotation_static.gif";
+import anim_rotation_dynamic_code from '!!raw-loader!./plots/vector-rotation/anim_rotation_dynamic.py?raw';
+import anim_rotation_static_code from '!!raw-loader!./plots/vector-rotation/anim_rotation_static.py?raw';
+
 export const figures = {
     sinecosine: 1,
     rotation_origin : 2,
@@ -36,7 +44,12 @@ export const figures = {
     rodrigues: 4,
     vector_projection: 5,
     rotation_disc1: 6,
-    rotation_disc2: 7
+    rotation_disc2: 7,
+    clairobscur: 8,
+    scenegraph: 9,
+    anim_rotation_dynamic: 10,
+    anim_rotation_static: 11,
+
 };
 
 
@@ -441,7 +454,7 @@ Without delving into the complexity of the involved operations, it should be evi
 
 ## 3D Rotation about an Arbitrary Axis 
 ### Rodrigues' Rotation Formula
-Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as **Rodrigues' formula**[^rodrigues]:
+Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues formula**[^rodrigues]:
 
 $$
 \vec{v'} = \vec{v}_{\parallel} + \cos(\Theta) \vec{v}_{\perp} + \sin(\Theta) \vec{w}
@@ -604,7 +617,7 @@ $$
 \end{alignat*}
 $$
 
-which leads to the commonly used compact form of Rodrigues' formula:
+which leads to the commonly used compact form of the Rodrigues formula:
 
 $$
 \vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
@@ -622,10 +635,10 @@ $$
 \end{alignat*}
 $$
 
-Using a specific rotation axis, we verify that $\boldsymbol{R}_z(\Theta)$ follows directly from **Rodrigues' formula**.
+Using a specific rotation axis, we verify that $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
 We rotate $\vec{v}$ by $\Theta$ around the $z$-axis of the orthonormal standard basis in $\mathbb{R}^3$.
 
-Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the Rodrigues' formula, we derive $\vec{v}'$:
+Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the formula, we derive $\vec{v}'$:
 
 
 $$
@@ -666,5 +679,84 @@ _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs 
 
 ## Application: Scene Graphs and Active Object Transformations 
 
-[^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrived 08.05.2025
+In Video Games and animations, set pieces contain a large number of individually transformed objects which relate to different coordinate systems. Those objects are often maintained using hierarchical data structures (like Trees) that help with bookkeeping of the parent-child relationships of the different coordinate system. 
+
+As an example of how might look like, we give a simplified representation of such a possible scene graph from the scene shown in <Figure idx={figures.clairobscur} />, a screenshot of the game _Clair Obscur: Expedition 33_[^clair]. The scene depicts a battle sequence where the camera moves between static positions and does not provide free movement by the player.  
+
+
+<Embed
+modeAware={false}
+figref={figures.clairobscur}
+title={
+"Reaper Cultist NPCs (right) from  'Clair Obscur: Expedition 33' have 3 orbs constantly rotating around it's body."}>
+<img src={clairobscur}  />
+</Embed>
+
+An abstraction of a possible scene graph is shown in <Figure idx={figures.scenegraph} />. We treat the orbs as individual objects for clearity, whereas efficient implementations might use one orb and compute three different geometric representations of it.
+
+<Embed
+modeAware={true}
+figref={figures.scenegraph}
+title={
+"Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+<img src={scenegraph}  />
+</Embed>
+
+As illustreted with the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is given in world coordinates.
+
+We see an abstraction of the geometric context in <Figure idx={figures.anim_rotation_dynamic} />, where we provide a single vector in world coordinates representing the EnemyNPC$_1$, with three single points positioned around it, representing the center of the local coordinate systems of the individual orbs.
+
+While the orbs are positioned relative to the NPC and provided as points, an implementing framework has to take care of properly setting the vectors into the required context: Since we have only points represented as relative positions, we have to establish a representationa s vectors so properly apply the Rodrigues formular. For this, we can pick any point on the rotation axis given by the npcsince the orthogonal projection will not change if the parallel projection of the resulting vectors change, which trivially follos from the equation
+
+$$
+\vec{v}_{perp} = \vec{v} - \vec{v}_{\parallel}
+$$
+
+The vertical part of a vector is not affected by horzontal changes.
+
+<Tabs>
+  <TabItem value="Stationary">
+<Embed
+modeAware={true}
+figref={figures.anim_rotation_static}
+title={
+"Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+<img src={anim_rotation_static}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {anim_rotation_static_code}
+</CodeBlock>
+
+</details>
+  </TabItem>
+  <TabItem value="Dynamic">
+ <Embed
+        modeAware={true}
+        figref={figures.anim_rotation_dynamic}
+        title={
+        "Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+        <img src={anim_rotation_dynamic}  />
+        </Embed>
+        <details>
+        <summary>Plot-Code (Python)</summary>
+        
+    <CodeBlock language="python">
+      {anim_rotation_dynamic_code}
+    </CodeBlock>
+    
+    </details>
+  </TabItem>
+</Tabs>
+
+:::info
+Quaternations
+Euler
+:::
+
+
+[^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrieved 08.05.2025
+[^clair]: _Clair Obscur: Expedition 33_ is a turn-based RPG developed by the french studio [Sandfall Interactive](https://www.sandfall.co) and is published by [Kepler Interactive](https://kepler-interactive.com/). It was released in April 2025 and to the date of 09.05.2025 the highest ranked PC Game of 2025 on [Opencritic](https://opencritic.com/game/18026/clair-obscur-expedition-33)
 ------------------------
