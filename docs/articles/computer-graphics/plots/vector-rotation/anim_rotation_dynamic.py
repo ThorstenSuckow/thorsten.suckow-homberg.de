@@ -60,9 +60,8 @@ def update(theta):
     origin = np.array([npc[0] + cosdelta/5, npc[1] + sindelta/5, npc[2] + sindelta/1.2]);
     ax.quiver(*origin, *v, color='black', linewidth=4,  arrow_length_ratio=0.05)
 
-
     ep1 = rodrigues(rad, [o1[0], o1[1], o1[2] + sindelta/1.2], v)
-    ep2 = rodrigues(rad, [o2[0] + cosdelta, o2[1] + sindelta, o2[2] + sindelta/1.25], v)
+    ep2 = rodrigues(rad, [o2[0] - cosdelta, o2[1] - sindelta, o2[2] + sindelta/1.25], v)
     ep3 = rodrigues(rad, [o3[0], o3[1], o3[2] + sindelta/1.3], v)
 
     ax.quiver(*origin + v, *(ep1), color='cyan', linewidth=1,  arrow_length_ratio=0.05)
