@@ -679,9 +679,11 @@ _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs 
 
 ## Application: Scene Graphs and Active Object Transformations 
 
-In Video Games and animations, set pieces contain a large number of individually transformed objects which relate to different coordinate systems. Those objects are often maintained using hierarchical data structures (like Trees) that help with bookkeeping of the parent-child relationships of the different coordinate system. 
+In Video Games and animations, set pieces usually contain a large number of objects which require individual transformations, which are computed with different coordinate systems, where some of them share parent-child relationships to other coordinate systems, just like locally defined coordinate systems we have described above. 
 
-As an example of how might look like, we give a simplified representation of such a possible scene graph from the scene shown in <Figure idx={figures.clairobscur} />, a screenshot of the game _Clair Obscur: Expedition 33_[^clair]. The scene depicts a battle sequence where the camera moves between static positions and does not provide free movement by the player.  
+To keep track off these inter- and independent objects, game and animation engines use hierarchical data structures that fulfill different puposes, such as discarding  objects not part of the [view frustum](/toolbox/computergraphics.viewfrustum) to reduce the cost of [culling](/toolbox/computergraphics.culling) operations - depending on the use case, the applied data structure is an implementation detail after all  (<BibRef name="Jas19" pp="693" />).
+
+We show an abstraction of a scene graph in <Figure idx={figures.scenegraph} />, which is a simplified representation of the scene from the game _Clair Obscur: Expedition 33_[^clair], shown in <Figure idx={figures.clairobscur} />.  The scene depicts a battle sequence where the camera moves between fixed positions based on user interaction and game engine's decisions.  
 
 
 <Embed
@@ -692,7 +694,7 @@ title={
 <img src={clairobscur}  />
 </Embed>
 
-An abstraction of a possible scene graph is shown in <Figure idx={figures.scenegraph} />. We treat the orbs as individual objects for clearity, whereas efficient implementations might use one orb and compute three different geometric representations of it.
+In the scene graph, we treat orbs as individual objects, whereas the handling of multiple geometric objects sharing a same instance is usually an implementation detail can also be relised with geometric instances for it (<BibRef name="RTR" pp="796" />, <BibRef name="PF05" pp="47" />).
 
 <Embed
 modeAware={true}
@@ -702,19 +704,36 @@ title={
 <img src={scenegraph}  />
 </Embed>
 
-As illustreted with the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is given in world coordinates.
+As illustrated with the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is given in world coordinates.
 
 We see an abstraction of the geometric context in <Figure idx={figures.anim_rotation_dynamic} />, where we provide a single vector in world coordinates representing the EnemyNPC$_1$, with three single points positioned around it, representing the center of the local coordinate systems of the individual orbs.
 
-While the orbs are positioned relative to the NPC and provided as points, an implementing framework has to take care of properly setting the vectors into the required context: Since we have only points represented as relative positions, we have to establish a representationa s vectors so properly apply the Rodrigues formular. For this, we can pick any point on the rotation axis given by the npcsince the orthogonal projection will not change if the parallel projection of the resulting vectors change, which trivially follos from the equation
+While the orbs are positioned relative to the NPC and provided as points, an implementing framework has to take care of properly setting the vectors into the required context: Since we have only points represented as relative positions, we have to establish a representationa s vectors so properly apply the Rodrigues formular. For this, we can pick any point on the rotation axis given by the npcsince the orthogonal projection will not change if the parallel projection of the resulting vectors change, which trivially follows from the equation
 
 $$
 \vec{v}_{perp} = \vec{v} - \vec{v}_{\parallel}
 $$
 
-The vertical part of a vector is not affected by horzontal changes.
+i.e. if the magnitude of the parallel projection changes, it does not affect its perpendicular projection, since these components are treated individually in this regard.
 
 <Tabs>
+<TabItem value="Dynamic">
+ <Embed
+        modeAware={true}
+        figref={figures.anim_rotation_dynamic}
+        title={
+        "Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+        <img src={anim_rotation_dynamic}  />
+        </Embed>
+        <details>
+        <summary>Plot-Code (Python)</summary>
+
+    <CodeBlock language="python">
+      {anim_rotation_dynamic_code}
+    </CodeBlock>
+    
+    </details>
+  </TabItem>
   <TabItem value="Stationary">
 <Embed
 modeAware={true}
@@ -732,29 +751,12 @@ title={
 
 </details>
   </TabItem>
-  <TabItem value="Dynamic">
- <Embed
-        modeAware={true}
-        figref={figures.anim_rotation_dynamic}
-        title={
-        "Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
-        <img src={anim_rotation_dynamic}  />
-        </Embed>
-        <details>
-        <summary>Plot-Code (Python)</summary>
-        
-    <CodeBlock language="python">
-      {anim_rotation_dynamic_code}
-    </CodeBlock>
-    
-    </details>
-  </TabItem>
 </Tabs>
 
-:::info
-Quaternations
-Euler
-:::
+The example above has been deliberately simplified for demonstration purposes, and it should be noted that, in a scene where **hundreds of thousands** of vertices have to undergo rotation, reducing the computational complexity of operations and improving numerical stability of floating-point computations might be equally important - especially in real-time rendering contexts.<br />
+In addition to the Rodrigues formula, **Euler angles** and **quaternions** (<BibRef name="Ham40" />) can be considered for applying rotations in three-dimensional space.<br />
+Discussions of their respective advantages and limitations are provided by _Shoemaker_ (<BibRef name="Shoe85" />), _Hughes et al._ (<BibRef name="HDMS+14" />), and _Dunn and Parberry_ (<BibRef name="DP11" p="263" />).
+
 
 
 [^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrieved 08.05.2025

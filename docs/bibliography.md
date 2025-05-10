@@ -47,6 +47,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [GD18a] ``Einführung``. In: **Datenstrukturen und Algorithmen**. Wiesbaden: SpringerFachmedien Wiesbaden, 2018, S. 1-38. isbn:978-3-658-04676-7. doi:10.1007/978-3-658-04676-7_1. url: https://doi.org/10.1007/978-3-658-04676-7_1 <a name="gd18a"></a>
 
+### **Dunn, Fletcher and Parberry, Ian**
+
+ - [DP11] **3D Math Primer for Graphics and Game Development**. Boca Raton, FL: A K Peters/CRC Press, 2011. isbn: 1439869812 <a name="dp11" />
+
+
 ### **Ertel, Wolfgang**
  - [Ert21]  **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
 
@@ -70,6 +75,14 @@ import {BackButton} from "../src/components/BackButton.js";
 ### **Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)**
 
  - [GOF] **Design Patterns**, Addison-Wesley, 1995 <a name="gof"></a>
+
+### **Gregory, Jason**
+
+ - [Jas19] **Game Engine Architecture**, 3rd Edition, United Kingdom, CRC Press, Taylor & Francis Group, 2019<a name="Jas19"></a>
+
+### **Hamilton, W. R.**
+ - [Ham40] **On a New Species of Imaginary Quantities, Connected with the Theory of Quaternions.**, Proceedings of the Royal Irish Academy (1836-1869), vol. 2, 1840, pp. 424–34<a name="ham40" />
+
 
 ### **Hughes, John F. and van Dam, Andries and McGuire, Morgan and  Sklar, David F. and Foley, James D. and Feiner, Steven K.  and Akeley, Kurt**
 
@@ -123,6 +136,10 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 
 - [Pfa22] Mario A. Pfannstiel. **Künstliche Intelligenz Im Gesundheitswesen: Entwicklungen, Beispiele und Perspektiven** Hrsg. von Mario A. Pfannstiel. Wiesbaden: Springer Fachmedien Wiesbaden, 2022, isbn: 978-3-658-33597-7. doi: https://doi.org/10.1007/978-3-658-33597-7 <a name="pfa22"></a>
 
+### **Pharr, Matt and Fernando, Randima**
+
+- [PF05] **GPU gems 2: Programming techniques for high-performance graphics and general-purpose computation**, Addison-Wesley Professional, 2005<a name="pf05"></a>
+
 ### **Minsky, M. L. and Papert, S. A**
  - [MIN69] **Perceptrons**, Cambridge, MA: MIT Press, 1969 <a name="MIN69"></a>
 
@@ -144,6 +161,10 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 
 ### **Shell, Donald**
 - [She59] D. L. Shell. ``A High-Speed Sorting Procedure``. In: _Commun. ACM 2.7_   (Juli 1959), S. 30-32. ISSN: 0001-0782. DOI: 10.1145/368370.368387. url: https://doi.org/10.1145/368370.368387 <a name="She59"></a>
+
+### **Shoemake, Ken**
+
+ - [Sho85] **Animating rotation with quaternion curves.**, SIGGRAPH Comput. Graph. 19, 3 (Jul. 1985), 245–254. https://doi.org/10.1145/325165.325242 <a name="Sho85"></a>
 
 ### **Sipser, Michael**
 
