@@ -47,6 +47,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [GD18a] Ralf Hartmut Güting und Stefan Dieker. ``Einführung``. In: _Datenstrukturen und Algorithmen_.Wiesbaden: SpringerFachmedien Wiesbaden, 2018, S. 1-38. isbn:978-3-658-04676-7. doi:10.1007/978-3-658-04676-7_1. url: https://doi.org/10.1007/978-3-658-04676-7_1 <a name="gd18a"></a>
 
+### **Eckert, Claudia**
+
+ - [Eck23] **IT-Sicherheit: Konzepte – Verfahren – Protokolle**, 11th, De Gruyter Oldenbourg, 2023. https://doi.org/10.1515/9783110985115 <a name="eck23" />
+
 ### **Ertel, Wolfgang**
  - [Ert21] Ertel, W. (2021). **Grundkurs Künstliche Intelligenz. Computational Intelligence.** Springer Vieweg, Wiesbaden. https://doi.org/10.1007/978-3-658-32075-1 <a name="ert21"></a>
 
@@ -77,6 +81,10 @@ import {BackButton} from "../src/components/BackButton.js";
 ### **Knuth, Donald**
  - [Knu97c] Donald E. Knuth. **The Art of Computer Programming**, Volume 3 (2nd
 Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1997. isbn: 0201896850. <a name="Knu97c"></a>
+
+### **Kurose, James and Ross, Keith**
+
+ - [KR20] **Computer Networking: A Top-Down Approach**, 8th, Pearson, 2020 <a name="kr20" />
 
 ### **Martin, Robert C.**
 
@@ -143,7 +151,11 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 
 ### **Sipser, Michael**
 
-- [Sip12] Sipser, Michael, **Introduction to the Theory of Computation**, Cengage Learning, 2012, isbn: 9781133187813 <a name="sip12"></a>
+- [Sip12]  **Introduction to the Theory of Computation**, Cengage Learning, 2012, isbn: 9781133187813 <a name="sip12"></a>
+
+### **Tanenbaum, Andrew and Wetherall, David and Feamster, Nick**
+
+ - [TFW21] **Computer Networks**, 6th, Pearson, 2021 <a name="tfw21" />
 
 ### **Thomas, David; Hunt, Andrew**
 
