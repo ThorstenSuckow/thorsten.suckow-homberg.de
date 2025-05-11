@@ -48,8 +48,7 @@ export const figures = {
     clairobscur: 8,
     scenegraph: 9,
     anim_rotation_dynamic: 10,
-    anim_rotation_static: 11,
-
+    anim_rotation_static: 11
 };
 
 
@@ -80,7 +79,7 @@ $$
 \boldsymbol{R}_z(\Theta) = \begin{pmatrix}
 &\cos \Theta &-\sin \Theta &0\\
 &\sin \Theta &\cos \Theta &0\\
-&0 &0 &1 
+&0 &0 &1
 \end{pmatrix}
 $$
 
@@ -101,7 +100,7 @@ $$
 This follows directly by $\cos \Theta, \sin \Theta$ when writing $\vec{v}$ as a linear combination of the two linear independent vectors $\vec{x}, \vec{y}$:
 
 $$
-\vec{v} = a \vec{x} + b \vec{y} 
+\vec{v} = a \vec{x} + b \vec{y}
 $$
 
 Substituting $a, b$ with $\cos \Theta$, $\sin \Theta$, we have:
@@ -121,7 +120,7 @@ $$
 
 
 
-In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product]. 
+In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product].
 
 [^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
 
@@ -142,13 +141,13 @@ In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents
 
 </details>
 
-We claim that 
+We claim that
 
 $$
 \vec{v} = a \vec{x} + b \vec{y}
 $$
 
-holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim). 
+holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim).
 
 We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by choosing $a=\cos \Theta, b = \sin \Theta$, as derived in the following proof.
 
@@ -309,9 +308,9 @@ $$
 \vec{v} = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
 $$
 
-yields a vector $\vec{v}$ satisfying 
+yields a vector $\vec{v}$ satisfying
 
-$$ 
+$$
 |\vec{v}| = |\vec{x}| = |\vec{y}|
 $$
 
@@ -329,7 +328,7 @@ $$
 
 Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\Box$
 
-[^denominator]: Since $|\vec{x}| = |\vec{y}|$, we can also chose $|\vec{y}|$  
+[^denominator]: Since $|\vec{x}| = |\vec{y}|$, we can also chose $|\vec{y}|$
 
 ## Rotation around arbitrary points
 
@@ -367,10 +366,10 @@ $$
 
 
 #### Choosing a different center of rotation
-<Figure idx={figures.rotation_point} /> illustrates the rotation around $r$. 
+<Figure idx={figures.rotation_point} /> illustrates the rotation around $r$.
 $\vec{p'}$ is computed such that
  - the rotation center $r$ becomes the origin of all points in the coordinate plane
- - rotation is applied 
+ - rotation is applied
  - the rotated point is translated back.
 
 Using $\vec{r} = r^T$, we get the expression:
@@ -397,7 +396,7 @@ title={"The point p gets translated, then rotated around the origin, then transl
 As an alternative to explicitly translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as shown in the [previous section](#expressing-the-linear-combination-with-cosine-and-sine):
 
 $$
-\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp} 
+\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp}
 $$
 
 Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same magnitude, i.e. $|\vec{rp}_{\perp}| = |\vec{rp}|$.
@@ -427,17 +426,17 @@ To obtain $\vec{rp}_{\perp}$, we present two practical methods:
 
 2. Using the **rotation matrix**:<br />
     By substituting $\Theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\Theta)$, we get:
-        
+
     $$
         \boldsymbol{R}(\frac{\pi}{2}) = \begin{pmatrix}\cos \frac{\pi}{2} & -sin \frac{\pi}{2} \\ \sin \frac{\pi}{2} & \cos \frac{\pi}{2} \end{pmatrix} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix}
     $$
-    
+
     Multiplying $\boldsymbol{R}(\frac{\pi}{2})$ with $\vec{rp}$, we obtain the perpendicular vector:
 
    $$
    \boldsymbol{R}(\frac{\pi}{2}) \vec{rp} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} \vec{rp}_x \\ \vec{rp}_y  \end{pmatrix} = \begin{pmatrix} -\vec{rp}_y \\ \vec{rp}_x  \end{pmatrix} =  \vec{rp}_{\perp}
    $$
-        
+
     which also confirms the claim above: $\vec{rp}_{\perp}$ represents $\vec{rp}$ rotated by $90\degree$ **ccw**.
 
 In both cases, $\vec{rp}_\perp$ can be used for finalizing the linear combination as
@@ -452,7 +451,7 @@ Without delving into the complexity of the involved operations, it should be evi
 
 [^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
 
-## 3D Rotation about an Arbitrary Axis 
+## 3D Rotation about an Arbitrary Axis
 ### Rodrigues' Rotation Formula
 Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues formula**[^rodrigues]:
 
@@ -470,7 +469,7 @@ $$
 
 We will now proceed to derive the formula, with a special focus on obtaining $\vec{w}$ which represents a coordinate axis in a locally defined orthogonal basis with equal-length axes.
 
-In <Figure idx={figures.rodrigues} />, the vector $\vec{v}$ is rotated about the axis $\vec{n}$. 
+In <Figure idx={figures.rodrigues} />, the vector $\vec{v}$ is rotated about the axis $\vec{n}$.
 Since we do not care about the magnitude of $\vec{n}$, but rather its direction, we normalize the vector and obtain $\hat{n}$, which will be the **center of rotation** for $\vec{v}$ in the following derivation.
 
 <Embed modeAware={true}
@@ -491,21 +490,21 @@ Clearly, rotating one vector about another vector in 3D must preserve at least o
 To illustrate this, consider the special case of rotation about one of the standard basis vectors in $\mathbb{R}^3$:
 
 $$
-\vec{x} = \begin{pmatrix}1 \\ 0 \\ 0\end{pmatrix}, 
-\vec{y} = \begin{pmatrix}0 \\ 1 \\ 0\end{pmatrix}, 
+\vec{x} = \begin{pmatrix}1 \\ 0 \\ 0\end{pmatrix},
+\vec{y} = \begin{pmatrix}0 \\ 1 \\ 0\end{pmatrix},
 \vec{z} = \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix}
 $$
 
-For example, rotation of a point $(x, y)$ in the Euclidean plane corresponds to rotating the point  $(x, y, s)$ in three-dimensional space about the $z$-axis: Here, the $z$-component $s$ always stays unchanged, e.g. 
+For example, rotation of a point $(x, y)$ in the Euclidean plane corresponds to rotating the point  $(x, y, s)$ in three-dimensional space about the $z$-axis: Here, the $z$-component $s$ always stays unchanged, e.g.
 
 $$
 \boldsymbol{R}_z(\Theta) \begin{pmatrix}x\\ y\\ s\end{pmatrix} = \begin{pmatrix}x'\\ y'\\ s\end{pmatrix}
 $$
 Analogous reasoning applies to rotation about the $x$-axis and $y$-axis, where the respective components remain constant.
 
-Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis lengths, as we will see shortly - helps us isolate the component of a vector that remains unchanged under rotation. 
+Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis lengths, as we will see shortly - helps us isolate the component of a vector that remains unchanged under rotation.
 Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a vector $\vec{a}$ onto another vector $\vec{b}$.
-    
+
 $$
 \vec{a}_{\parallel} = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}
 $$
@@ -538,7 +537,7 @@ It might at first seem confusing that both the orthogonal and the parallel proje
 
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
-As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, **perpendicular to the $z$-axis** (see <Figure idx={figures.rotation_disc1}/>). 
+As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, **perpendicular to the $z$-axis** (see <Figure idx={figures.rotation_disc1}/>).
 
 
 <Embed
@@ -592,7 +591,7 @@ Knowing that the vector-components parallel to the rotation axis stay fixed and 
    $$
    \vec{v}'_{\perp} = \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}
    $$
-   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to ensure that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and correspond to a $90^\circ$ **counterclockwise** rotation of $\vec{v}_{\perp}$. 
+   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to ensure that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and correspond to a $90^\circ$ **counterclockwise** rotation of $\vec{v}_{\perp}$.
    The existence of such a vector was shown in the [previous section](#generalization-to-arbitrary-lengths). We can obtain the orthogonal basis by computing $\vec{w}$ via
    $$
    \vec{w} = \hat{n} \times \vec{v}_{\perp}
@@ -623,7 +622,7 @@ $$
 \vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
 $$
 
-Solving componentwise, we obtain 
+Solving componentwise, we obtain
 
 $$
 \begin{alignat*}{3}
@@ -643,7 +642,7 @@ Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into t
 
 $$
 \begin{alignat*}{3}
-\vec{v}' &= \begin{pmatrix} (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0  \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0 \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  1 \end{pmatrix} + 
+\vec{v}' &= \begin{pmatrix} (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0  \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0 \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  1 \end{pmatrix} +
 \cos(\Theta) \begin{pmatrix} \vec{v}_x - (\vec{v}_x \cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0  \\ \vec{v}_y - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0 \\ \vec{v}_z - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot  1 \end{pmatrix} +
 \sin(\Theta)\begin{pmatrix} 0 \cdot \vec{v}_z - 1 \cdot \vec{v}_y \\ 1\cdot\vec{v}_x - 0\cdot\vec{v}_z \\ 0\cdot\vec{v}_y - 0\cdot\vec{v}_x  \end{pmatrix}\\
 \\ \
@@ -677,24 +676,29 @@ Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
-## Application: Scene Graphs and Active Object Transformations 
+## Application: Scene Graphs and Active Object Transformations
 
-In Video Games and animations, set pieces usually contain a large number of objects which require individual transformations, which are computed with different coordinate systems, where some of them share parent-child relationships to other coordinate systems, just like locally defined coordinate systems we have described above. 
+In video games and animations, set pieces typically consist of a large number of objects, each requiring individual transformations.
+Since some of these objects share parent-child-relationships with others (e.g. aggregates), multiple coordinate systems may be involved.
+Consequently, transformations must be computed with proper consideration of the corresponding (embedded) coordinate systems.
 
-To keep track off these inter- and independent objects, game and animation engines use hierarchical data structures that fulfill different puposes, such as discarding  objects not part of the [view frustum](/toolbox/computergraphics.viewfrustum) to reduce the cost of [culling](/toolbox/computergraphics.culling) operations - depending on the use case, the applied data structure is an implementation detail after all  (<BibRef name="Jas19" pp="693" />).
+To keep track of these interdependent and independent objects, game and animation engines use hierarchical data structures that serve different puposes, such as discarding objects outside of the
+<GlosRef name="view frustum" file="computergraphics.viewfrustum" /> to reduce the cost of <GlosRef name="culling" file="computergraphics.culling" /> operations. Depending on the use case, the applied data structure is ultimately an implementation detail (<BibRef name="Jas19" pp="693" />).
 
-We show an abstraction of a scene graph in <Figure idx={figures.scenegraph} />, which is a simplified representation of the scene from the game _Clair Obscur: Expedition 33_[^clair], shown in <Figure idx={figures.clairobscur} />.  The scene depicts a battle sequence where the camera moves between fixed positions based on user interaction and game engine's decisions.  
+<Figure idx={figures.scenegraph} /> shows a scene graph as a simplified representation of an in-game scene from the game _Clair Obscur: Expedition 33_[^clair] (<Figure idx={figures.clairobscur} />). The scene depicts a battle sequence in which the camera moves between fixed positions, based on user interaction and decisions made by the game engine while computing NPC AI.
 
 
 <Embed
 modeAware={false}
 figref={figures.clairobscur}
 title={
-"Reaper Cultist NPCs (right) from  'Clair Obscur: Expedition 33' have 3 orbs constantly rotating around it's body."}>
+"Reaper Cultist NPCs (right) from  'Clair Obscur: Expedition 33' have 3 orbs rotating around its upper torso, serving as buffs."}>
 <img src={clairobscur}  />
 </Embed>
 
-In the scene graph, we treat orbs as individual objects, whereas the handling of multiple geometric objects sharing a same instance is usually an implementation detail can also be relised with geometric instances for it (<BibRef name="RTR" pp="796" />, <BibRef name="PF05" pp="47" />).
+In the battle scenes depicted in the screenshot, enemies of the type _Reaper Cultist_ have orbs rotating around their upper torso.
+The scene graph shown in <Figure idx={figures.scenegraph} /> illustrates a simplified model of these NPCs embedded in the scene, including their orbs, which are represented as individual objects.
+The handling of multiple (geometric) objects sharing the same type is usually an implementation detail and can also be realized using _geometric instances_ (<BibRef name="RTR" pp="796" />, <BibRef name="PF05" pp="47" />).
 
 <Embed
 modeAware={true}
@@ -704,17 +708,14 @@ title={
 <img src={scenegraph}  />
 </Embed>
 
-As illustrated with the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is given in world coordinates.
+As illustrated by the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is defined in _world coordinates_.
 
-We see an abstraction of the geometric context in <Figure idx={figures.anim_rotation_dynamic} />, where we provide a single vector in world coordinates representing the EnemyNPC$_1$, with three single points positioned around it, representing the center of the local coordinate systems of the individual orbs.
+We abstract the geometric context in <Figure idx={figures.anim_rotation_dynamic} /> to demonstrate how Rodrigues rotation can be applied.
 
-While the orbs are positioned relative to the NPC and provided as points, an implementing framework has to take care of properly setting the vectors into the required context: Since we have only points represented as relative positions, we have to establish a representationa s vectors so properly apply the Rodrigues formular. For this, we can pick any point on the rotation axis given by the npcsince the orthogonal projection will not change if the parallel projection of the resulting vectors change, which trivially follows from the equation
+The animation shows a single vector in world coordinates representing EnemyNPC$_1$, along with three spheres arranged around it. The origin of the orb's local coordinate system is thus defined by the vector's endpoint - i.e. the NPCs head.
 
-$$
-\vec{v}_{perp} = \vec{v} - \vec{v}_{\parallel}
-$$
-
-i.e. if the magnitude of the parallel projection changes, it does not affect its perpendicular projection, since these components are treated individually in this regard.
+Implementing engines must ensure that all vectors are interpreted in the correct context: Since relative positions are provided as points in the coordinate system, it is necessary to derive direction vectors from these positions - typically by computing differences between them and some sort of reference points.
+For this purpose, any point on the rotation axis can serve as a reference point, because orthogonal projections remain unchanged even if the magnitude of the parallel component varies - as long as the direction remains constant. This is due to the fact that orthogonal and parallel vector components are treated independently in the projection process, as shown in the previous sections.
 
 <Tabs>
 <TabItem value="Dynamic">
@@ -731,7 +732,7 @@ i.e. if the magnitude of the parallel projection changes, it does not affect its
     <CodeBlock language="python">
       {anim_rotation_dynamic_code}
     </CodeBlock>
-    
+
     </details>
   </TabItem>
   <TabItem value="Stationary">
