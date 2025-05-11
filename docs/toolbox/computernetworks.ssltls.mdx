@@ -47,7 +47,7 @@ therefore, the description of the handshake protocol follows TLS 1.2 ([RFC5246](
 5. `ChangeCipherSpec`/`Finished`: Both client and server now compute the **master secret** from $K_{Pre}$, $R_C$ and $R_S$, using a pseudorandom function (PRF).
 Once the client finished computing the master secret, it lets the server know via a `ChangeCipherSpec` message, followed by a `Finished` message to authenticate the handshake. The server repeats the procedure. After this, payload can be sent using the **Record Protocol**, where subsequent keys for encrypting data and for generating MACs used with the **Record Protocol** are derived from the **master secret**.
 
-### SSL/TLS Record Protocol
+### Record Protocol
 Data between the communicating parties is exchanged via the **Record Protocol**. Its responsibilities are fragmentation of the application data into chunks not larger than 16KB.
 The fragments are optionally compressed[^compression], a MAC is calculated using a key derived from the **master secret**. Finally, the result is encrypted using a symmetric cryptographic algorithm.
 
