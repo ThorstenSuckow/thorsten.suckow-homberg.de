@@ -51,6 +51,13 @@ export const figures = {
     anim_rotation_static: 11
 };
 
+Transformations applied to objects - whether between key frames or as a response to user input - can be modeled as a combination of shearing, alignment, scaling and rotation.
+
+In this work, we focus on **vector rotation** in the two-dimensional plane, deriving the corresponding rotation matrices by using linear combinations and orthogonal bases.
+
+We then generalize this approach by introducing **Rodrigues' rotation formula**, which provides a compact expression for rotation around arbitrary axes in three-dimensional space. We verify that the standard rotation matrices emerge as special cases from this general form.
+
+Finally, we illustrate the application of vector rotation in the context of embedded coordinate systems within large scene graphs, demonstrating how transformations propagate across hierarchical structures in real-time environments such as video games.
 
 ## Vector Rotation as a Linear Combination
 
