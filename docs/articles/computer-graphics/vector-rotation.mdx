@@ -51,7 +51,7 @@ export const figures = {
     anim_rotation_static: 11
 };
 
-Transformations applied to objects - whether between key frames or as a response to user input - can be modeled as a combination of shearing, alignment, scaling and rotation.
+Transformations applied to objects - whether between key frames in animations or as a response to user input in video games - can be modeled as a combination of shearing, alignment, scaling and rotation.
 
 In this work, we focus on **vector rotation** in the two-dimensional plane, deriving the corresponding rotation matrices by using linear combinations and orthogonal bases.
 
@@ -716,7 +716,7 @@ As illustrated by the scene graph, a floating orb is positioned relative to the 
 
 We abstract the geometric context in <Figure idx={figures.anim_rotation_dynamic} /> to demonstrate how Rodrigues rotation can be applied.
 
-The animation shows a single vector in world coordinates representing EnemyNPC$_1$, along with three spheres arranged around it. The origin of the orb's local coordinate system is thus defined by the vector's endpoint - i.e. the NPCs head.
+The animation shows a single vector in world coordinates representing EnemyNPC$_1$, along with three spheres arranged around it. The origin of a sphere's local coordinate system is thus defined by the vector's endpoint - i.e. the NPCs head.
 
 Implementing engines must ensure that all vectors are interpreted in the correct context: Since relative positions are provided as points in the coordinate system, it is necessary to derive direction vectors from these positions - typically by computing differences between them and some sort of reference points.
 For this purpose, any point on the rotation axis can serve as a reference point, because orthogonal projections remain unchanged even if the magnitude of the parallel component varies - as long as the direction remains constant. This is due to the fact that orthogonal and parallel vector components are treated independently in the projection process, as shown in the previous sections.
