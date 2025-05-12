@@ -10,7 +10,7 @@ enableComments: true
 [Siesta](https://www.bryntum.com/products/siesta/) is a JavaScript unit and UI testing tool originally written by [Mats Bryntse](https://bryntum.com) which allows for running tests (for **Ext JS** (view-) components, amongst others) directly in the web browser (or headless in case you want to use it with your ci tools).
 
 It is [conjoon](https://conjoon.org)’s favorite among the various testing tools out there (we’re also working with [**Jest**🃏](https://jestjs.io/) when there’s no **Ext JS** involved) and without it, it’s clear that End-to-End tests of some of the features and changes that have made it into conjoon would have slowed the project down due to their cyclic complexity — or even worse, make the software stuck in regression.
-
+<!--truncate-->
 [extjs-app-webmail](https://www.conjoon.org/docs/api/packages/@conjoon/extjs-app-webmail) alone sports more than 5000 unit and ui tests created with Siesta and they all make sure that the frontend behaves as intended and is free from unwelcomed side effects for any edge case that might occur (we know that’s a [bold statement](https://dilbert.com/strip/2017-10-02?creator=Dilbert_Daily)).
 
 To ease the process of setting up a functional **Siesta** environment, we’re introducing the cli tool create-siesta which can be used with any JavaScript framework that requires a functional **Siesta** application running in a web browser, or at least a fully fledged infrastructure for running Siesta tests. However, by providing integrated build options for the **Ext JS** SDK, it is best suited for environments where the **Sencha** framework is already being used or will be used.

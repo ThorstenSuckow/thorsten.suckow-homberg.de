@@ -13,7 +13,7 @@ See https://github.com/conjoon/php-lib-conjoon/issues/17.
 Turns out that the way I assembled an email from a full text and converting it back to an instance of `Horde_Mime_Mail`
 does not consider the type of the internal representation of the `bcc`-field properly. It's related to
 `Horde_Mail_Rfc822_List::_normalize` and how values passed from `Horde_Mime_Mail::send()` are processed by it.
-
+<!--truncate-->
 Here's a code snippet that shows how I use a full text message as input, then converting it back to an instance of `Horde_Mime_Mail`
 with headers processed by `Horde_Mime_Headers::parseHeaders()`. 
 The original message has a `bcc` header-field:

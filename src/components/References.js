@@ -18,6 +18,13 @@ function citation ({name, pp}) {
 
 }
 
+function Figure ({idx}) {
+    return (
+        <a href={`#fig_${idx}`}><span className="bibRef">Figure {idx}</span></a>
+    );
+
+}
+
 function Abbildung ({idx}) {
     return (
         <a href="#fig_{idx}"><span className="bibRef">Abbildung {idx}</span></a>
