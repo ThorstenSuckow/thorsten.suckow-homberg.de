@@ -97,7 +97,11 @@ import {BackButton} from "../src/components/BackButton.js";
 
 
 ### **Kerningham, Brian W. and Ritchie, Dennis M.**
-- [KR88] Kernighan, Brian W. and Ritchie, Dennis M. **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
+- [KR88] **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
+
+### **Kessenich, John and Sellers, Graham and Shreiner, Dave**
+
+- [KSS17] **The OpenGL Programming Guide**, 9th, Addison Wesley, 2017 <a name="kss17" />
 
 ### **Kuipers, Jack B.**
 
