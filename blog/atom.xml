@@ -2,11 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://thorsten.suckow-homberg.de/blog</id>
     <title>thorsten.suckow-homberg.de Blog</title>
-    <updated>2025-04-26T00:00:00.000Z</updated>
+    <updated>2025-05-12T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://thorsten.suckow-homberg.de/blog"/>
     <subtitle>thorsten.suckow-homberg.de Blog</subtitle>
     <icon>https://thorsten.suckow-homberg.de/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Rotations as a Special Case of Vector Transformations]]></title>
+        <id>https://thorsten.suckow-homberg.de/blog/rotations-as-a-special-case-of-vector-transformations</id>
+        <link href="https://thorsten.suckow-homberg.de/blog/rotations-as-a-special-case-of-vector-transformations"/>
+        <updated>2025-05-12T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Rotations as a Special Case of Vector Transformations]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="rotations-as-a-special-case-of-vector-transformations">Rotations as a Special Case of Vector Transformations<a href="https://thorsten.suckow-homberg.de/blog/rotations-as-a-special-case-of-vector-transformations#rotations-as-a-special-case-of-vector-transformations" class="hash-link" aria-label="Direct link to Rotations as a Special Case of Vector Transformations" title="Direct link to Rotations as a Special Case of Vector Transformations">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="-with-applications-to-game-world-modeling">... with Applications to Game World Modeling<a href="https://thorsten.suckow-homberg.de/blog/rotations-as-a-special-case-of-vector-transformations#-with-applications-to-game-world-modeling" class="hash-link" aria-label="Direct link to ... with Applications to Game World Modeling" title="Direct link to ... with Applications to Game World Modeling">​</a></h4>
+<p>Rotations, as a class of affine vector transformations, represent rigid body transformations that change the direction of a vector within a given plane.<br>
+Efficient and accurate handling of such transformations poses challenges not only for game and animation engines, but also for simulations and real-time systems, where the limitations of floating-point arithmetic and operation throughput can negatively impact the computational outcomes.</p>
+<p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations">article</a> introduces <strong>vector rotation</strong> with a focus on the relations between its two- and three-dimensional formulations.</p>
+<p>We begin in the two-dimensional plane by deriving classical rotation matrices from linear combinations in orthogonal bases.</p>
+<p>We then generalize this approach by introducing <strong>Rodrigues' rotation formula</strong>, which provides a compact expression for rotation around arbitrary axes in three-dimensional space. We verify that the standard rotation matrices emerge as special cases from this general form.</p>
+<p>Finally, we illustrate the application of vector rotation in the context of embedded coordinate systems within large scene graphs, demonstrating how transformations propagate across hierarchical structures in real-time environments such as video games.</p>
+<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations">Continue reading...</a></p>]]></content>
+        <author>
+            <name>Thorsten Suckow-Homberg</name>
+            <uri>https://thorsten.suckow-homberg.de</uri>
+        </author>
+        <category label="computer graphics" term="computer graphics"/>
+        <category label="linear algebra" term="linear algebra"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[The Geometry of the Dot Product]]></title>
         <id>https://thorsten.suckow-homberg.de/blog/the-geometry-of-the-dot-product</id>
