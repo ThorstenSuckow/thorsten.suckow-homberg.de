@@ -63,6 +63,10 @@ import {BackButton} from "../src/components/BackButton.js";
 
 - [DIJ] **Selected Writings on Computing: A personal Perspective**, Springer-Verlag, 1982 <a name="DIJ"></a>
 
+### **Fall, Kevin R. and Stevens, W. Richard**
+
+ - [FS12] **TCP/IP Illustrated, Volume 1: The Protocols**, Addison-Wesley, 2012. isbn: 0321336313 <a name="fs12" />
+
 ### **Fowler, Martin**
 
  - [POEAA] **Patterns of Enterprise Application Architecture**, Addison-Wesley, 2003 <a name="poeaa"></a>
