@@ -91,9 +91,16 @@ import {BackButton} from "../src/components/BackButton.js";
 ### **Kerningham, Brian W. and Ritchie, Dennis M.**
  - [KR88] **The C Programming Language**, 2nd Ed., Prentice Hall Professional Technical Reference, 1988. isbn: 0131103709. <a name="kr88"></a>
 
+### **Kuipers, Jack B.**
+
+ - [Kui99] **Quaternions and Rotation Sequences: A Primer with Applications to Orbits, Aerospace and Virtual Reality**, Princeton University Press, 1999 <a name="kui99" />
+
 ### **Knuth, Donald**
  - [Knu97c] Donald E. Knuth. **The Art of Computer Programming**, Volume 3 (2nd
 Ed.): Sorting and Searching. USA: Addison Wesley Longman Publishing Co., Inc., 1997. isbn: 0201896850. <a name="Knu97c"></a>
+
+### **Lehn, Karsten and Gotzes, Merijam and Klawonn, Frank**
+ -[LGK23] **Introduction to Computer Graphics: Using OpenGL and Java**, Springer, 2023. https://doi.org/10.1007/978-3-031-28135-8 <a name="lgk23" />
 
 ### **Lengyel, Eric**
 
@@ -162,9 +169,13 @@ computer memories```. In: _Problemy Peredachi Informatsii_ 1.3 (1965), P. 81-98.
 ### **Shell, Donald**
 - [She59] D. L. Shell. ``A High-Speed Sorting Procedure``. In: _Commun. ACM 2.7_   (Juli 1959), S. 30-32. ISSN: 0001-0782. DOI: 10.1145/368370.368387. url: https://doi.org/10.1145/368370.368387 <a name="She59"></a>
 
+### **Shewchuk, Jonathan R.** 
+
+ - [She97] **Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates.**, Discret. Comput. Geom. 18 (1997): 305-368. https://api.semanticscholar.org/CorpusID:7678678 <a name="she97" />
+
 ### **Shoemake, Ken**
 
- - [Sho85] **Animating rotation with quaternion curves.**, SIGGRAPH Comput. Graph. 19, 3 (Jul. 1985), 245–254. https://doi.org/10.1145/325165.325242 <a name="Sho85"></a>
+ - [Sho85] **Animating rotation with quaternion curves.**, SIGGRAPH Comput. Graph. 19, 3 (Jul. 1985), 245–254. https://doi.org/10.1145/325165.325242 <a name="sho85"></a>
 
 ### **Sipser, Michael**
 

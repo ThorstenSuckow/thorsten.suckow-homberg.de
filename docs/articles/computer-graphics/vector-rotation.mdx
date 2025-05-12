@@ -1,5 +1,5 @@
 ---
-title: "Rotations as a Special Case of Vector Transformations"
+title: "Affine Vector Transformations: Rotations"
 description: "Rotations as a Special Case of Vector Transformations, with Applications to Game World Modeling"
 ---
 import Tabs from '@theme/Tabs';
@@ -51,9 +51,12 @@ export const figures = {
     anim_rotation_static: 11
 };
 
-Transformations applied to objects - whether between key frames in animations or as a response to user input in video games - can be modeled as a combination of shearing, alignment, scaling and rotation.
+Rotations, as a class of affine vector transformations, represent rigid body transformations that change the direction of a vector within a given plane.<br />
+Efficient and accurate handling of such transformations poses challenges not only for game and animation engines, but also for simulations and real-time systems, where the limitations of floating-point arithmetic and operation throughput can negatively impact the computational outcomes (<BibRef name="She97" />, <BibRef name="Kui99" />).
 
-In this work, we focus on **vector rotation** in the two-dimensional plane, deriving the corresponding rotation matrices by using linear combinations and orthogonal bases.
+This work introduces **vector rotation** with a focus on the relations between its two- and three-dimensional formulations.
+
+We begin in the two-dimensional plane by deriving classical rotation matrices from linear combinations in orthogonal bases.
 
 We then generalize this approach by introducing **Rodrigues' rotation formula**, which provides a compact expression for rotation around arbitrary axes in three-dimensional space. We verify that the standard rotation matrices emerge as special cases from this general form.
 
@@ -714,12 +717,20 @@ title={
 
 As illustrated by the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is defined in _world coordinates_.
 
-We abstract the geometric context in <Figure idx={figures.anim_rotation_dynamic} /> to demonstrate how Rodrigues rotation can be applied.
+We now abstract the geometric context in <Figure idx={figures.anim_rotation_dynamic} /> to demonstrate how Rodrigues rotation can be applied.
 
 The animation shows a single vector in world coordinates representing EnemyNPC$_1$, along with three spheres arranged around it. The origin of a sphere's local coordinate system is thus defined by the vector's endpoint - i.e. the NPCs head.
 
 Implementing engines must ensure that all vectors are interpreted in the correct context: Since relative positions are provided as points in the coordinate system, it is necessary to derive direction vectors from these positions - typically by computing differences between them and some sort of reference points.
 For this purpose, any point on the rotation axis can serve as a reference point, because orthogonal projections remain unchanged even if the magnitude of the parallel component varies - as long as the direction remains constant. This is due to the fact that orthogonal and parallel vector components are treated independently in the projection process, as shown in the previous sections.
+
+In these cases, we typically arrive at a composite transformation of the form
+
+$$
+\vec{v}_{World} = \boldsymbol{T}_{1} \cdot \boldsymbol{T}_{2} \cdot \ldots \cdot \boldsymbol{T}_{n} \cdot \boldsymbol{R}(\Theta,  \hat{n}) \cdot \vec{v}_{Object}
+$$
+
+where the translation matrices $\boldsymbol{T}_i$ successively map each object into the coordinate system of its parent, with transformations applied from right to left (<BibRef name="LGK23" pp="149 ff." />).
 
 <Tabs>
 <TabItem value="Dynamic">
