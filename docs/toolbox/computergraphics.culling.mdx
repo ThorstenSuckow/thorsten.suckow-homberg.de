@@ -1,0 +1,17 @@
+---
+title: "Culling"
+---
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# Culling (Computer Graphics)
+
+_Culling_ describes the process of excluding various geometrical shapes from rendering based on their spatial relation to the camera's <GlosRef name="view frustum" file="computergraphics.viewfrustum" />.
+
+Different techniques apply, such as
+
+ - **Back-face culling**: Enables the GPU to discard triangles facing away from the camera.
+ - **Frustum clipping**: Clips geometry against the camera to compute the visible portion, thereby creating new and smaller geometric objects (<BibRef name="KSS17" />).
+ - **Occlusion culling**: Portions of the world scenery that are within the camera's view frustum, but occluded by other objects, are excluded from the rendering process (<BibRef name="RTR" pp="840 ff." />).
+

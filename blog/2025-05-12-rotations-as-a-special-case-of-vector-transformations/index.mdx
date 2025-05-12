@@ -1,0 +1,30 @@
+---
+slug: rotations-as-a-special-case-of-vector-transformations
+title: "Rotations as a Special Case of Vector Transformations"
+authors: [thorstensuckow]
+tags: [computer graphics, linear algebra]
+enableComments: true
+---
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+
+## Rotations as a Special Case of Vector Transformations
+
+#### ... with Applications to Game World Modeling
+
+Rotations, as a class of affine vector transformations, represent rigid body transformations that change the direction of a vector within a given plane.<br />
+Efficient and accurate handling of such transformations poses challenges not only for game and animation engines, but also for simulations and real-time systems, where the limitations of floating-point arithmetic and operation throughput can negatively impact the computational outcomes.
+
+<!--truncate-->
+
+My [article](/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations) introduces **vector rotation** with a focus on the relations between its two- and three-dimensional formulations.
+
+We begin in the two-dimensional plane by deriving classical rotation matrices from linear combinations in orthogonal bases.
+
+We then generalize this approach by introducing **Rodrigues' rotation formula**, which provides a compact expression for rotation around arbitrary axes in three-dimensional space. We verify that the standard rotation matrices emerge as special cases from this general form.
+
+Finally, we illustrate the application of vector rotation in the context of embedded coordinate systems within large scene graphs, demonstrating how transformations propagate across hierarchical structures in real-time environments such as video games.
+
+[Continue reading...](/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations)

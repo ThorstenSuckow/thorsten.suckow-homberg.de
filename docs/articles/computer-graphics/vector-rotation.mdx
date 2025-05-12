@@ -1,0 +1,781 @@
+---
+title: "Rotations as a Special Case of Vector Transformations"
+slug: "rotations-as-a-special-case-of-vector-transformations"
+description: "Rotations as a Special Case of Vector Transformations, with Applications to Game World Modeling"
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {BackButton} from "../../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+import sinecosine from "./img/vector-rotation/sinecosine.png";
+import sinecosine_code from '!!raw-loader!./plots/vector-rotation/sinecosine.py?raw';
+
+import rotation_origin from "./img/vector-rotation/rotation_origin.png";
+import rotation_origin_code from '!!raw-loader!./plots/vector-rotation/rotation_origin.py?raw';
+
+import rotation_point from "./img/vector-rotation/rotation_point.png";
+import rotation_point_code from '!!raw-loader!./plots/vector-rotation/rotation_point.py?raw';
+
+import rodrigues from "./img/vector-rotation/rodrigues.png";
+import rodrigues_code from '!!raw-loader!./plots/vector-rotation/rodrigues.py?raw';
+
+import vector_projection from "./img/vector-rotation/vector_projection.png";
+import vector_projection_code from '!!raw-loader!./plots/vector-rotation/vector_projection.py?raw';
+
+import rotation_disc1 from "./img/vector-rotation/rotation_disc1.png";
+import rotation_disc1_code from '!!raw-loader!./plots/vector-rotation/rotation_disc1.py?raw';
+
+import rotation_disc2 from "./img/vector-rotation/rotation_disc2.png";
+import rotation_disc2_code from '!!raw-loader!./plots/vector-rotation/rotation_disc2.py?raw';
+
+import clairobscur from "./img/vector-rotation/clairobscur.png";
+import scenegraph from "./img/vector-rotation/scenegraph.png";
+import anim_rotation_dynamic from "./img/vector-rotation/anim_rotation_dynamic.gif";
+import anim_rotation_static from "./img/vector-rotation/anim_rotation_static.gif";
+import anim_rotation_dynamic_code from '!!raw-loader!./plots/vector-rotation/anim_rotation_dynamic.py?raw';
+import anim_rotation_static_code from '!!raw-loader!./plots/vector-rotation/anim_rotation_static.py?raw';
+
+export const figures = {
+    sinecosine: 1,
+    rotation_origin : 2,
+    rotation_point : 3,
+    rodrigues: 4,
+    vector_projection: 5,
+    rotation_disc1: 6,
+    rotation_disc2: 7,
+    clairobscur: 8,
+    scenegraph: 9,
+    anim_rotation_dynamic: 10,
+    anim_rotation_static: 11
+};
+
+Rotations, as a class of affine vector transformations, represent rigid body transformations that change the direction of a vector within a given plane.<br />
+Efficient and accurate handling of such transformations poses challenges not only for game and animation engines, but also for simulations and real-time systems, where the limitations of floating-point arithmetic and operation throughput can negatively impact the computational outcomes (<BibRef name="She97" />, <BibRef name="Kui99" />).
+
+This work introduces **vector rotation** with a focus on the relations between its two- and three-dimensional formulations.
+
+We begin in the two-dimensional plane by deriving classical rotation matrices from linear combinations in orthogonal bases.
+
+We then generalize this approach by introducing **Rodrigues' rotation formula**, which provides a compact expression for rotation around arbitrary axes in three-dimensional space. We verify that the standard rotation matrices emerge as special cases from this general form.
+
+Finally, we illustrate the application of vector rotation in the context of embedded coordinate systems within large scene graphs, demonstrating how transformations propagate across hierarchical structures in real-time environments such as video games.
+
+## Vector Rotation as a Linear Combination
+
+Given an angle $\Theta$ and an orthonormal basis in three-dimensional space, rotating a vector $\vec{v}$ around one of the cardinal axes can be computed with a **rotation matrix** $\boldsymbol{R}(\Theta)$.
+
+The following matrices define rotations about the $x$, $y$ and $z$ axes, respectively:
+
+$$
+\boldsymbol{R}_x(\Theta) = \begin{pmatrix}
+ &1 &0 &0 \\
+ &0 &\cos \Theta &-\sin \Theta\\
+ &0 &\sin \Theta &\cos \Theta
+\end{pmatrix}
+$$
+
+
+$$
+\boldsymbol{R}_y(\Theta) = \begin{pmatrix}
+&\cos \Theta & 0 &\sin \Theta\\
+&0 &1 &0\\
+&-\sin \Theta & 0 &\cos \Theta
+\end{pmatrix}
+$$
+
+
+
+$$
+\boldsymbol{R}_z(\Theta) = \begin{pmatrix}
+&\cos \Theta &-\sin \Theta &0\\
+&\sin \Theta &\cos \Theta &0\\
+&0 &0 &1
+\end{pmatrix}
+$$
+
+
+The matrix $\boldsymbol{R}_x$ directly arises from rotating a vector in the two-dimensional $xy$-plane. This connection will be established in the following.
+
+In an orthonormal basis with the **standard basis vectors** $\vec{x} = \begin{pmatrix} 1\\0\end{pmatrix}$, $\vec{y} = \begin{pmatrix} 0\\1\end{pmatrix}$, any vector of unit length can be expressed as
+
+$$
+\vec{v} = \begin{pmatrix} \cos \Theta \\ \sin \Theta \end{pmatrix}
+$$
+
+This follows directly by $\cos \Theta, \sin \Theta$ when writing $\vec{v}$ as a linear combination of the two linear independent vectors $\vec{x}, \vec{y}$:
+
+$$
+\vec{v} = a \vec{x} + b \vec{y}
+$$
+
+Substituting $a, b$ with $\cos \Theta$, $\sin \Theta$, we have:
+
+
+$$
+\vec{v} = \cos \Theta \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \sin \Theta  \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} \cos \Theta \\ \sin \Theta \end{pmatrix}
+$$
+
+or, as a matrix multiplication
+
+$$
+\begin{pmatrix} 1 &0 \\ 0 &1 \end{pmatrix} \begin{pmatrix} \cos \Theta \\\sin \Theta \end{pmatrix} = \vec{v}
+$$
+
+(Observe how $\vec{x}, \vec{y}$ represent the identity matrix $I_{2}$).
+
+
+
+In [Figure {figures.sinecosine}](#fig:sinecosine), the angle $\Theta$ represents the amount of rotation of $\vec{v}$ around the origin[^dot_product].
+
+[^dot_product]: See [Orthogonality of Unit Vectors](/docs/articles/computer-graphics/dot-product#orthogonality-of-unit-vectors)
+
+
+<Embed
+    modeAware={true}
+    figref={figures.sinecosine}
+    title={
+        "The vector v is rotated around the origin by θ degree, resulting in vector v'."}>
+    <img src={sinecosine}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {sinecosine_code}
+</CodeBlock>
+
+</details>
+
+We claim that
+
+$$
+\vec{v} = a \vec{x} + b \vec{y}
+$$
+
+holds for any **orthonormal basis**, not necessarily the standard basis (which turns out to be just a special case once we have proven the claim).
+
+We require $\sqrt{a^2 + b^2} = 1$ to ensure that $\vec{v}$ has unit length. This condition is immediately satisfied by choosing $a=\cos \Theta, b = \sin \Theta$, as derived in the following proof.
+
+### Expressing the linear combination with cosine and sine
+
+Let $\vec{x}, \vec{y} \in \mathbb{R}^2$, $\vec{x} \cdot \vec{y} = 0$, $|\vec{x}| = |\vec{y}| = 1$, $a, b \in \mathbb{R}_{[0, 1]}$, $a^2 + b ^2 = 1$.
+
+**Claim**: The linear combination $a\vec{x} + b\vec{y}$ can be written as $\cos(\Theta)\vec{x} + \sin(\Theta)\vec{y}$ and yields a normalized vector $\vec{v}$:
+
+$$
+\hat{v} = \cos(\Theta)\vec{x} + \sin(\Theta)\vec{y}
+$$
+
+
+**Proof**:
+
+We compute the dot products $\vec{v} \cdot \vec{x}$, $\vec{v} \cdot \vec{y}$ to relate the cosines of the angles $\Theta$ (between $\vec{x}$ and $\vec{v}$) and $\varphi$ (between $\vec{y}$ and $\vec{v}$), respectively:
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}| |\vec{x}| \\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| |\vec{y}|
+\end{alignat*}
+$$
+
+Since $|\vec{x}| = |\vec{y}| = 1$, we find
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}|\\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}|
+\end{alignat*}
+$$
+
+We now solve for $a$ and $b$. Since $\vec{v} = a\vec{x} + b \vec{y}$, we have
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{x} &= (a\vec{x} + b \vec{y}) \cdot \vec{x}  \\
+                      &= a(|\vec{x}|^2)   + b( \vec{x} \cdot \vec{y}) \\
+\end{split}
+$$
+
+Since $\vec{x} \cdot \vec{y} = 0$ and $|\vec{x}| = 1$, we have
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{x} = a \\
+\end{split}
+$$
+
+Solving analogously for $b$, we obtain
+
+$$
+\begin{split}
+\vec{v} \cdot \vec{y} = b \\
+\end{split}
+$$
+
+We have shown that
+
+$$
+\begin{alignat*}{3}
+\vec{v} \cdot \vec{x} &= \cos(\Theta)  |\vec{v}| &&= a\\
+\vec{v} \cdot \vec{y} &= \cos(\varphi) |\vec{v}| && = b
+\end{alignat*}
+$$
+
+and substitute into the linear combination:
+
+$$
+\begin{alignat*}{3}
+\vec{v} &= a \vec{x} + b \vec{y} \\
+        &= \cos(\Theta)  |\vec{v}| \vec{x} + \cos(\varphi) |\vec{v}| \vec{y}
+\end{alignat*}
+$$
+
+From $\angle(\vec{x}, \vec{y}) = \frac{\pi}{2}$ we can derive
+
+$$
+\begin{equation}\notag
+\begin{split}
+\cos(\varphi) &= \cos(\frac{\pi}{2} - \Theta) \\
+              &= \cos(\frac{\pi}{2})\cos(\Theta) + \sin(\frac{\pi}{2})\sin(\Theta)\\
+              &= \sin(\Theta)
+\end{split}
+\end{equation}
+$$
+
+
+
+and finally rewrite the linear combination as
+
+$$
+\vec{v} = \cos(\Theta)  |\vec{v}| \vec{x} + \sin(\Theta) |\vec{v}| \vec{y}
+$$
+
+Dividing by $|\vec{v}|$ yields the normalized vector $\hat{v}$. We therefore receive
+
+
+$$
+\frac{\vec{v}}{|\vec{v}|} = \hat{v} = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
+$$
+
+$\Box$
+
+#### Verifying the normalization
+Under the given assumptions, we verify that $|\hat{v}| = 1$, confirming that $\hat{v}$ is normalized:
+
+$$
+\begin{equation}\notag
+\begin{split}
+|\hat{v}| &= |a \vec{x} + b \vec{y}| \\
+          &= |a (x_1, x_2)^T + b (y_1, y_2)^T| \\
+          &=  \sqrt{(ax_1 + by_1)^2 + (ax_2 + by_2)^2} \\
+          &=  \sqrt{a^2x_1^2 + a^2x_2^2 + b^2y_1^2  + b^2y_2^2 + 2abx_1y_1 + 2abx_2y_2 } \\
+          &=  \sqrt{a^2(x_1^2 + x_2^2) + b^2(y_1^2 + y_2^2) + 2ab(x_1y_1 + x_2y_2)} \\
+          &=  \sqrt{a^2(\vec{x} \cdot \vec{x} ) + b^2(\vec{y} \cdot \vec{y}) + 2ab(\vec{x} \cdot \vec{y})} \\
+          &=  \sqrt{a^2 + b^2 + 2ab0} \\
+          &=  \sqrt{a^2 + b^2}
+\end{split}
+\end{equation}
+$$
+
+In order for $|\hat{v}| = 1$ to hold, it is required that $a^2 + b^2 = 1$, as given by the assumption.
+
+Substituting $a$ and $b$ by $\cos(\Theta)$ and $\sin(\Theta)$, respectively, we confirm that
+
+$$
+\cos^2(\Theta) + \sin^2(\Theta) = 1
+$$
+$\Box$
+
+### Determining the angle θ between the vectors
+
+**Claim**: $\Theta$ is the angle between $\hat{v}, \vec{x}$.
+
+This follows trivially since we have already shown that both $\hat{v}$ and $\vec{x}$ are unit vectors.
+By definition of the dot product, we have:
+
+$$
+\begin{alignat*}{3}
+\hat{v} \cdot \vec{x} &= \cos(\Theta) |\hat{v}| |\vec{x}| \\
+                      &= \cos(\Theta)
+\end{alignat*}
+$$
+which is illustrated in [Figure {figures.sinecosine}](#fig:sinecosine).
+
+$\Box$
+
+
+### Generalization to arbitrary lengths
+
+
+One particular result we get from this - and which will be useful when applying rotations in $\mathbb{R}^3$ around arbitrary axes -  is the fact that, for any perpendicular vectors $\vec{x}, \vec{y} \in \mathbb{R}^2$, where $|\vec{x}| = |\vec{y}|$, the linear combination
+
+$$
+\vec{v} = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
+$$
+
+yields a vector $\vec{v}$ satisfying
+
+$$
+|\vec{v}| = |\vec{x}| = |\vec{y}|
+$$
+
+Following the previous proof, we now treat $\vec{x}, \vec{y}$ as vectors with arbitrary, but **equal length**, resulting in the (normalized) linear combination
+
+$$
+\hat{v} = \cos(\Theta) \frac{\vec{x}}{|\vec{x}|} + \sin(\Theta)\frac{\vec{y}}{|\vec{y}|}
+$$
+
+To cancel out the denominators on the right-hand side, we multiply the equation by $|\vec{x}|$[^denominator], yielding
+
+$$
+\hat{v}|\vec{x}| = \cos(\Theta) \vec{x} + \sin(\Theta) \vec{y}
+$$
+
+Thus, we obtain a vector with the same magnitude as $\vec{x}$ and $\vec{y}$.  $\Box$
+
+[^denominator]: Since $|\vec{x}| = |\vec{y}|$, we can also chose $|\vec{y}|$
+
+## Rotation around arbitrary points
+
+When rotating a point by a given angle, the transformation depends on the chosen center of rotation.
+
+<Figure idx={figures.rotation_origin} /> illustrates the point $p = (6, 4)$ rotated by $\Theta = 20 \degree$.
+Here, $p$ is rotated around the origin $(0, 0)$ of the coordinate plane, resulting in $p'$, which can be obtained via the matrix-vector product
+
+$$
+\boldsymbol{R}(\Theta) \cdot \vec{p} = \vec{p'}
+$$
+
+where[^excursus]
+
+$$
+\boldsymbol{R}(\Theta) = \begin{pmatrix}
+\cos \Theta & -\sin \Theta \\
+\sin \Theta & \cos \Theta
+\end{pmatrix}
+$$
+
+<Embed
+    modeAware={true}
+    figref={figures.rotation_origin}
+    title={"The point p is rotated around the origin by θ degree, yielding p'."}>
+    <img src={rotation_origin}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_origin_code}
+</CodeBlock>
+</details>
+
+
+#### Choosing a different center of rotation
+<Figure idx={figures.rotation_point} /> illustrates the rotation around $r$.
+$\vec{p'}$ is computed such that
+ - the rotation center $r$ becomes the origin of all points in the coordinate plane
+ - rotation is applied
+ - the rotated point is translated back.
+
+Using $\vec{r} = r^T$, we get the expression:
+
+$$
+\boldsymbol{R}(\Theta) (\vec{p} - \vec{r}) + \vec{r}
+$$
+
+<Embed
+modeAware={true}
+figref={figures.rotation_code}
+title={"The point p gets translated, then rotated around the origin, then translated back to p'."}>
+<img src={rotation_point}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_origin_code}
+</CodeBlock>
+</details>
+
+### Constructing an orthogonal basis for linear combination
+As an alternative to explicitly translating a point to the origin, applying rotation and translating it back, we can directly construct an orthogonal basis around $\vec{rp}$ and express the rotated point as a linear combination, as shown in the [previous section](#expressing-the-linear-combination-with-cosine-and-sine):
+
+$$
+\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp}
+$$
+
+Here, $\vec{rp}_{\perp}$ is the vector perpendicular to $\vec{rp}$ with the same magnitude, i.e. $|\vec{rp}_{\perp}| = |\vec{rp}|$.
+
+To obtain $\vec{rp}_{\perp}$, we present two practical methods:
+
+1. Using the **vector cross product**:<br />
+    The vector cross product $\vec{w} \times \vec{rp}$ yields a vector $\vec{rp}_{\perp}$ orthogonal to both $\vec{rp}$ and $\vec{w}$.
+
+    $\vec{w}$ is unknown and therefor has to be computed.
+
+    Since the vector cross product is an operation inherently defined in $\mathbb{R}^3$,  we need to temporarily extend our vector by a third component: For $\vec{rp}$, we write $(\vec{rp}_x, \vec{rp}_y, 0)$.
+
+    For $\vec{w}$, we choose a unit vector along the $z$-axis, $(0, 0 , 1)^T$, which is perpendicular to our 2-dimensional plane.
+    We then calculate
+
+   $$
+   \vec{rp}_{\perp} = \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix} \times \begin{pmatrix}\vec{rp}_x \\ \vec{rp}_y \\ 0\end{pmatrix} = \begin{pmatrix} - \vec{rp}_y \\ \vec{rp}_x \\ 0\end{pmatrix}
+   $$
+    Dropping the third component in the resulting vector, we end up with $\vec{rp}_{\perp} = (- \vec{rp}_y, \vec{rp}_x)^T$, which is perpendicular to $\vec{rp}$, as verified by their dot product:
+
+   $$
+   (- \vec{rp}_y, \vec{rp}_x)^T \cdot (\vec{rp}_x, \vec{rp}_y)^T = -\vec{rp}_y \vec{rp}_x + \vec{rp}_x \vec{rp}_y = 0
+   $$
+
+    In fact, the resulting vector $\vec{rp}_{\perp}$ is simply $\vec{rp}$ rotated by $90\degree$ **counterclockwise**, which will be formally verified with the next method.
+
+2. Using the **rotation matrix**:<br />
+    By substituting $\Theta = \frac{\pi}{2}$ ($90\degree$) into the rotation matrix $\boldsymbol{R}(\Theta)$, we get:
+
+    $$
+        \boldsymbol{R}(\frac{\pi}{2}) = \begin{pmatrix}\cos \frac{\pi}{2} & -sin \frac{\pi}{2} \\ \sin \frac{\pi}{2} & \cos \frac{\pi}{2} \end{pmatrix} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix}
+    $$
+
+    Multiplying $\boldsymbol{R}(\frac{\pi}{2})$ with $\vec{rp}$, we obtain the perpendicular vector:
+
+   $$
+   \boldsymbol{R}(\frac{\pi}{2}) \vec{rp} = \begin{pmatrix}0 & -1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} \vec{rp}_x \\ \vec{rp}_y  \end{pmatrix} = \begin{pmatrix} -\vec{rp}_y \\ \vec{rp}_x  \end{pmatrix} =  \vec{rp}_{\perp}
+   $$
+
+    which also confirms the claim above: $\vec{rp}_{\perp}$ represents $\vec{rp}$ rotated by $90\degree$ **ccw**.
+
+In both cases, $\vec{rp}_\perp$ can be used for finalizing the linear combination as
+
+$$
+\vec{p'} = \cos(\Theta) \vec{rp} + \sin(\Theta) \vec{rp}_{\perp}
+$$
+$\Box$
+
+Without delving into the complexity of the involved operations, it should be evident that translating, rotating by $\boldsymbol{R}(\Theta)$, then translating back is more efficient when operating on a large number of vectors, as it avoids computing an orthogonal basis for each case. However, constructing such a basis becomes necessary when rotations around arbitrary axes must be performed, a topic we will address in the next section.
+
+
+[^excursus]: See [Excursus: Constructing a second vector at a specific angle to an existing vector](/docs/articles/computer-graphics/dot-product#excursus-constructing-a-second-vector-at-a-specific-angle-to-an-existing-vector)
+
+## 3D Rotation about an Arbitrary Axis
+### Rodrigues' Rotation Formula
+Rotation of vectors about an arbitrary vector $\vec{n} \in \mathbb{R}^3$ in _three dimensions_ involves a combination of **vector projection** and the use of a locally defined two-dimensional orthogonal basis. The general method for computing such rotations is also known as the **Rodrigues formula**[^rodrigues]:
+
+$$
+\vec{v'} = \vec{v}_{\parallel} + \cos(\Theta) \vec{v}_{\perp} + \sin(\Theta) \vec{w}
+$$
+
+or, in its commonly used compact form
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
+$$
+
+
+
+We will now proceed to derive the formula, with a special focus on obtaining $\vec{w}$ which represents a coordinate axis in a locally defined orthogonal basis with equal-length axes.
+
+In <Figure idx={figures.rodrigues} />, the vector $\vec{v}$ is rotated about the axis $\vec{n}$.
+Since we do not care about the magnitude of $\vec{n}$, but rather its direction, we normalize the vector and obtain $\hat{n}$, which will be the **center of rotation** for $\vec{v}$ in the following derivation.
+
+<Embed modeAware={true}
+figref={figures.rodrigues}
+title={"Visualization of Rodrigues' rotation formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the orthogonal projection undergoes rotation in the locally defined two-dimensional plane."}>
+<img src={rodrigues}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rodrigues_code}
+</CodeBlock>
+</details>
+
+
+Clearly, rotating one vector about another vector in 3D must preserve at least one component of the vector that never changes, specifically the one aligned with the axis of rotation.
+To illustrate this, consider the special case of rotation about one of the standard basis vectors in $\mathbb{R}^3$:
+
+$$
+\vec{x} = \begin{pmatrix}1 \\ 0 \\ 0\end{pmatrix},
+\vec{y} = \begin{pmatrix}0 \\ 1 \\ 0\end{pmatrix},
+\vec{z} = \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix}
+$$
+
+For example, rotation of a point $(x, y)$ in the Euclidean plane corresponds to rotating the point  $(x, y, s)$ in three-dimensional space about the $z$-axis: Here, the $z$-component $s$ always stays unchanged, e.g.
+
+$$
+\boldsymbol{R}_z(\Theta) \begin{pmatrix}x\\ y\\ s\end{pmatrix} = \begin{pmatrix}x'\\ y'\\ s\end{pmatrix}
+$$
+Analogous reasoning applies to rotation about the $x$-axis and $y$-axis, where the respective components remain constant.
+
+Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis lengths, as we will see shortly - helps us isolate the component of a vector that remains unchanged under rotation.
+Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a vector $\vec{a}$ onto another vector $\vec{b}$.
+
+$$
+\vec{a}_{\parallel} = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}
+$$
+
+
+<Embed modeAware={true}
+figref={figures.vector_projection}
+title={"Parallel and orthogonal projection of a vector a onto a vector b. The parallel projection represents the component of vector a into the direction of vector b, the orthogonal projection the component perpendicular to b."}>
+<img src={vector_projection}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {vector_projection_code}
+</CodeBlock>
+</details>
+
+
+Here, $\vec{a}_{\parallel}$ represents the $x$-component of vector $\vec{a}$ in the direction of $\vec{b}$, while the **orthogonal** (or "sifted out") $y$-component is given by $\vec{a}_{\perp}$:
+
+$$
+\vec{a}_{\perp} = \vec{a} - \vec{a}_{\parallel}
+$$
+
+:::note
+It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant. This raises the question: Where is the rotation axis located in the Euclidean space[^no-rotation-in-2d]?
+
+[^no-rotation-in-2d]: There is none, as _Foley et al._ point out. In addition, they provide the proof that rotations in three-dimensional space always have an axis (<BibRef name="HDMS+14" pp="267"/>).
+
+This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
+
+As demonstrated above, a 2D rotation can be represented in 3D by considering vectors lying in an $xy$-plane, **perpendicular to the $z$-axis** (see <Figure idx={figures.rotation_disc1}/>).
+
+
+<Embed
+modeAware={true}
+figref={figures.rotation_disc1}
+title={"Vector a lies in the xy-plane and is rotated around the z-axis. Any projection of a onto the z-axis must be zero since a is perpendicular to z."}>
+<img src={rotation_disc1}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_disc1_code}
+</CodeBlock>
+</details>
+
+Here, the _parallel projection_ of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. This follows directly from the dot product.
+
+However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_disc2}/>).
+
+<Embed
+modeAware={true}
+figref={figures.rotation_disc2}
+title={"The xy-plane is now tilted. Vector a rotates around the z-axis. Unlike before, its projection onto the z-axis is non-zero, yet it remains fixed under rotation."}>
+<img src={rotation_disc2}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_disc2_code}
+</CodeBlock>
+</details>
+
+Informally speaking, the fixed projection of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
+:::
+
+Knowing that the vector-components parallel to the rotation axis stay fixed and only the orthogonal projection changes, we conclude:
+
+ - $\vec{v}_{\parallel}$ is the **parallel projection** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed as
+    $$
+       \vec{v}_{\parallel} = (\vec{v} \cdot \hat{n}) \cdot \hat{n}
+    $$
+    This is the part that never changes during rotation. Thus, the rotated vector $\vec{v}'$ is the vector sum of the parallel projection and the orthogonal projection after rotation.
+ - $\vec{v}_{\perp}$ is the orthogonal projection of $\vec{v}$ onto the plane perpendicular to $\hat{n}$. $\vec{v}_{\perp}$ is obtained by computing
+   $$
+   \vec{v}_{\perp} = \vec{v} - \vec{v}_{\parallel}
+   $$
+ - While the parallel projection of $\vec{v}$ stays fixed under rotation, the orthogonal projection itself changes.
+   It can be expressed by the linear combination
+   $$
+   \vec{v}'_{\perp} = \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}
+   $$
+   Here, the locally defined two-dimensional orthogonal basis is given by $\vec{v}_{\perp}$ and the vector $\vec{w}$. For the linear combination to ensure that the resulting vector $\vec{v}'_{\perp}$ has the same length as $\vec{v}_{\perp}$, the vector $\vec{w}$ must have the same magnitude as $\vec{v}_{\perp}$ and correspond to a $90^\circ$ **counterclockwise** rotation of $\vec{v}_{\perp}$.
+   The existence of such a vector was shown in the [previous section](#generalization-to-arbitrary-lengths). We can obtain the orthogonal basis by computing $\vec{w}$ via
+   $$
+   \vec{w} = \hat{n} \times \vec{v}_{\perp}
+   $$
+    Since $|\hat{n}| = 1$ and $\angle( \hat{n}, \vec{v}_{\perp}) = \frac{\pi}{2}$, the length of $\vec{w}$ is verified with the **vector cross product**
+
+   $$
+   |\vec{w}| = |\hat{n} \times \vec{v}_{\perp}|= \sin(\frac{\pi}{2}) \cdot |\hat{n}| \cdot |\vec{v}_{\perp}| = |\vec{v}_{\perp}|
+   $$
+
+### Deriving the Rotation Matrices
+
+We now derive $\vec{v}'$ as the result of rotating the vector $\vec{v}$ by an angle $\Theta$ about the rotation axis $\vec{n}$ using the locally defined two-dimensional orthogonal basis, with coordinate axes $\vec{v}_{\perp}$ and $\vec{w}$.
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &= \vec{v}_{\parallel} + \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - \vec{v}_{\parallel}) + \sin(\Theta)(\hat{n} \times \vec{v}_{\perp})\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - \vec{v}_{\parallel}))\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)(\hat{n} \times (\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}))\\
+         &= \vec{v}_{\parallel} + \cos(\Theta)(\vec{v} - (\vec{v} \cdot \hat{n}) \cdot \hat{n}) + \sin(\Theta)((\hat{n} \times \vec{v}) - (\hat{n} \times ((\vec{v} \cdot \hat{n}) \cdot \hat{n})))\\
+\end{alignat*}
+$$
+
+which leads to the commonly used compact form of the Rodrigues formula:
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
+$$
+
+Solving componentwise, we obtain
+
+$$
+\begin{alignat*}{3}
+\vec{v}_{\parallel} &= (\vec{v} \cdot \hat{n})\cdot \hat{n} &&=  \begin{pmatrix} (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_x  \\ (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_y \\ (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_z \end{pmatrix}\\
+\\ \
+\vec{v}_{\perp} &= \vec{v} - \vec{v}_{\parallel} &&= \begin{pmatrix} \vec{v}_x - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_x  \\ \vec{v}_y - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_y \\ \vec{v}_z - (\vec{v}_x\hat{n}_x + \vec{v}_y\hat{n}_y + \vec{v}_z\hat{n}_z) \cdot  \hat{n}_z \end{pmatrix}\\
+\\ \
+\vec{w} &= \hat{n} \times \vec{v} &&= \begin{pmatrix} \hat{n}_y\vec{v}_z - \hat{n}_z\vec{v}_y \\ \hat{n}_z\vec{v}_x - \hat{n}_x\vec{v}_z \\ \hat{n}_x\vec{v}_y - \hat{n}_y\vec{v}_x  \end{pmatrix}
+\end{alignat*}
+$$
+
+Using a specific rotation axis, we verify that $\boldsymbol{R}_z(\Theta)$ follows directly from the **Rodrigues formula**.
+We rotate $\vec{v}$ by $\Theta$ around the $z$-axis of the orthonormal standard basis in $\mathbb{R}^3$.
+
+Hence, substituting $\hat{n}$ by $\begin{pmatrix}0 \\ 0\\ 1\end{pmatrix}$ into the formula, we derive $\vec{v}'$:
+
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &= \begin{pmatrix} (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0  \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  0 \\ (\vec{v}_x \cdot 0 + \vec{v}_y \cdot 0 + \vec{v}_z \cdot 1) \cdot  1 \end{pmatrix} +
+\cos(\Theta) \begin{pmatrix} \vec{v}_x - (\vec{v}_x \cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0  \\ \vec{v}_y - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot 0 \\ \vec{v}_z - (\vec{v}_x\cdot 0 + \vec{v}_y\cdot 0 + \vec{v}_z\cdot 1) \cdot  1 \end{pmatrix} +
+\sin(\Theta)\begin{pmatrix} 0 \cdot \vec{v}_z - 1 \cdot \vec{v}_y \\ 1\cdot\vec{v}_x - 0\cdot\vec{v}_z \\ 0\cdot\vec{v}_y - 0\cdot\vec{v}_x  \end{pmatrix}\\
+\\ \
+ &= \begin{pmatrix} 0  \\  0 \\ \vec{v}_z \end{pmatrix} +
+\cos(\Theta) \begin{pmatrix} \vec{v}_x \\ \vec{v}_y \\ 0 \end{pmatrix} +
+\sin(\Theta)\begin{pmatrix} -  \vec{v}_y \\ \vec{v}_x  \\ 0 \end{pmatrix}\\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\  \cos(\Theta) \vec{v}_y + \sin(\Theta)\vec{v}_x \\ \vec{v}_z \end{pmatrix}
+\end{alignat*}
+$$
+
+which corresponds to the matrix-vector product of $\boldsymbol{R}_z(\Theta)$ and $\vec{v}$
+
+$$
+\begin{alignat*}{3}
+\vec{v}' &=  \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\  \cos(\Theta) \vec{v}_y + \sin(\Theta)\vec{v}_x \\ \vec{v}_z \end{pmatrix} \\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) \vec{v}_x - \sin(\Theta)\vec{v}_y  \\ \sin(\Theta)\vec{v}_x + \cos(\Theta) \vec{v}_y  \\ \vec{v}_z \end{pmatrix}\\
+\\ \
+&= \begin{pmatrix} \cos(\Theta) & -\sin(\Theta) & 0 \\ \sin(\Theta) & \cos(\Theta) & 0 \\ 0 & 0 & 1 \end{pmatrix} \cdot  \begin{pmatrix} \vec{v}_x \\ \vec{v}_y \\ \vec{v}_z \end{pmatrix}\\
+\\ \
+&= \boldsymbol{R}_z(\Theta) \vec{v}
+\end{alignat*}
+$$
+
+This confirms that the rotation matrix $\boldsymbol{R}_z(\Theta)$ follows directly from **Rodrigues' rotation formula**.
+
+Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\Theta)$.
+
+
+[^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
+_Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
+
+## Application: Scene Graphs and Active Object Transformations
+
+In video games and animations, set pieces typically consist of a large number of objects, each requiring individual transformations.
+Since some of these objects share parent-child-relationships with others (e.g. aggregates), multiple coordinate systems may be involved.
+Consequently, transformations must be computed with proper consideration of the corresponding (embedded) coordinate systems.
+
+To keep track of these interdependent and independent objects, game and animation engines use hierarchical data structures that serve different puposes, such as discarding objects outside of the
+<GlosRef name="view frustum" file="computergraphics.viewfrustum" /> to reduce the cost of <GlosRef name="culling" file="computergraphics.culling" /> operations. Depending on the use case, the applied data structure is ultimately an implementation detail (<BibRef name="Jas19" pp="693" />).
+
+<Figure idx={figures.scenegraph} /> shows a scene graph as a simplified representation of an in-game scene from the game _Clair Obscur: Expedition 33_[^clair] (<Figure idx={figures.clairobscur} />). The scene depicts a battle sequence in which the camera moves between fixed positions, based on user interaction and decisions made by the game engine while computing NPC AI.
+
+
+<Embed
+modeAware={false}
+figref={figures.clairobscur}
+title={
+"Reaper Cultist NPCs (right) from  'Clair Obscur: Expedition 33' have 3 orbs rotating around its upper torso, serving as buffs."}>
+<img src={clairobscur}  />
+</Embed>
+
+In the battle scenes depicted in the screenshot, enemies of the type _Reaper Cultist_ have orbs rotating around their upper torso.
+The scene graph shown in <Figure idx={figures.scenegraph} /> illustrates a simplified model of these NPCs embedded in the scene, including their orbs, which are represented as individual objects.
+The handling of multiple (geometric) objects sharing the same type is usually an implementation detail and can also be realized using _geometric instances_ (<BibRef name="RTR" pp="796" />, <BibRef name="PF05" pp="47" />).
+
+<Embed
+modeAware={true}
+figref={figures.scenegraph}
+title={
+"Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+<img src={scenegraph}  />
+</Embed>
+
+As illustrated by the scene graph, a floating orb is positioned relative to the head of the npc, which in turn is positioned relative to the EnemyNPC$_1$, whose position is defined in _world coordinates_.
+
+We now abstract the geometric context in <Figure idx={figures.anim_rotation_dynamic} /> to demonstrate how Rodrigues rotation can be applied.
+
+The animation shows a single vector in world coordinates representing EnemyNPC$_1$, along with three spheres arranged around it. The origin of a sphere's local coordinate system is thus defined by the vector's endpoint - i.e. the NPCs head.
+
+Implementing engines must ensure that all vectors are interpreted in the correct context: Since relative positions are provided as points in the coordinate system, it is necessary to derive direction vectors from these positions - typically by computing differences between them and some sort of reference points.
+For this purpose, any point on the rotation axis can serve as a reference point, because orthogonal projections remain unchanged even if the magnitude of the parallel component varies - as long as the direction remains constant. This is due to the fact that orthogonal and parallel vector components are treated independently in the projection process, as shown in the previous sections.
+
+In these cases, we typically arrive at a composite transformation of the form
+
+$$
+\vec{v}_{World} = \boldsymbol{T}_{1} \cdot \boldsymbol{T}_{2} \cdot \ldots \cdot \boldsymbol{T}_{n} \cdot \boldsymbol{R}(\Theta,  \hat{n}) \cdot \vec{v}_{Object}
+$$
+
+where the translation matrices $\boldsymbol{T}_i$ successively map each object into the coordinate system of its parent, with transformations applied from right to left (<BibRef name="LGK23" pp="149 ff." />).
+
+<Tabs>
+<TabItem value="Dynamic">
+ <Embed
+        modeAware={true}
+        figref={figures.anim_rotation_dynamic}
+        title={
+        "Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+        <img src={anim_rotation_dynamic}  />
+        </Embed>
+        <details>
+        <summary>Plot-Code (Python)</summary>
+
+    <CodeBlock language="python">
+      {anim_rotation_dynamic_code}
+    </CodeBlock>
+
+    </details>
+  </TabItem>
+  <TabItem value="Stationary">
+<Embed
+modeAware={true}
+figref={figures.anim_rotation_static}
+title={
+"Visualization of 3 objects rotating around a moving npc. Simplified scene graph for the depicted battle scene in Clair Obscur."}>
+<img src={anim_rotation_static}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {anim_rotation_static_code}
+</CodeBlock>
+
+</details>
+  </TabItem>
+</Tabs>
+
+The example above has been deliberately simplified for demonstration purposes, and it should be noted that, in a scene where **hundreds of thousands** of vertices have to undergo rotation, reducing the computational complexity of operations and improving numerical stability of floating-point computations might be equally important - especially in real-time rendering contexts.<br />
+In addition to the Rodrigues formula, **Euler angles** and **quaternions** (<BibRef name="Ham40" />) can be considered for applying rotations in three-dimensional space.
+Discussions of their respective advantages and limitations are provided by _Shoemaker_ (<BibRef name="Shoe85" />), _Hughes et al._ (<BibRef name="HDMS+14" />), and _Dunn and Parberry_ (<BibRef name="DP11" p="263" />).
+
+
+
+[^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrieved 08.05.2025
+[^clair]: _Clair Obscur: Expedition 33_ is a turn-based RPG developed by the french studio [Sandfall Interactive](https://www.sandfall.co) and is published by [Kepler Interactive](https://kepler-interactive.com/). It was released in April 2025 and to the date of 09.05.2025 the highest ranked PC Game of 2025 on [Opencritic](https://opencritic.com/game/18026/clair-obscur-expedition-33)
+------------------------
