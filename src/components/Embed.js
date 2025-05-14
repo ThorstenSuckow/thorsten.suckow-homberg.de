@@ -10,12 +10,14 @@ import {Cite} from "./References";
 function Embed ({width, children, title, figure, figref, modeAware}) {
 
     return (
-        <div style={{width, textAlign:"center",margin:20}}>
+        <div style={{ display:"flex", justifyContent:"center"}}>
+        <div style={{maxWidth : width, textAlign:"center",margin:20}}>
             {figref && <a name={`fig_${figref}`} />}
             <div className={modeAware !== false ? "umlImg" : ""}>{children}</div>
             <div style={{textAlign:"center"}}>
                 <sup ><b>{l8.isString(figure) ? figure : `Figure ${figure ?? (figref ?? 1)}`}</b> <span dangerouslySetInnerHTML={{__html: title}}></span></sup>
             </div>
+        </div>
         </div>
     );
 }
