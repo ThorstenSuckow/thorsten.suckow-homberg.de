@@ -18,6 +18,14 @@ function citation ({name, pp}) {
 
 }
 
+function LocRef ({name, pp, add}) {
+    const href = `#${name.toLowerCase()}`;
+    return (
+        <a href={href}>[<span className="bibRef">📖{name}</span>{add ? `, ${add} ` : "" }{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
+    );
+
+}
+
 
 function Abbildung ({idx}) {
     return (
@@ -56,4 +64,4 @@ function toolbox ({name, file}) {
 }
 
 export {toolbox as GlosRef};
-export {Figure, Abbildung, citation as Cite, Bibliography as BibRef};
+export {LocRef, Figure, Abbildung, citation as Cite, Bibliography as BibRef};
