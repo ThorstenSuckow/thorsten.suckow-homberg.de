@@ -90,7 +90,12 @@ _Fall and Stevens_ point out that, if ESP is used, but only authenticity and int
 [^null-encryption] <LocRef name="RFC2410" />
 
 ### Transport Mode
-In **transport mode**, ESP encrypts the TCP packet. In contrast to AH, the HMAC for integrity check is _appended_ to the encrypted payload in form of a **ESP trailer** (see <Figure idx={figures.transportmode} />).
+In **transport mode**, ESP encrypts the TCP packet. In contrast to AH, the HMAC for integrity check is _appended_ to the encrypted payload, after the  **ESP trailer**, which contains _Pad_, _Pad Length_ and _Next Header_ fields (see <Figure idx={figures.transportmode} />).
+
+> "The ESP ICV is a variable-length trailer used if integrity support is enabled
+and required by the integrity-checking algorithm. It is computed over the ESP
+header, payload, and ESP trailer." <LocRef name="FS12" pp="859" />
+
 
 ### Tunnel Mode
 In **tunnel mode**, ESP encrypts the whole original IP datagram. Just like with AH and tunnel mode, a new IP header is then constructed, and intermediate devices may modify the header fields as required (see <Figure idx={figures.tunnelmode} />).
