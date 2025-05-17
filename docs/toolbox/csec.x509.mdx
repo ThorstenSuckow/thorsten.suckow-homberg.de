@@ -12,7 +12,7 @@ export const figures = {
     certpath: 1
 }
 
-# X.509 Certificate (CSEC)
+# X.509 Certificate (Network Security)
 
 The **X.509 Certificate** is a standardised certificate format and is commonly used by _Public Key Infrastructures_ (_PKI_) to ensure interoperability between systems.
 
@@ -39,7 +39,7 @@ The following information is typically provided by a certificate:
 ## Roles and Responsibilities
 Signing entities and public key holders have responsibilities in certificate management. The following roles are commonly involved:
 
- - **Key Generation Authority**: 
+ - **Key Generation Authority**:
     Responsible for generating key pairs. May be a dedicated system of the certificate issuer or the chip card of the public key holder, in which case the private key never leaves the secure environment.
  - **Registration Authority (RA)**: Handles registration of subjects requesting certificates, and handles validation of data and identities.
  - **Naming Authority**: Ensures that entities are assigned unique and unambiguous names.
@@ -48,21 +48,21 @@ Signing entities and public key holders have responsibilities in certificate man
 
 ## Certification Path
 
-<Figure idx={figures.certpath} /> visualizes a **certification path** from a signed document up to the root-CA. 
-The root certificate is self signed (as indicated by `Basic Constraints: CA`). 
-The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`. 
+<Figure idx={figures.certpath} /> visualizes a **certification path** from a signed document up to the root-CA.
+The root certificate is self signed (as indicated by `Basic Constraints: CA`).
+The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`.
 `entity` signs the `document` with its private key and publishes its public key via a directory service.
 
 A relying party receiving the document builds the certification path starting with the entity's certificate up to the root CA.
 The full chain of trust must then be validated to verify the document's signature.
 
  1. Starting with the root CA, its public key is used to verify the signature of TSP$_1$: Its `signatureValue`-field contains the signature of the `tbsCertificate`-section.
- 2. This step repeats with the public key of TSP$_1$ to verify the entity's `signatureValue`.  
+ 2. This step repeats with the public key of TSP$_1$ to verify the entity's `signatureValue`.
  3. Only after all certificates were validated, the signature of the document is verified using the entity's public key.
 
 Depending on the context, different validation models apply.
 [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6) specifies the path validation procedures outlined above in full technical detail.
-Additional requirements for constraints in path validation may be imposed by national laws, regulatory frameworks or institutional policies[^bsi]. 
+Additional requirements for constraints in path validation may be imposed by national laws, regulatory frameworks or institutional policies[^bsi].
 
 
 <Embed
@@ -114,30 +114,30 @@ Certificate:
         X509v3 extensions:
             X509v3 Key Usage: critical
                 Digital Signature, Key Encipherment
-            X509v3 Extended Key Usage: 
+            X509v3 Extended Key Usage:
                 TLS Web Server Authentication, TLS Web Client Authentication
             X509v3 Basic Constraints: critical
                 CA:FALSE
-            X509v3 Subject Key Identifier: 
+            X509v3 Subject Key Identifier:
                 58:C9:B2:AA:68:E6:A5:48:CC:D8:2B:E8:42:B2:BF:7F:BE:45:66:68
-            X509v3 Authority Key Identifier: 
+            X509v3 Authority Key Identifier:
                 keyid:C5:CF:46:A4:EA:F4:C3:C0:7A:6C:95:C4:2D:B0:5E:92:2F:26:E3:B9
 
-            Authority Information Access: 
+            Authority Information Access:
                 OCSP - URI:http://r11.o.lencr.org
                 CA Issuers - URI:http://r11.i.lencr.org/
 
-            X509v3 Subject Alternative Name: 
+            X509v3 Subject Alternative Name:
                 DNS:thorsten.suckow-homberg.de
-            X509v3 Certificate Policies: 
+            X509v3 Certificate Policies:
                 Policy: 2.23.140.1.2.1
 
-            X509v3 CRL Distribution Points: 
+            X509v3 CRL Distribution Points:
 
                 Full Name:
                   URI:http://r11.c.lencr.org/50.crl
 
-            CT Precertificate SCTs: 
+            CT Precertificate SCTs:
                 Signed Certificate Timestamp:
                     Version   : v1 (0x0)
                     Log ID    : 0D:E1:F2:30:2B:D3:0D:C1:40:62:12:09:EA:55:2E:FC:
