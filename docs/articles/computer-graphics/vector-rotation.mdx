@@ -52,8 +52,10 @@ export const figures = {
     anim_rotation_static: 11
 };
 
-Rotations, as a class of affine vector transformations, represent rigid body transformations that change the direction of a vector within a given plane.<br />
+Rotations, as a class of linear vector transformations[^lineartransformation], represent rigid body transformations that change the direction of a vector within a given plane.<br />
 Efficient and accurate handling of such transformations poses challenges not only for game and animation engines, but also for simulations and real-time systems, where the limitations of floating-point arithmetic and operation throughput can negatively impact the computational outcomes (<BibRef name="She97" />, <BibRef name="Kui99" />).
+
+[^lineartransformation]: A previous version of this article referred to "affine vector transformations", which is appropriate when considering rotations that also include a translational component. Although such cases are discussed in later sections, the term has been updated to "linear" for conciseness and consistency with the mathematical treatment of pure rotations.
 
 This work introduces **vector rotation** with a focus on the relations between its two- and three-dimensional formulations.
 
@@ -482,7 +484,7 @@ Since we do not care about the magnitude of $\vec{n}$, but rather its direction,
 
 <Embed modeAware={true}
 figref={figures.rodrigues}
-title={"Visualization of Rodrigues' rotation formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the orthogonal projection undergoes rotation in the locally defined two-dimensional plane."}>
+title={"Visualization of Rodrigues' rotation formula applied to vector v, rotated 45° around the axis n. Also shown is the decomposition into the parallel and orthogonal components. A second rotation by 90° demonstrates that the parallel component remains unchanged, while only the perpendicular part (the rejection) undergoes rotation in the locally defined two-dimensional plane."}>
 <img src={rodrigues}  />
 </Embed>
 <details>
@@ -511,7 +513,7 @@ $$
 Analogous reasoning applies to rotation about the $x$-axis and $y$-axis, where the respective components remain constant.
 
 Applying the rules of vector projection in an orthonormal basis - or an orthogonal basis with equal axis lengths, as we will see shortly - helps us isolate the component of a vector that remains unchanged under rotation.
-Illustrated in <Figure idx={figures.vector_projection} /> is the projection of a vector $\vec{a}$ onto another vector $\vec{b}$.
+Illustrated in <Figure idx={figures.vector_projection} /> is the orthogonal projection of a vector $\vec{a}$ onto another vector $\vec{b}$, which yields the component of $\vec{a}$ _parallel_ to $\vec{b}$.
 
 $$
 \vec{a}_{\parallel} = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}
@@ -520,7 +522,7 @@ $$
 
 <Embed modeAware={true}
 figref={figures.vector_projection}
-title={"Parallel and orthogonal projection of a vector a onto a vector b. The parallel projection represents the component of vector a into the direction of vector b, the orthogonal projection the component perpendicular to b."}>
+title={"Orthogonal projection of a vector a onto a vector b. The projection of a onto b represents the parallel component of vector a into the direction of vector b, the rejection of a from b the component perpendicular to b."}>
 <img src={vector_projection}  />
 </Embed>
 <details>
@@ -539,9 +541,10 @@ $$
 $$
 
 :::note
-It might at first seem confusing that both the orthogonal and the parallel projections change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant. This raises the question: Where is the rotation axis located in the Euclidean space[^no-rotation-in-2d]?
+It might at first seem confusing that both the parallel and the perpendicular component change under rotation in two dimensions, whereas we previously stated that the projection parallel to the rotation axis remains constant.
+This raises the question: Where is the rotation axis located in the Euclidean space? Obviously, there is none, as _Foley et al._ point out[^no-rotation-in-2d].
 
-[^no-rotation-in-2d]: There is none, as _Foley et al._ point out. In addition, they provide the proof that rotations in three-dimensional space always have an axis (<BibRef name="HDMS+14" pp="267"/>).
+[^no-rotation-in-2d]: In addition, they provide the proof that rotations in three-dimensional space always have an axis (<BibRef name="HDMS+14" pp="267"/>).
 
 This apparent discrepancy resolves once we explicitly construct the rotation axis **outside the plane**, effectively embedding the plane into a higher dimensional-space.
 
@@ -562,9 +565,9 @@ title={"Vector a lies in the xy-plane and is rotated around the z-axis. Any proj
 </CodeBlock>
 </details>
 
-Here, the _parallel projection_ of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. This follows directly from the dot product.
+Here, the _orthogonal projection_ - the parallel component - of any rotated vector onto the rotation axis is always $\vec{0}$ - which corresponds exactly to the situation in two-dimensional rotation. This follows directly from the dot product.
 
-However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel projections of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_disc2}/>).
+However, once we _tilt_ the plane slightly, such that vectors take the form $(x, y, s)^T$ with $(x, y, s)^T \cdot (0, 0 , 1)^T \neq 0$, the parallel components of these vectors become nonzero and remain fixed under rotation (see <Figure idx={figures.rotation_disc2}/>).
 
 <Embed
 modeAware={true}
@@ -580,21 +583,21 @@ title={"The xy-plane is now tilted. Vector a rotates around the z-axis. Unlike b
 </CodeBlock>
 </details>
 
-Informally speaking, the fixed projection of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
+Informally speaking, the "fixed projection" of a rotated vector in two dimensions is not absent, its just that it's not "visible" within the plane of rotation.
 :::
 
 Knowing that the vector-components parallel to the rotation axis stay fixed and only the orthogonal projection changes, we conclude:
 
- - $\vec{v}_{\parallel}$ is the **parallel projection** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed as
+ - $\vec{v}_{\parallel}$ is the **parallel component** of $\vec{v}$ onto the **normalized** rotation axis $\vec{n}$. $\vec{v}_{\parallel}$ can be computed as
     $$
        \vec{v}_{\parallel} = (\vec{v} \cdot \hat{n}) \cdot \hat{n}
     $$
     This is the part that never changes during rotation. Thus, the rotated vector $\vec{v}'$ is the vector sum of the parallel projection and the orthogonal projection after rotation.
- - $\vec{v}_{\perp}$ is the orthogonal projection of $\vec{v}$ onto the plane perpendicular to $\hat{n}$. $\vec{v}_{\perp}$ is obtained by computing
+ - $\vec{v}_{\perp}$ is the perpendicular component of $\vec{v}$ and lies in a two-dimensional **subspace** perpendicular to $\hat{n}$. This component $\vec{v}_{\perp}$,  also called the "_rejection_" of $\vec{v}$ from $\vec{n}$ (<BibRef name="Len16" pp="29" />), is obtained by subtracting the parallel component $\vec{v}_{\parallel}$ from $\vec{v}$:
    $$
    \vec{v}_{\perp} = \vec{v} - \vec{v}_{\parallel}
    $$
- - While the parallel projection of $\vec{v}$ stays fixed under rotation, the orthogonal projection itself changes.
+ - While the parallel component of $\vec{v}$ stays fixed under rotation, the perpendicular component in respect to the projection changes.
    It can be expressed by the linear combination
    $$
    \vec{v}'_{\perp} = \cos(\Theta)\vec{v}_{\perp} + \sin(\Theta)\vec{w}
@@ -609,6 +612,7 @@ Knowing that the vector-components parallel to the rotation axis stay fixed and 
    $$
    |\vec{w}| = |\hat{n} \times \vec{v}_{\perp}|= \sin(\frac{\pi}{2}) \cdot |\hat{n}| \cdot |\vec{v}_{\perp}| = |\vec{v}_{\perp}|
    $$
+
 
 ### Deriving the Rotation Matrices
 
@@ -779,3 +783,7 @@ Discussions of their respective advantages and limitations are provided by _Shoe
 [^scene-graph-ai]: https://research.nvidia.com/publication/2021-06_neural-scene-graph-rendering, retrieved 08.05.2025
 [^clair]: _Clair Obscur: Expedition 33_ is a turn-based RPG developed by the french studio [Sandfall Interactive](https://www.sandfall.co) and is published by [Kepler Interactive](https://kepler-interactive.com/). It was released in April 2025 and to the date of 09.05.2025 the highest ranked PC Game of 2025 on [Opencritic](https://opencritic.com/game/18026/clair-obscur-expedition-33)
 ------------------------
+
+_Updates_:
+- 12.05.2025 Initial publication.
+- 17.05.2025 Terminology clarified: More concise and consistent use of _orthogonal projection_ and related vector decomposition concepts.
