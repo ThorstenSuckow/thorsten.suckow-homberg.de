@@ -4,6 +4,7 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const {sortSidebarItems} = require("./src/Util");
+import remarkBibRef from './src/plugins/thorstensuckow-bibref/remark-bibref.js';
 
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -52,7 +53,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          remarkPlugins: [remarkMath],
+          remarkPlugins: [remarkMath, remarkBibRef],
           rehypePlugins: [rehypeKatex],
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
@@ -71,7 +72,7 @@ const config = {
             'https://github.com/thorstensuckow/thorsten.suckow-homberg.de/tree/main/',
         },
         blog: {
-          remarkPlugins: [remarkMath],
+          remarkPlugins: [remarkMath, remarkBibRef],
           rehypePlugins: [rehypeKatex],
           blogSidebarTitle: 'Recent Posts',
           blogSidebarCount: 'ALL',
@@ -121,9 +122,9 @@ const config = {
             label: 'Articles',
           },{
             type: "docSidebar",
-            sidebarId: "toolbox",
+            sidebarId: "wiki",
             position: "left",
-            label: "Toolbox"
+            label: "Wiki"
           },
           {to: '/projects', label: 'Projects', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},

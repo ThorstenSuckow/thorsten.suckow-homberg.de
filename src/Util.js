@@ -2,8 +2,8 @@
 
 const sortCategoryItems = items => {
 
-    if ((items[0].id && items[0].id.startsWith("toolbox")) ||
-        (items[0].link.id && items[0].link.id.startsWith("toolbox"))) {
+    if ((items[0].id && items[0].id.startsWith("wiki")) ||
+        (items[0].link.id && items[0].link.id.startsWith("wiki"))) {
         items.sort((a, b) => {
             if (!a.id) {
                 return 0;

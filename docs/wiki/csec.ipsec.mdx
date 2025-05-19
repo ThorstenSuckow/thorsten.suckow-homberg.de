@@ -1,0 +1,134 @@
+---
+title: "IPsec "
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {LocRef, Figure, BibRef, GlosRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+import transportmode from "./img/csec.ipsec/transportmode.png";
+import tunnelmode from "./img/csec.ipsec/tunnelmode.png";
+
+
+export const figures = {
+    transportmode: 1,
+    tunnelmode : 2
+}
+
+# IPsec (CSEC)
+
+**IPsec** (_IP security)_ is a protocol suite  for the network layer in the 5-layer internet model.
+It provides  **confidentiality**, **integrity** and **authenticity** for IPv4/IPv6 traffic at the IP layer.
+
+IPsec can be understood as a framework rather than a single, self-contained protocol. Therefore, the specification spans various RFCs.
+An architectural overview is given in <LocRef name="RFC4301" />.
+
+The original specification for IPv4 did not include native protection mechanisms. However, due to growing concerns about network security in the 1990s, the IETF intended to make security mechanisms mandatory for the upcoming IPv6[^ipsecwar].
+_Graziani_ points out that this mandate was later relaxed in <LocRef name="RFC6434"/> (<LocRef name="Gra17" pp="78" />): Support for IPsec is recommended ("_should_ implement") for IPv6 devices[^ipsecmust].
+
+[^ipsecmust]: "Previously, IPv6 mandated implementation of IPsec and recommended the
+key management approach of IKE.  This document updates that
+recommendation by making support of the IPsec Architecture \[RFC4301\]
+a SHOULD for all IPv6 nodes." (<LocRef name="RFC6434" add="Section 11" />). Conversely, _Fall and Stevens_ state in  <LocRef name="SF12" pp="841" /> that IPsec implementation must be present fpr IPv6 implementations, which is possibly due to the close date of the pblication date of the 2nd edition of this book (2012) and the RFC's publication date (December 2011)
+[^ipsecwar]: _Tanenbaum_ outlines briefly the historical discussion that led to IPsec being addressed at the network layer instead of relying on application layer protocols in <LocRef name="TFW21" pp="820" />
+
+
+There are two protocols commonly used with IPsec when end-to-end communications needs to be secured: The **Authentication Header Protocol** and the **Encapsulating Security Payload Protocol**, respectively. Both differ in the security objectives they achieve.
+Furthermore,
+> "both AH and ESP offer integrity and authentication
+services, but the coverage differs for each protocol and differs for
+transport vs. tunnel mode." (<LocRef name="RFC4301" add="Section 4.2" />).
+
+The following provides a brief overview.
+
+(Note that for IPsec to be used various parameter shave to be negotiated. This is realized with the help of **Security Associations**. The concept is described in <LocRef name="RFC4301" add="Section 4.1" /> and <LocRef name="RFC4306" /> respectively.)
+
+## Authentication Header Protocol (AH)
+**Authentication Header** is specified in  <LocRef name="RFC4302" />. It is designed to provide origin authentication and integrity for IPv4- and IPv6-datagrams.
+
+### Transport Mode
+In _transport mode_, an IPsec datagram gets created as follows: An HMAC $h$ is constructed over the payload of the IP datagram, i.e. the encapsulated TCP packet (<LocRef name="TFW21" pp="823" />), and over immutable fields of the IP header.
+The result is prepended as the AH to the original payload of the datagram. It contains the cryptographic data used to verify the authenticity and integrity of the datagram by the destination host.
+Thus, it the payload of the "new" datagram  (see <Figure idx={figures.transportmode} />) contains the original TCP packet and the AH.
+
+The original IP header from the authenticated datagram is reused for sending the datagram.
+
+The destination host recalculates the HMAC $h'$ over the payload of the datagram and specific fields of the IP header and compares it to the HMAC $h$ embedded in the Authentication Header.
+If both values match, the datagram was verified.
+
+The symmetric key used for the HMAC was previously established via the negotiated **Security Association** and the implemented **Internet Key Exchange (IKEv2) Protocol** (<LocRef name="RFC4306" />).
+
+<Embed
+    modeAware={true}
+    width={600}
+    figref={figures.transportmode}
+    title={"Illustration of the IPsec Transport-Mode. Note that when using AH in transport mode, not all fields of the IP header are authenticated, since certain fields - such as the TTL or destination address - must be read or modified by devices not IPsec-aware."}>
+    <img src={transportmode}  />
+</Embed>
+
+### Tunnel Mode
+In tunnel mode, the **entire original IP datagram** is encapsulated and becomes the payload of a new datagram.
+An HMAC is computed over this payload (see <Figure idx={figures.tunnelmode} />).<br />
+The **outer IP header** is constructed independently, often by copying selected fields from the original header. However, since the HMAC does not cover fields from the outer header, intermediate network devices like router and switches may modify those fields if required (e.g. to support _Network Address Translation_).
+
+As a result, the verification process performed by the destination host excludes fields from the outer header, in contrast to **transport mode**.
+
+
+### Establishing Authenticity and Integrity with AH
+
+- **Integrity** is ensured by verifying whether $h \overset{?}{=} h'$.
+- **Authenticity** is guaranteed by the fact that only sender and receiver possess the secret shared by using the **Security Association** and negotiated over the **IKE Protocol**.
+
+If verification of $h \overset{?}{=} h'$ fails, then the datagram cannot be trusted.
+
+
+## Encapsulating Security Payload Protocol (ESP)
+
+**Encapsulating Security Payload Protocol** (_ESP) is specified in <LocRef name="RFC4303" />. In addition to [AH](#authentication-header-protocol-ah), it provides confidentiality.
+_Fall and Stevens_ point out that, if ESP is used, but only authenticity and integrity if required, ESP can employ a `NULL`-encryption method[^null-encryption] (<LocRef name="SF12" pp="858" />).
+
+[^null-encryption] <LocRef name="RFC2410" />
+
+### Transport Mode
+In **transport mode**, ESP encrypts the TCP packet. In contrast to AH, the HMAC for integrity check is _appended_ to the encrypted payload, after the  **ESP trailer**, which contains _Pad_, _Pad Length_ and _Next Header_ fields (see <Figure idx={figures.transportmode} />).
+
+> "The ESP ICV is a variable-length trailer used if integrity support is enabled
+and required by the integrity-checking algorithm. It is computed over the ESP
+header, payload, and ESP trailer." <LocRef name="SF12" pp="859" />
+
+
+### Tunnel Mode
+In **tunnel mode**, ESP encrypts the whole original IP datagram. Just like with AH and tunnel mode, a new IP header is then constructed, and intermediate devices may modify the header fields as required (see <Figure idx={figures.tunnelmode} />).
+
+<Embed
+    modeAware={true}
+    width={600}
+    figref={figures.tunnelmode}
+    title={"IPsec Tunnel-Mode."}>
+    <img src={tunnelmode}  />
+</Embed>
+
+
+### Combination of AH and ESP
+_Tanenbaum et al._ point out that AH's integrity check uses some of the IP header's fields, which makes it "impossible for an intruder to falsify the origin of a packet". (<LocRef name="TFW21" pp="823" />)[^ahesphist].
+For this reason, AH and ESP are sometimes combined to add an additional layer of protection:
+
+- AH first, then ESP: The AH data is encrypted. The origin is only visible to the receiving peer after decryption.
+- ESP first, then AH: AH covers the encrypted payload, providing a stronger form for origin authenticity.
+
+[^ahesphist]: Additionally, the authors mention the historical motivation for the existence of the two different protocols: AH was responsible for integrity, ESP for encryption, while integrity was later on added to ESP (_ibid._, p. $824$).
+
+
+
+## Comparing IPsec to SSL/TLS
+
+While <GlosRef name="SSL/TLS" file="computernetworks.ssltls"  /> operates as an application-layer protocol, IPsec secures end-to-end communication at the network-layer.
+
+Support for SLS/TLS must be provided by the applications that wish to provide secure communications, e.g. web browsers or mail clients.
+
+In contrast, IPsec is implemented at a lower abstraction layer in the IP stack and requires system wide support, affecting devices and operating systems.
+For example, when tunnel mode is used, receiving endpoints must be able to properly demultiplex incoming packets and extract the payload accordingly.
+
+Due to the (architectural) complexity of IPsec, it is most commonly deployed in **Virtual Private Networks** (_VPNs_).
+
+------------------------
