@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "deploy": "docusaurus deploy",
+    "build:bib": "node src/plugins/thorstensuckow-bibref/bibGenerator.js",
+    "start": "npm run build:bib && docusaurus start",
+    "build": "npm run build:bib && docusaurus build",
+    "deploy": "npm run build:bib && docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "swizzle": "docusaurus swizzle",
@@ -37,6 +38,7 @@
     "remark-math": "^6.0.0"
   },
   "devDependencies": {
+    "bibtex-parse-js": "^0.0.24",
     "raw-loader": "^4.0.2",
     "standard-version": "^9.5.0"
   },

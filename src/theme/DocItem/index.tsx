@@ -1,115 +1,74 @@
 import React from 'react';
-import DocItemOriginal from '@theme-original/DocItem';
-import type {Props} from '@theme/DocItem';
-import {BackButton} from '@site/src/components/BackButton';
-import {Figure, BibRef} from '@site/src/components/References';
+import {HtmlClassNameProvider} from '@docusaurus/theme-common';
+import {DocProvider} from '@docusaurus/plugin-content-docs/client';
+import DocItemMetadata from '@theme/DocItem/Metadata';
+import DocItemLayout from '@theme/DocItem/Layout';
+import bibEntries from '@site/static/bibref/combined-bib.json';
+import BackToTopOnCitation from '@site/src/plugins/thorstensuckow-bibref/BackToTopOnCitation';
 
-export default function DocItemWrapper(props: Props): JSX.Element {
+// Deine eigene Referenz-Komponente
+function References({bibRefs}: { bibRefs: string[] }) {
+    if (!bibRefs?.length) return null;
+
     return (
         <>
-            <DocItemOriginal {...props} />
+        <hr />
+        <section className="footnotes">
+            <h2>References</h2>
+            <ol>
+                {bibRefs.map((id) => {
+                    const entry = bibEntries[id.toLowerCase()] ;
+                    return (
+                        <li id={`ref-${id}`} key={id}>
+                            <a id={`bibref-${id.toLowerCase()}`} />[{id}]:{' '}
+                            {entry ? (
+                                <>
+                  <span>
+                    {entry.author && <strong>{entry.author}: </strong>}
+                      {entry.title && <em>{entry.title}</em>}
+                      {entry.year && <span> ({entry.year})</span>}
+                      {entry.publisher && <span>, {entry.publisher}</span>}
+                      {entry.doi && <span>, <a href={`https://doi.org/${entry.doi}`}>{entry.doi}</a> </span>}
+                  </span>{' '}
+                                    <a
+                                        href={`data:text/plain;charset=utf-8,${encodeURIComponent(
+                                            entry._original,
+                                        )}`}
+                                        download={`${id}.bib`}
+                                        style={{marginLeft: '0.5rem', fontSize: '0.8em'}}
+                                    >
+                                        [BibTeX]
+                                    </a>
+                                </>
+                            ) : (
+                                <span style={{color: 'red'}}>[unknown ref: {id}]</span>
+                            )}
+                        </li>
+                    );
+                })}
+            </ol>
+        </section>
         </>
     );
 }
 
-/*
+export default function DocItem(props) {
+    const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
+    const MDXComponent = props.content;
+    const bibRefs = props.content.bibRefs;
 
-import React from 'react';
-import DocItemOriginal from '@theme-original/DocItem';
-import type { Props } from '@theme/DocItem';
-import fs from 'fs';
-import path from 'path';
-import bibtexParse from 'bibtex-parse-js';
-
-export default function DocItemWrapper(props: Props): JSX.Element {
-  function loadBibEntries(): Record<string, any> {
-    const bibPath = path.resolve(__dirname, '../../../data/sources.bib');
-    const raw = fs.readFileSync(bibPath, 'utf8');
-    const parsed = bibtexParse.toJSON(raw);
-    const entries: Record<string, any> = {};
-    parsed.forEach(entry => {
-      if (entry.citationKey) {
-        entries[entry.citationKey] = {
-          ...entry.entryTags,
-          _original: entry.original,
-        };
-      }
-    });
-    return entries;
-  }
-
-  const locRefIds: Set<string> = new Set();
-
-  function extractLocRefs(node: any) {
-    if (React.isValidElement(node)) {
-      if (node.type?.name === 'LocRef' || node.type === 'LocRef') {
-        if (node.props?.id) {
-          locRefIds.add(node.props.id);
-        }
-      }
-      if (node.props?.children) {
-        const children = Array.isArray(node.props.children)
-          ? node.props.children
-          : [node.props.children];
-        children.forEach(extractLocRefs);
-      }
-    }
-  }
-
-  const pageContent = <DocItemOriginal {...props} />;
-  extractLocRefs(pageContent);
-
-  const bibEntries = loadBibEntries();
-
-  return (
-    <>
-      {pageContent}
-
-      {locRefIds.size > 0 && (
-        <footer
-          style={{
-            marginTop: '3rem',
-            borderTop: '1px solid #ddd',
-            paddingTop: '1rem',
-            fontSize: '0.95em',
-          }}
-        >
-          <h2>Zitierte Literatur</h2>
-          <ul>
-            {[...locRefIds].map(id => {
-              const entry = bibEntries[id];
-              return (
-                <li id={`ref-${id}`} key={id}>
-                  {entry ? (
-                    <>
-                      <span>
-                        {entry.author && <>{entry.author}: </>}
-                        {entry.title && <em>{entry.title}</em>}
-                        {entry.year && <span> ({entry.year})</span>}
-                        {entry.publisher && <span>, {entry.publisher}</span>}
-                      </span>{' '}
-                      <a
-                        href={`data:text/plain;charset=utf-8,${encodeURIComponent(
-                          entry._original,
-                        )}`}
-                        download={`${id}.bib`}
-                        title="BibTeX herunterladen"
-                        style={{ marginLeft: '0.5rem', fontSize: '0.8em' }}
-                      >
-                        [BibTeX]
-                      </a>
-                    </>
-                  ) : (
-                    <span style={{ color: 'red' }}>[Unbekannter Eintrag: {id}]</span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </footer>
-      )}
-    </>
-  );
+    return (
+        <DocProvider content={props.content}>
+            <HtmlClassNameProvider className={docHtmlClassName}>
+                <DocItemMetadata/>
+                <DocItemLayout>
+                    <MDXComponent/>
+                    <References bibRefs={bibRefs}/>
+                    <BackToTopOnCitation />
+                </DocItemLayout>
+            </HtmlClassNameProvider>
+        </DocProvider>
+    );
 }
 
-*/
+
