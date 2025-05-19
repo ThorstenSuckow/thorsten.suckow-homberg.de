@@ -65,8 +65,7 @@ const sidebars = {
             }],
             "collapsible": true,
             "collapsed": false,
-        },
-        'bibliography'
+        }
     ]
 
 };

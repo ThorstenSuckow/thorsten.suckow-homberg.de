@@ -5,7 +5,7 @@ import l8 from "@l8js/l8";
 import CodeBlock from '@theme/CodeBlock';
 import fetch from 'cross-fetch';
 import Gist from "react-gist";
-import {Cite} from "./References";
+import {BibRef} from "./References";
 
 function Embed ({width, children, title, figure, figref, modeAware}) {
 
@@ -28,7 +28,7 @@ function CiteEmbed ({width, children, title, figure, modeAware,  pp, name}) {
         <div style={{width, textAlign:"center",margin:20}}>
             <div className={modeAware !== false ? "umlImg" : ""}>{children}</div>
             <div style={{textAlign:"center"}}>
-                <sup ><b>{l8.isString(figure) ? figure : `Figure ${figure ?? 1}`}</b> <span dangerouslySetInnerHTML={{__html: title}}></span> (Quelle: in Anlehnung an <Cite pp={pp} name={name} />)</sup>
+                <sup ><b>{l8.isString(figure) ? figure : `Figure ${figure ?? 1}`}</b> <span dangerouslySetInnerHTML={{__html: title}}></span> (Quelle: in Anlehnung an <BibRef pp={pp} name={name} />)</sup>
             </div>
 
         </div>

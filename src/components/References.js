@@ -3,21 +3,6 @@
 import React from 'react';
 import LocRef from '@site/src/plugins/thorstensuckow-bibref/LocRef';
 
-function Bibliography ({name, pp}) {
-    const href = `/docs/bibliography#${name.toLowerCase()}`;
-    return (
-        <a href={href}>[<span className="bibRef">📖{name}</span>{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
-    );
-
-}
-
-function citation ({name, pp}) {
-    const href = `/docs/bibliography#${name.toLowerCase()}`;
-    return (
-        <a href={href}>[<span className="bibRef">📖{name}</span>{pp ? `, ${pp.includes("-") ? "pp" : "p"}. ${pp}` : ""}]</a>
-    );
-
-}
 
 function Abbildung ({idx}) {
     return (
@@ -56,4 +41,4 @@ function toolbox ({name, file}) {
 }
 
 export {toolbox as GlosRef};
-export {LocRef, Figure, Abbildung, citation as Cite, Bibliography as BibRef};
+export {LocRef, Figure, Abbildung, LocRef as BibRef};
