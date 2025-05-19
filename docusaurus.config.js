@@ -122,7 +122,7 @@ const config = {
             label: 'Articles',
           },{
             type: "docSidebar",
-            sidebarId: "toolbox",
+            sidebarId: "wiki",
             position: "left",
             label: "Wiki"
           },

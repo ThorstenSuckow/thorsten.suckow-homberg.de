@@ -43,7 +43,7 @@ _Rumbaugh et al._ state that once the owning element is destroyed, the owning el
 ### The "one-composite-at-a-time"-rule
 A **Composition** serves as an abstraction to parent/child-relationships. It is defined through the sum of its parts, i.e. the **owning object** and its parts with the prerequisite that a **Composition** - as a stronger form of an **Aggregation** - maintains and controls references to its parts, and no other object must do this for as long as the owning composite exists. Other elements may reference the parts, but they may not control their lifecycle.
 
-In the Toolbox-entry <GlosRef name="Association" file="uml.Association" />, the `Company`'s and  `Employee`'s relationship with `Address` is  modelled as plain **Association**.
+In the Wiki-entry <GlosRef name="Association" file="uml.Association" />, the `Company`'s and  `Employee`'s relationship with `Address` is  modelled as plain **Association**.
 
 We understand that `Company` and `Employee` **must not share** the same `Address`-objects, since changing an address
  $A$ for `Company` $C$ would also change the data for `Employee` $E$. The formal definition for a **Composition** in **UML** rules the simultaneously existence of more than one owning object out.

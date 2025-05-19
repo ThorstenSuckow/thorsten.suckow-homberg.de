@@ -48,7 +48,7 @@ function toolbox ({name, file}) {
         }
     });
 
-    const href = `/docs/toolbox/${file}`;
+    const href = `/docs/wiki/${file}`;
     return (
         <a href={href} className="glosRef">{name}</a>
     );
