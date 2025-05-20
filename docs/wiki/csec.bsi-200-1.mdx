@@ -1,0 +1,51 @@
+---
+title: "BSI-Standard 200-1"
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {LocRef, Figure, BibRef, GlosRef} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+import transportmode from "./img/csec.ipsec/transportmode.png";
+import tunnelmode from "./img/csec.ipsec/tunnelmode.png";
+
+import pdca from "./img/csec.bsi/pdca.png";
+
+export const figures = {
+    pdca: 1
+}
+
+
+# BSI-Standard 200-1: Information Security Management Systems (ISMS)
+
+The **BSI-Standard 200-1**[^sources] of the <GlosRef name="BSI IT-Grundschutz" file="csec.bsigrundschutz" /> provides guidance on how to establish an **Information Security Management System** (_ISMS_).
+
+It is aimed both at senior management of organizations and those responsible for IT (security) systems.
+
+The standard outlines the general requirements for an ISMS and defines its essential components as:
+
+ - management principles
+ - resources
+ - personnel
+ - the security process, including its conceptualization and organisation
+
+As a **management-focused** framework, the standard emphasizes the crucial role of leadership in initiating and supporting the ISMS, as well as its continuous improvement through the involvement of all stakeholders.
+Accordingly, it recommends the **PDCA**[^pdca] lifecycle model for security processes (see <Figure idx={figures.pdca} />), offering structured guidance for implementing, monitoring and refinement of the ISMS in an iterative manner.
+
+
+<Embed
+    modeAware={true}
+    figref={figures.pdca}
+    title={"According to the BSI-Standard 200-1, the \"Plan-Do-Check-Act\" cycle can be a applied to all tasks within the security process, and is as such used within the standard as the lifecycle model."}>
+    <img src={pdca}  />
+</Embed>
+
+
+The standard explicitly positions itself as a generic framework for establishing an ISMS.
+Its concrete implementation is typically guided by risk assessments and further complemented by specifications available with the additional standards of the IT-Grundschutz, namely BSI-Standard 200-2, 200-3 and 200-4.
+
+
+---------
+[^pdca]: PDCA: _Plan-Do-Check-Act_
+[^sources]: BSI-Standard 200-1: Information Security Management Systems (ISMS): [en](https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Grundschutz/International/bsi-standard-2001_en_pdf.html) /
+ [de](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/BSI_Standards/standard_200_1.html) *(retrieved 20.05.2025)*
