@@ -18,13 +18,15 @@ function Figure ({idx}) {
 
 }
 
-function Wiki ({name, file}) {
+function Wiki ({name, file, url}) {
 
     const mappings = {
         "sd": "softwaredesign",
         "sa": "softwarearchitecture",
         "cs": "computerscience"
     };
+
+    file = file ? file : (url ? url : "");
 
     Object.entries(mappings).some(([abbr, name]) => {
         if (file.startsWith(`${abbr}.`)) {
