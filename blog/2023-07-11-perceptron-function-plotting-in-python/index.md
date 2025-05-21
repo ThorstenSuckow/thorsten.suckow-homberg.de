@@ -1,6 +1,5 @@
 ---
 title: "Perceptron Function Plotting with Python"
-authors: [thorstensuckow]
 tags: [machine learning, ai, perceptron, neural network]
 enableComments: true
 ---

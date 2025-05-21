@@ -1,7 +1,6 @@
 ---
 slug: betrachtung-des-widerspruchsbeweis-des-speziellen-halteproblems-nach-vossen-und-witt
 title: "[DE] Betrachtung des Widerspruchsbeweis des speziellen Halteproblems nach Vossen und Witt"
-authors: [thorstensuckow]
 tags: [automata theory, algorithms]
 enableComments: true
 ---

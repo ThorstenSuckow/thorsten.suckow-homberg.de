@@ -1,7 +1,6 @@
 ---
 slug: Releasing-conjoon-V1.0
 title: Releasing conjoon V1.0
-authors: [thorstensuckow]
 tags: [release, conjoon, open source, email]
 enableComments: true
 ---

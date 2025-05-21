@@ -1,8 +1,7 @@
 ---
 slug: a-brief-overview-on-recent-cyberattacks
 title: "A Brief Overview on Recent Cyberattacks"
-authors: [thorstensuckow]
-tags: [information security]
+tags: [information security, computer networks]
 enableComments: true
 ---
 
@@ -33,12 +32,12 @@ In January 2025, the German Federal Office for Information Security (BSI)[^forti
 - **Security Risk from End-of-Life MS Exchange Versions**<br />
 In March 2025, the BSI[^exchange-bsi] warned of security vulnerabilities in versions of Microsoft Exchange Server that have reached *end-of-life* status but are still in use by various institutions.
 
-[^fbi-psa]: Determined by, among others, the FBI: [IC3 PSA (26 Feb 2025)](https://www.ic3.gov/PSA/2025/PSA250226) (accessed 23 Mar 2025)
-[^bybit]: [Bybit Incident Report](https://announcements.bybit.com/en/article/incident-update-unauthorized-activity-involving-eth-cold-wallet-blt292c0454d26e9140/), reported by [Telepolis](https://www.telepolis.de/features/Groesster-Krypto-Diebstahl-aller-Zeiten-Nordkorea-klaut-1-5-Milliarden-Dollar-bei-Bybit-10295169.html) and [Spiegel.de](https://www.spiegel.de/netzwelt/web/bybit-nordkoreas-hacker-sollen-milliarden-bei-kryptoboerse-erbeutet-haben-a-529d2692-6be9-4f4b-965f-7b192c7c6f2a) (accessed 23 Mar 2025)
-[^microsoft]: [Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2025/03/06/malvertising-campaign-leads-to-info-stealers-hosted-on-github/) (accessed 23 Mar 2025)
-[^wired]: [Wired.com on X.com DDoS Attack](https://www.wired.com/story/x-ddos-attack-march-2025/) (accessed 23 Mar 2025)
-[^fortinet-bsi]: [BSI Warning on Fortinet](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2025/2025-213432-1032.pdf?__blob=publicationFile&v=2) (accessed 23 Mar 2025)
-[^exchange-bsi]: [BSI Warning on MS Exchange EOL](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2024/2024-223466-1032.pdf?__blob=publicationFile&v=7) (accessed 23 Mar 2025)
+[^fbi-psa]: Determined by, among others, the FBI: [IC3 PSA (26 Feb 2025)](https://www.ic3.gov/PSA/2025/PSA250226) (retrieved 23.03.2025)
+[^bybit]: [Bybit Incident Report](https://announcements.bybit.com/en/article/incident-update-unauthorized-activity-involving-eth-cold-wallet-blt292c0454d26e9140/), reported by [Telepolis](https://www.telepolis.de/features/Groesster-Krypto-Diebstahl-aller-Zeiten-Nordkorea-klaut-1-5-Milliarden-Dollar-bei-Bybit-10295169.html) and [Spiegel.de](https://www.spiegel.de/netzwelt/web/bybit-nordkoreas-hacker-sollen-milliarden-bei-kryptoboerse-erbeutet-haben-a-529d2692-6be9-4f4b-965f-7b192c7c6f2a) (retrieved 23.03.2025)
+[^microsoft]: [Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2025/03/06/malvertising-campaign-leads-to-info-stealers-hosted-on-github/) (retrieved 23.03.2025)
+[^wired]: [Wired.com on X.com DDoS Attack](https://www.wired.com/story/x-ddos-attack-march-2025/) (retrieved 23.03.2025)
+[^fortinet-bsi]: [BSI Warning on Fortinet](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2025/2025-213432-1032.pdf?__blob=publicationFile&v=2) (retrieved 23.03.2025)
+[^exchange-bsi]: [BSI Warning on MS Exchange EOL](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2024/2024-223466-1032.pdf?__blob=publicationFile&v=7) (retrieved 23.03.2025)
 
 
 ## DDoS Attack on X.com
@@ -46,7 +45,7 @@ In March 2025, the BSI[^exchange-bsi] warned of security vulnerabilities in vers
 - **Affected <Wiki name="security objectives" file="csec.ciatriad" />:** **Availability** (**Mitigation measures:** Including **decoupling**, **scalable infrastructure**, and **IPS**[^ips])
 
 X.com relies on the services of Cloudflare[^cloudflare] to protect itself against DDoS attacks[^dns-lookup].
-DDoS attacks (Distributed Denial of Service) aim to flood a service with excessive requests until the system's technical resources are exhausted and no further requests can be handled (cf. <Cite pp="120 ff." name="Eck18" />, <Cite pp="533 ff." name="SL05" />).
+DDoS attacks (Distributed Denial of Service) aim to flood a service with excessive requests until the system's technical resources are exhausted and no further requests can be handled (cf. <Cite pp="120 ff." name="Eck23" />, <Cite pp="533 ff." name="SL05" />).
 A major challenge lies in distinguishing legitimate from malicious requests, as the traffic is distributed across various IP networks. It is therefore difficult to attribute the attack to a single source.
 
 
@@ -62,11 +61,11 @@ In this instance, the vulnerability seems to have been exacerbated by the fact t
 
 [^ips]: *Intrusion Prevention System* - a system that analyzes network traffic using Network Behavior Analysis (NBA) to detect various forms of attack.
 
-[^cloudflare]: [https://cloudflare.com](https://cloudflare.com) (accessed 23 Mar 2025)
+[^cloudflare]: [https://cloudflare.com](https://cloudflare.com) (retrieved 23.03.2025)
 
-[^dns-lookup]: As noted in the article cited above; further evidence includes DNS requests showing A-records pointing to Cloudflare IP addresses such as 172.66.0.227 (accessed 23 Mar 2025)
+[^dns-lookup]: As noted in the article cited above; further evidence includes DNS requests showing A-records pointing to Cloudflare IP addresses such as 172.66.0.227 (retrieved 23.03.2025)
 
-[^beaumont]: [https://doublepulsar.com/](https://doublepulsar.com/) (accessed 23 Mar 2025)
+[^beaumont]: [https://doublepulsar.com/](https://doublepulsar.com/) (retrieved 23.03.2025)
 
 ## Bybit Hack
 
@@ -99,10 +98,10 @@ This incident highlights fundamental security challenges in cryptocurrency tradi
 
 
 [^lazarus]: [Lazarus Group – Wikipedia](https://en.wikipedia.org/wiki/Lazarus_Group)
-[^multisig]: See [Binance Academy – What is a Multisig Wallet?](https://academy.binance.com/en/articles/what-is-a-multisig-wallet) (accessed 23 Mar 2025)
-[^safe-wallet]: [Safe\{Wallet\}](https://app.safe.global/welcome) (accessed 23 Mar 2025)
-[^hackernews]: [The Hacker News – Safe\{Wallet\} confirms North Korean hacking](https://thehackernews.com/2025/03/safewallet-confirms-north-korean.html) (accessed 23 Mar 2025)
-[^gauthamzzz]: Accessed 23 Mar 2025
+[^multisig]: See [Binance Academy – What is a Multisig Wallet?](https://academy.binance.com/en/articles/what-is-a-multisig-wallet) (retrieved 23.03.2025)
+[^safe-wallet]: [Safe\{Wallet\}](https://app.safe.global/welcome) (retrieved 23.03.2025)
+[^hackernews]: [The Hacker News – Safe\{Wallet\} confirms North Korean hacking](https://thehackernews.com/2025/03/safewallet-confirms-north-korean.html) (retrieved 23.03.2025)
+[^gauthamzzz]: retrieved 23.03.2025
 [^cold-wallet]: A cold wallet refers to an offline crypto wallet that stores private keys.
 
 
