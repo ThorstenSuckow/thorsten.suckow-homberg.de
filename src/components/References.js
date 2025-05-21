@@ -18,7 +18,7 @@ function Figure ({idx}) {
 
 }
 
-function toolbox ({name, file}) {
+function Wiki ({name, file}) {
 
     const mappings = {
         "sd": "softwaredesign",
@@ -40,5 +40,4 @@ function toolbox ({name, file}) {
 
 }
 
-export {toolbox as GlosRef};
-export {LocRef, Figure, Abbildung, LocRef as BibRef};
+export {Wiki as GlosRef, Wiki, LocRef, Figure, Abbildung, LocRef as BibRef, LocRef as Cite};
