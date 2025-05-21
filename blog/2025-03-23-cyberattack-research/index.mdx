@@ -1,0 +1,109 @@
+---
+slug: a-brief-overview-on-recent-cyberattacks
+title: "A Brief Overview on Recent Cyberattacks"
+tags: [information security, computer networks]
+enableComments: true
+---
+
+import {Wiki, Cite} from "../../src/components/References";
+
+# A Brief Overview on Recent Cyberattacks (early 2025)
+
+In the first months of 2025, several high-impact cyberattacks made headlines - targeting everything from crypto exchanges and streaming platforms to core infrastructure components. This post takes a brief look at two selected incidents: How they worked, what security objectives were compromised, and what they reveal about the evolving threat landscape.
+
+<!--truncate-->
+
+
+We begin with a list of notable incidents:
+
+- **Bybit Hack**<br />
+In February 2025, the cryptocurrency exchange *Bybit*[^bybit] became the victim of a hack in which over \$1.5 billion were stolen by North Korean hackers[^fbi-psa].
+
+- **Storm-0408**<br />
+In March 2025, Microsoft reported a malware campaign[^microsoft] targeting users via (illegal) streaming websites. Malicious advertisements embedded in these websites installed information-stealing malware on users' devices.
+
+- **DDoS Attack on X.com**<br />
+In March 2025, Wired.com[^wired] reported a Distributed Denial-of-Service (DDoS) attack targeting X.com (formerly twitter.com).
+
+
+- **Fortinet Zero-Day Exploit**<br />
+In January 2025, the German Federal Office for Information Security (BSI)[^fortinet-bsi] published a warning regarding a zero-day vulnerability in FortiOS and FortiProxy. Attackers could exploit the flaw to obtain super-admin privileges.
+
+- **Security Risk from End-of-Life MS Exchange Versions**<br />
+In March 2025, the BSI[^exchange-bsi] warned of security vulnerabilities in versions of Microsoft Exchange Server that have reached *end-of-life* status but are still in use by various institutions.
+
+[^fbi-psa]: Determined by, among others, the FBI: [IC3 PSA (26 Feb 2025)](https://www.ic3.gov/PSA/2025/PSA250226) (retrieved 23.03.2025)
+[^bybit]: [Bybit Incident Report](https://announcements.bybit.com/en/article/incident-update-unauthorized-activity-involving-eth-cold-wallet-blt292c0454d26e9140/), reported by [Telepolis](https://www.telepolis.de/features/Groesster-Krypto-Diebstahl-aller-Zeiten-Nordkorea-klaut-1-5-Milliarden-Dollar-bei-Bybit-10295169.html) and [Spiegel.de](https://www.spiegel.de/netzwelt/web/bybit-nordkoreas-hacker-sollen-milliarden-bei-kryptoboerse-erbeutet-haben-a-529d2692-6be9-4f4b-965f-7b192c7c6f2a) (retrieved 23.03.2025)
+[^microsoft]: [Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2025/03/06/malvertising-campaign-leads-to-info-stealers-hosted-on-github/) (retrieved 23.03.2025)
+[^wired]: [Wired.com on X.com DDoS Attack](https://www.wired.com/story/x-ddos-attack-march-2025/) (retrieved 23.03.2025)
+[^fortinet-bsi]: [BSI Warning on Fortinet](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2025/2025-213432-1032.pdf?__blob=publicationFile&v=2) (retrieved 23.03.2025)
+[^exchange-bsi]: [BSI Warning on MS Exchange EOL](https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2024/2024-223466-1032.pdf?__blob=publicationFile&v=7) (retrieved 23.03.2025)
+
+
+## DDoS Attack on X.com
+
+- **Affected <Wiki name="security objectives" file="csec.ciatriad" />:** **Availability** (**Mitigation measures:** Including **decoupling**, **scalable infrastructure**, and **IPS**[^ips])
+
+X.com relies on the services of Cloudflare[^cloudflare] to protect itself against DDoS attacks[^dns-lookup].
+DDoS attacks (Distributed Denial of Service) aim to flood a service with excessive requests until the system's technical resources are exhausted and no further requests can be handled (cf. <Cite pp="120 ff." name="Eck23" />, <Cite pp="533 ff." name="SL05" />).
+A major challenge lies in distinguishing legitimate from malicious requests, as the traffic is distributed across various IP networks. It is therefore difficult to attribute the attack to a single source.
+
+
+As a result, many organizations rely on service providers with the technical capabilities to operate large-scale server infrastructures that are specifically designed to mitigate such attacks.
+For institutions to implement such defenses on their own would typically require considerable staffing and technical resources.
+
+Wired.com quotes **Kevin Beaumont**[^beaumont], who describes the botnet used in this case as being composed of cameras and DVRs - in other words, IoT devices that are often insufficiently protected from a security standpoint, as also noted by *Münch and Schaumüller-Bichl* (<Cite pp="36" name="ITS2" />).
+
+In this instance, the vulnerability seems to have been exacerbated by the fact that some of X.com's services were not protected by Cloudflare's infrastructure:
+
+> “[…] some X origin servers, which respond to web requests, weren't properly secured behind the company's Cloudflare DDoS protection and were publicly visible.”
+
+
+[^ips]: *Intrusion Prevention System* - a system that analyzes network traffic using Network Behavior Analysis (NBA) to detect various forms of attack.
+
+[^cloudflare]: [https://cloudflare.com](https://cloudflare.com) (retrieved 23.03.2025)
+
+[^dns-lookup]: As noted in the article cited above; further evidence includes DNS requests showing A-records pointing to Cloudflare IP addresses such as 172.66.0.227 (retrieved 23.03.2025)
+
+[^beaumont]: [https://doublepulsar.com/](https://doublepulsar.com/) (retrieved 23.03.2025)
+
+## Bybit Hack
+
+- **Affected <Wiki name="security objectives" file="csec.ciatriad" />:** **Authenticity**, **Integrity**, **Confidentiality** (**Mitigation measures:** Diverse and not reducible to a few isolated mechanisms.)
+
+Nearly USD 1.5 billion in the cryptocurrency *Ethereum* were stolen in the attack.
+The North Korean hacker group *Lazarus*[^lazarus] was identified as responsible.
+
+The theft was likely enabled by exploiting vulnerabilities in the underlying key infrastructure. In *multisignature wallets*[^multisig], several users must provide their private keys to authorize a transaction.
+Owners of crypto assets using wallets protected by a single private key are often targets of phishing attacks aiming to drain their funds.
+To counter this, multisig wallets - where multiple private keys are required - serve as a **preventive security measure**.
+
+In this case, both social engineering and infrastructural weaknesses at *Safe\{Wallet\}*[^safe-wallet], a third-party multisig provider, were exploited.
+The attackers first performed test transactions with smaller amounts to verify the vulnerability, before eventually stealing large sums.
+
+The hackers used a compromised laptop belonging to a *Safe\{Wallet\}* developer and obtained AWS tokens to bypass **multi-factor authentication (MFA)**. This enabled them to install malware on a server[^hackernews].
+
+> “All signers saw the masked UI which showed the correct address and the URL was from
+> @safe [Note: *Safe\{Wallet\}*]. However, the signing message was to change the smart contract logic of our ETH cold wallet.”
+>  -  [@gauthamzzz on X](https://x.com/gauthamzzz/status/1893004650934345889)[^gauthamzzz]
+
+The theft was carried out through a manipulated multisig wallet user interface. Victims unknowingly signed transactions that compromised their **cold wallet**[^cold-wallet] (offline wallet including private keys).
+These offline wallets were then used to legally initiate transfers to shadow wallets - without the users’ intent.
+
+The affected security objective **confidentiality** likely resulted from **human error**, ultimately exploited via social engineering.
+
+This incident highlights fundamental security challenges in cryptocurrency trading. As noted in the closing remarks of *The Hacker News* article:
+
+> “Verifying that the transaction you are signing will result in the intended outcome remains one of the biggest security challenges in Web3, and this is not just a user and education problem  -  it is an industry-wide issue that demands collective action.”
+
+
+[^lazarus]: [Lazarus Group – Wikipedia](https://en.wikipedia.org/wiki/Lazarus_Group)
+[^multisig]: See [Binance Academy – What is a Multisig Wallet?](https://academy.binance.com/en/articles/what-is-a-multisig-wallet) (retrieved 23.03.2025)
+[^safe-wallet]: [Safe\{Wallet\}](https://app.safe.global/welcome) (retrieved 23.03.2025)
+[^hackernews]: [The Hacker News – Safe\{Wallet\} confirms North Korean hacking](https://thehackernews.com/2025/03/safewallet-confirms-north-korean.html) (retrieved 23.03.2025)
+[^gauthamzzz]: retrieved 23.03.2025
+[^cold-wallet]: A cold wallet refers to an offline crypto wallet that stores private keys.
+
+
+
+----------

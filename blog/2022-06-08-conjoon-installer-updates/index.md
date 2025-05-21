@@ -1,6 +1,5 @@
 ---
 title: conjoon installer updates
-authors: [thorstensuckow]
 tags: [npm, tooling, javascript, conjoon]
 enableComments: true
 ---

@@ -1,6 +1,5 @@
 ---
 title: "Fix: Ext JS Simlets and omitting the status code"
-authors: [thorstensuckow]
 tags: [javascript, sencha, extjs]
 enableComments: true
 ---

@@ -1,6 +1,5 @@
 ---
 title: JavaScript, function-as-object and the internet
-authors: [thorstensuckow]
 tags: [social, internet, javascript]
 enableComments: true
 ---

@@ -1,6 +1,5 @@
 ---
 title: "bcc-header issues with Horde_Mime_Mail"
-authors: [thorstensuckow]
 tags: [php, horde, bug]
 enableComments: true
 ---

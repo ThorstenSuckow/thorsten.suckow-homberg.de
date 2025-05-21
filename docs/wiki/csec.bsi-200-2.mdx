@@ -1,0 +1,43 @@
+---
+title: "BSI-Standard 200-2"
+tags: [information security]
+---
+
+import {LocRef, Figure, BibRef, Wiki} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+export const figures = {
+    pdca: 1
+}
+
+
+# BSI-Standard 200-2: IT-Grundschutz-Methodology
+
+The BSI-Standard 200-2[^sources] provides a methodology for the effective implementation and management of information security.
+The standard complements <Wiki name="BSI-Standard 200-1" url="csec.bsi-200-1" /> and thus aligns with <Wiki name="ISO/IEC 27001" url="csec.isoiec27001" />.
+
+Whereas 200-1 only describes general methods for **initiation and management** of an **information security management system** (_ISMS_), 200-2 provides concrete guidance for its practical implementation.
+It does so by introducing three distinct **protection levels**, tailored to the specific risk profile of an organization:
+
+| Protection Level     | Description                                                                                                                                                                           | Pros                                             | Cons                                                                                 |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------------|
+| **Basic Protection** | Broad and initial safeguard for organizations just getting started with IT-Grundschutz, with no significantly increased risk.                                                        | low effort, quick to achieve                     | only a low level of security                                                        |
+| **Core Protection**  | Targets business processes and assets exposed to specific security risks; focuses on securing what is essential to operations.                                                       | focuses on crown jewels[^crown]                         | may overlook other vulnerabilities impacting overall security                        |
+| **Standard Protection** | Classic IT-Grundschutz approach for organizations where security incidents would result in financial loss or productivity impact; assumes sensitive data handling.              | highest level of protection, considers all assets | high implementation and maintenance effort and cost                                 |
+
+
+
+## Security Policy
+The standard provides guidance on how to achieve these defined protection levels within an organization and outlines how to document then in a **Security Policy**. The policy should include
+
+ - the **scope** of the policy
+ - the **security objectives**
+ - the **overall strategy** to achieve the protection level
+ - the **organizational structure** of the ISMS
+
+
+---------
+
+[^sources]: BSI-Standard 200-2: IT-Grundschutz-Methodology: [en](https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Grundschutz/International/bsi-standard-2002_en_pdf.html?nn=128640) /
+[de](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/BSI_Standards/standard_200_2.html) *(retrieved 21.05.2025)*
+[^crown]:  assets existentially important for an organisation

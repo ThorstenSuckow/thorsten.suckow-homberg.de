@@ -1,7 +1,6 @@
 ---
 slug: loesungshinweise-prog-fh-trier
-title: "[DE] Lösungshinweise Modul prog (Update 15.03.2024)"  
-authors: [thorstensuckow]
+title: "[DE] Lösungshinweise Modul prog (Update 15.03.2024)" 
 tags: [study, java, test, programmierung]
 enableComments: true
 ---

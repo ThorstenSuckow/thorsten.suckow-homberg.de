@@ -1,6 +1,5 @@
 ---
 title: "Fix: Missing favicon.ico in Sencha ExtJS production builds"
-authors: [thorstensuckow]
 tags: [javascript, sencha, extjs]
 enableComments: true
 ---

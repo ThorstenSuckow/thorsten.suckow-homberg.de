@@ -18,13 +18,15 @@ function Figure ({idx}) {
 
 }
 
-function toolbox ({name, file}) {
+function Wiki ({name, file, url}) {
 
     const mappings = {
         "sd": "softwaredesign",
         "sa": "softwarearchitecture",
         "cs": "computerscience"
     };
+
+    file = file ? file : (url ? url : "");
 
     Object.entries(mappings).some(([abbr, name]) => {
         if (file.startsWith(`${abbr}.`)) {
@@ -40,5 +42,4 @@ function toolbox ({name, file}) {
 
 }
 
-export {toolbox as GlosRef};
-export {LocRef, Figure, Abbildung, LocRef as BibRef};
+export {Wiki as GlosRef, Wiki, LocRef, Figure, Abbildung, LocRef as BibRef, LocRef as Cite};

@@ -1,6 +1,5 @@
 ---
 title: "[DE] \"Beweisen lernen\" - Errata"
-authors: [thorstensuckow]
 tags: [mathematics]
 enableComments: true
 ---
