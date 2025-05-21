@@ -1,0 +1,40 @@
+---
+title: "CIA Triad"
+tags: [information security]
+---
+
+import {Figure, BibRef, Wiki} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed.js";
+
+
+export const figures = {
+}
+
+
+
+**CIA Triad** is an umbrella term used in Information Security that refers to three core security objectives **Confidentiality**, **Integrity**, **Availability**.
+These objectives are commonly defined as follows[^definitions]:
+
+### Confidentiality
+ - Meaning: Prevention of unauthorized access to information. Exchanged data remains confidential between the communicating entities; unauthorized entities cannot read or interpret the data, even if intercepted.
+ - Risk examples: A third party reads unencrypted email content in plaintext; intercepted TCP/IP packets are exposed; stolen data is sold on the black market.
+
+
+### Integrity
+ - Meaning: Protection against unauthorized modification of data. Information remains unchanged unless authorized by authenticated entities.
+ - Risk examples: Individual data is accidentally or maliciously deleted; emails are intercepted and their content modified.
+
+
+### Availability
+ - Meaning: Ensuring consistent and reliable access to data. A system's availability must not be compromised by external factors.
+ - Risk examples: Data lost due to technical failure or force majeure; malicious attacks such as Distributed Denial of Service (DDoS) disrupt connectivity.
+
+## CIA+
+While **CIA** forms the foundation for secure information systems, modern frameworks often include **Authenticity**. As such, the term **CIA** was coined, whereas **Authenticity** is commonly defined as follows:
+
+### Authenticity
+ - Meaning: The information originates from a legitimate, uniquely identifiable source.
+ - Risk example: An attacker impersonates the identity of a customer and places an order using stolen credit card information.
+
+---------
+[^definitions]: see <BibRef name="Eck23" /> among others
