@@ -77,14 +77,20 @@ const bibFiles = findBibFiles(rootBibDir);
 
 bibFiles.forEach(bibPath => {
     const raw = fs.readFileSync(bibPath, 'utf8');
-    const parsed = bibtexParse.toJSON(raw);
+    const parsed = bibtexParse.toJSON(raw, { includeOriginal: true });
 
     parsed.forEach(entry => {
         if (entry.citationKey) {
+
+            const rawEntry = raw
+                .split('@')
+                .find(e => e.startsWith(entry.entryType) && e.includes(entry.citationKey));
+            const original = rawEntry ? `@${rawEntry.trim()}` : null;
+
             const fullKey = `${entry.citationKey}`;
             entries[fullKey.toLowerCase()] = {
                 ...cleanFields(entry.entryTags),
-                _original: entry.original,
+                _original: original,
             };
         }
     });
