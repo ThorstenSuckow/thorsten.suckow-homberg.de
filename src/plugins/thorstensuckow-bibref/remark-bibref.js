@@ -8,7 +8,7 @@ const plugin = (options) => {
         const bibRefs = new Set();
 
         visit(tree, (node) => {
-            if (node.name === 'LocRef' || node.name === "BibRef") {
+            if (node.name === 'LocRef' || node.name === "BibRef" || node.name === "Cite") {
                 const nameAttr = node.attributes.find(attr => attr.name === 'name');
                 if (nameAttr?.value) {
                     bibRefs.add(nameAttr.value);
