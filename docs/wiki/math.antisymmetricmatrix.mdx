@@ -1,0 +1,82 @@
+---
+title: "Antisymmetric Matrix"
+tags: [math, linear algebra]
+---
+
+import {GlosRef} from "../../src/components/References";
+import {BibRef} from "../../src/components/References";
+
+
+# Antisymmetric Matrix
+
+An **Antisymmetric Matrix** or **Skew Symmetric Matrix** is a matrix where its cross-diagonal entries are negated, that is
+
+$$
+\boldsymbol{A}_{ij} = -\boldsymbol{A}_{ji}
+$$
+
+Since
+
+
+$$
+\boldsymbol{A}_{ii} = -\boldsymbol{A}_{ii}
+$$
+
+it follows that the diagonal elements must be $0$.
+
+## Examples
+
+#### Skew symmetric $4 \times 4$ matrix
+Let
+
+$$
+\boldsymbol{A} = \begin{pmatrix}
+ 0 &  a & b & -c \\
+-a &  0 & e & -h \\
+-b & -e & 0 & -i \\
+ c &  h & i & 0
+\end{pmatrix}
+$$
+
+be a matrix. Then $\boldsymbol{A}$ is **skew symmetric**, since
+
+- $ \boldsymbol{A}_{01} = a,\ \boldsymbol{A}_{10} = -a \Rightarrow \boldsymbol{A}_{10} = -\boldsymbol{A}_{01} $
+- $ \boldsymbol{A}_{02} = b,\ \boldsymbol{A}_{20} = -b \Rightarrow \boldsymbol{A}_{20} = -\boldsymbol{A}_{02} $
+- $ \boldsymbol{A}_{03} = -c,\ \boldsymbol{A}_{30} = c \Rightarrow \boldsymbol{A}_{30} = -\boldsymbol{A}_{03} $
+- $ \boldsymbol{A}_{12} = e,\ \boldsymbol{A}_{21} = -e \Rightarrow \boldsymbol{A}_{21} = -\boldsymbol{A}_{12} $
+- $ \boldsymbol{A}_{13} = -h,\ \boldsymbol{A}_{31} = h \Rightarrow \boldsymbol{A}_{31} = -\boldsymbol{A}_{13} $
+- $ \boldsymbol{A}_{23} = -i,\ \boldsymbol{A}_{32} = i \Rightarrow \boldsymbol{A}_{32} = -\boldsymbol{A}_{23} $
+- Diagonal: $ \boldsymbol{A}_{ii} = 0 $
+
+
+
+#### Cross-product as skew-symmetric matrix
+The **cross-product** of two vectors $\vec{a}, \vec{b} \in \mathbb{R}^3$ can be written as the Matrix-Vector-product of a skew-symmetric matrix and a vector:
+
+Let
+
+$$
+\vec{a} = \begin{pmatrix}a_x\\a_y\\a_z\end{pmatrix},
+\vec{b} = \begin{pmatrix}b_x\\b_y\\b_z\end{pmatrix}
+$$
+
+Then
+
+
+$$
+\begin{pmatrix}a_x\\a_y\\a_z\end{pmatrix} \times \begin{pmatrix}b_x\\b_y\\b_z\end{pmatrix} =
+ \begin{pmatrix}a_y b_z - a_z b_y\\a_z b_x - a_x b_z\\a_x b_y - a_y b_x\end{pmatrix} = \begin{pmatrix}
+0 &- &a_z b_y &+ &a_y b_z  \\
+a_z b_x &+   &0    &-&a_x b_z \\
+-a_y b_x &+  &a_x b_y &+ &0
+\end{pmatrix}  = \begin{pmatrix}
+0 & -a_z & a_y  \\
+a_z &   0  &  -a_x \\
+-a_y &  a_x & 0
+\end{pmatrix} \begin{pmatrix}
+b_x \\
+b_y \\
+b_z
+\end{pmatrix}
+$$
+
