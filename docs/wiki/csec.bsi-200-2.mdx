@@ -6,8 +6,10 @@ tags: [information security]
 import {LocRef, Figure, BibRef, Wiki} from "../../src/components/References";
 import {Embed} from "../../src/components/Embed.js";
 
+import systematicapproach from "./img/csec.bsi/systematicapproach.png";
+
 export const figures = {
-    pdca: 1
+    systematicapproach: 1
 }
 
 
@@ -35,9 +37,49 @@ The standard provides guidance on how to achieve these defined protection levels
  - the **overall strategy** to achieve the protection level
  - the **organizational structure** of the ISMS
 
+## Systematic Approach
+
+In order to establish the ISMS in an organization, BSI 200-2 proposes a systematic, multi-stage approach, as illustrated in <Figure idx={figures.systematicapproach} />.
+
+The figure also highlights the **Plan-Do-Check-Act**-cycle[^pcda] as part of an iterative methodology, underlining the need to continuously re-evaluate both potential risks and the effectiveness of available ISMS controls.
+Accordingly, the security concept must be audited at regular intervals - or reactively in response to specific system compromises.
+
+<Embed
+    modeAware={true}
+    width={540}
+    figref={figures.systematicapproach}
+    title={"Systematic approach for establishiing an ISMS according to BSI-Standard 200-2. (Source: adapted from BSI-Standard 200-2, Figure 1)"}>
+    <img src={systematicapproach}  />
+</Embed>
+
+### Initiation of the security process
+The process must be initiated by the organization's management.
+As the standard emphasizes, it is essential that the management demonstrates its commitment to the ISMS - this includes delegating responsibilities and providing adequate financial and human resources for both planning and implementation.
+
+### Drawing up of an Information Security Policy
+The Security Policy serves as an "essential basis for the design of the security process" and defines both the security objectives and the level of protection targeted by the organization.
+As a means to raise awareness within the organization, the policy also includes the rationale behind the security efforts. Furthermore, it specifies the safeguards and structural measures intended to achieve the defined protection level.
+
+### Design of a suitable organisational structure
+To effectively steer and manage the ISMS, a suitable organizational structure has to be established.
+This includes appointing an **Information Security Officer**, who serves as the "main contact person [...] for all aspects of information security".
+The role includes managing the security process, coordinating related tasks, and reporting directly to management on all security-related issues.
+
+### Drawing up of a security concept
+The security concept is developed on the basis of the modules provided in the <Wiki name="IT-Grundschutz" url="csec.bsigrundschutz" /> Compendium.
+BSI-Standard 200-2 emphasizes that when protection requirements are significally higher, a risk analysis should be conducted.
+The risk analysis can be carried out following the guidance of <Wiki name="BSI-Standard 200-3" url="csec.bsi-200-3" />.
+
+### Implementation of security concepts
+The necessary safeguards to mitigate the identified risks are implemented in order to achieve the intended level of protection.
+
+### Maintenance and continuous improvement of information security
+The security process and the implemented safeguards must be regularly re-evaluated - both at predefined intervals and in response to security incidents or system compromises.
+The effectiveness of the safegaurds should be assessed in this context, which may lead to the removal of ineffective or unnecessary measures, the addition of new ones, or adjustments to the organizational structure of the ISMS.
 
 ---------
 
 [^sources]: BSI-Standard 200-2: IT-Grundschutz-Methodology: [en](https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Grundschutz/International/bsi-standard-2002_en_pdf.html?nn=128640) /
 [de](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/BSI_Standards/standard_200_2.html) *(retrieved 21.05.2025)*
 [^crown]:  assets existentially important for an organisation
+[^pcda]: see <Wiki name="BSI-Standard 200-1" url="csec.bsi-200-1" />
