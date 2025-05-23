@@ -1,0 +1,35 @@
+---
+title: "Outer Product"
+tags: [math, linear algebra]
+---
+
+import {Cite} from "../../src/components/References";
+
+
+# Outer Product
+
+Let $\boldsymbol{A}$ and $\boldsymbol{B}$ be $n \times 1$-matrices.
+
+The matrix product of
+
+$$
+\boldsymbol{M}= \boldsymbol{A} \boldsymbol{B}^T
+$$
+
+is called the **outer product** (<Cite name="LLM21" pp="133" />) of  $\boldsymbol{A}$ and $\boldsymbol{B}$.
+
+
+Each entry $\boldsymbol{M}_{ij}$ corresponds to the product of the $i$th entry of $\boldsymbol{A}$ and the $j$th entry of $\boldsymbol{B}$:
+
+$$
+\boldsymbol{M}_{ij} = A_i B_j
+$$
+
+### Example
+
+$$
+\begin{pmatrix}
+a_1 \\
+a_2
+\end{pmatrix} \begin{pmatrix}b_1 & b_2\end{pmatrix} = \begin{pmatrix} a_1 b_1 & a_1 b_2 \\ a_2 b_1 & a_2 b_2\end{pmatrix}
+$$
