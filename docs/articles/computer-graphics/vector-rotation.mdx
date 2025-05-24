@@ -688,6 +688,196 @@ Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
+### Rodrigues’ Rotation Formula in Matrix Form
+
+The following form of Rodrigues’ rotation formula:
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
+$$
+
+is expanded into matrix form in the following steps.
+
+#### 1. Term $\vec{v} \cos(\Theta)$: Identity component
+
+This term is equivalent to the product of a scaled identity matrix and the vector $\vec{v}$.
+
+$$
+\begin{pmatrix}
+\cos \Theta & 0 & 0 \\
+0 & \cos \Theta & 0  \\
+0 & 0& \cos \Theta
+\end{pmatrix} \vec{v}
+$$
+
+
+#### 2. Term  $((\vec{v} \cdot \hat{n}) \hat{n})(1 - \cos(\Theta))$: Projection component
+
+We expand $(\vec{v} \cdot \hat{n}) \hat{n}$ explicitly into component form:
+
+
+$$
+\begin{alignat*}{3}
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_x &= \vec{v}_x \hat{n}^2_x +\vec{v}_y \hat{n}_x\hat{n}_y + \vec{v}_z \hat{n}_x\hat{n}_z\\
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_y &= \vec{v}_x \hat{n}_x\hat{n}_y +\vec{v}_y \hat{n}^2_y + \vec{v}_z \hat{n}_y\hat{n}_z\\
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_z &= \vec{v}_x \hat{n}_x \hat{n}_z +\vec{v}_y \hat{n}_y \hat{n}_z + \vec{v}_z \hat{n}^2_z\\
+\end{alignat*}
+$$
+
+This yields the following matrix representation:
+
+$$
+\begin{alignat*}{3}
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}
+\begin{pmatrix}
+\vec{v}_x\\
+\vec{v}_y\\
+\vec{v}_z
+\end{pmatrix}
+\end{alignat*}
+$$
+
+This matrix product is the <GlosRef name="outer product" file="math.outerproduct" /> of $\hat{n}$ with itself and $\vec{v}$:
+
+$$
+\hat{n} \hat{n}^T \vec{v}
+$$
+
+with $n_m, v_m$ being the $3 \times 1$ matrix representation (i.e., column vector form) of $\hat{n}$ and $\vec{v}$, respectively:
+
+$$
+\begin{bmatrix}\begin{pmatrix}
+\hat{n}_x \\
+\hat{n}_y \\
+\hat{n}_z
+\end{pmatrix}
+\begin{pmatrix}
+\hat{n}_x &
+\hat{n}_y &
+\hat{n}_z
+\end{pmatrix}
+\end{bmatrix}
+\begin{pmatrix}
+\vec{v}_x \\
+\vec{v}_y \\
+\vec{v}_z
+\end{pmatrix}
+$$
+
+This yields the following matrix expression:
+
+$$
+\begin{alignat*}{3}
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}(1 - \cos \Theta)\vec{v}
+\end{alignat*}
+$$
+
+#### 3. Term  $(\hat{n} \times \vec{v})\sin(\Theta)$: Skew component
+
+This can be expressed using the <GlosRef name="skew matrix" file="math.antisymmetricmatrix" />:
+
+$$
+\begin{pmatrix}
+0     &  -\hat{n}_z & \hat{n}_y   \\
+\hat{n}_z  &    0 & -\hat{n}_x   \\
+-\hat{n}_y   &   \hat{n}_x   & 0
+\end{pmatrix} (\sin \Theta)\vec{v}
+$$
+
+#### 4. Final Matrix form of the Rodrigues formula
+
+Combining all three components, the final matrix form of the rotation matrix is:
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{R}(\theta, \hat{n}) &=
+\begin{pmatrix}
+\cos \Theta & 0 & 0 \\
+0 & \cos \Theta & 0  \\
+0 & 0& \cos \Theta
+\end{pmatrix} +
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}(1 - \cos \Theta)
++
+\begin{pmatrix}
+0     &  -\hat{n}_z & \hat{n}_y   \\
+\hat{n}_z  &    0 & -\hat{n}_x   \\
+-\hat{n}_y   &   \hat{n}_x   & 0
+\end{pmatrix} (\sin \Theta)\\
+
+& \qquad\\
+& =
+\begin{pmatrix}
+\cos \Theta + \hat{n}^2_x (1 - \cos \Theta) & \hat{n}_x\hat{n}_y (1 - \cos \Theta)  -\hat{n}_z \sin \Theta &  \hat{n}_x\hat{n}_z (1 - \cos \Theta) +  \hat{n}_y \sin \Theta\\
+\hat{n}_x\hat{n}_y (1 - \cos \Theta) + \hat{n}_z \sin \Theta & \cos \Theta + \hat{n}^2_y (1 - \cos \Theta) &  \hat{n}_y\hat{n}_z (1 - \cos \Theta) -\hat{n}_x \sin \Theta \\
+\hat{n}_x\hat{n}_z (1 - \cos \Theta) -\hat{n}_y \sin \Theta  & \hat{n}_y\hat{n}_z (1 - \cos \Theta) + \hat{n}_x \sin \Theta  & \cos \Theta + \hat{n}^2_z (1 - \cos \Theta)
+\end{pmatrix}
+\end{alignat*}
+$$
+
+By factoring $\vec{v}$ in each term of the expansion, we arrive at a single matrix $\boldsymbol{R}(\Theta, \hat{n})$, which is a composition of a scaled identity, a projection along the rotation axis, and a skew transformation representing the cross product.
+
+Hence, the rotation can be written in one step as
+
+$$
+\vec{v}' = \boldsymbol{R}(\Theta, \hat{n}) \vec{v}
+$$
+
+
+:::tip Application: Rodrigues rotation matrix with GLM in C++
+
+When the rotation axis $\vec{n}$ and the rotation angle $\Theta$ are known, a corresponding **rotation matrix** can be conveniently implemented as a function.
+
+The following C++ function returns a `glm::mat3` representing a rotation around an arbitrary axis, using **GLM** (_OpenGL Mathematics_)[^glm]:
+
+```cpp
+mat3 Transform::rotate(const float degrees, const vec3& axis) {
+
+    float theta = radians(degrees);
+
+    vec3 n = normalize(axis);
+
+    float cos_theta = cos(theta);
+    float sin_theta = sin(theta);
+    float t = 1.0f - cos_theta;
+
+    return mat3(
+        cos_theta + n.x * n.x * t,
+        n.x * n.y * t + n.z * sin_theta,
+        n.x * n.z * t - n.y * sin_theta,
+
+        n.x * n.y * t - n.z * sin_theta,
+        cos_theta + n.y * n.y * t,
+        n.y*n.z * t + n.x * sin_theta,
+
+        n.x * n.z * t + n.y * sin_theta,
+        n.y * n.z * t - n.x * sin_theta,
+        cos_theta + n.z * n.z * t
+    );
+}
+```
+
+Given a vector `glm::vec3 v`, its rotation around the specified axis by $45^\circ$ can be computed as follows:
+
+```cpp
+vec3 vr = rotate(45.0f, axis) * v;
+```
+:::
+
+[^glm]: _OpenGL Mathematics_ library for C++: https://github.com/g-truc/glm (retrieved 24.05.2025)
+
+
 ## Application: Scene Graphs and Active Object Transformations
 
 In video games and animations, set pieces typically consist of a large number of objects, each requiring individual transformations.
@@ -787,3 +977,4 @@ Discussions of their respective advantages and limitations are provided by _Shoe
 _Updates_:
 - 12.05.2025 Initial publication.
 - 17.05.2025 Terminology clarified: More concise and consistent use of _orthogonal projection_ and related vector decomposition concepts.
+- 24.05.2025 Added explicit matrix form of Rodrigues' rotation formula.
