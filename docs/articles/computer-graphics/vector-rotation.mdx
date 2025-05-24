@@ -688,6 +688,176 @@ Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
+### Generalization to a Rotation Matrix
+
+In cases where the rotation axis is known and the radians specified for the amount of rotation, it makes sense to provide an implementation for a Rotation Matrix as a function, e.g. in C++
+
+```c++
+export class Vec3 {
+    //...
+    public:
+        Vec3(float e0, float e1, float e2);
+
+        Vec3 rotate(const Vec3 &n, float rad);
+    //...
+```
+
+with `vec3` being an implementation of a vector for $\mathbb{R}^3$[^glm].
+
+For this, a matrix form of the compact Rodrigues form
+
+$$
+\vec{v}' = \vec{v} \cos(\Theta) + ((\vec{v} \cdot \hat{n}) \cdot \hat{n})(1 - \cos(\Theta)) + (\hat{n} \times \vec{v})\sin(\Theta)
+$$
+
+is required, which we'll deduce in the following.
+
+#### 1. Term $\vec{v} \cos(\Theta)$
+ We start with the first term $\vec{v} \cos(\Theta)$, which can be written as the Matrix-vector product of the identity matrix $\boldsymbol{I}_3$ multiplied with $\cos \Theta$ and the vector to rotate $\vec{v}$.
+
+$$
+\begin{pmatrix}
+\cos \Theta & 0 & 0 \\
+0 & \cos \Theta & 0  \\
+0 & 0& \cos \Theta
+\end{pmatrix} \vec{v}
+$$
+
+
+#### 2. Term  $((\vec{v} \cdot \hat{n}) \hat{n})(1 - \cos(\Theta))$
+
+The next term is  $((\vec{v} \cdot \hat{n}) \hat{n})(1 - \cos(\Theta))$ where we will begin with deriving the orthogonal projection of $\vec{v}$ onto the rotation axis. We will first rewrite $(\vec{v} \cdot \hat{n}) \hat{n}$ in linear form:
+
+$$
+\begin{alignat*}{3}
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_x &= \vec{v}_x \hat{n}^2_x +\vec{v}_y \hat{n}_x\hat{n}_y + \vec{v}_z \hat{n}_x\hat{n}_z\\
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_y &= \vec{v}_x \hat{n}_x\hat{n}_y +\vec{v}_y \hat{n}^2_y + \vec{v}_z \hat{n}_y\hat{n}_z\\
+(\vec{v}_x \hat{n}_x +\vec{v}_y \hat{n}_y + \vec{v}_z \hat{n}_z) \hat{n}_z &= \vec{v}_x \hat{n}_x \hat{n}_z +\vec{v}_y \hat{n}_y \hat{n}_z + \vec{v}_z \hat{n}^2_z\\
+\end{alignat*}
+$$
+
+We observe terms that can be rewritten in matrix form, namely
+
+$$
+\begin{alignat*}{3}
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}
+\begin{pmatrix}
+\vec{v}_x\\
+\vec{v}_y\\
+\vec{v}_z
+\end{pmatrix}
+\end{alignat*}
+$$
+
+Furthermore, we conclude that the left-hand matrix is now the <GlosRef name="outer product" file="math.outerproduct" /> of $\hat{n}$ as column and as row vector:
+
+$$
+n_m n_m^T v_m
+$$
+
+with $n_m, v_m$ being the $3 \times 1$ matrix representation (i.e., column vector form) of $\hat{n}$ and $\vec{v}$, respectively:
+
+$$
+\begin{bmatrix}\begin{pmatrix}
+\hat{n}_x \\
+\hat{n}_y \\
+\hat{n}_z
+\end{pmatrix}
+\begin{pmatrix}
+\hat{n}_x &
+\hat{n}_y &
+\hat{n}_z
+\end{pmatrix}
+\end{bmatrix}
+\begin{pmatrix}
+\vec{v}_x \\
+\vec{v}_y \\
+\vec{v}_z
+\end{pmatrix}
+$$
+
+We end up with the term
+
+$$
+\begin{alignat*}{3}
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}(1 - \cos \Theta)\vec{v}
+\end{alignat*}
+$$
+
+#### 3. Term  $(\hat{n} \times \vec{v})\sin(\Theta)$
+
+We can write $\hat{n} \times \vec{v}$ as the <GlosRef name="skew matrix" file="math.asymmetricmatrix" />
+
+$$
+\begin{pmatrix}
+    0     &  -n_z & n_y   \\
+    n_z  &    0 & -n_x   \\
+    -n_y   &   n_x   & 0
+\end{pmatrix} \begin{pmatrix} \vec{v}_x \\ \vec{v}_y \\ \vec{v}_z \\ \end{pmatrix}
+$$
+
+Thus, we end with the term in matrix form
+
+
+$$
+\begin{pmatrix}
+0     &  -n_z & n_y   \\
+n_z  &    0 & -n_x   \\
+-n_y   &   n_x   & 0
+\end{pmatrix} (\sin \Theta)\vec{v}
+$$
+
+#### 4. Final Matrix for of the Rodrigues formula
+
+Factorizing $\vec{v}$ yields the following matrix:
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{R}(\theta, \vec{n}) &=
+\begin{pmatrix}
+\cos \Theta & 0 & 0 \\
+0 & \cos \Theta & 0  \\
+0 & 0& \cos \Theta
+\end{pmatrix} +
+\begin{pmatrix}
+\hat{n}^2_x & \hat{n}_x\hat{n}_y &  \hat{n}_x\hat{n}_z\\
+\hat{n}_x\hat{n}_y & \hat{n}^2_y &  \hat{n}_y\hat{n}_z\\
+\hat{n}_x\hat{n}_z & \hat{n}_y\hat{n}_z & \hat{n}^2_z
+\end{pmatrix}(1 - \cos \Theta)
++
+\begin{pmatrix}
+0     &  -n_z & n_y   \\
+n_z  &    0 & -n_x   \\
+-n_y   &   n_x   & 0
+\end{pmatrix} (\sin \Theta)\\
+
+& \qquad\\
+& =
+\begin{pmatrix}
+\cos \Theta + \hat{n}^2_x (1 - \cos \Theta) & \hat{n}_x\hat{n}_y (1 - \cos \Theta)  -n_z \sin \Theta &  \hat{n}_x\hat{n}_z (1 - \cos \Theta) +  n_y \sin \Theta\\
+\hat{n}_x\hat{n}_y (1 - \cos \Theta) + n_z \sin \Theta & \cos \Theta + \hat{n}^2_y (1 - \cos \Theta) &  \hat{n}_y\hat{n}_z (1 - \cos \Theta) -n_x \sin \Theta \\
+\hat{n}_x\hat{n}_z (1 - \cos \Theta) -n_y \sin \Theta  & \hat{n}_y\hat{n}_z (1 - \cos \Theta) + n_x \sin \Theta  & \cos \Theta + \hat{n}^2_z (1 - \cos \Theta)
+\end{pmatrix}
+\end{alignat*}
+$$
+
+This final form allows us to multiply the resulting matrix with any vector after substututing $\Theta$ and $\vec{n}$ with their respective values:
+
+$$
+\vec{v}' = \boldsymbol{R}(\Theta, \vec{n}) \vec{v}
+$$
+
+
+[^glm]: Various open source implementation exist for such datatypes, such as in the _OpenGL Mathematics_ library for C++: https://glm.g-truc.net/0.9.9/api/a00281.html (retrieved 22.05.2025)
+
 ## Application: Scene Graphs and Active Object Transformations
 
 In video games and animations, set pieces typically consist of a large number of objects, each requiring individual transformations.
