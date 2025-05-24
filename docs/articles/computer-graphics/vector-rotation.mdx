@@ -688,23 +688,7 @@ Similar computations apply to $\boldsymbol{R}_x(\Theta)$ and $\boldsymbol{R}_y(\
 [^rodrigues]: Rodrigues, O. (1840). *Des lois géométriques qui régissent les déplacements d'un système solide dans l'espace, et de la variation des coordonnées provenant de ces déplacements considérés indépendamment des causes qui peuvent les produire*. *Journal de Mathématiques Pures et Appliquées*, 5, 380–440. http://eudml.org/doc/234443. <br />
 _Friedberg, R. (2022)_ provides a translation, commentary and additional proofs in his paper   *Rodrigues, Olinde: "Des lois géométriques qui régissent les déplacements d'un système solide...", translation and commentary*. https://arxiv.org/abs/2211.07787.
 
-### Generalization to a Rotation Matrix
-
-
-When the rotation axis $\vec{n}$ and the rotation angle $\Theta$ in radians are known, a corresponding **rotation matrix** can be implemented as a function, e.g., in C++:
-
-
-```cpp
-export class Vec3 {
-    //...
-    public:
-        Vec3(float e0, float e1, float e2);
-
-        Vec3 rotate(const Vec3 &n, float rad);
-    //...
-```
-
-Here `Vec3`  represents a vector implementation for $\mathbb{R}^3$[^glm].
+### Rodrigues’ Rotation Formula in Matrix Form
 
 The following form of Rodrigues’ rotation formula:
 
@@ -850,12 +834,12 @@ $$
 \vec{v}' = \boldsymbol{R}(\Theta, \hat{n}) \vec{v}
 $$
 
-[^glm]: Various open source implementation exist for such datatypes, such as in the _OpenGL Mathematics_ library for C++: https://glm.g-truc.net/0.9.9/api/a00281.html (retrieved 22.05.2025)
-
 
 :::tip Application: Rodrigues rotation matrix with GLM in C++
 
-With the matrix form of the Rodrigues rotation formula, we can now implement a C++ function that returns a `glm::mat3` rotation matrix:
+When the rotation axis $\vec{n}$ and the rotation angle $\Theta$ are known, a corresponding **rotation matrix** can be conveniently implemented as a function.
+
+The following C++ function returns a `glm::mat3` representing a rotation around an arbitrary axis, using **GLM** (_OpenGL Mathematics_)[^glm]:
 
 ```cpp
 mat3 Transform::rotate(const float degrees, const vec3& axis) {
@@ -884,12 +868,15 @@ mat3 Transform::rotate(const float degrees, const vec3& axis) {
 }
 ```
 
-Given a vector `glm::vec3 v`, its rotation around the specified axis by $45^\circ$ can be computed by invoking:
+Given a vector `glm::vec3 v`, its rotation around the specified axis by $45^\circ$ can be computed as follows:
 
 ```cpp
 vec3 vr = rotate(45.0f, axis) * v;
 ```
 :::
+
+[^glm]: _OpenGL Mathematics_ library for C++: https://github.com/g-truc/glm (retrieved 24.05.2025)
+
 
 ## Application: Scene Graphs and Active Object Transformations
 
