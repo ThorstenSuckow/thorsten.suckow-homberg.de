@@ -51,8 +51,10 @@ Signing entities and public key holders have responsibilities in certificate man
 
 <Figure idx={figures.certpath} /> visualizes a **certification path** from a signed document up to the root-CA.
 The root certificate is self signed (as indicated by `Basic Constraints: CA`).
-The CA issues a certificate for TSP$_1$, which issues a certificate for `entity`.
+The CA issues a certificate for TSP$_1$[^tsp], which issues a certificate for `entity`.
 `entity` signs the `document` with its private key and publishes its public key via a directory service.
+
+[^tsp]: TSP = _Trust Service Provider_
 
 A relying party receiving the document builds the certification path starting with the entity's certificate up to the root CA.
 The full chain of trust must then be validated to verify the document's signature.
