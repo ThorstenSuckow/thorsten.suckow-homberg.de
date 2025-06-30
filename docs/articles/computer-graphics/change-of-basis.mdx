@@ -1,0 +1,131 @@
+---
+title: "Geometric Interpretation of Change of Basis"
+slug: "geometric-interpretation-of-change-of-basis"
+description: "Geometric Interpretation of Change of Basis"
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {BackButton} from "../../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+
+
+export const figures = {
+
+};
+
+
+## Standard Basis and Identity Matrix
+
+Let $\vec{u}, \vec{v}, \vec{w}$ be orthonormal vectors of the standard basis in $\mathbb{R}^3$
+
+$$
+\begin{alignat*}{3}
+
+\vec{u} &= \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\\
+\vec{v} &= \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\\
+\vec{w} &= \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\\
+
+\end{alignat*}
+$$
+
+and $\vec{p}$ be an arbitrary vector $\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix}$.
+
+We can write $\vec{p}$ as the matrix-vector product $\boldsymbol{A}p = p$, where $\boldsymbol{A}$ is a $3 \times 3$-matrix where the rows represent the vectors $\vec{u}, \vec{v}, \vec{w}$:
+
+$$
+\begin{alignat*}{3}
+
+\begin{pmatrix}
+ 1 & 0 & 0 \\
+ 0 & 1 & 0 \\
+ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p} \end{pmatrix} \begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix}
+\end{alignat*}
+$$
+
+It is immediately clear that the resulting vector contains the components of $p$ parallel to the respective axes of the **coordinate-frame** represented by $\boldsymbol{A}$:
+
+$$
+(\vec{u} \cdot \vec{p}) \vec{u} = (\frac{\vec{u} \cdot \vec{p}}{|\vec{u}|^2}) \vec{u} =  (\frac{\vec{u} \cdot \vec{p}}{1}) \vec{u} = (p_x) \vec{u} = (p_x, 0, 0)^T
+$$
+
+Analogusly for $\vec{v}, \vec{w}$, we rewrite $\vec{p}$ as a linear combination of
+
+$$
+p = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w} = \begin{pmatrix}p_x \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix}0 \\ p_y \\ 0 \end{pmatrix} +\begin{pmatrix}0 \\ 0 \\ p_z \end{pmatrix} = \begin{pmatrix}p_x \\ p_y\\ p_z \end{pmatrix}
+$$
+
+
+This holds for any vector $p'$ of any subspace of $\mathbb{R}^3$ that undergoes a change of basis, which we will show in the following.
+
+## Change of Basis with Orthonormal Axes
+
+**Claim**:
+Let $A$ be a $3 \times 3$ matrix with its rows representing vectors $\vec{u}, \vec{v}, \vec{w}$ such that
+
+$$
+\begin{alignat*}{3}
+&|\vec{u}| = |\vec{v}| = |\vec{w}| = 1 \\
+& \vec{u} \cdot \vec{v} = 0 \\
+& \vec{u} \cdot \vec{w} = 0 \\
+& \vec{v} \cdot \vec{w} = 0
+\end{alignat*}
+$$
+
+Hence, $\vec{u}, \vec{v}, \vec{w}$ is an **orthonormal** basis in $\mathbb{R}^3$
+
+Then the matrix-vector product
+
+$$
+\boldsymbol{A}p = p'
+$$
+
+is a vector $$p'$$ where the components are the parallel-projections of the respective components onto the axes of the orthonormal basis.
+
+## Proof by Scalar Products:
+
+The multiplicatione
+$$
+\begin{alignat*}{3}
+
+\begin{pmatrix}
+ u_x & u_y & u_z \\
+ v_x & v_y & v_z \\
+ w_x & w_y & w_z \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} \end{alignat*}
+$$
+
+yields the vector
+
+$$
+p' = \begin{pmatrix}
+ u_x p_x + u_y p_y + u_z p_z \\
+ v_x p_x + v_y p_y + v_z p_z \\
+ w_x p_x + w_y p_y + w_z p_z \end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p}\end{pmatrix}
+$$
+
+Intuitively, the components in the resulting vector $p'$ show the _scalar amount_ the component are showing into the respective direction. To prove that the direction if the components is actually belonging to the directions defined by $\vec{u}, \vec{v}, \vec{w}$, we rewrite $p'$ as follows
+
+
+$$
+p' = (\vec{u} \cdot \vec{p})\vec{u} +  (\vec{v} \cdot \vec{p})\vec{v} + (\vec{w} \cdot \vec{p})\vec{w}
+$$
+
+The dot product of $p'$ and the respective vectors will leave the vector in the equation and remove those perpendicular to the vector. We show that the dot product of $p'$ and any vector of the orthogonal basis removes any component other than the component defined by the combination of $p$ and the respective vector:
+
+
+$$
+\begin{alignat*}{3}
+p' \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
+&= (\vec{u} \cdot \vec{p})(1) +  (\vec{v} \cdot \vec{p})(0) + (\vec{w} \cdot \vec{p})(0) \\
+& = \vec{u} \cdot \vec{p}
+\end{alignat*}
+$$
+
+
+
+------------------------
+
+_Updates_:
+- dd.mm.yyyy Initial publication.

@@ -15,7 +15,8 @@ const sidebars = {
                     link: {type: 'doc', id: 'articles/computer-graphics/index'},
                     items: [
                         'articles/computer-graphics/dot-product',
-                        'articles/computer-graphics/vector-rotation'
+                        'articles/computer-graphics/vector-rotation',
+                        'articles/computer-graphics/change-of-basis'
                     ],
                     "collapsed": false
                 },
