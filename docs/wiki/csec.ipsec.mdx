@@ -30,7 +30,7 @@ _Graziani_ points out that this mandate was later relaxed in <LocRef name="RFC64
 [^ipsecmust]: "Previously, IPv6 mandated implementation of IPsec and recommended the
 key management approach of IKE.  This document updates that
 recommendation by making support of the IPsec Architecture \[RFC4301\]
-a SHOULD for all IPv6 nodes." (<LocRef name="RFC6434" add="Section 11" />). Conversely, _Fall and Stevens_ state in  <LocRef name="SF12" pp="841" /> that IPsec implementation must be present fpr IPv6 implementations, which is possibly due to the close date of the pblication date of the 2nd edition of this book (2012) and the RFC's publication date (December 2011)
+a SHOULD for all IPv6 nodes." (<LocRef name="RFC6434" add="Section 11" />). Conversely, _Fall and Stevens_ state in  <LocRef name="SF12" pp="841" /> that IPsec implementation must be present fpr IPv6 implementations, which is possibly due to the close date of the publication date of the 2nd edition of this book (2012) and the RFC's publication date (December 2011)
 [^ipsecwar]: _Tanenbaum_ outlines briefly the historical discussion that led to IPsec being addressed at the network layer instead of relying on application layer protocols in <LocRef name="TFW21" pp="820" />
 
 
@@ -86,7 +86,7 @@ If verification of $h \overset{?}{=} h'$ fails, then the datagram cannot be trus
 ## Encapsulating Security Payload Protocol (ESP)
 
 **Encapsulating Security Payload Protocol** (_ESP_) is specified in <LocRef name="RFC4303" />. In addition to [AH](#authentication-header-protocol-ah), it provides confidentiality.
-_Fall and Stevens_ point out that, if ESP is used, but only authenticity and integrity if required, ESP can employ a `NULL`-encryption method[^null-encryption] (<LocRef name="SF12" pp="858" />).
+_Fall and Stevens_ point out that, if ESP is used, but only authenticity and integrity is required, ESP can employ a `NULL`-encryption method[^null-encryption] (<LocRef name="SF12" pp="858" />).
 
 [^null-encryption]: <LocRef name="RFC2410" />
 
