@@ -1,0 +1,140 @@
+---
+title: "Geometric Interpretation of Change of Basis"
+slug: "geometric-interpretation-of-change-of-basis"
+description: "Geometric Interpretation of Change of Basis"
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {BackButton} from "../../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+
+
+export const figures = {
+
+};
+
+
+## Standard Basis and Identity Matrix
+
+
+Let $\vec{u}, \vec{v}, \vec{w}$ be the orthonormal vectors of the standard basis in $\mathbb{R}^3$
+
+$$
+\begin{alignat*}{3}
+
+\vec{u} &= \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\\
+\vec{v} &= \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\\
+\vec{w} &= \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\\
+
+\end{alignat*}
+$$
+
+Let $ \vec{p} = \begin{pmatrix} p_x \\ p_y \\ p_z \end{pmatrix} $ be an arbitrary vector in $ \mathbb{R}^3 $.
+
+We can write $ \vec{p} $ as the matrix-vector product $ \boldsymbol{A} \vec{p} = \vec{p} $, where $ \boldsymbol{A} $ is a $ 3 \times 3 $ matrix whose rows represent the vectors $ \vec{u}, \vec{v}, \vec{w} $:
+
+$$
+\begin{alignat*}{3}
+
+\begin{pmatrix}
+ 1 & 0 & 0 \\
+ 0 & 1 & 0 \\
+ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p} \end{pmatrix} \begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix}
+\end{alignat*}
+$$
+
+
+It is clear that the resulting components represent the **scalar projections** of $ \vec{p} $ onto the axes of the standard basis.
+
+These projections can be used to reconstruct $ \vec{p} $ as a linear combination of the basis vectors:
+
+Since
+$$
+(\vec{u} \cdot \vec{p}) \vec{u} = (\frac{\vec{u} \cdot \vec{p}}{|\vec{u}|^2}) \vec{u} =  (\frac{\vec{u} \cdot \vec{p}}{1}) \vec{u} = (p_x) \vec{u} = (p_x, 0, 0)^T
+$$
+
+and Analogusly for $\vec{v}, \vec{w}$, we rewrite $\vec{p}$
+
+$$
+p = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w} = \begin{pmatrix}p_x \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix}0 \\ p_y \\ 0 \end{pmatrix} +\begin{pmatrix}0 \\ 0 \\ p_z \end{pmatrix} = \begin{pmatrix}p_x \\ p_y\\ p_z \end{pmatrix}
+$$
+
+This construction generalizes to any orthonormal basis, as we show next.
+
+## Change of Basis with Orthonormal Axes
+
+**Claim**:
+Let $ \boldsymbol{A} \in \mathbb{R}^{3 \times 3} $ be a matrix whose rows are vectors $ \vec{u}, \vec{v}, \vec{w} $ such that:
+
+$$
+\begin{alignat*}{3}
+&|\vec{u}| = |\vec{v}| = |\vec{w}| = 1 \\
+& \vec{u} \cdot \vec{v} = 0 \\
+& \vec{u} \cdot \vec{w} = 0 \\
+& \vec{v} \cdot \vec{w} = 0
+\end{alignat*}
+$$
+Then $ \{ \vec{u}, \vec{v}, \vec{w} \} $ form an **orthonormal basis** of $ \mathbb{R}^3 $, and for any vector $ \vec{p} $, the matrix-vector product
+$$
+\boldsymbol{A}p = p'
+$$
+
+returns the **scalar projections** of $ \vec{p} $ onto the basis vectors.
+
+## Proof by Scalar Products:
+
+Computing the product
+
+$$
+\begin{alignat*}{3}
+
+\begin{pmatrix}
+ u_x & u_y & u_z \\
+ v_x & v_y & v_z \\
+ w_x & w_y & w_z \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} \end{alignat*}
+$$
+
+yields the vector
+
+$$
+p' = \begin{pmatrix}
+ u_x p_x + u_y p_y + u_z p_z \\
+ v_x p_x + v_y p_y + v_z p_z \\
+ w_x p_x + w_y p_y + w_z p_z \end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p}\end{pmatrix}
+$$
+
+Each component $ \vec{b}_i \cdot \vec{p} $ is the scalar projection of $ \vec{p} $ onto the basis vector $ \vec{b}_i $.
+
+Intuitively, the components in the resulting vector $p'$ show the _scalar amount_ the component are showing into the respective direction.
+
+To confirm that these projections are aligned with the original basis vectors, we rewrite:
+
+
+$$
+\vec{p} = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w}
+$$
+
+Taking the dot product with any basis vector isolates its contribution:
+
+
+
+$$
+\begin{alignat*}{3}
+p' \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
+&= (\vec{u} \cdot \vec{p})(1) +  (\vec{v} \cdot \vec{p})(0) + (\vec{w} \cdot \vec{p})(0) \\
+& = \vec{u} \cdot \vec{p}
+\end{alignat*}
+$$
+
+Analogously for $ \vec{v} $ and $ \vec{w} $.
+
+Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scalar projections of $ \vec{p} $ onto the axes of the new orthonormal basis, and the original vector can be reconstructed as a linear combination of the basis vectors scaled by those projections. $\Box$
+
+
+------------------------
+
+_Updates_:
+- dd.mm.yyyy Initial publication.

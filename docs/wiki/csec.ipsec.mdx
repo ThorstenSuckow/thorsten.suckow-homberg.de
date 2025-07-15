@@ -85,10 +85,10 @@ If verification of $h \overset{?}{=} h'$ fails, then the datagram cannot be trus
 
 ## Encapsulating Security Payload Protocol (ESP)
 
-**Encapsulating Security Payload Protocol** (_ESP) is specified in <LocRef name="RFC4303" />. In addition to [AH](#authentication-header-protocol-ah), it provides confidentiality.
+**Encapsulating Security Payload Protocol** (_ESP_) is specified in <LocRef name="RFC4303" />. In addition to [AH](#authentication-header-protocol-ah), it provides confidentiality.
 _Fall and Stevens_ point out that, if ESP is used, but only authenticity and integrity if required, ESP can employ a `NULL`-encryption method[^null-encryption] (<LocRef name="SF12" pp="858" />).
 
-[^null-encryption] <LocRef name="RFC2410" />
+[^null-encryption]: <LocRef name="RFC2410" />
 
 ### Transport Mode
 In **transport mode**, ESP encrypts the TCP packet. In contrast to AH, the HMAC for integrity check is _appended_ to the encrypted payload, after the  **ESP trailer**, which contains _Pad_, _Pad Length_ and _Next Header_ fields (see <Figure idx={figures.transportmode} />).
