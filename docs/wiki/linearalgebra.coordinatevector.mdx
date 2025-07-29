@@ -1,0 +1,25 @@
+---
+title: "Coordinate Vector"
+tags: [computer graphics, linear algebra]
+---
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+# Coordinate Vector (Linear Algebra)
+
+Let $B = \{\vec{b_1}, \vec{b_2}, \ldots, \vec{b_n}\}$ be a basis for the vector space $V = \mathbb{R}^n$.
+
+Then, every vector $\vec{x} \in V$ can be written uniquely as a linear combination:
+
+$$
+x = c_1 \vec{b_1} + c_2 \vec{b_2} + \ldots + c_n \vec{b_n}
+$$
+
+The vector
+$$
+    [\vec{x}]_B = \begin{pmatrix}c_1 \\ c_2 \\ \vdots \\ c_n \end{pmatrix}
+$$
+
+
+is then called the **coordinate vector**<BibRef name="LLM21" pp="256" /> of $\vec{x}$ relative to B.
