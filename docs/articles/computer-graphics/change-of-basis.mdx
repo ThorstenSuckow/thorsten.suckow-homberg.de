@@ -1,12 +1,13 @@
 ---
-title: "Geometric Interpretation of Change of Basis"
-slug: "geometric-interpretation-of-change-of-basis"
+title: "View Matrices and Geometric Interpretation of Change of Coordinates"
+slug: "view-matrices-geometric-interpretation-of-change-of-coordinates"
 description: "Geometric Interpretation of Change of Basis"
+tags: [computer graphics, linear algebra, opengl]
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import {BackButton} from "../../../src/components/BackButton.js";
-import {Figure, BibRef, GlosRef} from "../../../src/components/References";
+import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../../src/components/References";
 import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
@@ -17,76 +18,121 @@ export const figures = {
 };
 
 
-## Standard Basis and Identity Matrix
+
+This article introduces the derivation of the _lookAt_-Matrix in OpenGL, which is  a $4x4$-transformation matrix of the form
+
+$$
+\boldsymbol{M}_{\text{lookAt}} = \begin{pmatrix}
+\boldsymbol{R}_{3 \times 3} & \vec{T}_{3 \times 1} \\
+0 & 1
+\end{pmatrix}
+$$
+
+Here, $\boldsymbol{R}_{3 \times 3}$ denotes a **change-of-coordinates matrix**, and $\vec{T}_{3 \times 1}$ represents a translation vector.
+
+The purpose of the _lookAt_-matrix is to transform coordinates from **world space** to **camera space**, effectively re-expressing world coordinates relative to the camera's point of view:
+
+$$
+\vec{v}_\text{camera} = \boldsymbol{M}_{\text{lookAt}}\ \vec{v}_\text{world}
+$$
+
+This helps with computing the final image usually appearing on the device being used.
+
+We begin by examining the structure of matrix-vector products, where the **matrix rows are interpreted as the vectors of an orthonormal basis**[^matrixrowsemphased] in $\mathbb{R}^3$.<br />
+Next, we introduce the concept of **coordinate vectors** and explain how **change-of-coordinates matrices** are used to map vectors from one coordinate system
+
+$$
+V_\text{world}
+$$
+
+into another coordinate system
+
+$$
+V_\text{camera}
+$$
+
+Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix.
 
 
-Let $\vec{u}, \vec{v}, \vec{w}$ be the orthonormal vectors of the standard basis in $\mathbb{R}^3$
+[^matrixrowsemphased]: We intentionally emphasize the phrasing, as it contrasts with the more common convention of interpreting matrix **columns** as basis vectors.
+
+
+
+## Interpreting Matrix-Vector Products as Projections
+
+
+Let $\vec{u}, \vec{v}, \vec{w}$ be the orthonormal vectors of the standard basis $\varepsilon$ in $\mathbb{R}^3$
 
 $$
 \begin{alignat*}{3}
 
-\vec{u} &= \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\\
-\vec{v} &= \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\\
-\vec{w} &= \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\\
+\vec{u} &= \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix},\ \vec{v} &= \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\ \vec{w} &= \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}
 
 \end{alignat*}
 $$
 
 Let $ \vec{p} = \begin{pmatrix} p_x \\ p_y \\ p_z \end{pmatrix} $ be an arbitrary vector in $ \mathbb{R}^3 $.
 
-We can write $ \vec{p} $ as the matrix-vector product $ \boldsymbol{A} \vec{p} = \vec{p} $, where $ \boldsymbol{A} $ is a $ 3 \times 3 $ matrix whose rows represent the vectors $ \vec{u}, \vec{v}, \vec{w} $:
+We can write $ \vec{p} $ as the matrix-vector product $ \boldsymbol{A} \vec{x} = \vec{p} $, where $ \boldsymbol{A} $ is a $ 3 \times 3 $ matrix whose **rows** represent the vectors $ \vec{u}, \vec{v}, \vec{w} $. Since $A = A^T = I_3$, it immediately follows that $\vec{x} = \vec{p}$.
 
 $$
 \begin{alignat*}{3}
 
 \begin{pmatrix}
+ \vec{u}_x & \vec{u}_y & \vec{u}_z \\
+ \vec{v}_x & \vec{v}_y & \vec{v}_z \\
+ \vec{w}_x & \vec{w}_y & \vec{w}_z \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} =
+\begin{pmatrix}
  1 & 0 & 0 \\
  0 & 1 & 0 \\
- 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p} \end{pmatrix} \begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix}
+ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p} \end{pmatrix} = \begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix}
 \end{alignat*}
 $$
 
 
-It is clear that the resulting components represent the **scalar projections** of $ \vec{p} $ onto the axes of the standard basis.
+The resulting components $\vec{p}_x, \vec{p}_y, \vec{p}_z$ represent the **scalar projections** of $ \vec{p} $ onto the axes of the standard basis.
 
-These projections can be used to reconstruct $ \vec{p} $ as a linear combination of the basis vectors:
+Since $\vec{u}$ is a normalized vector, multiplying $\vec{p}_x$ with $\vec{u}$ yields the parallel component of the orthogonal projection of $\vec{p}$ onto $\vec{u}$.<br />
+These projections can then be used to reconstruct $\vec{p}$ as a linear combination of the basis vectors $\vec{u}, \vec{v}, \vec{w}$, e.g. for $\vec{u}$:
 
-Since
 $$
 (\vec{u} \cdot \vec{p}) \vec{u} = (\frac{\vec{u} \cdot \vec{p}}{|\vec{u}|^2}) \vec{u} =  (\frac{\vec{u} \cdot \vec{p}}{1}) \vec{u} = (p_x) \vec{u} = (p_x, 0, 0)^T
 $$
 
-and Analogusly for $\vec{v}, \vec{w}$, we rewrite $\vec{p}$
+and analogously for $\vec{v}, \vec{w}$.
+
+Hence, $\vec{p}$ can be expressed as
 
 $$
-p = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w} = \begin{pmatrix}p_x \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix}0 \\ p_y \\ 0 \end{pmatrix} +\begin{pmatrix}0 \\ 0 \\ p_z \end{pmatrix} = \begin{pmatrix}p_x \\ p_y\\ p_z \end{pmatrix}
+(\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w} = \begin{pmatrix}p_x \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix}0 \\ p_y \\ 0 \end{pmatrix} +\begin{pmatrix}0 \\ 0 \\ p_z \end{pmatrix} = \begin{pmatrix}p_x \\ p_y\\ p_z \end{pmatrix} = \vec{p}
 $$
 
-This construction generalizes to any orthonormal basis, as we show next.
+Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />: The coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
 
-## Change of Basis with Orthonormal Axes
+$$
+[p]_\varepsilon = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
+$$
+
+[^coordinatevectornotation]: We follow _Lay et al._ <Cite name="LLM21" /> with this notation.
+
+
+
+
+### Generalizing to Arbitrary Bases in 3D
 
 **Claim**:
-Let $ \boldsymbol{A} \in \mathbb{R}^{3 \times 3} $ be a matrix whose rows are vectors $ \vec{u}, \vec{v}, \vec{w} $ such that:
+Let $ \boldsymbol{A} \in \mathbb{R}^{3 \times 3} $ be a matrix whose rows are **orthonormal** basis vectors $ \vec{u}, \vec{v}, \vec{w} $ of $C \subseteq \mathbb{R}^3$.
 
+Then, for any vector $\vec{p} \in \mathbb{R}^3 $, the matrix-vector product
 $$
-\begin{alignat*}{3}
-&|\vec{u}| = |\vec{v}| = |\vec{w}| = 1 \\
-& \vec{u} \cdot \vec{v} = 0 \\
-& \vec{u} \cdot \vec{w} = 0 \\
-& \vec{v} \cdot \vec{w} = 0
-\end{alignat*}
-$$
-Then $ \{ \vec{u}, \vec{v}, \vec{w} \} $ form an **orthonormal basis** of $ \mathbb{R}^3 $, and for any vector $ \vec{p} $, the matrix-vector product
-$$
-\boldsymbol{A}p = p'
+\boldsymbol{A}\vec{p} = \vec{p}'
 $$
 
-returns the **scalar projections** of $ \vec{p} $ onto the basis vectors.
+yields the **scalar projections** of $ \vec{p} $ onto the basis vectors - that is, the coordinates of $\vec{p}$ relative to the orthonormal basis of $C$.
 
-## Proof by Scalar Products:
+### Proof by Scalar Products
 
-Computing the product
+Computing the Matrix-Vector product
 
 $$
 \begin{alignat*}{3}
@@ -106,18 +152,18 @@ p' = \begin{pmatrix}
  w_x p_x + w_y p_y + w_z p_z \end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p}\end{pmatrix}
 $$
 
-Each component $ \vec{b}_i \cdot \vec{p} $ is the scalar projection of $ \vec{p} $ onto the basis vector $ \vec{b}_i $.
+Each component is the scalar projection of $ \vec{p} $ onto the basis vector $ \vec{u}, \vec{v}, \vec{w}  $.
 
-Intuitively, the components in the resulting vector $p'$ show the _scalar amount_ the component are showing into the respective direction.
+Intuitively, the components in the resulting vector $p'$ show the _scalar amount_ showing into the respective direction.
 
 To confirm that these projections are aligned with the original basis vectors, we rewrite:
 
 
 $$
-\vec{p} = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w}
+\vec{p}' = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w}
 $$
 
-Taking the dot product with any basis vector isolates its contribution:
+Computing the dot product with a specific basis vector isolates its corresponding contribution:
 
 
 
@@ -129,9 +175,91 @@ p' \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \
 \end{alignat*}
 $$
 
-Analogously for $ \vec{v} $ and $ \vec{w} $.
+The same holds for $ \vec{v} $ and $ \vec{w} $.
 
-Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scalar projections of $ \vec{p} $ onto the axes of the new orthonormal basis, and the original vector can be reconstructed as a linear combination of the basis vectors scaled by those projections. $\Box$
+Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scalar projections of $ \vec{p} $ onto the axes of the orthonormal basis, and the original vector can be reconstructed as a linear combination of the basis vectors scaled by those projections. $\Box$
+
+
+
+### Proof via Change-of-Coordinates
+We now show that multiplying a vector $\vec{p}$ - that is, its coordinate representation $[\vec{p}]_\varepsilon$ in the standard basis - with $\boldsymbol{A}$ yields a vector whose components are the scalar projections of $\vec{p}$ relative to the orthonormal basis $C$, via a change-of-coordinates matrix.<br />
+ This approach emphasizes the geometric interpretation of the transformation as a coordinate conversion from the standard basis to an arbitrary orthonormal basis and provides the theoretical foundation for the _lookAt_ matrix introduced later.
+
+We begin by computing the change-of-coordinate matrix $\underset{\varepsilon \leftarrow C}{M}$:
+
+This matrix satisfies the following condition:
+
+$$
+\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} [\vec{p}]_C = [\vec{p}]_\varepsilon
+$$
+
+We can rewrite $\underset{\varepsilon \leftarrow C}{M}$ as
+
+$$
+\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = [ [\vec{u}]_\varepsilon\ [\vec{v}]_\varepsilon\ [\vec{w}]_\varepsilon ]
+$$
+
+since $\vec{u}, \vec{v}, \vec{w}$ are the basis vectors of C. Obviously, since the target coordinate space is the standard basis
+$$
+\varepsilon =
+\begin{Bmatrix}
+\begin{bmatrix}
+1 \\ 0 \\ 0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\ 1 \\ 0
+\end{bmatrix},
+ \begin{bmatrix}
+ 0 \\ 0 \\ 1
+ \end{bmatrix}
+\end{Bmatrix}
+$$
+
+we are allowed to rerwite this as
+
+$$
+\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = [ \vec{u}\ \vec{v}\ \vec{w} ]
+$$
+
+since the individual components of the basis vectors of $\boldsymbol{A}$ already are the scalar projections onto the unit vectors of $\varepsilon$.
+
+$\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = \boldsymbol{A^T}$ is now an orthonormal basis
+
+$$
+\begin{pmatrix}
+\vec{u}_x & \vec{v}_x & \vec{w}_x \\
+\vec{u}_y & \vec{v}_y & \vec{w}_y \\
+\vec{u}_z & \vec{v}_z & \vec{w}_z
+\end{pmatrix}
+$$
+
+Since
+
+$$
+(\underset{\varepsilon \leftarrow C}{\boldsymbol{M}})^{-1} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}
+$$
+
+and the inverse of an orthonormal matrix is simply its transpose, it follows that
+
+$$
+(\underset{\varepsilon \leftarrow C}{\boldsymbol{M}})^{-1} = (A^T)^{-1} = (A^T)^{T} = A = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}
+$$
+
+This shows that $A$ already provides a change-of-coordinates matrix from $\epsilon$ to $C$. As such, any vector $\vec{p}$ multiplied with this matrix yields a coordinate vector whose components are the scalar projections of $\vec{p}$ relative to $C$:
+
+$$
+A \vec{p} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}} [\vec{p}]_\epsilon = [\vec{p}]_C
+$$
+
+As such,
+
+$$
+\begin{alignat*}{3}
+p' = {[\vec{p}]_C}_x \vec{u} + {[\vec{p}]_C}_y \vec{v} + {[\vec{p}]_C}_z \vec{w}
+\end{alignat*}
+$$
+
+$\Box$
 
 
 ------------------------
