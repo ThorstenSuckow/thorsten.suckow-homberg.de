@@ -1,6 +1,6 @@
 ---
-title: "View Matrices and Geometric Interpretation of Change of Coordinates"
-slug: "view-matrices-geometric-interpretation-of-change-of-coordinates"
+title: "Change of Coordinates and Applications to View Matrices"
+slug: "change-of-coordinates-and-applications-to-view-matrices"
 description: "Geometric Interpretation of Change of Basis"
 tags: [computer graphics, linear algebra, opengl]
 ---
@@ -110,12 +110,28 @@ $$
 Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />: The coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
 
 $$
-[p]_\varepsilon = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
+[p]_\varepsilon = \vec{p}_x\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix} + \vec{p}_y\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} + \vec{p}_z\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
 $$
 
 [^coordinatevectornotation]: We follow _Lay et al._ <Cite name="LLM21" /> with this notation.
 
+:::note Coordinate-Vector Definition
+Let $B = \{\vec{b_1}, \vec{b_2}, \ldots, \vec{b_n}\}$ be a basis for the vector space $V = \mathbb{R}^n$.
 
+Then, every vector $\vec{x} \in V$ can be written uniquely as a linear combination:
+
+$$
+x = c_1 \vec{b_1} + c_2 \vec{b_2} + \ldots + c_n \vec{b_n}
+$$
+
+The vector
+$$
+    [\vec{x}]_B = \begin{pmatrix}c_1 \\ c_2 \\ \vdots \\ c_n \end{pmatrix}
+$$
+
+
+is then called the **coordinate vector** <BibRef name="LLM21" pp="256" /> of $\vec{x}$ relative to B.
+:::
 
 
 ### Generalizing to Arbitrary Bases in 3D
@@ -146,7 +162,7 @@ $$
 yields the vector
 
 $$
-p' = \begin{pmatrix}
+\vec{p'} = \begin{pmatrix}
  u_x p_x + u_y p_y + u_z p_z \\
  v_x p_x + v_y p_y + v_z p_z \\
  w_x p_x + w_y p_y + w_z p_z \end{pmatrix} = \begin{pmatrix} \vec{u} \cdot \vec{p} \\ \vec{v} \cdot \vec{p} \\ \vec{w} \cdot \vec{p}\end{pmatrix}
@@ -154,7 +170,7 @@ $$
 
 Each component is the scalar projection of $ \vec{p} $ onto the basis vector $ \vec{u}, \vec{v}, \vec{w}  $.
 
-Intuitively, the components in the resulting vector $p'$ show the _scalar amount_ showing into the respective direction.
+Intuitively, the components in the resulting vector $\vec{p'}$ show the _scalar amount_ showing into the respective direction.
 
 To confirm that these projections are aligned with the original basis vectors, we rewrite:
 
@@ -169,7 +185,7 @@ Computing the dot product with a specific basis vector isolates its correspondin
 
 $$
 \begin{alignat*}{3}
-p' \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
+\vec{p'} \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
 &= (\vec{u} \cdot \vec{p})(1) +  (\vec{v} \cdot \vec{p})(0) + (\vec{w} \cdot \vec{p})(0) \\
 & = \vec{u} \cdot \vec{p}
 \end{alignat*}
@@ -182,10 +198,92 @@ Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scal
 
 
 ### Proof via Change-of-Coordinates
-We now show that multiplying a vector $\vec{p}$ - that is, its coordinate representation $[\vec{p}]_\varepsilon$ in the standard basis - with $\boldsymbol{A}$ yields a vector whose components are the scalar projections of $\vec{p}$ relative to the orthonormal basis $C$, via a change-of-coordinates matrix.<br />
+
+
+ We begin by introduing the **Change-of-Coordinate Matrix Theorem**
+
+:::note Change-of-Coordinate Matrix Theorem
+ [^theoremref]Let $B = \{\vec{b}_1, \vec{b}_2, \ldots, \vec{b}_n\}$ and $C =  \{\vec{c}_1, \vec{c}_2, \ldots, \vec{c}_n\}$ be bases of a vector space $V$. Then there is a unique $n \times n$ matrix  $\underset{C \leftarrow B}{\boldsymbol{P}}$ such that
+
+ $$
+ \underset{C \leftarrow B}{\boldsymbol{P}} [\vec{x}]_B = [\vec{x}]_C
+ $$
+
+ The columns of $\underset{C \leftarrow B}{\boldsymbol{P}}$ are the $C$-coordinate vectors of the vectors in the basis $B$ [^bcoordinatevectors].<br />
+ That is,
+
+ $$
+ \underset{C \leftarrow B}{\boldsymbol{P}} = \begin{pmatrix}[\vec{b_1}]_C &[\vec{b_2}]_C & \ldots & [\vec{b_n}]_C \end{pmatrix}
+ $$
+
+ **Proof (Existence):**
+ Given $\vec{v} \in V$, there exists scalars $x_1, x_2, \ldots, x_n$ such that
+
+ $$
+ \vec{v} = x_1\vec{b_1} + x_2\vec{b_2} + \ldots + x_n\vec{b_n}
+ $$
+
+By the rules of matrix-vector multiplication, we can rewrite this equation to
+
+ $$
+ \vec{v} = \begin{pmatrix} \vec{b_1} & \vec{b_2} & \ldots & \vec{b_n} \end{pmatrix} \begin{pmatrix}x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix}
+ $$
+
+ Clearly, $(x_1, x_2, \ldots, x_n)^T$ represents $[\vec{v}]_B$, as it is the coordinate vector of $\vec{v}$ relative to the basis $B$.
+
+Since $B$ and $C$ are bases for the same vector space, each $\vec{b_i}$ can be expressed as a linear combination of vectors in $C$, that is, via $[\vec{b_i}]_C$.
+ <br />
+ Hence, we substitute $\vec{b_i}$ with $[\vec{b_i}]_C, 1 \leq i \leq n$.
+
+ $$
+ [\vec{v}]_C = \begin{pmatrix} [\vec{b_1}]_C & [\vec{b_2}]_C & \ldots & [\vec{b_n}]_C \end{pmatrix} \begin{pmatrix}x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix}
+ $$
+
+We denote the left-hand matrix as
+
+$$
+\underset{C \leftarrow B}{\boldsymbol{P}}
+$$
+
+Multiplying the contained coordinate vectors with the coordinates of $\vec{v}$ relative to $B$ then yields the coordinates of $\vec{v}$ relative to $C$, as per rules of linear transformation.
+
+
+$$
+ [\vec{v}]_C = \underset{C \leftarrow B}{\boldsymbol{P}} [\vec{v}]_B
+$$
+$\Box$
+
+**Proof (Uniqueness)**:
+
+Let $[\vec{v}]_C = \boldsymbol{M} [\vec{v}]_B\ \forall\ \vec{v} \in V$.
+
+Replace $\vec{v}$ with $\vec{b_1}$. Then $[\vec{b_1}]_B = \vec{e_1}$, i.e. $(1, 0, \ldots, 0)^T$ of the standard basis. Hence, the first column of $\boldsymbol{M}$ must be $[\vec{b_1}]_C$ to satisfy
+
+$$
+[\vec{b_1}]_C = \boldsymbol{M} \vec{e_1}
+$$
+
+Equally, for any $i > 1$, the $i$th column of $\boldsymbol{M}$ must be $[\vec{b_i}]_C$, since $[\vec{b_i}]_B = \vec{e_i}$:
+
+$$
+[\vec{b_i}]_C = \boldsymbol{M} \vec{e_i}
+$$
+
+Since any vector $\vec{v} \in V$ is a linear combination of (linearly independent) basis vectors, the resulting coordinate vector in $C$ can be written as a sum of the columns of $\boldsymbol{M}$ weighted by the coordinates of $[\vec{v}]_B$.<br />
+ Because the columns of $\boldsymbol{M}$ are uniquely determined by the basis vectors, the resulting change-of-coordinates matrix $\boldsymbol{M}$ is unique.
+
+$\Box$
+
+:::
+
+[^theoremref]: See <Cite name="LLM21" pp="275" />
+[^bcoordinatevectors]: That is, the coordinate vector of $\vec{x}$ relative to $C$.
+
+We now show that multiplying a vector $\vec{p}$ - that is, its coordinate representation $[\vec{p}]_\varepsilon$ in the standard basis - with $\boldsymbol{A}$ yields a vector whose components are the scalar projections of $\vec{p}$ relative to an orthonormal basis $C$, via a change-of-coordinates matrix.<br />
  This approach emphasizes the geometric interpretation of the transformation as a coordinate conversion from the standard basis to an arbitrary orthonormal basis and provides the theoretical foundation for the _lookAt_ matrix introduced later.
 
-We begin by computing the change-of-coordinate matrix $\underset{\varepsilon \leftarrow C}{M}$:
+We begin by computing the change-of-coordinate matrix $\underset{\varepsilon \leftarrow C}{M}$.
+
 
 This matrix satisfies the following condition:
 
@@ -215,15 +313,15 @@ $$
 \end{Bmatrix}
 $$
 
-we are allowed to rerwite this as
+we are allowed to rewite this as
 
 $$
 \underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = [ \vec{u}\ \vec{v}\ \vec{w} ]
 $$
 
-since the individual components of the basis vectors of $\boldsymbol{A}$ already are the scalar projections onto the unit vectors of $\varepsilon$.
+since the individual components of the basis vectors represented by the rows of $\boldsymbol{A}$ already are the scalar projections onto the unit vectors of $\varepsilon$.
 
-$\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = \boldsymbol{A^T}$ is now an orthonormal basis
+$\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = \boldsymbol{A^T}$ is now an orthogonal matrix
 
 $$
 \begin{pmatrix}
@@ -239,23 +337,23 @@ $$
 (\underset{\varepsilon \leftarrow C}{\boldsymbol{M}})^{-1} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}
 $$
 
-and the inverse of an orthonormal matrix is simply its transpose, it follows that
+and the inverse of an orthogonal matrix is simply its transpose <Cite name="FH22" pp="118" /> it follows that
 
 $$
 (\underset{\varepsilon \leftarrow C}{\boldsymbol{M}})^{-1} = (A^T)^{-1} = (A^T)^{T} = A = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}
 $$
 
-This shows that $A$ already provides a change-of-coordinates matrix from $\epsilon$ to $C$. As such, any vector $\vec{p}$ multiplied with this matrix yields a coordinate vector whose components are the scalar projections of $\vec{p}$ relative to $C$:
+This shows that $A$ already provides a change-of-coordinates matrix from $\varepsilon$ to $C$. As such, any vector $\vec{p}$ multiplied with this matrix yields a coordinate vector whose components are the scalar projections of $\vec{p}$ relative to $C$:
 
 $$
-A \vec{p} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}} [\vec{p}]_\epsilon = [\vec{p}]_C
+A \vec{p} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}} [\vec{p}]_\varepsilon = [\vec{p}]_C
 $$
 
 As such,
 
 $$
 \begin{alignat*}{3}
-p' = {[\vec{p}]_C}_x \vec{u} + {[\vec{p}]_C}_y \vec{v} + {[\vec{p}]_C}_z \vec{w}
+\vec{p'} = {[\vec{p}]_C}_x \vec{u} + {[\vec{p}]_C}_y \vec{v} + {[\vec{p}]_C}_z \vec{w}
 \end{alignat*}
 $$
 
