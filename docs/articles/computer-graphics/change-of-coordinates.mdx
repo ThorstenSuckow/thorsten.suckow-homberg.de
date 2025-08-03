@@ -11,10 +11,11 @@ import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../../src/components/Refer
 import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
-
+import change_of_coordinates from "./img/change-of-coordinates/change-of-coordinates.png";
+import change_of_coordinates_code from '!!raw-loader!./plots/change-of-coordinates/change-of-coordinates.py?raw';
 
 export const figures = {
-
+    change_of_coordinates : 1
 };
 
 
@@ -42,16 +43,17 @@ We begin by examining the structure of matrix-vector products, where the **matri
 Next, we introduce the concept of **coordinate vectors** and explain how **change-of-coordinates matrices** are used to map vectors from one coordinate system
 
 $$
-V_\text{world}
+B
 $$
 
 into another coordinate system
 
 $$
-V_\text{camera}
+C
 $$
 
-Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix.
+Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix to map coordinates between
+$V_\text{world}$ and $V_\text{camera}$.
 
 
 [^matrixrowsemphased]: We intentionally emphasize the phrasing, as it contrasts with the more common convention of interpreting matrix **columns** as basis vectors.
@@ -359,9 +361,98 @@ $$
 
 $\Box$
 
-import ThreeScene from '@site/src/components/threejs/Scene';
 
-<ThreeScene />
+:::tip Change-of-Coordinates Example
+
+<Embed
+    modeAware={true}
+    figref={figures.change_of_coordinates}
+    title={
+        "The vector v expressed as coordinate vector relative to the bases B and C."}>
+    <img src={change_of_coordinates}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {change_of_coordinates_code}
+</CodeBlock>
+
+</details>
+
+<Figure idx={figures.change_of_coordinates} /> shows two different coordinate systems $B, C$ that both span $\mathbb{R}^2$:
+
+$$
+B = \begin{Bmatrix}\vec{b_1}, \ \vec{b_2} \end{Bmatrix} = \begin{Bmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}, \begin{pmatrix}0 \\1\end{pmatrix}\end{Bmatrix}, C = \begin{Bmatrix}\vec{c_1}, \ \vec{c_2} \end{Bmatrix} =\begin{Bmatrix}\begin{pmatrix}0.5 \\ -0.25\end{pmatrix}, \begin{pmatrix}0.25 \\0.5\end{pmatrix}\end{Bmatrix}
+$$
+
+Obviously, since $B = \varepsilon$, the vector $\vec{v} = (6, 2)^T$ can be expressed as
+
+$$
+[\vec{v}]_B = \begin{bmatrix} [\vec{b_1}]_B \ [\vec{b_2}]_B   \end{bmatrix}  \begin{pmatrix} 6\\2 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 6 \\ 2 \end{pmatrix} = \begin{pmatrix} 6 \\ 2 \end{pmatrix}
+$$
+
+We now derive the coordinates of $\vec{v}$ relative to the basis $C$.
+To construct $[\vec{v}]_C$, we need the columns $[\vec{b_1}]_C$ and $[\vec{b_2}]_C$ of the change-of-coordinates matrix $\underset{C \leftarrow B}{\boldsymbol{P}}$.<br />
+These are obtained by expressing the basis vectors of $B$ as linear combinations of the basis vectors of $C$:
+$$
+\begin{equation}
+x_1 \vec{c_1} + x_2 \vec{c_2} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \vec{b_1}
+\end{equation}
+$$
+
+and
+
+$$
+\begin{equation}
+x_1 \vec{c_1} + x_2 \vec{c_2} = \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \vec{b_2}
+\end{equation}
+$$
+
+Row-reducing the augmented matrix of _euqation (1)_ yields
+
+$$
+\begin{pmatrix}
+\begin{array}{cc|c}
+0.5   & 0.25 & 1 \\
+-0.25 & 0.5  & 0
+\end{array}
+\end{pmatrix} \sim \begin{pmatrix}\begin{array}{cc|c}
+                                  1 & 0 & 1.6 \\
+                                  0 & 1 & 0.8
+                                  \end{array}\end{pmatrix}
+$$
+
+Similiarly, _equation (2)_ gives
+
+$$
+\begin{pmatrix}
+\begin{array}{cc|c}
+0.5   & 0.25 & 0 \\
+-0.25 & 0.5  & 1
+\end{array}
+\end{pmatrix} \sim \begin{pmatrix}\begin{array}{cc|c}
+                                  1 & 0 & -0.8 \\
+                                  0 & 1 & 1.6
+                                  \end{array}\end{pmatrix}
+$$
+
+Thus, the change-of-coordinates matrix $\underset{C \leftarrow B}{\boldsymbol{P}}$ is
+
+$$
+\underset{C \leftarrow B}{\boldsymbol{P}} = \begin{pmatrix} 1.6 & -0.8 \\ 0.8 & 1.6  \end{pmatrix}
+$$
+
+and we finally obtain
+
+$$
+[\vec{v}]_C = \begin{bmatrix} [\vec{b_1}]_C \ [\vec{b_1}]_C   \end{bmatrix} [\vec{v}]_B = \begin{pmatrix} 1.6 & -0.8 \\ 0.8 & 1.6  \end{pmatrix} \begin{pmatrix} 6 \\ 2 \end{pmatrix} = \begin{pmatrix} 8 \\ 8\end{pmatrix}
+$$
+
+$\Box$
+:::
+
+
 
 ------------------------
 
