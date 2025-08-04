@@ -11,11 +11,13 @@ import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../../src/components/Refer
 import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
+import ViewCamera from "/threejs/viewcamera/jsx/ViewCamera.jsx";
 import change_of_coordinates from "./img/change-of-coordinates/change-of-coordinates.png";
 import change_of_coordinates_code from '!!raw-loader!./plots/change-of-coordinates/change-of-coordinates.py?raw';
 
 export const figures = {
-    change_of_coordinates : 1
+    change_of_coordinates : 1,
+    viewcamera: 2
 };
 
 
@@ -451,6 +453,21 @@ $$
 
 $\Box$
 :::
+
+## OpenGL View Camera
+
+<Figure idx={figures.viewcamera} /> shows a wireframe teapot mesh with a view camera targeted at it
+(<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>). The controls allow for repositioning both the view camera and the teapot, visualizing the different coordinate systems involved in rendering the 3D world versus producing the final 2D image[^GEB].
+
+[^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
+
+<figure><a name={`fig_${figures.viewcamera}`} />
+<ViewCamera />
+  <figcaption style={{width:'100%',textAlign:'center',fontSize:'small'}}>
+    <b>Figure {figures.viewcamera}:</b>
+    <span>A wireframe teapot mesh with a view camera targeted at it.</span>
+  </figcaption>
+</figure>
 
 
 
