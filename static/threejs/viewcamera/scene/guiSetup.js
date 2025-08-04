@@ -12,6 +12,7 @@ export const makeGui = (targetContainer) => {
     worldCameraFolder.add(state.worldCameraState, "x").listen();
     worldCameraFolder.add(state.worldCameraState, "y").listen();
     worldCameraFolder.add(state.worldCameraState, "z").listen();
+    worldCameraFolder.close();
 
     // Dummy Camera
     addFolder(
@@ -36,7 +37,7 @@ export const makeGui = (targetContainer) => {
     );
 
     // Teapot
-    addFolder(
+    const teapotFolder = addFolder(
         gui,
         "Teapot",
         ["x", "y", "z"],
@@ -44,12 +45,13 @@ export const makeGui = (targetContainer) => {
         -100,
         100,
         updateScene,
+        false
     );
-    gui.add(state.teapotState, "size", 0, 20).onChange(updateScene).listen();
-    gui.add(state.teapotState, "segments", 0, 20, 1)
+    teapotFolder.add(state.teapotState, "size", 0, 20).onChange(updateScene).listen();
+    teapotFolder.add(state.teapotState, "segments", 0, 20, 1)
         .onChange(updateScene)
         .listen();
-    gui.add(state.teapotState, "rotate").onChange(updateScene).listen();
+    teapotFolder.add(state.teapotState, "rotate").onChange(updateScene).listen();
 
     // ... perspective
     addFolder(
@@ -89,4 +91,5 @@ const addFolder = (gui, name, keys, params, min, max, cb, close = true) => {
     const folder = gui.addFolder(name);
     keys.forEach((k) => folder.add(params, k, min, max).onChange(cb).listen());
     close && folder.close();
+    return folder;
 };
