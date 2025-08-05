@@ -12,12 +12,19 @@ import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
 import ViewCamera from "/threejs/viewcamera/jsx/ViewCamera.jsx";
+import graphics_pipeline from "./img/change-of-coordinates/graphics_pipeline.png";
+
+import orthonormalization from "./img/change-of-coordinates/orthonormalization.png";
+import orthonormalization_code from '!!raw-loader!./plots/change-of-coordinates/orthonormalization.py?raw';
+
 import change_of_coordinates from "./img/change-of-coordinates/change-of-coordinates.png";
 import change_of_coordinates_code from '!!raw-loader!./plots/change-of-coordinates/change-of-coordinates.py?raw';
 
 export const figures = {
     change_of_coordinates : 1,
-    viewcamera: 2
+    viewcamera: 2,
+    graphics_pipeline: 3,
+    orthonormalization: 4
 };
 
 
@@ -454,11 +461,12 @@ $$
 $\Box$
 :::
 
-## OpenGL View Camera
+## Applications to View Camera
 
 <Figure idx={figures.viewcamera} /> shows a wireframe teapot mesh with a view camera targeted at it
-(<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>). The controls allow for repositioning both the view camera and the teapot, visualizing the different coordinate systems involved in rendering the 3D world versus producing the final 2D image[^GEB].
+(<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>)[^threejs]. The interactive controls allow repositioning of the world and the view camera as well as the teapot, making it easy to visualize the different coordinate systems involved: The 3D world space versus the 2D image produced by the camera[^GEB].
 
+[^threejs]: [Source code](https://github.com/thorstensuckow/threejs-lab/viewcamera)
 [^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
 
 <figure><a name={`fig_${figures.viewcamera}`} />
@@ -469,7 +477,79 @@ $\Box$
   </figcaption>
 </figure>
 
+The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are **eye** and **up**, as they define the camera's position and orientation in world space as we will show in the following sections.
 
+In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coordinates $\vec{u} \in V_\text{world}$  to camera coordinates $\vec{v} \in V_\text{camera}$  is typically the third step in the rasterization process, as illustrated in <Figure idx={figures.graphics_pipeline} />.
+
+<Embed
+    width={600}
+    modeAware={true}
+    figref={figures.graphics_pipeline}
+    title={
+        "An abstraction of the graphics pipeline. 'View' is responsible for mapping world-coordinate to view coordinates - that is, transforming points and vectors of the game world to an arbitrary camera, or point of view, most often determined through a player controlled camera. (Adapted from [Figure 7.1, 232, VB15])."}>
+    <img src={graphics_pipeline}  />
+</Embed>
+
+### The camera-location and the point of interest
+
+The eye (or camera) position - labeled as `Camera Position` in <Figure idx={figures.viewcamera} /> - represents the location of the viewer in the world, also referred to as the _vantage point_.
+
+As a position in $V_\text{world}$, it can either be represented as a point
+
+$$
+\vec{p} = \text{eye}_{xyz} \in \mathbb{R}^n
+$$
+
+or equivalently as a vector from the origin
+
+$$
+\vec{p} = \text{eye}_{xyz} - (0, 0, 0)
+$$
+
+When moving freely in the world, the camera is directed at a **point of interested** (_poi_)
+
+$$
+c \in \mathbb{R}^n
+$$
+
+ The pair $(p, c)$ defines both the distance as well as the direction of the camera view. The _forward vector_ $\vec{c}$, representing the viewing direction, is simply the difference between the point of interest and the camera position.
+
+$$
+\vec{f} = c - p
+$$
+
+### Constructing an Orthonormal Camera Frame
+
+To construct a coordinate frame for the view space $V_\text{camera}$, a third component is required - the $\vec{up}$ - vector.
+This vector indicates the orientation of the camera's top - it can be thought of as the reference for the camera's vertical direction in view space.
+An intuitive analogy is a flight simulator: Rolling the airplane about its forward axis - the $z$-axis - effectively rotates the $\vec{up}$ vector and changes the percieved orientation of the game world.
+
+In <Figure idx={figures.viewcamera} />, this up-direction is visualized by the small blue triangle on top of the view frustum.
+
+Together with the forward vector $\vec{c}$, we can now construct an orthonormal camera frame for mapping points and vectors from $V_\text{world}$ to $V_\text{camera}$
+
+
+<Embed
+    modeAware={true}
+    figref={figures.orthonormalization}
+    title={
+        "Starting from the viewer’s position, the vector toward the point of interest, and a given up‑vector, the camera’s coordinate system is constructed by orthonormalization"}>
+    <img src={orthonormalization}  />
+</Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {orthonormalization_code}
+</CodeBlock>
+
+</details>
+
+
+https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
+P 665
+OpenGL does not force left- or right-handedness on any of its coordinates
+systems.
 
 ------------------------
 
