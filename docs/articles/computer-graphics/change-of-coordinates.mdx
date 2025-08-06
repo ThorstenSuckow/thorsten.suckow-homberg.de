@@ -69,7 +69,7 @@ $V_\text{world}$ and $V_\text{camera}$.
 
 
 
-## Interpreting Matrix-Vector Products as Projections
+## Projections and Matrix-Vector Products
 
 
 Let $\vec{u}, \vec{v}, \vec{w}$ be the orthonormal vectors of the standard basis $\varepsilon$ in $\mathbb{R}^3$
@@ -145,7 +145,7 @@ is then called the **coordinate vector** <BibRef name="LLM21" pp="256" /> of $\v
 :::
 
 
-### Generalizing to Arbitrary Bases in 3D
+### Change of Basis in Three Dimensions
 
 **Claim**:
 Let $ \boldsymbol{A} \in \mathbb{R}^{3 \times 3} $ be a matrix whose rows are **orthonormal** basis vectors $ \vec{u}, \vec{v}, \vec{w} $ of $C \subseteq \mathbb{R}^3$.
@@ -421,7 +421,7 @@ x_1 \vec{c_1} + x_2 \vec{c_2} = \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \vec{b_2}
 \end{equation}
 $$
 
-Row-reducing the augmented matrix of _euqation (1)_ yields
+Row-reducing the augmented matrix of equation (1)_ yields
 
 $$
 \begin{pmatrix}
@@ -464,19 +464,18 @@ $$
 $\Box$
 :::
 
-## Applications to View Camera
+## Application: View Transformation and Camera Space in OpenGL
 
-<Figure idx={figures.viewcamera} /> shows a wireframe teapot mesh with a view camera targeted at it
-(<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>)[^threejs]. The interactive controls allow repositioning of the world and the view camera as well as the teapot, making it easy to visualize the different coordinate systems involved: The 3D world space versus the 2D image produced by the camera[^GEB].
+<Figure idx={figures.viewcamera} /> shows a wireframe teapot mesh with a view camera targeted at it[^threejs]. The interactive controls allow repositioning of the world and the view camera as well as the teapot, making it easy to visualize the different coordinate systems involved: The 3D world space versus the 2D image produced by the camera[^GEB].
 
 [^threejs]: [Source code](https://github.com/thorstensuckow/threejs-lab/viewcamera)
 [^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
 
 <figure><a name={`fig_${figures.viewcamera}`} />
-ViewCamera
+<ViewCamera />
   <figcaption style={{width:'100%',textAlign:'center',fontSize:'small'}}>
     <b>Figure {figures.viewcamera}:</b>
-    <span>A wireframe teapot mesh with a view camera targeted at it.</span>
+    <span>A wireframe teapot mesh with a view camera targeted at it (<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>).</span>
   </figcaption>
 </figure>
 
@@ -493,7 +492,7 @@ In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coor
     <img src={graphics_pipeline}  />
 </Embed>
 
-### The camera-location and the point of interest
+### Defining Eye and Target Position
 
 The eye (or camera) position - labeled as `Camera Position` in <Figure idx={figures.viewcamera} /> - represents the location of the viewer in the world, also referred to as the _vantage point_.
 
@@ -521,7 +520,7 @@ $$
 \vec{f} = c - p
 $$
 
-### Constructing an Orthonormal Camera Frame
+### Constructing the Camera Basis
 
 To construct a coordinate frame for the view space $V_\text{camera}$, a third component is required - the $\vec{up}$ - vector.
 This vector indicates the orientation of the camera's top - it can be thought of as the reference for the camera's vertical direction in view space.
@@ -536,7 +535,7 @@ Together with the forward vector $\vec{f}$, we can now construct an orthonormal 
     modeAware={true}
     figref={figures.orthonormalization}
     title={
-        "Starting from the viewer’s position, the vector toward the point of interest, and a given up‑vector, the camera’s coordinate system is constructed by orthonormalization"}>
+        "Starting from the viewer’s position, the vector toward the point of interest, and a given up‑vector, the camera’s coordinate system is constructed by orthonormalization."}>
     <img src={orthonormalization}  />
 </Embed>
 <details>
@@ -612,7 +611,7 @@ $$
 \end{pmatrix} = \underset{cam \leftarrow \text{world}}{\boldsymbol{P}} = \boldsymbol{R}_{3 \times 3}
 $$
 
-### Moving the world in focus
+### Transforming the World into Camera Space
 We now derive the translation vector $\vec{T}_{3 \times 1}$ used to complete the transformation.
 
 By convention, the view camera is located at the origin $(0, 0, 0)$ and oriented to look down the negative $z$-axis.
@@ -663,7 +662,7 @@ $$
 $$
 
 
-[^notevector]: Note that the final column consist of dot producs between the camera axes and the eye position vector $\text{eye}_{xyz}^{T}$
+[^notevector]: Note that the final column consist of dot products between the camera axes and the eye position vector $\text{eye}_{xyz}^{T}$
 
 
 ------------------------
