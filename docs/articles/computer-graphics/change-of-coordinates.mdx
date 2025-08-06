@@ -121,7 +121,7 @@ $$
 Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />: The coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
 
 $$
-[p]_\varepsilon = \vec{p}_x\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix} + \vec{p}_y\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} + \vec{p}_z\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
+[\vec{p}]_\varepsilon = \vec{p}_x\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix} + \vec{p}_y\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} + \vec{p}_z\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
 $$
 
 [^coordinatevectornotation]: We follow _Lay et al._ <Cite name="LLM21" /> with this notation.
@@ -187,7 +187,7 @@ To confirm that these projections are aligned with the original basis vectors, w
 
 
 $$
-\vec{p}' = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w}
+\vec{p} = (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w}
 $$
 
 Computing the dot product with a specific basis vector isolates its corresponding contribution:
@@ -196,7 +196,7 @@ Computing the dot product with a specific basis vector isolates its correspondin
 
 $$
 \begin{alignat*}{3}
-\vec{p'} \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
+\vec{p} \cdot \vec{u} &= (\vec{u} \cdot \vec{p})(\vec{u} \cdot \vec{u}) +  (\vec{v} \cdot \vec{p})(\vec{v}  \cdot \vec{u}) + (\vec{w} \cdot \vec{p})(\vec{w}  \cdot \vec{u})\\
 &= (\vec{u} \cdot \vec{p})(1) +  (\vec{v} \cdot \vec{p})(0) + (\vec{w} \cdot \vec{p})(0) \\
 & = \vec{u} \cdot \vec{p}
 \end{alignat*}
@@ -324,7 +324,7 @@ $$
 \end{Bmatrix}
 $$
 
-we are allowed to rewite this as
+we are allowed to rewrite this as
 
 $$
 \underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = [ \vec{u}\ \vec{v}\ \vec{w} ]
@@ -360,15 +360,18 @@ $$
 A \vec{p} = \underset{C \leftarrow \varepsilon}{\boldsymbol{M}} [\vec{p}]_\varepsilon = [\vec{p}]_C
 $$
 
-As such,
+We can therefore summarize:
 
 $$
 \begin{alignat*}{3}
-\vec{p'} = {[\vec{p}]_C}_x \vec{u} + {[\vec{p}]_C}_y \vec{v} + {[\vec{p}]_C}_z \vec{w}
+& \qquad \quad \ \ \ \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}\ &&[\vec{p}]_\varepsilon &&=  [\vec{p}]_C\\
+\Leftrightarrow &(\underset{C \leftarrow \varepsilon}{\boldsymbol{M}})^{-1}\ \underset{C \leftarrow \varepsilon}{\boldsymbol{M}}\ &&[\vec{p}]_\varepsilon &&= (\underset{C \leftarrow \varepsilon}{\boldsymbol{M}})^{-1} \ [\vec{p}]_C\\
+\Leftrightarrow & \qquad \qquad &&[\vec{p}]_\varepsilon &&= \underset{\varepsilon \leftarrow C}{\boldsymbol{M}}[\vec{p}]_C
 \end{alignat*}
 $$
 
 $\Box$
+
 
 
 :::tip Change-of-Coordinates Example
@@ -455,7 +458,7 @@ $$
 and we finally obtain
 
 $$
-[\vec{v}]_C = \begin{bmatrix} [\vec{b_1}]_C \ [\vec{b_1}]_C   \end{bmatrix} [\vec{v}]_B = \begin{pmatrix} 1.6 & -0.8 \\ 0.8 & 1.6  \end{pmatrix} \begin{pmatrix} 6 \\ 2 \end{pmatrix} = \begin{pmatrix} 8 \\ 8\end{pmatrix}
+[\vec{v}]_C = \begin{bmatrix} [\vec{b_1}]_C \ [\vec{b_2}]_C   \end{bmatrix} [\vec{v}]_B = \begin{pmatrix} 1.6 & -0.8 \\ 0.8 & 1.6  \end{pmatrix} \begin{pmatrix} 6 \\ 2 \end{pmatrix} = \begin{pmatrix} 8 \\ 8\end{pmatrix}
 $$
 
 $\Box$
@@ -470,14 +473,14 @@ $\Box$
 [^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
 
 <figure><a name={`fig_${figures.viewcamera}`} />
-<ViewCamera />
+ViewCamera
   <figcaption style={{width:'100%',textAlign:'center',fontSize:'small'}}>
     <b>Figure {figures.viewcamera}:</b>
     <span>A wireframe teapot mesh with a view camera targeted at it.</span>
   </figcaption>
 </figure>
 
-The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are **eye** and **up**, as they define the camera's position and orientation in world space as we will show in the following sections.
+The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are the _camera position_, $\text{up}_{xyz}$ and $\text{eye}_{xyz}$, as they define the camera's position, it's orientation and the view direction in world space. These parameters are used for constructing an orthonormal coordinate frame as we will show in the following sections.
 
 In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coordinates $\vec{u} \in V_\text{world}$  to camera coordinates $\vec{v} \in V_\text{camera}$  is typically the third step in the rasterization process, as illustrated in <Figure idx={figures.graphics_pipeline} />.
 
@@ -506,13 +509,13 @@ $$
 \vec{p} = \text{eye}_{xyz} - (0, 0, 0)
 $$
 
-When moving freely in the world, the camera is directed at a **point of interested** (_poi_)
+When moving freely in the world, the camera is directed at a _point of interest_ (_poi_)
 
 $$
 c \in \mathbb{R}^n
 $$
 
- The pair $(p, c)$ defines both the distance as well as the direction of the camera view. The _forward vector_ $\vec{c}$, representing the viewing direction, is simply the difference between the point of interest and the camera position.
+ The pair $(p, c)$ defines both the distance as well as the direction of the camera view. The _forward vector_ $\vec{f}$, representing the viewing direction, is simply the difference between the point of interest and the camera position.
 
 $$
 \vec{f} = c - p
@@ -526,7 +529,7 @@ An intuitive analogy is a flight simulator: Rolling the airplane about its forwa
 
 In <Figure idx={figures.viewcamera} />, this up-direction is visualized by the small blue triangle on top of the view frustum.
 
-Together with the forward vector $\vec{c}$, we can now construct an orthonormal camera frame for mapping points and vectors from $V_\text{world}$ to $V_\text{camera}$
+Together with the forward vector $\vec{f}$, we can now construct an orthonormal camera frame for mapping points and vectors from $V_\text{world}$ to $V_\text{camera}$
 
 
 <Embed
@@ -546,10 +549,122 @@ Together with the forward vector $\vec{c}$, we can now construct an orthonormal 
 </details>
 
 
-https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
-P 665
-OpenGL does not force left- or right-handedness on any of its coordinates
-systems.
+Although the OpenGL specifications explicitly state that
+
+> _"OpenGL does not force left- or right-handedness on any of its coordinate system.s"_[^openglspecs]
+
+ we adopt the widely accepted conventions found in standard textbooks and the OpenGL reference documentation itself (<Cite name="SWH15" />): These conventions assume a right-handed coordinate system in which the viewer looks down the negative $z$-axis, the positive $x$-axis extends to the right, and the positive $y$-axis points upward[^objectsdrawnnote].
+
+
+[^objectsdrawnnote]: _"When the point of observation is located at the origin, as in perspective projection, objects drawn with positive z values are behind the observer."_ <Cite name="SWH15" pp="83 ff" />
+[^openglspecs]: [OpenGL 4.6 Core Profile, p.665](https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf) (retrieved 05.08.2025)
+
+<Figure idx={figures.orthonormalization} /> shows a given up vector $\vec{up}$, the vantage point $p$ as well as $c$ as the observed point. $p$ and $c$ lets us derive the forward vector $f$. This vector - as well as subsequent vectors used in the following computations - is normalized.
+
+This gives us $\vec{cam}_z$, which will serve as the $z$-axis of the required orthonormal basis of the camera space:
+
+$$
+\frac{p-c}{|p-c|} = \vec{cam}_z
+$$
+
+:::note OpenGL z-axis conventions
+Note that we subtract the point of interest $c$ from the camera position $p$ to obtain a vector pointing in the opposite direction of the view vector in world space. This inversion is necessary because the resulting camera space expects the view direction to be aligned with the _negative_ $z$-axis[^openglzaxisfigure].
+:::
+
+[^openglzaxisfigure]: The illustration in <Figure idx={figures.orthonormalization} /> shows a coordinate frame computed for a $+z$-convention.
+
+$\vec{cam}_z$ and $\vec{up}$ allow us to construct a perpendicular vector $\vec{cam}_x$, which becomes the $x$-axis of the camera frame:
+
+$$
+\frac{\vec{up} \times \vec{cam}_z}{|\vec{up} \times \vec{cam}_z|} = \vec{cam}_x
+$$
+
+To complete the basis, we compute $\vec{cam}_y$. While one might be tempted to use $\vec{up}$ directly, it is not guaranteed to be orthogonal to $\vec{f}$, since $\vec{f}$ is not a predefined axis but computed as the direction vector from $p$ to $c$. Consequently, $\vec{up}$ may be slightly tilted toward or away from $f$, as illustrated in <Figure idx={figures.orthonormalization} />[^orthonormalcross].
+
+$$
+\vec{cam}_z \times \vec{cam}_x = \vec{cam}_y
+$$
+
+
+[^orthonormalcross]: $|\vec{cam}_y| = 1$, since  $|\vec{cam}_z \times \vec{cam}_x| = |\vec{cam}_z||\vec{cam}_x| \sin(\frac{\pi}{2}) = 1$
+
+
+Finally, we can construct or change-of-coordinates matrix $\underset{cam \leftarrow \text{world}}{\boldsymbol{P}}$.
+
+Note that $V_\text{world}$ is represented by the standard basis $\varepsilon$. Therefore, the matrix
+
+$$
+\begin{pmatrix}
+\vec{cam_x}_1 & \vec{cam_y}_1 & \vec{cam_z}_1 \\
+\vec{cam_x}_2 & \vec{cam_y}_2 & \vec{cam_z}_2 \\
+\vec{cam_x}_3 & \vec{cam_y}_3 & \vec{cam_z}_3
+\end{pmatrix} = \underset{world \leftarrow \text{cam}}{\boldsymbol{P}}
+$$
+
+contains the scalar components of the basis vectors of the camera frame expressed in world coordinate system.
+ Its transpose yields the actual change-of-coordinates matrix from world to camera space:
+
+$$
+\begin{pmatrix}
+\vec{cam_x}_1 & \vec{cam_x}_2 & \vec{cam_x}_3 \\
+\vec{cam_y}_1 & \vec{cam_y}_2 & \vec{cam_y}_3 \\
+\vec{cam_z}_1 & \vec{cam_z}_2 & \vec{cam_z}_3
+\end{pmatrix} = \underset{cam \leftarrow \text{world}}{\boldsymbol{P}} = \boldsymbol{R}_{3 \times 3}
+$$
+
+### Moving the world in focus
+We now derive the translation vector $\vec{T}_{3 \times 1}$ used to complete the transformation.
+
+By convention, the view camera is located at the origin $(0, 0, 0)$ and oriented to look down the negative $z$-axis.
+Objects that result in positive $z$-coordinates relative to the camera are typically <Wiki name="culled" file="computergraphics.culling" /> from the final image.
+
+To align the world such that the camera resides at the origin, we perform a translation by the negative eye position. This yields the following homogeneous translation matrix:
+
+
+$$
+\begin{pmatrix}
+1 & 0 & 0 & -\text{eye}_x \\
+0 & 1 & 0 & -\text{eye}_y \\
+0 & 0 & 1 & -\text{eye}_z \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+With translation applied first, followed by rotation, we finally derive the complete lookAt-matrix
+
+$$
+\boldsymbol{M}_{\text{lookAt}} = \begin{pmatrix}
+\boldsymbol{R}_{3 \times 3} & \vec{T}_{3 \times 1} \\
+0 & 1\end{pmatrix}
+$$
+
+as the product of rotation matrix and translation matrix[^notevector]
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{M}_{\text{lookAt}}  &= \begin{pmatrix}
+        \vec{cam_x}_1 & \vec{cam_x}_2 & \vec{cam_x}_3 & 0\\
+        \vec{cam_y}_1 & \vec{cam_y}_2 & \vec{cam_y}_3 & 0 \\
+        \vec{cam_z}_1 & \vec{cam_z}_2 & \vec{cam_z}_3 & 0 \\
+         0 & 0  & 0 & 1 \\
+        \end{pmatrix}   \begin{pmatrix}
+         1 & 0 & 0 & -\text{eye}_x \\
+         0 & 1 & 0 & -\text{eye}_y \\
+         0 & 0 & 1 & -\text{eye}_z \\
+         0 & 0 & 0 & 1
+         \end{pmatrix}\\ \ \\ &=  \begin{pmatrix}
+                                  \vec{cam_x}_1 & \vec{cam_x}_2 & \vec{cam_x}_3 & -(\vec{cam_x} \cdot \vec{eye})\\
+                                  \vec{cam_y}_1 & \vec{cam_y}_2 & \vec{cam_y}_3 & -(\vec{cam_y} \cdot \vec{eye}) \\
+                                  \vec{cam_z}_1 & \vec{cam_z}_2 & \vec{cam_z}_3 & -(\vec{cam_z} \cdot \vec{eye}) \\
+                                   0 & 0  & 0 & 1 \\
+                                  \end{pmatrix}
+
+\end{alignat*}
+$$
+
+
+[^notevector]: Note that the final column consist of dot producs between the camera axes and the eye position vector $\text{eye}_{xyz}^{T}$
+
 
 ------------------------
 
