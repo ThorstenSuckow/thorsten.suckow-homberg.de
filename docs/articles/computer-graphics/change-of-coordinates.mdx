@@ -1,7 +1,7 @@
 ---
 title: "Change of Coordinates and Applications to View Matrices"
 slug: "change-of-coordinates-and-applications-to-view-matrices"
-description: "Geometric Interpretation of Change of Basis"
+description: "Derivation and geometric interpretation of change-of-basis matrices, with applications to camera view transformations in computer graphics."
 tags: [computer graphics, linear algebra, opengl]
 ---
 import Tabs from '@theme/Tabs';
@@ -33,7 +33,7 @@ export const figures = {
 
 
 
-This article introduces the derivation of the _lookAt_-Matrix in OpenGL, which is  a $4x4$-transformation matrix of the form
+This article introduces the derivation of the _lookAt_ matrix in OpenGL, which is  a $4 \times 4$-transformation matrix of the form
 
 $$
 \boldsymbol{M}_{\text{lookAt}} = \begin{pmatrix}
@@ -42,18 +42,18 @@ $$
 \end{pmatrix}
 $$
 
-Here, $\boldsymbol{R}_{3 \times 3}$ denotes a **change-of-coordinates matrix**, and $\vec{T}_{3 \times 1}$ represents a translation vector.
+Here, $\boldsymbol{R}_{3 \times 3}$ denotes a change-of-coordinates matrix, and $\vec{T}_{3 \times 1}$ denotes a translation vector.
 
-The purpose of the _lookAt_-matrix is to transform coordinates from **world space** to **camera space**, effectively re-expressing world coordinates relative to the camera's point of view:
+The purpose of the _lookAt_-matrix is to transform coordinates from world space to camera space, effectively re-expressing world coordinates relative to the camera's point of view:
 
 $$
 \vec{v}_\text{camera} = \boldsymbol{M}_{\text{lookAt}}\ \vec{v}_\text{world}
 $$
 
-This helps with computing the final image usually appearing on the device being used.
+This helps with computing the final image appearing on the device being used.
 
 We begin by examining the structure of matrix-vector products, where the **matrix rows are interpreted as the vectors of an orthonormal basis**[^matrixrowsemphased] in $\mathbb{R}^3$.<br />
-Next, we introduce the concept of **coordinate vectors** and explain how **change-of-coordinates matrices** are used to map vectors from one coordinate system $B$ into another coordinate system $C$.
+Next, we introduce the concept of coordinate vectors and explain how change-of-coordinates matrices are used to map vectors from one coordinate system $B$ into another coordinate system $C$.
 
 Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix to map coordinates between
 $V_\text{world}$ and $V_\text{camera}$.
