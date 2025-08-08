@@ -429,7 +429,7 @@ $$
                                   \end{array}\end{pmatrix}
 $$
 
-Similiarly, _equation (2)_ gives
+Similarly, _equation (2)_ gives
 
 $$
 \begin{pmatrix}
@@ -473,7 +473,7 @@ $\Box$
   </figcaption>
 </figure>
 
-The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are the _camera position_, $\text{up}_{xyz}$ and $\text{eye}_{xyz}$, as they define the camera's position, it's orientation and the view direction in world space. These parameters are used for constructing an orthonormal coordinate frame as we will show in the following sections.
+The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are the _camera position_, $\text{up}_{xyz}$ and $\text{eye}_{xyz}$, as they define the camera's position, its orientation and the view direction in world space. These parameters are used for constructing an orthonormal coordinate frame as we will show in the following sections.
 
 In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coordinates $\vec{u} \in V_\text{world}$  to camera coordinates $\vec{v} \in V_\text{camera}$  is typically the third step in the rasterization process, as illustrated in <Figure idx={figures.graphics_pipeline} />.
 
@@ -544,7 +544,7 @@ Together with the forward vector $\vec{f}$, we can now construct an orthonormal 
 
 Although the OpenGL specifications explicitly state that
 
-> _"OpenGL does not force left- or right-handedness on any of its coordinate system.s"_[^openglspecs]
+> _"OpenGL does not force left- or right-handedness on any of its coordinate systems."_[^openglspecs]
 
  we adopt the widely accepted conventions found in standard textbooks and the OpenGL reference documentation itself (<Cite name="SWH15" />): These conventions assume a right-handed coordinate system in which the viewer looks down the negative $z$-axis, the positive $x$-axis extends to the right, and the positive $y$-axis points upward[^objectsdrawnnote].
 
