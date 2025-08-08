@@ -14,6 +14,8 @@ import CodeBlock from '@theme/CodeBlock';
 import ViewCamera from "/threejs/viewcamera/jsx/ViewCamera.jsx";
 import graphics_pipeline from "./img/change-of-coordinates/graphics_pipeline.png";
 
+import ortho_illu from "./img/change-of-coordinates/ortho_illu.png";
+
 import orthonormalization from "./img/change-of-coordinates/orthonormalization.png";
 import orthonormalization_code from '!!raw-loader!./plots/change-of-coordinates/orthonormalization.py?raw';
 
@@ -24,7 +26,9 @@ export const figures = {
     change_of_coordinates : 1,
     viewcamera: 2,
     graphics_pipeline: 3,
-    orthonormalization: 4
+    orthonormalization: 4,
+    ortho_illu: 5
+
 };
 
 
@@ -49,17 +53,7 @@ $$
 This helps with computing the final image usually appearing on the device being used.
 
 We begin by examining the structure of matrix-vector products, where the **matrix rows are interpreted as the vectors of an orthonormal basis**[^matrixrowsemphased] in $\mathbb{R}^3$.<br />
-Next, we introduce the concept of **coordinate vectors** and explain how **change-of-coordinates matrices** are used to map vectors from one coordinate system
-
-$$
-B
-$$
-
-into another coordinate system
-
-$$
-C
-$$
+Next, we introduce the concept of **coordinate vectors** and explain how **change-of-coordinates matrices** are used to map vectors from one coordinate system $B$ into another coordinate system $C$.
 
 Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix to map coordinates between
 $V_\text{world}$ and $V_\text{camera}$.
@@ -228,7 +222,7 @@ Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scal
  $$
 
  **Proof (Existence):**
- Given $\vec{v} \in V$, there exists scalars $x_1, x_2, \ldots, x_n$ such that
+ Given $\vec{v} \in V$, there exist scalars $x_1, x_2, \ldots, x_n$ such that
 
  $$
  \vec{v} = x_1\vec{b_1} + x_2\vec{b_2} + \ldots + x_n\vec{b_n}
@@ -468,14 +462,14 @@ $\Box$
 
 <Figure idx={figures.viewcamera} /> shows a wireframe teapot mesh with a view camera targeted at it[^threejs]. The interactive controls allow repositioning of the world and the view camera as well as the teapot, making it easy to visualize the different coordinate systems involved: The 3D world space versus the 2D image produced by the camera[^GEB].
 
-[^threejs]: [Source code](https://github.com/thorstensuckow/threejs-lab/viewcamera)
+[^threejs]: [Source code](https://github.com/ThorstenSuckow/threejs-lab/tree/main/viewcamera)
 [^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
 
 <figure><a name={`fig_${figures.viewcamera}`} />
 <ViewCamera />
   <figcaption style={{width:'100%',textAlign:'center',fontSize:'small'}}>
-    <b>Figure {figures.viewcamera}:</b>
-    <span>A wireframe teapot mesh with a view camera targeted at it (<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>).</span>
+    <b>Figure {figures.viewcamera}: </b>
+    <span>A wireframe teapot mesh rendered in a 3D scene, with a view camera targeting it. Use mouse controls to explore the scene interactively (<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>).</span>
   </figcaption>
 </figure>
 
@@ -558,7 +552,7 @@ Although the OpenGL specifications explicitly state that
 [^objectsdrawnnote]: _"When the point of observation is located at the origin, as in perspective projection, objects drawn with positive z values are behind the observer."_ <Cite name="SWH15" pp="83 ff" />
 [^openglspecs]: [OpenGL 4.6 Core Profile, p.665](https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf) (retrieved 05.08.2025)
 
-<Figure idx={figures.orthonormalization} /> shows a given up vector $\vec{up}$, the vantage point $p$ as well as $c$ as the observed point. $p$ and $c$ lets us derive the forward vector $f$. This vector - as well as subsequent vectors used in the following computations - is normalized.
+<Figure idx={figures.orthonormalization} /> shows a given up vector $\vec{up}$, the vantage point $p$ as well as $c$ as the observed point. $p$ and $c$ let us derive the forward vector $\vec{f}$. This vector - as well as subsequent vectors used in the following computations - is normalized.
 
 This gives us $\vec{cam}_z$, which will serve as the $z$-axis of the required orthonormal basis of the camera space:
 
@@ -578,17 +572,28 @@ $$
 \frac{\vec{up} \times \vec{cam}_z}{|\vec{up} \times \vec{cam}_z|} = \vec{cam}_x
 $$
 
-To complete the basis, we compute $\vec{cam}_y$. While one might be tempted to use $\vec{up}$ directly, it is not guaranteed to be orthogonal to $\vec{f}$, since $\vec{f}$ is not a predefined axis but computed as the direction vector from $p$ to $c$. Consequently, $\vec{up}$ may be slightly tilted toward or away from $f$, as illustrated in <Figure idx={figures.orthonormalization} />[^orthonormalcross].
+To complete the basis, we compute $\vec{cam}_y$. While one might be tempted to use $\vec{up}$ directly, it is not guaranteed to be orthogonal to $\vec{f}$, since $\vec{f}$ is not a predefined axis but computed as the direction vector from $p$ to $c$. Consequently, $\vec{up}$ may be slightly tilted toward or away from $\vec{f}$, as illustrated in <Figure idx={figures.orthonormalization} />[^orthonormalcross].
 
 $$
 \vec{cam}_z \times \vec{cam}_x = \vec{cam}_y
 $$
 
 
-[^orthonormalcross]: $|\vec{cam}_y| = 1$, since  $|\vec{cam}_z \times \vec{cam}_x| = |\vec{cam}_z||\vec{cam}_x| \sin(\frac{\pi}{2}) = 1$
+[^orthonormalcross]: $|\vec{cam}_y| = 1$, since  $|\vec{cam}_y| = |\vec{cam}_z \times \vec{cam}_x| = |\vec{cam}_z||\vec{cam}_x| \sin(\frac{\pi}{2}) = 1 \cdot 1 \cdot 1 = 1$
 
+The derivation of the coordinate vector of point $c$ from world space to camera space is illustrated in <Figure idx={figures.ortho_illu} />. In the figure, the camera is positioned behind the point of interest. As a result, the point - while located on the positive x-axis in world coordinates - is mapped onto the negative x-axis in the camera image.
 
-Finally, we can construct or change-of-coordinates matrix $\underset{cam \leftarrow \text{world}}{\boldsymbol{P}}$.
+<Embed
+    modeAware={true}
+    figref={figures.ortho_illu}
+    title={
+        "Illustration of the orthonormalization process and the resulting camera image in a right-handed coordinate system. The bold lines represent the basis vectors of the camera coordinate frame. The point c is located on the positive x-axis in world space, but is projected onto the negative x-axis in the camera image due to the coordinate transformation."}>
+    <img src={ortho_illu} />
+</Embed>
+
+### Transforming the World into Camera Space
+
+Finally, we can construct the change-of-coordinates matrix $\underset{cam \leftarrow \text{world}}{\boldsymbol{P}}$.
 
 Note that $V_\text{world}$ is represented by the standard basis $\varepsilon$. Therefore, the matrix
 
@@ -611,11 +616,10 @@ $$
 \end{pmatrix} = \underset{cam \leftarrow \text{world}}{\boldsymbol{P}} = \boldsymbol{R}_{3 \times 3}
 $$
 
-### Transforming the World into Camera Space
 We now derive the translation vector $\vec{T}_{3 \times 1}$ used to complete the transformation.
 
 By convention, the view camera is located at the origin $(0, 0, 0)$ and oriented to look down the negative $z$-axis.
-Objects that result in positive $z$-coordinates relative to the camera are typically <Wiki name="culled" file="computergraphics.culling" /> from the final image.
+Objects that result in positive $z$-coordinates relative to the camera are typically clipped respectively <Wiki name="culled" file="computergraphics.culling" /> from the final image.
 
 To align the world such that the camera resides at the origin, we perform a translation by the negative eye position. This yields the following homogeneous translation matrix:
 
@@ -661,6 +665,172 @@ $$
 \end{alignat*}
 $$
 
+:::tip Derivation of the lookAt Matrix via Stepwise Inversion
+
+In the following, we implicitly assume that, whenever a $3\times 1$ vector $\vec{n}$ is multiplied by a $4\times 4$ matrix,
+ $\vec{n}$ is interpreted as a homogeneous vector by appending a $1$ as its fourth component.
+
+Let $\vec{c_i}$ be the basis vectors of the camera space, expressed as coordinate vectors relative to the standard basis (that is, the basis of the world space).
+
+The rotation matrix $\boldsymbol{R}$ is given by
+
+$$
+\begin{pmatrix}
+\vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x \\
+\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y \\
+\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z
+\end{pmatrix}
+$$
+
+Mapping a vector $\vec{p}_\text{cam}$ **from camera to world space** gives
+
+$$
+\vec{p}_\text{world} =
+\begin{pmatrix}
+\vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x \\
+\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y \\
+\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z
+\end{pmatrix} \vec{p}_\text{cam}
+$$
+
+However, to account for the position of the camera $\text{eye}_{xyz}$ - that is, the origin of the camera coordinate frame in world coordinates - we add $\vec{e}$ ($=\text{eye}_{xyz} - (0,0,0)$) to the rotated camera-space vector $\boldsymbol{R}(\vec{p}_\text{cam})$.
+
+Hence, we obtain a transformation matrix
+
+$$
+\vec{p}_\text{world} =
+\begin{pmatrix}
+ \vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x & \vec{e}_{x} \\
+\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y & \vec{e}_{y} \\
+\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z & \vec{e}_{z} \\
+0 & 0 & 0 & 1
+\end{pmatrix} \vec{p}_\text{cam}
+$$
+
+How can we justify an inverse of this matrix through reasoning alone?
+
+Since the original transformation from camera to world space consists of a rotation, followed by a translation, the inverse must reverse these steps - undo translation, then undo rotation:
+
+$$
+\vec{p}_\text{cam} = \boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) \ \vec{p}_\text{world}
+$$
+
+where $\boldsymbol{R}^T$ is just the inverse of the rotation matrix $\boldsymbol{R}$, and $\boldsymbol{T}(-\vec{e})$ is a transformation matrix that adds $-\vec{e}$ component wise from the vector multiplied with it.
+
+Obviously, due to associativity of matrix multiplications, we can compute the rotation-translation matrix first, which gives us
+
+$$
+\boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) =
+\begin{pmatrix}
+    \boldsymbol{R}^T & \begin{matrix} -(\vec{c_1} \cdot \vec{e}) \\ -(\vec{c_2} \cdot \vec{e}) \\ -(\vec{c_3} \cdot \vec{e}) \end{matrix} \\
+    0 & 1
+\end{pmatrix}
+$$
+
+Multiplying the vector $\vec{p}_\text{world}$ with this matrix will yield
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) \ \vec{p}_\text{world}
+&= \begin{pmatrix}
+ \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & -(\vec{c_1} \cdot \vec{e}) \\
+\vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & -(\vec{c_2} \cdot \vec{e}) \\
+\vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & -(\vec{c_3} \cdot \vec{e})\\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+\vec{p_x}_\text{world} \\
+\vec{p_y}_\text{world} \\
+\vec{p_z}_\text{world} \\
+1
+\end{pmatrix}\\
+\\
+&= \begin{pmatrix}
+\vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & -(\vec{c_1} \cdot \vec{e}) \\
+\vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & -(\vec{c_2} \cdot \vec{e}) \\
+\vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & -(\vec{c_3} \cdot \vec{e})\\
+                                                                    0 & 0 & 0 & 1
+\end{pmatrix}\begin{pmatrix}
+             \vec{p_x}_\text{world} \\
+             \vec{p_y}_\text{world} \\
+             \vec{p_z}_\text{world} \\
+             1
+             \end{pmatrix}\\
+\\
+&= \begin{pmatrix}
+   \vec{p_x}_\text{world}\vec{c_1}_x + \vec{p_y}_\text{world}\vec{c_1}_y + \vec{p_z}_\text{world}\vec{c_1}_z -(\vec{c_1} \cdot \vec{e}) \\
+   \vec{p_x}_\text{world}\vec{c_2}_x + \vec{p_y}_\text{world}\vec{c_2}_y + \vec{p_z}_\text{world}\vec{c_2}_z -(\vec{c_2} \cdot \vec{e}) \\
+   \vec{p_x}_\text{world}\vec{c_3}_x + \vec{p_y}_\text{world}\vec{c_3}_y + \vec{p_z}_\text{world}\vec{c_3}_z -(\vec{c_3} \cdot \vec{e})\\
+     1
+   \end{pmatrix}\\
+   \\
+&= \begin{pmatrix}
+  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_1}_x + (\vec{p_y}_\text{world} - \vec{e_y})\vec{c_1}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_1}_z \\
+  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_2}_x + (\vec{p_y}_\text{world} - \vec{e_y})\vec{c_2}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_2}_z \\
+  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_3}_x+ (\vec{p_y}_\text{world}  - \vec{e_y})\vec{c_3}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_3}_z\\
+    1
+  \end{pmatrix}\\
+  \\
+&= \begin{pmatrix}
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_1} \\
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_2} \\
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_3}\\
+     1
+     \end{pmatrix}\\
+     \\
+   &= \vec{p}_\text{cam}
+\end{alignat*}
+$$
+
+Here, $\vec{p}_\text{world} - \vec{e}$ yields a vector relative to the origin of the camera coordinate frame - the first step in the reverse operation (undo translation).
+
+This vector is then projected onto the respective standard basis vectors, expressed in the camera basis ($[\vec{\varepsilon}_i]_c$), which form the rows of $\boldsymbol{R}^T$ (undo rotation).
+
+The result is the same as if translation was applied first to $\vec{p}_\text{world}$ and then rotated:
+
+$$
+\begin{alignat*}{3}
+\begin{pmatrix}
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_1} \\
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_2} \\
+     (\vec{p}_\text{world} - \vec{e})\ \vec{c_3}\\
+     1
+     \end{pmatrix}
+   &= \begin{pmatrix}
+       \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & 0 \\
+      \vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & 0 \\
+      \vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & 0\\
+      0 & 0 & 0 & 1
+      \end{pmatrix}
+      \begin{pmatrix}
+       1 & 0 & 0 & -\vec{e_x} \\
+      0 & 1 & 0 & -\vec{e_y} \\
+      0 & 0 & 1 & -\vec{e_z} \\
+      0 & 0 & 0 & 1
+      \end{pmatrix} \begin{pmatrix}
+        \vec{p_x}_\text{world} \\
+        \vec{p_y}_\text{world} \\
+        \vec{p_z}_\text{world} \\
+        1
+        \end{pmatrix}\\
+      \\
+   &= \begin{pmatrix}
+             \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & 0 \\
+            \vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & 0 \\
+            \vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & 0\\
+            0 & 0 & 0 & 1
+            \end{pmatrix}
+            \begin{pmatrix}
+              \vec{p_x}_\text{world} -\vec{e_x} \\
+              \vec{p_y}_\text{world} -\vec{e_y} \\
+              \vec{p_z}_\text{world} -\vec{e_z} \\
+            1
+            \end{pmatrix}\\
+            \\
+\end{alignat*}
+$$
+
+ :::
 
 [^notevector]: Note that the final column consist of dot products between the camera axes and the eye position vector $\text{eye}_{xyz}^{T}$
 
