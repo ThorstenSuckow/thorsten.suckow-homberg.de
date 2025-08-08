@@ -1,7 +1,7 @@
 import { TeapotGeometry } from "three/examples/jsm/geometries/TeapotGeometry";
 import * as THREE from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
-import { state } from "../scene/state.js";
+import { getState } from "../scene/state.js";
 
 const teapotGeometry = new TeapotGeometry(2, 2);
 const material = new THREE.MeshBasicMaterial({
@@ -11,6 +11,7 @@ const material = new THREE.MeshBasicMaterial({
 
 const teapot = new THREE.Mesh(teapotGeometry, material);
 
+const state = getState();
 const teapotState = state.teapotState;
 
 let teapotTransformControls;

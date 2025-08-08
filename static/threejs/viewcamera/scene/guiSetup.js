@@ -1,8 +1,10 @@
 import GUI from "lil-gui";
-import { state } from "./state.js";
+import { getState } from "./state.js";
 import { updateScene, resetScene } from "./sceneSetup.js";
 import { LAYERS as layerCfg } from "../config/config.js";
 import { dummyCam } from "../objects/dummyCam.js";
+
+const state = getState();
 
 export const makeGui = (targetContainer) => {
     const gui = new GUI(targetContainer ? {container : targetContainer} : undefined);

@@ -2,19 +2,30 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CONFIG as defaultCfg } from "../config/config.js";
 
-export const state = {
-    container: document.getElementById("three-container"),
-    scene: new THREE.Scene(),
-    renderer: new THREE.WebGLRenderer({ antialias: true }),
-    dummyRenderer: new THREE.WebGLRenderer({ antialias: true }),
-    camera: null,
-    controls: null,
-    camHelper: null,
-    teapotTransformControls: null,
-    worldCameraState: { x: 0, y: 0, z: 0 },
-    dummyCamState: {},
-    teapotState: {},
-};
+
+let state = null;
+
+export const getState = () => {
+
+    if (!state) {
+        state = {
+            container: document.getElementById("three-container"),
+            scene: new THREE.Scene(),
+            renderer: new THREE.WebGLRenderer({ antialias: true }),
+            dummyRenderer: new THREE.WebGLRenderer({ antialias: true }),
+            camera: null,
+            controls: null,
+            camHelper: null,
+            teapotTransformControls: null,
+            worldCameraState: { x: 0, y: 0, z: 0 },
+            dummyCamState: {},
+            teapotState: {},
+        };
+    }
+
+    return state;
+}
+
 
 export const initCamera = () => {
     const { container } = state;

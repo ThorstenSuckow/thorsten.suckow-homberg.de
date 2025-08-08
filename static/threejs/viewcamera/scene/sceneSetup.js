@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { state, initCamera, updateWorldCameraState } from "./state.js";
+import { getState, initCamera, updateWorldCameraState } from "./state.js";
 import {
     makeTransformControls as makeTeapotTransformControls,
     update as updateTeapot,
@@ -13,8 +13,13 @@ import {
 } from "../objects/dummyCam.js";
 import { CONFIG as defaultCfg, LAYERS as layerCfg } from "../config/config.js";
 
+const  state = getState();
+
+
 export const initScene = (renderContainer) => {
+
     state.container = renderContainer;
+
     const { scene, renderer, container } = state;
 
     scene.background = new THREE.Color(0x000000);
@@ -38,10 +43,10 @@ export const initScene = (renderContainer) => {
     teapot.layers.set(layerCfg.teapot);
 
     // TransformControls für Teapot
-    state.teapotTransformControls = makeTeapotTransformControls(
+    !state.teapotTransformControls && (()=>{state.teapotTransformControls = makeTeapotTransformControls(
         state.camera,
         renderer,
-    );
+    )})();
     state.teapotTransformControls.addEventListener("dragging-changed", (e) => {
         state.controls.enabled = !e.value;
     });
@@ -64,6 +69,7 @@ export const initScene = (renderContainer) => {
 export const updateScene = () => {
     updateDummyCam();
     updateTeapot();
+
     state.camHelper.update();
 };
 

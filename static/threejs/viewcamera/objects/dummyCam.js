@@ -1,7 +1,11 @@
 import * as THREE from "three";
-import { state } from "../scene/state.js";
+import { getState } from "../scene/state.js";
+
+const state = getState();
 
 const dummyCamState = state.dummyCamState;
+
+
 
 export const dummyCam = new THREE.PerspectiveCamera(
     dummyCamState.fov,
