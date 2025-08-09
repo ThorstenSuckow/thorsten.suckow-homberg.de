@@ -31,18 +31,16 @@ export const figures = {
 
 };
 
-
-
 This article introduces the derivation of the _lookAt_ matrix in OpenGL, which is  a $4 \times 4$-transformation matrix of the form
 
 $$
 \boldsymbol{M}_{\text{lookAt}} = \begin{pmatrix}
-\boldsymbol{R}_{3 \times 3} & \vec{T}_{3 \times 1} \\
+\underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}} & \vec{T}_{3 \times 1} \\
 0 & 1
 \end{pmatrix}
 $$
 
-Here, $\boldsymbol{R}_{3 \times 3}$ denotes a change-of-coordinates matrix, and $\vec{T}_{3 \times 1}$ denotes a translation vector.
+Here, $\underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}}$ denotes a change-of-coordinates matrix. While $\vec{T}_{3 \times 1}$ is often referred to as a translation vector - that is, a displacement vector - we will later see in the view matrix that this displacement also involves rotation.
 
 The purpose of the _lookAt_-matrix is to transform coordinates from world space to camera space, effectively re-expressing world coordinates relative to the camera's point of view:
 
@@ -203,9 +201,9 @@ Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scal
 ### Proof via Change-of-Coordinates
 
 
- We begin by introducing the **Change-of-Coordinate Matrix Theorem**[^theoremref].
+ We begin by introducing the **Change-of-Coordinates Matrix Theorem**[^theoremref].
 
-:::note Change-of-Coordinate Matrix Theorem
+:::note Change-of-Coordinates Matrix Theorem
 Let $B = \{\vec{b}_1, \vec{b}_2, \ldots, \vec{b}_n\}$ and $C =  \{\vec{c}_1, \vec{c}_2, \ldots, \vec{c}_n\}$ be bases of a vector space $V$. Then there is a unique $n \times n$ matrix  $\underset{C \leftarrow B}{\boldsymbol{P}}$ such that
 
  $$
@@ -280,12 +278,22 @@ $\Box$
 :::
 
 [^theoremref]: See <Cite name="LLM21" pp="275" />
-[^bcoordinatevectors]: That is, the coordinate vector of $\vec{x}$ relative to $C$.
+[^bcoordinatevectors]: That is, the coordinate vector of $\vec{b_i}$ relative to $C$.
 
-We now show that multiplying a vector $\vec{p}$ - that is, its coordinate representation $[\vec{p}]_\varepsilon$ in the standard basis - with $\boldsymbol{A}$ yields a vector whose components are the scalar projections of $\vec{p}$ relative to an orthonormal basis $C$, via a change-of-coordinates matrix.<br />
+We now show that multiplying a vector $\vec{p}$ - that is, its coordinate representation $[\vec{p}]_\varepsilon$ in the standard basis - with
+
+$$
+\boldsymbol{A} = \begin{pmatrix}
+ - \vec{u} - \\
+ - \vec{v} - \\
+ - \vec{w} -
+ \end{pmatrix}
+$$
+
+ yields a vector whose components are the scalar projections of $\vec{p}$ relative to an orthonormal basis $C$, via a change-of-coordinates matrix.<br />
  This approach emphasizes the geometric interpretation of the transformation as a coordinate conversion from the standard basis to an arbitrary orthonormal basis and provides the theoretical foundation for the _lookAt_ matrix introduced later.
 
-We begin by computing the change-of-coordinate matrix $\underset{\varepsilon \leftarrow C}{M}$.
+We begin by computing the change-of-coordinates matrix $\underset{\varepsilon \leftarrow C}{M}$.
 
 
 This matrix satisfies the following condition:
@@ -611,7 +619,7 @@ $$
 \vec{cam_x}_1 & \vec{cam_x}_2 & \vec{cam_x}_3 \\
 \vec{cam_y}_1 & \vec{cam_y}_2 & \vec{cam_y}_3 \\
 \vec{cam_z}_1 & \vec{cam_z}_2 & \vec{cam_z}_3
-\end{pmatrix} = \underset{cam \leftarrow \text{world}}{\boldsymbol{P}} = \boldsymbol{R}_{3 \times 3}
+\end{pmatrix} = \underset{cam \leftarrow \text{world}}{\boldsymbol{P}}
 $$
 
 We now derive the translation vector $\vec{T}_{3 \times 1}$ used to complete the transformation.
@@ -635,7 +643,7 @@ With translation applied first, followed by rotation, we finally derive the comp
 
 $$
 \boldsymbol{M}_{\text{lookAt}} = \begin{pmatrix}
-\boldsymbol{R}_{3 \times 3} & \vec{T}_{3 \times 1} \\
+\underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}} & \vec{T}_{3 \times 1} \\
 0 & 1\end{pmatrix}
 $$
 
@@ -665,12 +673,12 @@ $$
 
 :::tip Derivation of the lookAt Matrix via Stepwise Inversion
 
-In the following, we implicitly assume that, whenever a $3\times 1$ vector $\vec{n}$ is multiplied by a $4\times 4$ matrix,
- $\vec{n}$ is interpreted as a homogeneous vector by appending a $1$ as its fourth component.
+(In the following, we implicitly assume that, whenever a $3\times 1$ vector $\vec{n}$ is multiplied by a $4\times 4$ matrix,
+ $\vec{n}$ is interpreted as a homogeneous vector by appending a $1$ as its fourth component.)
 
 Let $\vec{c_i}$ be the basis vectors of the camera space, expressed as coordinate vectors relative to the standard basis (that is, the basis of the world space).
 
-The rotation matrix $\boldsymbol{R}$ is given by
+The change-of-coordinates matrix $(\underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}})^{-1} = \underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}}$ is given by
 
 $$
 \begin{pmatrix}
@@ -710,17 +718,17 @@ How can we justify an inverse of this matrix through reasoning alone?
 Since the original transformation from camera to world space consists of a rotation, followed by a translation, the inverse must reverse these steps - undo translation, then undo rotation:
 
 $$
-\vec{v}_\text{cam} = \boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) \ \vec{v}_\text{world}
+\vec{v}_\text{cam} = (\underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}})^{-1}\ \boldsymbol{T}(-\vec{e}) \ \vec{v}_\text{world}
 $$
 
-where $\boldsymbol{R}^T$ is just the inverse of the rotation matrix $\boldsymbol{R}$, and $\boldsymbol{T}(-\vec{e})$ is a transformation matrix that adds $-\vec{e}$ component wise from the vector multiplied with it.
+where $(\underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}})^{-1}$ is the inverse of $\underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}}$, and $\boldsymbol{T}(-\vec{e})$ is a transformation matrix that adds $-\vec{e}$ component wise from the vector multiplied with it.
 
 Obviously, due to associativity of matrix multiplications, we can compute the rotation-translation matrix first, which gives us
 
 $$
-\boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) =
+(\underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}})^{-1}\ \boldsymbol{T}(-\vec{e}) =
 \begin{pmatrix}
-    \boldsymbol{R}^T & \begin{matrix} -(\vec{c_1} \cdot \vec{e}) \\ -(\vec{c_2} \cdot \vec{e}) \\ -(\vec{c_3} \cdot \vec{e}) \end{matrix} \\
+    \underset{\text{cam} \leftarrow \text{world}}{\boldsymbol{P}} & \begin{matrix} -(\vec{c_1} \cdot \vec{e}) \\ -(\vec{c_2} \cdot \vec{e}) \\ -(\vec{c_3} \cdot \vec{e}) \end{matrix} \\
     0 & 1
 \end{pmatrix}
 $$
@@ -729,7 +737,7 @@ Multiplying the vector $\vec{v}_\text{world}$ with this matrix will yield
 
 $$
 \begin{alignat*}{3}
-\boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) \ \vec{v}_\text{world}
+(\underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}})^{-1}\ \boldsymbol{T}(-\vec{e}) \ \vec{v}_\text{world}
 &= \begin{pmatrix}
  c_{1_x} & c_{1_y} & c_{1_z} & -(\vec{c_1} \cdot \vec{e}) \\
 c_{2_x} & c_{2_y} & c_{2_z} & -(\vec{c_2} \cdot \vec{e}) \\
@@ -770,9 +778,9 @@ c_{3_x} & c_{3_y} & c_{3_z} & -(\vec{c_3} \cdot \vec{e})\\
   \end{pmatrix}\\
   \\
 &= \begin{pmatrix}
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_1} \\
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_2} \\
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_3}\\
+     (\vec{v}_\text{world} - \vec{e})\cdot \vec{c_1} \\
+     (\vec{v}_\text{world} - \vec{e})\cdot \vec{c_2} \\
+     (\vec{v}_\text{world} - \vec{e})\cdot \vec{c_3}\\
      1
      \end{pmatrix}\\
      \\
@@ -782,16 +790,16 @@ $$
 
 Here, $\vec{v}_\text{world} - \vec{e}$ yields a vector relative to the origin of the camera coordinate frame - the first step in the reverse operation (undo translation).
 
-This vector is then projected onto the respective standard basis vectors, expressed in the camera basis ($[\vec{\varepsilon}_i]_c$), which form the rows of $\boldsymbol{R}^T$ (undo rotation).
+This vector is then projected onto the respective standard basis vectors, expressed in the camera basis ($[\vec{\varepsilon}_i]_c$), which form the rows of $(\underset{\text{world} \leftarrow \text{cam}}{\boldsymbol{P}})^{-1}$ (undo rotation).
 
 The result is the same as if translation was applied first to $\vec{v}_\text{world}$ and then rotated:
 
 $$
 \begin{alignat*}{3}
 \begin{pmatrix}
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_1} \\
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_2} \\
-     (\vec{v}_\text{world} - \vec{e})\ \vec{c_3}\\
+     (\vec{v}_\text{world} - \vec{e}) \cdot \vec{c_1} \\
+     (\vec{v}_\text{world} - \vec{e}) \cdot \vec{c_2} \\
+     (\vec{v}_\text{world} - \vec{e}) \cdot \vec{c_3}\\
      1
      \end{pmatrix}
    &= \begin{pmatrix}
