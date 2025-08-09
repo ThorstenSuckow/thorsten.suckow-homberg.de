@@ -6,6 +6,8 @@ tags: [computer graphics, linear algebra, opengl]
 keywords: [lookAt matrix, OpenGL view matrix, coordinate systems, change of basis, camera transformation, graphics pipeline]
 
 ---
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import {BackButton} from "../../../src/components/BackButton.js";
@@ -13,7 +15,6 @@ import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../../src/components/Refer
 import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
-import ViewCamera from "/threejs/viewcamera/jsx/ViewCamera.jsx";
 import graphics_pipeline from "./img/change-of-coordinates/graphics_pipeline.png";
 
 import ortho_illu from "./img/change-of-coordinates/ortho_illu.png";
@@ -484,7 +485,14 @@ $\Box$
 [^GEB]: As this is a self‑contained scene observing itself, it resonates nicely with the spirit of Gödel, Escher, Bach.
 
 <figure><a name={`fig_${figures.viewcamera}`} />
-<ViewCamera />
+<BrowserOnly fallback={<div />}>
+  {() => {
+        const ViewCamera = require("/threejs/viewcamera/jsx/ViewCamera.jsx").default;
+        return <ViewCamera />;
+    }
+  }
+</BrowserOnly>
+
   <figcaption style={{width:'100%',textAlign:'center',fontSize:'small'}}>
     <b>Figure {figures.viewcamera}: </b>
     <span>A wireframe teapot mesh rendered in a 3D scene, with a view camera targeting it. Use mouse controls to explore the scene interactively (<a href="/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">open in new tab</a>).</span>
