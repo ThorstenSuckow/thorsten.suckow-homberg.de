@@ -42,7 +42,7 @@ camy_norm = np.linalg.cross(camx_norm, camz_norm)
 camy_norm = camy_norm / np.linalg.norm(camy_norm)
 
 ax.text(*(poi - [0, -.3, -0.1]), r'$c$', color=poicol, fontsize=12, horizontalalignment='left')
-ax.text(*(eye - [0, 0.3, 0.0]), r'$p$', color=camcol, fontsize=12, horizontalalignment='left')
+ax.text(*(eye - [0, 0.6, 0.0]), r'$\text{eye}_{xyz}$', color=camcol, fontsize=12, horizontalalignment='left')
 
 ax.scatter(*eye, color=camcol, s=50)
 ax.scatter(*poi, color=poicol, s=50)
@@ -58,9 +58,10 @@ ax.text(*(eye + [0, 0.1, -0.6]), r'$\vec{\text{cam}}_\text{x}$', color=camxcol, 
 ax.quiver(*eye, *(camz_norm), color=camzcol,  arrow_length_ratio=0.05)
 ax.text(*(eye + [0, 0.5, -0.1]), r'$\vec{\text{cam}}_\text{z}$', color=camzcol, fontsize=12, horizontalalignment='left')
 
+ax.text(*(eye + [0, 1.9, 0.4]), r'$\vec{f}$', fontsize=12, horizontalalignment='left')
+
 ax.quiver(*eye, *(camy_norm), color=camycol,  arrow_length_ratio=0.05)
 ax.text(*(eye + [0, -0.3, 0.4]), r'$\vec{\text{cam}}_\text{y}$', color=camycol, fontsize=12, horizontalalignment='left')
 
 plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
-
 plt.show()
