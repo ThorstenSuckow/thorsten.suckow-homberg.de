@@ -47,16 +47,14 @@ Here, $\boldsymbol{R}_{3 \times 3}$ denotes a change-of-coordinates matrix, and 
 The purpose of the _lookAt_-matrix is to transform coordinates from world space to camera space, effectively re-expressing world coordinates relative to the camera's point of view:
 
 $$
-\vec{v}_\text{camera} = \boldsymbol{M}_{\text{lookAt}}\ \vec{v}_\text{world}
+\vec{v}_\text{cam} = \boldsymbol{M}_{\text{lookAt}}\ \vec{v}_\text{world}
 $$
-
-This helps with computing the final image appearing on the device being used.
 
 We begin by examining the structure of matrix-vector products, where the **matrix rows are interpreted as the vectors of an orthonormal basis**[^matrixrowsemphased] in $\mathbb{R}^3$.<br />
 Next, we introduce the concept of coordinate vectors and explain how change-of-coordinates matrices are used to map vectors from one coordinate system $B$ into another coordinate system $C$.
 
 Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix to map coordinates between
-$V_\text{world}$ and $V_\text{camera}$.
+$V_\text{world}$ and $V_\text{cam}$.
 
 
 [^matrixrowsemphased]: We intentionally emphasize the phrasing, as it contrasts with the more common convention of interpreting matrix **columns** as basis vectors.
@@ -112,7 +110,7 @@ $$
 (\vec{u} \cdot \vec{p}) \vec{u} + (\vec{v} \cdot \vec{p}) \vec{v} + (\vec{w} \cdot \vec{p}) \vec{w} = \begin{pmatrix}p_x \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix}0 \\ p_y \\ 0 \end{pmatrix} +\begin{pmatrix}0 \\ 0 \\ p_z \end{pmatrix} = \begin{pmatrix}p_x \\ p_y\\ p_z \end{pmatrix} = \vec{p}
 $$
 
-Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />: The coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
+Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />. For example, the coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
 
 $$
 [\vec{p}]_\varepsilon = \vec{p}_x\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix} + \vec{p}_y\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} + \vec{p}_z\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
@@ -205,10 +203,10 @@ Thus, the vector $ \vec{p}' = \boldsymbol{A} \vec{p} $ contains exactly the scal
 ### Proof via Change-of-Coordinates
 
 
- We begin by introducing the **Change-of-Coordinate Matrix Theorem**.
+ We begin by introducing the **Change-of-Coordinate Matrix Theorem**[^theoremref].
 
 :::note Change-of-Coordinate Matrix Theorem
- [^theoremref]Let $B = \{\vec{b}_1, \vec{b}_2, \ldots, \vec{b}_n\}$ and $C =  \{\vec{c}_1, \vec{c}_2, \ldots, \vec{c}_n\}$ be bases of a vector space $V$. Then there is a unique $n \times n$ matrix  $\underset{C \leftarrow B}{\boldsymbol{P}}$ such that
+Let $B = \{\vec{b}_1, \vec{b}_2, \ldots, \vec{b}_n\}$ and $C =  \{\vec{c}_1, \vec{c}_2, \ldots, \vec{c}_n\}$ be bases of a vector space $V$. Then there is a unique $n \times n$ matrix  $\underset{C \leftarrow B}{\boldsymbol{P}}$ such that
 
  $$
  \underset{C \leftarrow B}{\boldsymbol{P}} [\vec{x}]_B = [\vec{x}]_C
@@ -262,16 +260,16 @@ $\Box$
 
 Let $[\vec{v}]_C = \boldsymbol{M} [\vec{v}]_B\ \forall\ \vec{v} \in V$.
 
-Replace $\vec{v}$ with $\vec{b_1}$. Then $[\vec{b_1}]_B = \vec{e_1}$, i.e. $(1, 0, \ldots, 0)^T$ of the standard basis. Hence, the first column of $\boldsymbol{M}$ must be $[\vec{b_1}]_C$ to satisfy
+Replace $\vec{v}$ with $\vec{b_1}$. Then $[\vec{b_1}]_B = \vec{\varepsilon_1}$, i.e. $(1, 0, \ldots, 0)^T$ of the standard basis. Hence, the first column of $\boldsymbol{M}$ must be $[\vec{b_1}]_C$ to satisfy
 
 $$
-[\vec{b_1}]_C = \boldsymbol{M} \vec{e_1}
+[\vec{b_1}]_C = \boldsymbol{M} \vec{\varepsilon_1}
 $$
 
-Equally, for any $i > 1$, the $i$th column of $\boldsymbol{M}$ must be $[\vec{b_i}]_C$, since $[\vec{b_i}]_B = \vec{e_i}$:
+Equally, for any $i > 1$, the $i$th column of $\boldsymbol{M}$ must be $[\vec{b_i}]_C$, since $[\vec{b_i}]_B = \vec{\varepsilon_i}$:
 
 $$
-[\vec{b_i}]_C = \boldsymbol{M} \vec{e_i}
+[\vec{b_i}]_C = \boldsymbol{M} \vec{\varepsilon_i}
 $$
 
 Since any vector $\vec{v} \in V$ is a linear combination of (linearly independent) basis vectors, the resulting coordinate vector in $C$ can be written as a sum of the columns of $\boldsymbol{M}$ weighted by the coordinates of $[\vec{v}]_B$.<br />
@@ -475,7 +473,7 @@ $\Box$
 
 The abstracted camera also defines parameters for perspective projection, such as  the field of view (fov) and the aspect ratio. However, for the purpose of constructing the view matrix, the most relevant parameters are the _camera position_, $\text{up}_{xyz}$ and $\text{eye}_{xyz}$, as they define the camera's position, its orientation and the view direction in world space. These parameters are used for constructing an orthonormal coordinate frame as we will show in the following sections.
 
-In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coordinates $\vec{u} \in V_\text{world}$  to camera coordinates $\vec{v} \in V_\text{camera}$  is typically the third step in the rasterization process, as illustrated in <Figure idx={figures.graphics_pipeline} />.
+In the graphics pipeline <Cite name="VB15" pp="232" />,  transforming world coordinates $\vec{u} \in V_\text{world}$  to camera coordinates $\vec{v} \in V_\text{cam}$  is typically the third step in the rasterization process, as illustrated in <Figure idx={figures.graphics_pipeline} />.
 
 <Embed
     width={600}
@@ -493,7 +491,7 @@ The eye (or camera) position - labeled as `Camera Position` in <Figure idx={figu
 As a position in $V_\text{world}$, it can either be represented as a point
 
 $$
-\vec{p} = \text{eye}_{xyz} \in \mathbb{R}^n
+p = \text{eye}_{xyz} \in \mathbb{R}^n
 $$
 
 or equivalently as a vector from the origin
@@ -516,13 +514,13 @@ $$
 
 ### Constructing the Camera Basis
 
-To construct a coordinate frame for the view space $V_\text{camera}$, a third component is required - the $\vec{up}$ - vector.
+To construct a coordinate frame for the view space $V_\text{cam}$, a third component is required - the $\vec{up}$ - vector.
 This vector indicates the orientation of the camera's top - it can be thought of as the reference for the camera's vertical direction in view space.
 An intuitive analogy is a flight simulator: Rolling the airplane about its forward axis - the $z$-axis - effectively rotates the $\vec{up}$ vector and changes the percieved orientation of the game world.
 
 In <Figure idx={figures.viewcamera} />, this up-direction is visualized by the small blue triangle on top of the view frustum.
 
-Together with the forward vector $\vec{f}$, we can now construct an orthonormal camera frame for mapping points and vectors from $V_\text{world}$ to $V_\text{camera}$
+Together with the forward vector $\vec{f}$, we can now construct an orthonormal camera frame for mapping points and vectors from $V_\text{world}$ to $V_\text{cam}$
 
 
 <Embed
@@ -676,9 +674,9 @@ The rotation matrix $\boldsymbol{R}$ is given by
 
 $$
 \begin{pmatrix}
-\vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x \\
-\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y \\
-\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z
+c_{1_x} & c_{2_x} & c_{3_x} \\
+c_{1_y} & c_{2_y} & c_{3_y} \\
+c_{1_z} & c_{2_z} & c_{3_z}
 \end{pmatrix}
 $$
 
@@ -687,9 +685,9 @@ Mapping a vector $\vec{p}_\text{cam}$ **from camera to world space** gives
 $$
 \vec{p}_\text{world} =
 \begin{pmatrix}
-\vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x \\
-\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y \\
-\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z
+c_{1_x} & c_{2_x} & c_{3_x} \\
+c_{1_y} & c_{2_y} & c_{3_y} \\
+c_{1_z} & c_{2_z} & c_{3_z}
 \end{pmatrix} \vec{p}_\text{cam}
 $$
 
@@ -700,9 +698,9 @@ Hence, we obtain a transformation matrix
 $$
 \vec{p}_\text{world} =
 \begin{pmatrix}
- \vec{c_1}_x & \vec{c_2}_x & \vec{c_3}_x & \vec{e}_{x} \\
-\vec{c_1}_y & \vec{c_2}_y & \vec{c_3}_y & \vec{e}_{y} \\
-\vec{c_1}_z & \vec{c_2}_z & \vec{c_3}_z & \vec{e}_{z} \\
+ c_{1_x} & c_{2_x} & c_{3_x} & e_x \\
+c_{1_y} & c_{2_y} & c_{3_y} & e_y \\
+c_{1_z} & c_{2_z} & c_{3_z} & e_z \\
 0 & 0 & 0 & 1
 \end{pmatrix} \vec{p}_\text{cam}
 $$
@@ -733,9 +731,9 @@ $$
 \begin{alignat*}{3}
 \boldsymbol{R}^T\ \boldsymbol{T}(-\vec{e}) \ \vec{p}_\text{world}
 &= \begin{pmatrix}
- \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & -(\vec{c_1} \cdot \vec{e}) \\
-\vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & -(\vec{c_2} \cdot \vec{e}) \\
-\vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & -(\vec{c_3} \cdot \vec{e})\\
+ c_{1_x} & c_{1_y} & c_{1_z} & -(\vec{c_1} \cdot \vec{e}) \\
+c_{2_x} & c_{2_y} & c_{2_z} & -(\vec{c_2} \cdot \vec{e}) \\
+c_{3_x} & c_{3_y} & c_{3_z} & -(\vec{c_3} \cdot \vec{e})\\
 0 & 0 & 0 & 1
 \end{pmatrix}
 \begin{pmatrix}
@@ -746,9 +744,9 @@ $$
 \end{pmatrix}\\
 \\
 &= \begin{pmatrix}
-\vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & -(\vec{c_1} \cdot \vec{e}) \\
-\vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & -(\vec{c_2} \cdot \vec{e}) \\
-\vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & -(\vec{c_3} \cdot \vec{e})\\
+c_{1_x} & c_{1_y} & c_{1_z} & -(\vec{c_1} \cdot \vec{e}) \\
+c_{2_x} & c_{2_y} & c_{2_z} & -(\vec{c_2} \cdot \vec{e}) \\
+c_{3_x} & c_{3_y} & c_{3_z} & -(\vec{c_3} \cdot \vec{e})\\
                                                                     0 & 0 & 0 & 1
 \end{pmatrix}\begin{pmatrix}
              \vec{p_x}_\text{world} \\
@@ -758,16 +756,16 @@ $$
              \end{pmatrix}\\
 \\
 &= \begin{pmatrix}
-   \vec{p_x}_\text{world}\vec{c_1}_x + \vec{p_y}_\text{world}\vec{c_1}_y + \vec{p_z}_\text{world}\vec{c_1}_z -(\vec{c_1} \cdot \vec{e}) \\
-   \vec{p_x}_\text{world}\vec{c_2}_x + \vec{p_y}_\text{world}\vec{c_2}_y + \vec{p_z}_\text{world}\vec{c_2}_z -(\vec{c_2} \cdot \vec{e}) \\
-   \vec{p_x}_\text{world}\vec{c_3}_x + \vec{p_y}_\text{world}\vec{c_3}_y + \vec{p_z}_\text{world}\vec{c_3}_z -(\vec{c_3} \cdot \vec{e})\\
+   \vec{p_x}_\text{world}c_{1_x} + \vec{p_y}_\text{world}c_{1_y} + \vec{p_z}_\text{world}c_{1_z} -(\vec{c_1} \cdot \vec{e}) \\
+   \vec{p_x}_\text{world}c_{2_x} + \vec{p_y}_\text{world}c_{2_y} + \vec{p_z}_\text{world}c_{2_z} -(\vec{c_2} \cdot \vec{e}) \\
+   \vec{p_x}_\text{world}c_{3_x} + \vec{p_y}_\text{world}c_{3_y} + \vec{p_z}_\text{world}c_{3_z} -(\vec{c_3} \cdot \vec{e})\\
      1
    \end{pmatrix}\\
    \\
 &= \begin{pmatrix}
-  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_1}_x + (\vec{p_y}_\text{world} - \vec{e_y})\vec{c_1}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_1}_z \\
-  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_2}_x + (\vec{p_y}_\text{world} - \vec{e_y})\vec{c_2}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_2}_z \\
-  (\vec{p_x}_\text{world} - \vec{e_x})\vec{c_3}_x+ (\vec{p_y}_\text{world}  - \vec{e_y})\vec{c_3}_y + (\vec{p_z}_\text{world}- \vec{e_z})\vec{c_3}_z\\
+  (\vec{p_x}_\text{world} - e_x)c_{1_x} + (\vec{p_y}_\text{world} - e_y)c_{1_y} + (\vec{p_z}_\text{world}- e_z)c_{1_z} \\
+  (\vec{p_x}_\text{world} - e_x)c_{2_x} + (\vec{p_y}_\text{world} - e_y)c_{2_y} + (\vec{p_z}_\text{world}- e_z)c_{2_z} \\
+  (\vec{p_x}_\text{world} - e_x)c_{3_x}+ (\vec{p_y}_\text{world}  - e_y)c_{3_y} + (\vec{p_z}_\text{world}- e_z)c_{3_z}\\
     1
   \end{pmatrix}\\
   \\
@@ -797,15 +795,15 @@ $$
      1
      \end{pmatrix}
    &= \begin{pmatrix}
-       \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & 0 \\
-      \vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & 0 \\
-      \vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & 0\\
+       c_{1_x} & c_{1_y} & c_{1_z} & 0 \\
+      c_{2_x} & c_{2_y} & c_{2_z} & 0 \\
+      c_{3_x} & c_{3_y} & c_{3_z} & 0\\
       0 & 0 & 0 & 1
       \end{pmatrix}
       \begin{pmatrix}
-       1 & 0 & 0 & -\vec{e_x} \\
-      0 & 1 & 0 & -\vec{e_y} \\
-      0 & 0 & 1 & -\vec{e_z} \\
+       1 & 0 & 0 & -e_x \\
+      0 & 1 & 0 & -e_y \\
+      0 & 0 & 1 & -e_z \\
       0 & 0 & 0 & 1
       \end{pmatrix} \begin{pmatrix}
         \vec{p_x}_\text{world} \\
@@ -815,15 +813,15 @@ $$
         \end{pmatrix}\\
       \\
    &= \begin{pmatrix}
-             \vec{c_1}_x & \vec{c_1}_y & \vec{c_1}_z & 0 \\
-            \vec{c_2}_x & \vec{c_2}_y & \vec{c_2}_z & 0 \\
-            \vec{c_3}_x & \vec{c_3}_y & \vec{c_3}_z & 0\\
+             c_{1_x} & c_{1_y} & c_{1_z} & 0 \\
+            c_{2_x} & c_{2_y} & c_{2_z} & 0 \\
+            c_{3_x} & c_{3_y} & c_{3_z} & 0\\
             0 & 0 & 0 & 1
             \end{pmatrix}
             \begin{pmatrix}
-              \vec{p_x}_\text{world} -\vec{e_x} \\
-              \vec{p_y}_\text{world} -\vec{e_y} \\
-              \vec{p_z}_\text{world} -\vec{e_z} \\
+              \vec{p_x}_\text{world} -e_x \\
+              \vec{p_y}_\text{world} -e_y \\
+              \vec{p_z}_\text{world} -e_z \\
             1
             \end{pmatrix}\\
             \\
