@@ -82,9 +82,9 @@ $$
 \begin{alignat*}{3}
 
 \begin{pmatrix}
- \vec{u}_x & \vec{u}_y & \vec{u}_z \\
- \vec{v}_x & \vec{v}_y & \vec{v}_z \\
- \vec{w}_x & \vec{w}_y & \vec{w}_z \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} =
+ u_x & u_y & u_z \\
+ v_x & v_y & v_z \\
+ w_x & w_y & w_z \end{pmatrix}\begin{pmatrix} p_x \\ p_y \\ p_z\end{pmatrix} =
 \begin{pmatrix}
  1 & 0 & 0 \\
  0 & 1 & 0 \\
@@ -93,9 +93,9 @@ $$
 $$
 
 
-The resulting components $\vec{p}_x, \vec{p}_y, \vec{p}_z$ represent the **scalar projections** of $ \vec{p} $ onto the axes of the standard basis.
+The resulting components $p_x, p_y, p_z$ represent the **scalar projections** of $ \vec{p} $ onto the axes of the standard basis.
 
-Since $\vec{u}$ is a normalized vector, multiplying $\vec{p}_x$ with $\vec{u}$ yields the parallel component of the orthogonal projection of $\vec{p}$ onto $\vec{u}$.<br />
+Since $\vec{u}$ is a normalized vector, multiplying $p_x$ with $\vec{u}$ yields the parallel component of the orthogonal projection of $\vec{p}$ onto $\vec{u}$.<br />
 These projections can then be used to reconstruct $\vec{p}$ as a linear combination of the basis vectors $\vec{u}, \vec{v}, \vec{w}$, e.g. for $\vec{u}$:
 
 $$
@@ -113,7 +113,7 @@ $$
 Before we generalize this construction to an arbitrary orthonormal basis, it is worth noting that the **scalar projections** - that is, the **weights** in the above linear combination - are commonly referred to as the components of the corresponding <Wiki name="coordinate vector" file="linearalgebra.coordinatevector" />. For example, the coordinate vector of $\vec{p}$ relative to the standard basis $\varepsilon$ is denoted by[^coordinatevectornotation]
 
 $$
-[\vec{p}]_\varepsilon = \vec{p}_x\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix} + \vec{p}_y\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} + \vec{p}_z\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} = \begin{bmatrix}\vec{p}_x \\ \vec{p}_y \\ \vec{p}_z\end{bmatrix}
+[\vec{p}]_\varepsilon = p_x\begin{pmatrix}1 \\ 0 \\ 0\end{pmatrix} + p_y\begin{pmatrix}0 \\ 1 \\ 0\end{pmatrix} + p_z\begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix} = \begin{pmatrix}p_x \\ p_y \\ p_z\end{pmatrix}
 $$
 
 [^coordinatevectornotation]: We follow _Lay et al._ <Cite name="LLM21" /> with this notation.
@@ -328,9 +328,9 @@ $\underset{\varepsilon \leftarrow C}{\boldsymbol{M}} = \boldsymbol{A^T}$ is now 
 
 $$
 \begin{pmatrix}
-\vec{u}_x & \vec{v}_x & \vec{w}_x \\
-\vec{u}_y & \vec{v}_y & \vec{w}_y \\
-\vec{u}_z & \vec{v}_z & \vec{w}_z
+u_x & v_x & w_x \\
+u_y & v_y & w_y \\
+u_z & v_z & w_z
 \end{pmatrix}
 $$
 
@@ -559,7 +559,7 @@ $$
 $$
 
 :::note OpenGL z-axis conventions
-Note that we subtract the point of interest $c$ from the camera position $p$ to obtain a vector pointing in the opposite direction of the view vector in world space. This inversion is necessary because the resulting camera space expects the view direction to be aligned with the _negative_ $z$-axis[^openglzaxisfigure].
+Note that we subtract the point of interest $c$ from the camera position $\text{eye}_{xyz}$ to obtain a vector pointing in the opposite direction of the view vector in world space ($\text{eye}_{xyz}-c = - \vec{f}$). This inversion is necessary because the resulting camera space expects the view direction to be aligned with the _negative_ $z$-axis[^openglzaxisfigure].
 :::
 
 [^openglzaxisfigure]: The illustration in <Figure idx={figures.orthonormalization} /> shows a coordinate frame computed for a $+z$-convention.
