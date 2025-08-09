@@ -31,6 +31,14 @@ export const figures = {
 
 };
 
+This article introduces the mathematical derivation of the **lookAt** view matrix commonly used in computer graphics APIs like OpenGL.
+
+As part of the graphics pipeline, the purpose of this matrix is to perform the view transformation, converting global world coordinates into a coordinate system defined by position and direction of an observer.
+
+The derivation is built from from fundamental linear algebra principles, beginning with the interpretation of the matrix-vector product as projections onto an orthonormal basis. This leads to formal treatment of coordinate system changes using change-of-coordinates matrices. By applying these concepts, we construct a final $4 \times 4$ matrix, revealing the precise geometric meaning of both its rotational as well as translational components.
+
+
+## Introduction
 This article introduces the derivation of the _lookAt_ matrix in OpenGL, which is  a $4 \times 4$-transformation matrix of the form
 
 $$
@@ -53,6 +61,8 @@ Next, we introduce the concept of coordinate vectors and explain how change-of-c
 
 Building on these concepts, we conclude by deriving the explicit form of the _lookAt_ matrix to map coordinates between
 $V_\text{world}$ and $V_\text{cam}$.
+
+To complement the theoretical derivation, we provide an interactive application as a hands-on experience, enabling readers to visualize the effects of these transformations in real-time.
 
 
 [^matrixrowsemphased]: We intentionally emphasize the phrasing, as it contrasts with the more common convention of interpreting matrix **columns** as basis vectors.
