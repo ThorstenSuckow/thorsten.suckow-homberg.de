@@ -2,11 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://thorsten.suckow-homberg.de/blog</id>
     <title>thorsten.suckow-homberg.de Blog</title>
-    <updated>2025-05-12T00:00:00.000Z</updated>
+    <updated>2025-08-11T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://thorsten.suckow-homberg.de/blog"/>
     <subtitle>thorsten.suckow-homberg.de Blog</subtitle>
     <icon>https://thorsten.suckow-homberg.de/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Change of Coordinates and Applications to View Matrices]]></title>
+        <id>https://thorsten.suckow-homberg.de/blog/change-of-coordinates-and-applications-to-view-matrices</id>
+        <link href="https://thorsten.suckow-homberg.de/blog/change-of-coordinates-and-applications-to-view-matrices"/>
+        <updated>2025-08-11T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Change of Coordinates]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="change-of-coordinates">Change of Coordinates<a href="https://thorsten.suckow-homberg.de/blog/change-of-coordinates-and-applications-to-view-matrices#change-of-coordinates" class="hash-link" aria-label="Direct link to Change of Coordinates" title="Direct link to Change of Coordinates">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="-and-applications-to-view-matrices">... and Applications to View Matrices<a href="https://thorsten.suckow-homberg.de/blog/change-of-coordinates-and-applications-to-view-matrices#-and-applications-to-view-matrices" class="hash-link" aria-label="Direct link to ... and Applications to View Matrices" title="Direct link to ... and Applications to View Matrices">​</a></h4>
+<p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/change-of-coordinates-and-applications-to-view-matrices">article</a> introduces the mathematical derivation of the lookAt view matrix commonly used in computer graphics APIs like OpenGL.</p>
+<p>As part of the graphics pipeline, the purpose of this matrix is to perform the view transformation, converting global world coordinates into a coordinate system defined by position and direction of an observer.</p>
+<p>The derivation is built from from fundamental linear algebra principles, beginning with the interpretation of the matrix-vector product as projections onto an orthonormal basis. This leads to formal treatment of coordinate system changes using change-of-coordinates matrices. By applying these concepts, we can construct a <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">4 \times 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">4</span></span></span></span> revealing the precise geometric meaning of both its rotational as well as translational components.</p>
+<p>To complement the theoretical derivation, I also provide an <a href="https://thorsten.suckow-homberg.de/threejs/viewcamera/build/index.html" target="_blank" rel="noopener">interactive application</a> as a hands-on experience, enabling readers to visualize the effects of these transformations in real-time.</p>
+<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/change-of-coordinates-and-applications-to-view-matrices">Continue reading...</a></p>]]></content>
+        <category label="computer graphics" term="computer graphics"/>
+        <category label="linear algebra" term="linear algebra"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Rotations as a Special Case of Vector Transformations]]></title>
         <id>https://thorsten.suckow-homberg.de/blog/rotations-as-a-special-case-of-vector-transformations</id>
