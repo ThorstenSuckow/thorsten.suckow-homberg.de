@@ -16,7 +16,8 @@ const sidebars = {
                     items: [
                         'articles/computer-graphics/dot-product',
                         'articles/computer-graphics/vector-rotation',
-                        'articles/computer-graphics/change-of-coordinates'
+                        'articles/computer-graphics/change-of-coordinates',
+                        'articles/computer-graphics/perspective-projection'
                     ],
                     "collapsed": false
                 },
