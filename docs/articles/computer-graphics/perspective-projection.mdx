@@ -1,0 +1,68 @@
+---
+title: "Perspective Projection"
+slug: "perspective-projection"
+description: "Derivation of the lookAt view matrix in OpenGL, from linear algebra fundamentals to geometric interpretation of rotational and translational components."
+tags: [computer graphics, linear algebra, opengl]
+keywords: [lookAt matrix, OpenGL view matrix, coordinate systems, change of basis, camera transformation, graphics pipeline]
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {BackButton} from "../../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+import camera_obscura from "./img/perspective-projection/camera_obscura.png";
+
+export const figures = {
+    camera_obscura: 1
+}
+
+## Introduction
+
+This article describes one of the final steps in the rendering pipeline: Projection and perspective transformations.
+
+While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth—in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
+
+We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures and an interactive application to show how an orthographic projection affects objects we usually perceive in a perspective manner.
+
+We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width, creates a so-called view frustum that contains the objects visible to the observer. All remaining objects in the world are ignored in the subsequent projection.
+
+The article concludes by summarizing the OpenGL rendering pipeline and closing with a brief derivation of the transformation into normalized device coordinates (NDC) of the perspective projection.
+
+
+
+## Projection Planes
+
+In the final steps of the rendering pipeline, a 2D image is produced after the perspective divide to via the perspective divide to normalized device coordinates[^ndc] and the subsequent viewport transform and rasterization.
+
+[^ndc]: A common stumbling block when you’re used to absolute screen pixels: How are you supposed to scale anything when there’s "nothing" to scale against?
+
+Before this happens, a view matrix $\boldsymbol{M}_\text{lookAt}$ is constructed that transforms world coordinates into camera coordinates, defined by a vantage point $\text{eye}_{xyz}$, the observed point  $c$ and a vector  $\vec{up}$  representing the camera’s up direction at camera at $\text{eye}_{xyz}$ looking at $c$.
+
+Transforming world into camera coordinates isn’t particularly helpful on its own. In a scene graph with hundreds of nodes, we still have to decide which ones should actually appear on screen. Even if we know the viewer’s position and look direction, using a single point as render input yields an almost empty image. And approximating a point cloud with only the device’s height and width doesn’t suffice: it may hint at the aspect ratio, but it tells us nothing about scaling, depth range, or clipping.
+
+In general, the camera implicit in computing camera coordinates is a pinhole camera - an idealized model with an infinitesimally small aperture that admits rays and produces an image. We push the abstraction a step further: in computer graphics we don’t capture photons, we trace geometric lines from the scene’s vertices through the pinhole onto a projection plane. If you like the _camera obscura_[^cameraobscura] picture: place a screen behind the pinhole and the projected points meet on that plane, yielding a mirrored, upside-down image (see <Figure idx={figures.camera_obscura} />).
+
+[^cameraobscura]: see https://en.wikipedia.org/wiki/Camera_obscura, retrieved 20.08.2025
+
+<Embed
+    modeAware={false}
+    figref={figures.camera_obscura}
+    title={
+        "First published picture of camera obscura in Gemma Frisius' 1545 book De Radio Astronomica et Geometrica. (Source: <a href='https://commons.wikimedia.org/wiki/File:1545_gemma_frisius_-_camera-obscura-sonnenfinsternis_1545-650x337.jpg'>Wikipedia</a>)"}>
+    <img src={camera_obscura}  />
+</Embed>
+
+However, our projection plane is in front of us. In the following, we’ll determine its size, its distance from our position, and which scene objects fall into the resulting <Wiki name="view frustum" file="computergraphics.viewfrustum" />
+
+
+
+## Orthographic Projection
+
+
+
+## Perspective Projection
+
+-------------
