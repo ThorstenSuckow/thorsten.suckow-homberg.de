@@ -35,7 +35,7 @@ The article concludes by summarizing the OpenGL rendering pipeline and closing w
 
 ## Projection Planes
 
-In the final steps of the rendering pipeline, a 2D image is produced after the perspective divide to via the perspective divide to normalized device coordinates[^ndc] and the subsequent viewport transform and rasterization.
+In the final steps of the rendering pipeline, the _perspective divide_ converts clip-space coordinates to _normalized device coordinates_[^ndc]; the _viewport transform_ maps them to screen space, and _rasterization_ produces the 2D image.
 
 [^ndc]: A common stumbling block when you’re used to absolute screen pixels: How are you supposed to scale anything when there’s "nothing" to scale against?
 
