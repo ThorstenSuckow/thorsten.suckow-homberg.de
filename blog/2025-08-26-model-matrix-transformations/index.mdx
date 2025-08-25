@@ -1,0 +1,28 @@
+---
+title: "Model Matrix Transformations: A Change-of-Coordinates Perspective"
+slug:  "model-matrix-transformations-a-change-of-coordinates-perspective"
+tags: [computer graphics, linear algebra]
+enableComments: true
+---
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+
+## Model Matrix Transformations
+
+#### ... A Change-of-Coordinates Perspective
+
+My [article](/docs/articles/computer-graphics/model-matrix-transformations-a-change-of-coordinates-perspective) examines model matrices through the lens of change-of-coordinates transformations.
+
+Rather than treating model matrices as mere transformation tools, viewing them as change-of-coordinates matrices reveals why certain algebraic properties hold. Specifically, I demonstrate the mathematical equivalence between two common rotation approaches:
+
+- Matrix-first: $ \boldsymbol{R}\  \underset{W \leftarrow M}{P}\  \vec{v}$ (rotate the model matrix, then transform)
+- Transform-first: $ \boldsymbol{R}\  (\underset{W \leftarrow M}{P}\ \vec{v})$ (transform to world space, then rotate)
+
+<!--truncate-->
+
+The article provides proofs for the transitivity of basis changes and demonstrates how scalar projections of basis vectors emerge naturally from matrix composition. These results have immediate applications in understanding transformation matrices in 3D graphics programming.
+
+
+[Continue reading...](/docs/articles/computer-graphics/model-matrix-transformations-a-change-of-coordinates-perspective)

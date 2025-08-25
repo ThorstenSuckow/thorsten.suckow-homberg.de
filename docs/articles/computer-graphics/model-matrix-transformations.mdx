@@ -1,6 +1,6 @@
 ---
-title: "Model Matrix Transformations: A Coordinate System Perspective"
-slug: "Model-Matrix-Transformations-A-Coordinate-System-Perspective"
+title: "Model Matrix Transformations: A Change-of-Coordinates Perspective"
+slug:  "model-matrix-transformations-a-change-of-coordinates-perspective"
 description: "Mathematical foundations for model matrices through change-of-coordinates theory, equivalence proofs."
 tags: [computer graphics, linear algebra]
 keywords: [model matrix, OpenGL model matrix, coordinate systems, change of basis, transformation, graphics pipeline]
@@ -31,7 +31,7 @@ $$
 \underset{W \leftarrow M}{P} = \begin{bmatrix} \vec{m_1} & \vec{m_2} & \vec{m_3} \end{bmatrix} (\text{where $\vec{m_i} \equiv [\vec{m_i}]_\varepsilon $})
 $$
 
-This allows us to express any local vectors in world coordinates:
+This allows us to express any local vector in world coordinates:
 
 $$
 [\vec{u}]_\varepsilon = \underset{W \leftarrow M}{P} [\vec{u}]_M
@@ -58,7 +58,7 @@ $$
 \underset{W \leftarrow M_R}{P} = \boldsymbol{R} \begin{bmatrix}  m_1 & m_2 & m_3 \end{bmatrix} = \boldsymbol{R} \underset{W \leftarrow M}{P}
 $$
 
-For the transformation of a vector $[\vec{u}]_M$ into world coordinates, the following results:
+For the transformation of a vector $[\vec{u}]_M$ into world coordinates, the following holds:
 
 $$
 \begin{alignat*}{3}
@@ -78,7 +78,7 @@ This derivation shows an important point that is commonly seen in various softwa
 
 Due to the associativity of matrix multiplication, both approaches are equivalent and lead to the same result.
 
-## Rotation as a Change of Basis
+## Passive Rotation and the Composition of Transformations
 
 Alternatively, the rotation can also be understood as a change of basis. If $\boldsymbol{R}$ contains the orthonormal basis vectors  $\vec{r_1},\vec{r_2},\vec{r_3}$ as its columns, then the following holds:
 
@@ -86,7 +86,7 @@ $$
 \underset{W \leftarrow R}{P} = \begin{bmatrix} [\vec{r_1}]_\varepsilon & [\vec{r_2}]_\varepsilon & [\vec{r_3}]_\varepsilon  \end{bmatrix} = \boldsymbol{R}
 $$
 
-as well as
+and
 
 $$
 \begin{alignat*}{3}
@@ -136,7 +136,7 @@ $$
 \underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P}
 $$
 
-leads to
+yields
 
 $$
 \underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P} = \underset{R \leftarrow M}{P}
@@ -196,7 +196,7 @@ $$
 $\Box$
 [^wnotation]: We intentionally write $W$ instead of $\varepsilon$ to emphasize the general nature of the composition and the associated transitivity.
 
-## Reconstruction of the Rotated Vector
+## Verification by Reconstruction
 
 By
 
@@ -219,5 +219,7 @@ $$
 &= [\vec{u}]_\varepsilon
 \end{alignat*}
 $$
+
+This verifies our coordinate transformation.
 
 --------------------
