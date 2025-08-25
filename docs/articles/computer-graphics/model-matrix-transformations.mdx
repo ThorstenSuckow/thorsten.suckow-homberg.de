@@ -3,7 +3,7 @@ title: "Model Matrix Transformations: A Coordinate System Perspective"
 slug: "Model-Matrix-Transformations-A-Coordinate-System-Perspective"
 description: "Mathematical foundations for model matrices through change-of-coordinates theory, equivalence proofs."
 tags: [computer graphics, linear algebra]
-keywords: [lookAt matrix, OpenGL view matrix, coordinate systems, change of basis, camera transformation, graphics pipeline]
+keywords: [model matrix, OpenGL model matrix, coordinate systems, change of basis, transformation, graphics pipeline]
 ---
 
 import {GlosRef, BibRef, Cite} from "../../../src/components/References";
@@ -11,51 +11,54 @@ import {BackButton} from "../../../src/components/BackButton.js";
 
 The model matrix is a fundamental transformation in computer graphics that converts local object coordinates to world space. We examine the mathematical foundations of model matrices through the lens of change-of-coordinates transformations, with particular focus on rotational components. We demonstrate that rotation transformations can be conceptualized in two equivalent ways: As direct matrix operations on basis vectors, or as coordinate system changes between orthonormal bases.
 
-## Introdcution
+## Introduction
 
-Eine Model Matrix beschreibt Größe, Lage und Ausrichtung eines Objekts relativ zu Weltkoordinaten <Cite name="VB15" pp="139" />. Sie kann als Koordinatenwechselmatrix (Change-of-Coordinates) aufgefasst werden, die die lokalen Koordinaten $[\vec{u}]_M$ relativ zu einer lokalen Basis $\boldsymbol{M}$ in Weltkoordinaten (Basis $\boldsymbol{W}$) überführt.
+A model matrix describes the size, position, and orientation of an object relative to world coordinates <Cite name="VB15" pp="139" />. It can be understood as a change-of-coordinates matrix that transforms local coordinates $[\vec{u}]_M$ relative to a local basis $\boldsymbol{M}$ into world coordinates with basis $\boldsymbol{W}$.
 
-Im Folgenden erläutern wir den Zusammenhang zwischen der Rotationskomponente der Model Matrix und Koordinatenwechselmatrizen.
-Wir gehen bei $\boldsymbol{M}$ von einer Basis mit gleichem Ursprung wie $\boldsymbol{W}$ aus. Ist dies nicht gegeben, muss zusätzlich eine Translation angewendet werden; diese wird der Einfachheit halber im Folgenden ausgelassen.
+In the following, we will elaborate on the relationship between the rotational component of the model matrix and change-of-coordinates matrices.
+We assume that the basis $\boldsymbol{M}$ shares the same origin as $\boldsymbol{W}$. If this is not the case, an additional translation must be applied, which is omitted below for the sake of simplicity.
 
-Eine Model Matrix kann als Change-of-Coordinates-Matrix aufgefasst werden:
+A model matrix can be understood as a change-of-coordinates matrix:
 
 $$
 \underset{W \leftarrow M}{P} = \begin{bmatrix} [\vec{m_1}]_W & [\vec{m_2}]_W & [\vec{m_3}]_W \end{bmatrix}
 $$
 
-Da wir die Weltbasis als Standardbasis $\varepsilon$ wählen, dürfen wir die Spalten abkürzend als die entsprechenden Weltkoordinaten schreiben:
+Since we choose the world basis as the standard basis $\varepsilon$, we can simply write the columns as the corresponding world coordinates:
+
 
 $$
-\underset{W \leftarrow M}{P} = \begin{bmatrix} \vec{m_1} & \vec{m_2} & \vec{m_3} \end{bmatrix} (\text{mit $\vec{m_i} \equiv [\vec{m_i}]_\varepsilon $})
+\underset{W \leftarrow M}{P} = \begin{bmatrix} \vec{m_1} & \vec{m_2} & \vec{m_3} \end{bmatrix} (\text{where $\vec{m_i} \equiv [\vec{m_i}]_\varepsilon $})
 $$
 
-Damit lassen sic beliebige lokale Vektoren  in Weltkoordinaten ausdrücken:
+This allows us to express any local vectors in world coordinates:
 
 $$
 [\vec{u}]_\varepsilon = \underset{W \leftarrow M}{P} [\vec{u}]_M
 $$
 
-Wenn wir das Modell - undalle damit ausgedrückten Koordinaten - rotieren wollen, verwenden wir eine Rotationsmatrix $\boldsymbol{R}$ (relativ zu Weltkoordinaten).
-Multipliziert mit einem Vektor $\vec{v}$ erhalten wir somit einen rotierten Vektor
+If we want to rotate the model - and thus all coordinates expressed relative to it - we use a rotation matrix $\boldsymbol{R}$ (relative to world coordinates).
+When multiplied by a vector $\vec{v}$, we thus obtain a rotated vector
 
 $$
 \vec{v'} = \boldsymbol{R} \vec{v}
 $$
 
-In gleicher Weise kann die Rotation auf die Basivektoren der Modellmatrix angewendet werden, wodurch die gesamte Modellbasis - und damit das Modell - rotiert:
+Likewise, the rotation can be applied to the basis vectors of the model matrix, thereby rotating the entire model basis - and thus the model:
+
 
 $$
 \underset{W \leftarrow M_R}{P} = \begin{bmatrix} \boldsymbol{R} \vec{m_1} & \boldsymbol{R} \vec{m_2} & \boldsymbol{R} \vec{m_3} \end{bmatrix}
 $$
 
-Aufgrund der Linearität (spaltenweises Wirken) ergibt sich die Kurzschreibweise
+Due to linearity (acting column-wise), this results in the shorthand notation:
+
 
 $$
 \underset{W \leftarrow M_R}{P} = \boldsymbol{R} \begin{bmatrix}  m_1 & m_2 & m_3 \end{bmatrix} = \boldsymbol{R} \underset{W \leftarrow M}{P}
 $$
 
-Für die Transformation eines Vektors $[\vec{u}]_M$ in Weltkoordinaten ergibt sich:
+For the transformation of a vector $[\vec{u}]_M$ into world coordinates, the following results:
 
 $$
 \begin{alignat*}{3}
@@ -69,21 +72,21 @@ $$
 \end{alignat*}
 $$
 
-Diese Rechnung zeigt einen wichtigen Punkt, der in den verschiedenen Software-Bibliotheken zur Matrixmultiplikation (bspw. [glm](https://github.com/g-truc/glm)) regelmäßig auftaucht:
- - es wird zuerst die Modellmatrix rotiert und dann der Vektor überführt
- - zuerst wird der Vektor überführt und anschließend rotiert.
+This derivation shows an important point that is commonly seen in various software libraries for matrix multiplication (e.g. [glm](https://github.com/g-truc/glm)):
+ - the model matrix is rotated first, and then the vector is transformed
+ - the vector is transformed first, and then rotated.
 
-Beides ist aufgrund der Assoziativität der Matrixmultiplikation äquivalent und führt zum selben Ergebnis.
+Due to the associativity of matrix multiplication, both approaches are equivalent and lead to the same result.
 
-## Rotation als Basiswechsel
+## Rotation as a Change of Basis
 
-Alternativ kann die Rotation auch als Basiswechsel aufgefasst werden. Enthält $\boldsymbol{R}$ als Spalten die orthonormalen Basisvektoren $\vec{r_1},\vec{r_2},\vec{r_3}$, dann gilt
+Alternatively, the rotation can also be understood as a change of basis. If $\boldsymbol{R}$ contains the orthonormal basis vectors  $\vec{r_1},\vec{r_2},\vec{r_3}$ as its columns, then the following holds:
 
 $$
 \underset{W \leftarrow R}{P} = \begin{bmatrix} [\vec{r_1}]_\varepsilon & [\vec{r_2}]_\varepsilon & [\vec{r_3}]_\varepsilon  \end{bmatrix} = \boldsymbol{R}
 $$
 
-sowie
+as well as
 
 $$
 \begin{alignat*}{3}
@@ -98,20 +101,20 @@ $$
 $$
 
 
-Damit gilt
+Thus, it holds that
 
 
 $$
 [\vec{u}]_R = \underset{R \leftarrow W}{P} [\vec{u}]_\varepsilon
 $$
 
-Da
+Since
 
 $$
 (R^{-1})^{-1} = (\underset{R \leftarrow W}{P})^{-1} = \underset{W \leftarrow R}{P} =  \begin{bmatrix} [\vec{r_1}]_\varepsilon & [\vec{r_2}]_\varepsilon & [\vec{r_3}]_\varepsilon \end{bmatrix} = \boldsymbol{R}
 $$
 
-folgt
+it follows that
 
 $$
 \begin{alignat*}{3}
@@ -123,25 +126,25 @@ $$
 \end{alignat*}
 $$
 
-## Transitivität des Basiswechsels
+## Transitivity of Basis Change
 
-Es kann gezeigt werden, dass die Matrixkomposition[^komposition]
+It can be shown that the matrix composition[^komposition]
 
-[^komposition]: In diesem Fall die Komposition von Koordinatenwechseln.
+[^komposition]: In this case, the composition of coordinate changes.
 
 $$
 \underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P}
 $$
 
-zu
+leads to
 
 $$
 \underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P} = \underset{R \leftarrow M}{P}
 $$
 
-führt.
 
-Sei[^wnotation]
+
+Let[^wnotation]
 
 $$
 \begin{alignat*}{3}
@@ -151,16 +154,16 @@ $$
 \end{alignat*}
 $$
 
-Für orthonormales $\boldsymbol{R}$ gilt zugleich[^rtranspose]
+For orthonormal $\boldsymbol{R}$ we also have[^rtranspose]
 
-[^rtranspose]: Die Koordinatenwechselmatrix $\underset{R \leftarrow W}{P}$ hat als Zeilen die transponierten Basisvektoren von $R$ (ausgedrückt in $W$-Koordinaten).
+[^rtranspose]: The change-of-coordinates matrix $\underset{R \leftarrow W}{P}$ has - as its rows - the transposed basis vectors of $R$ (expressed in $W$-coordinates).
 
 
 $$
 \underset{R \leftarrow W}{P} = \begin{bmatrix}  [\vec{r_1}]^T_\varepsilon \\ [\vec{r_2}]^T_\varepsilon \\ \vdots \\ [\vec{r_n}]^T_\varepsilon \end{bmatrix}
 $$
 
-sodass
+so that
 
 $$
 \begin{alignat*}{3}
@@ -180,7 +183,7 @@ $$
 \end{alignat*}
 $$
 
-woraus folgt, dass die Einträge dieser Matrix die skalaren Projektionen der Basisvektoren von $\boldsymbol{M}$ auf die Basisvektoren von $R$ sind - in Matrixform also
+from which it follows that the entries of this matrix are the scalar projections of the basis vectors of $\boldsymbol{M}$ onto the basis vectors of $R$ - in matrix form:
 
 $$
 \begin{alignat*}{3}
@@ -191,11 +194,11 @@ $$
 $$
 
 $\Box$
-[^wnotation]: Wir schreiben hier $W$ statt $\varepsilon$, um den allgemeinen Charakter der Komposition und der damit verbundenen Transitivität zu verdeutlichen.
+[^wnotation]: We intentionally write $W$ instead of $\varepsilon$ to emphasize the general nature of the composition and the associated transitivity.
 
-## Rekonstruktion des rotierten Vektors
+## Reconstruction of the Rotated Vector
 
-Durch
+By
 
 $$
 \begin{alignat*}{3}
@@ -203,9 +206,9 @@ $$
 \end{alignat*}
 $$
 
-erhalten wir den Koordinatenvektor $[\vec{u}]_R$, also die Koordinaten von $\vec{u}$ relativ zu der Basis $\boldsymbol{R}$ - d.h. die skalaren Projektionen auf die orthonormalen Basisvetoren $\vec{r_1}, \vec{r_2}, \vec{r_3}$ von $\boldsymbol{R}$.
+we obtain the coordinate vector $[\vec{u}]_R$, i.e., the coordinates of $\vec{u}$ relative to the basis $\boldsymbol{R}$ - the scalar projections onto the orthonormal basis vectors $\vec{r_1}, \vec{r_2}, \vec{r_3}$ of $\boldsymbol{R}$.
 
-Multiplizieren wir diesen koordinatenvektor mit der Basismatrix (lineare Kombination der Spalten), ergibt sich die Rekonstruktion in Weltkoordinaten:
+Multiplying this coordinate vector by the basis matrix (a linear combination of its columns) yields the reconstruction in world coordinates:
 
 $$
 \begin{alignat*}{3}
