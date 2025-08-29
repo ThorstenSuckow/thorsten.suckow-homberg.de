@@ -19,7 +19,7 @@ const socialLinks = [
         ),
     },{
         name: "BlueSky",
-        url: "https://bsky.app/profile/thorstensuckow.bsky.social",
+        url: "https://bsky.app/profile/thorsten.suckow-homberg.de",
         svg: (
             <svg  viewBox="0 0 511.999 452.266">
                 <title>BlueSky</title>
