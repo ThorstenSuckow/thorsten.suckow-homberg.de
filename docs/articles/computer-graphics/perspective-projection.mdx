@@ -14,9 +14,21 @@ import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
 import camera_obscura from "./img/perspective-projection/camera_obscura.png";
+import railroad_tracks from "./img/perspective-projection/railroad_tracks.png";
+
+import ortho_proj_cube_iso from "./img/perspective-projection/ortho_proj_cube_iso_small.gif";
+import ortho_proj_cube_ortho_front from "./img/perspective-projection/ortho_proj_cube_ortho_front_small.gif";
+import ortho_proj_cube_persp_front from "./img/perspective-projection/ortho_proj_cube_persp_front_small.gif";
+
+
+import orthogonal_projection_code from '!!raw-loader!./plots/perspective-projection/orthogonal-projection.py?raw';
 
 export const figures = {
-    camera_obscura: 1
+    camera_obscura: 1,
+    ortho_proj_cube_iso : 2,
+    ortho_proj_cube_ortho_front : 3,
+    ortho_proj_cube_persp_front : 4,
+    railroad_tracks: 5
 }
 
 ## Introduction
@@ -60,7 +72,218 @@ However, our projection plane is in front of us. In the following, we’ll deter
 
 
 ## Orthographic Projection
+When we apply orthographic projection, points are projected onto an arbitratry plane.
 
+Visually, it appears as if we are reducing the vector space by one dimension. A key property is that parallel lines remain parallel, regardless of the camera's orientation, and the perspective component is eliminated.
+
+To explain this intuitive sense of depth and the apparent contradiction with parallel lines, the example of railroad tracks is often used: While we can assume that railroad tracks are parallel not only at the observer's standpoint but also a kilometer in the distance, the effect of depth makes it seem as though the tracks converge at a single point, known as the _vanishing point_ (see Figure <Figure idx={figures.railroad_tracks} />).
+
+<Embed
+    modeAware={true}
+    figref={figures.railroad_tracks}
+    title={
+        "The left side shows an orthographic (top-down) view of a spectator and railroad tracks. In this objective view, parallel lines remain parallel. The right side shows a perspective view from the spectator's vantage point. Here, the parallel tracks recede into the distance, appearing to converge at a vanishing point and demonstrating how our eyes perceive depth. (Source: own)"}>
+    <img src={railroad_tracks}  />
+</Embed>
+
+For eliminating the z-component of any given $\vec{v} \in \mathbb{R}^3$, we can use the following matrix:
+
+$$
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1\\
+ \end{pmatrix}
+$$
+
+From this matrix form it immediately folows that any homogenous vector $\vec{v} = (x, y, z, 1)^T$ multiplied with this matrix yields a vector $\vec{v'}$ with its z-component set to $0$:
+
+
+$$
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1\\
+ \end{pmatrix} \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix} = \begin{pmatrix} x \\ y \\ 0 \\ 1 \end{pmatrix}
+$$
+
+To project onto an arbitryry z-plane, we use the z-component of the 4 column in the matrix amd construct a trasnformation matrix
+
+$$
+\boldsymbol{M_o} =
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & z_p\\
+0 & 0 & 0 & 1\\
+ \end{pmatrix}
+$$
+
+This gives us
+
+
+
+$$
+\boldsymbol{M_o} \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix} =
+  \begin{pmatrix}
+  (1, 0, 0, 0)^T \cdot (x, y, z, 1)^T \\
+  (0, 1, 0, 0)^T \cdot (x, y, z, 1)^T \\
+  (0, 0, 0, z_p)^T \cdot (x, y, z, 1)^T \\
+  (0, 0, 0, 1)^T \cdot (x, y, z, 1)^T
+  \end{pmatrix} =
+  \begin{pmatrix} x \\ y \\ z_p \\ 1 \end{pmatrix}
+$$
+
+We can easily derive that any vector computed by this must be perpendicular to the plane given by the vectors $(x, 0, 0)^T$ and $(0, y, 0)^T$, since their crossproduc yields
+
+$$
+\begin{pmatrix} x \\ 0 \\ 0 \end{pmatrix} \times \begin{pmatrix} 0 \\ y \\ 0 \end{pmatrix} =
+\begin{pmatrix} 0 \\ 0 \\ xy \end{pmatrix}
+$$
+
+which is a vector $\vec{xy}$ with  $|\vec{xy}| = sin(\theta) |\vec{x}| |\vec{y}|$.
+
+It is easily shown that this vector is parallel to $(0, 0, z_p)^T$ since
+
+$$
+\begin{pmatrix} 0 \\ 0 \\ xy \end{pmatrix} \times \begin{pmatrix} 0 \\ 0 \\ z_p \end{pmatrix} =
+\begin{pmatrix} 0 \\ 0 \\ 0 \end{pmatrix}
+$$
+
+
+The effect of projecting the points of a (wireframed) cube is shown in the animations <Figure idx={figures.ortho_proj_cube_iso} />, <Figure idx={figures.ortho_proj_cube_persp_front} />,  <Figure idx={figures.ortho_proj_cube_ortho_front} />.
+
+
+
+<Embed
+    modeAware={true}
+
+    figref={figures.ortho_proj_cube_iso}
+    title={
+        "An isometric view showing a cube being orthographically projected onto the highlighted plane at z=-4."}>
+  <img style={{maxWidth : 600}} src={ortho_proj_cube_iso}   />
+</Embed>
+
+<Embed
+    modeAware={true}
+    width={600}
+    figref={figures.ortho_proj_cube_iso}
+    title={
+        "Here, the same scene is rendered with a direct orthographic view, eliminating all perspective. This illustrates the final 2D image as it would appear on a screen if the camera was directly in front of the cube."}>
+    <img style={{maxWidth : 600}} src={ortho_proj_cube_ortho_front}  />
+</Embed>
+
+<Embed
+    modeAware={true}
+    figref={figures.ortho_proj_cube_iso}
+    title={
+        "Instead of rendering the entire scene orthographically, we first project it onto z=-4 and then visualize this 2D result with a perspective camera on the negative z-axis, an optical axis orthogonal to the plane."}>
+    <img style={{maxWidth : 600}} src={ortho_proj_cube_persp_front}  />
+</Embed>
+
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {orthogonal_projection_code}
+</CodeBlock>
+
+</details>
+
+### Affine Transformation
+
+The statement that two parallel vectors $\vec{p}, \vec{q}$ remain parallel after an orthographic projection is applied is a fundamental property of an **affine transformation** <Cite name="VB15" pp="118" />.
+
+An affine transformation $\boldsymbol{T}$ is a transformation of the form
+
+$$
+\vec{v'} = \boldsymbol{T}(\vec{v}) = \boldsymbol{L}(\vec{v}) + \vec{x}
+$$
+
+where $\boldsymbol{L}$ is a linear transformation. Hence, an affine transformaton is simply a linear transformation to which a translation is applied.
+
+Intuitively, we can seethat this statement holds. Given two parallel vectors:
+
+$$
+\vec{p} = \begin{pmatrix}x \\ y \\ z \end{pmatrix}, \ \vec{q} = \begin{pmatrix}x' \\ y' \\ z' \end{pmatrix}
+$$
+
+Their cross product is the zero vector
+
+$$
+\vec{p} \times \vec{q} = (x, y, z)^T \times (x', y', z')^T = (yz' - zy', zx' - xz', xy' - x'y) = \vec{0}
+$$
+
+which yields three initial conditions:
+
+$$
+yz' - zy' = 0 \Leftrightarrow yz' = zy' \\
+zx' - xz' = 0 \Leftrightarrow zx' = xz' \\
+xy' - x'y = 0 \Leftrightarrow xy' = x'y \\
+$$
+
+Obviously, removing the z component from $\vec{p}$ and $\vec{q}$ preserves the parallelism for the $xy$-plane, as the third component of the cross product is still zero:
+
+$$
+\begin{pmatrix} x \\ y \\ 0 \end{pmatrix} \times \begin{pmatrix} x' \\ y' \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\  xy' - x'y = 0 \end{pmatrix} = \vec{0}
+$$
+
+Our intutiotn tells us that since these new vectors are parallel, translating both by an equal amount in the same direction will not change their parallelism. Therefor, adding the same z-component $(0, 0, z_p)^T$ to both vectors yields to parallel vectors
+
+$$
+\vec{p'} = \begin{pmatrix}x \\ y\\ z_p \end{pmatrix}, \vec{q'} = \begin{pmatrix}x' \\ y'\\ z_p \end{pmatrix}
+$$
+
+#### Formal Proof
+This intuition can be formalized using the definiton of an affine transformation. We can write our orthographic projection Matrix $\boldsymbol{M_o}$ as an affine transformation $\boldsymbol{T}$ consisting of the sum of a linear combination
+
+
+$$
+\boldsymbol{L}(\vec{v}) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 &0 \end{pmatrix} \vec{v} = \begin{pmatrix} v_0 \\ v_1 \\ 0 \end{pmatrix}
+$$
+
+and a translation vector $(0, 0, \vec{z_p})^T$
+
+$$
+\boldsymbol{T}(\vec{v}) = \boldsymbol{L}(\vec{v}) + \vec{z_p}
+$$
+
+Let's define two lines $p_l$, $q_l$ with direction vectors $\vec{p} = P_2 - P_1$ and $\vec{q} = Q_2 - Q1$, where $P_i, Q_i$ are points on the respective lines.
+
+Since the lines are parallel, we can write $\vec{p}$ as the scaled version of $\vec{q}$: $\vec{p} = k \vec{q}$, with $k \in \mathbb{R}$.
+
+Applying the affine transformation to the points $P_1$ and $P_2$ yields a new vector with direction $\vec{p}''$:
+
+$$
+\begin{alignat*}{3}
+\vec{p'} &= T (P_2) - T(P_1) \\
+&= (\boldsymbol{L}(P_2) + \vec{z_p}) - (\boldsymbol{L}(P_1) + \vec{z_p})\\
+&= \boldsymbol{L}(P_2) - \boldsymbol{L}(P_1)
+\end{alignat*}
+$$
+
+Since $\boldsymbol{L}$ is a linear transformation, we can simplify this to
+
+$$
+\vec{p'} = \boldsymbol{L}(P_2) - \boldsymbol{L}(P_1) = \boldsymbol{L}(P_2 - P_1) = \boldsymbol{L}(\vec{p})
+$$
+
+This shows that the new direction vector is the result of applying the linear part of the transformation to the original direction vector.
+Applying the same computation to $q_l$ gives us
+
+$$
+\vec{q'} = \boldsymbol{L}(Q_2) - \boldsymbol{L}(Q_1) = \boldsymbol{L}(Q_2 - Q_1) = \boldsymbol{L}(\vec{q})
+$$
+
+Since we know $\vec{p} = k \vec{q}$, we can therefore conclude:
+
+$$
+\vec{p'} = \boldsymbol{L}(\vec{p}) = \boldsymbol{L}(k \vec{q}) = k \boldsymbol{L}(\vec{q}) = k \vec{q'}
+$$
+
+Hence, $\vec{p}'$ is the $\vec{q}'$ scaled by $k$, which shows that they are parallel. This proves that the affine transformation $\boldsymbol{T}$, and therefore our orthographic projection matrix $\boldsymbol{M_o}$, preserves parallelism. $\Box$
 
 
 ## Perspective Projection
