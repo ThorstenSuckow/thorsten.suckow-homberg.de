@@ -17,20 +17,35 @@ import localspace from "./img/model-matrix-rotation/localspace.png";
 import modeltimeslocal from "./img/model-matrix-rotation/modeltimeslocal.png";
 import rotatetimesmodel from "./img/model-matrix-rotation/rotatetimesmodel.png";
 
+import localrotate_model from "./img/model-matrix-rotation/localrotate_model.png";
+import localrotate_modelrotate from "./img/model-matrix-rotation/localrotate_modelrotate.png";
+import localrotate_modeltoworld from "./img/model-matrix-rotation/localrotate_modeltoworld.png";
+
 import rotationaroundorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundorigin.py?raw';
+import rotationaroundobjectsorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundobjectsorigin.py?raw';
 
 export const figures = {
     rotation_point : 1,
     localspace : 2,
     modeltimeslocal: 3,
-    rotatetimesmodel: 4
+    rotatetimesmodel: 4,
+    localrotate_model: 5,
+    localrotate_modelrotate: 6,
+    localrotate_modeltoworld: 7
 };
 
+We provide a mathematical foundation for rotation as linear transformations applied to model matrices in 3D computer graphics. We focus on the distinction between rotating an object around an external point and rotating it around its own local origin, and derive the necessary transformations from two conceptually different but mathematically equivalent perspectives: Active transformations, which move the object in a fixed coordinate system, and passive transformations, which redefine the coordinate system around a fixed object. Additionally, we demonstrate the impact of matrix multiplication order, distinguish between world-space and local-space rotations, and conclude with performance considerations and examples from external libraries and game frameworks.
 
 
-When applying rotations to a model matrix, we can distinguish between two fundamental scenarios: R
- - Rotating an object around a different, external point[^rodriguesarticle]
- - Rotating an object around its own center
+## Introduction
+The effect of a rotation matrix changes significantly depending on the order of matrix multiplication, as this determines the pivot point for the operation. This article addresses two essential scenarios:
+
+ - Rotating an object around an external point[^rodriguesarticle].
+ - Rotating an object around its own local origin.
+
+We will derive the mathematical solutions for both cases. The first scenario will be explored from two distinct but equivalent perspectives: as an active transformation that directly manipulates an object's vertices, and as a passive change of coordinates that reorients the coordinate system itself.
+
+By examining the underlying matrix compositions, we will connect this theory to practical examples in common graphics libraries.
 
 [^rodriguesarticle]: see [Rotations as a Special Case of Vector Transformations](/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations)
 
@@ -133,12 +148,12 @@ This unfolds in the following sequence:
 
  1. Model to World: First, the local vector $\vec{a}$ is multiplied by the model matrix $\boldsymbol{M}$ This transforms it into world space, resulting in the vector $\vec{a}_W$
  2. Translate to Origin: The world-space vector $\vec{a}_W$ is then multiplied by $\begin{bmatrix}\boldsymbol{I}_3 & -\vec{b}\\ 0 & 1\end{bmatrix}$. This actively moves the vector by $-\vec{b}$. The result is the vector's position relative to the pivot point B, $\vec{a}_B$.
- 3. Rotate: This translated vector is then multiplied by the rotation matrix $\boldsymbol{R}(\theta)$ liefert $\vec{a}_R$, rotating it around the world origin (for $\vec{a}_B$, this is now $B$).
+ 3. Rotate: This translated vector is then multiplied by the rotation matrix $\boldsymbol{R}(\theta)$ yields $\vec{a}_R$, rotating it around the world origin (for $\vec{a}_B$, this is now $B$).
  4. Translate Back: Finally, the rotated vector is multiplied by $\begin{bmatrix}\boldsymbol{I}_3 & \vec{b}\\ 0 & 1\end{bmatrix}$. This moves the vector back by $\vec{b}$, placing it in its final rotated position in the world.
 
 Since matrix multiplication is associative, we can pre-multiply all the transformation matrices together to create a single, final matrix $\boldsymbol{M'}$. Applying this single matrix $\boldsymbol{M'}$ to the local vector achieves the same result in one operation.
 
-:::info Performance Considerations
+:::tip Performance Considerations
 When transforming a large number $n$ of vertices, pre-multiplying the transformation matrices into a single matrix is more efficient than applying each matrix to every vector step-by-step. The proof lies in comparing the total number of arithmetic operations.
 
 Let's assume our transformation consists of the four given $4 \times 4$ matrices, and we have a number of $n$ homogenous $4 \times 1$ vertices $\vec{v_i}$. Then, the following holds in our case:
@@ -280,7 +295,77 @@ title={""}>
 
 </details>
 
+## Rotating an object around its own center
+
+If we want to use the object's own center as the pivot point for a rotation, it is sufficient to multiply the model matrix $\boldsymbol{M}$ by the rotation matrix $\boldsymbol{R}$. In this case, a separate translation to a different origin is not necessary.
+
+The effect becomes clear when we apply the operation to a local-space vector, $\vec{v}_\text{local}$.
+
+
+$$
+\vec{v}_\text{world} = \boldsymbol{M}\ (\boldsymbol{R}\ \vec{v}_\text{local})
+$$
+
+Interpreting this from right to left as is conventional, the vector $\vec{v}_\text{local}$ is first rotated within the object's local coordinate system. Then, the model matrix is multiplied by this newly rotated local vector, transforming it into world coordinates as $\vec{v}_\text{world}$.
+
+Since matrix multiplication is associative, we can pre-calculate a new model matrix, $\boldsymbol{M}'$, from the multiplication:
+
+$$
+\boldsymbol{M'}\ = \boldsymbol{M}\ \boldsymbol{R}
+$$
+
+This new matrix can then be applied to all vertices of the object to achieve the same result more efficiently.
+
+Figure <Figure idx={figures.localspace} /> shows the object from the previous example in its local coordinates. Figure <Figure idx={figures.localrotate_modelrotate} /> then shows the rotation being applied first. Finally, Figure <Figure idx={figures.localrotate_modeltoworld} /> shows the multiplication by the model matrix, which transforms the already-rotated object into world coordinates.
+
+<Tabs>
+<TabItem value="Local Space...">
+ <Embed
+        modeAware={true}
+        figref={figures.localrotate_model}
+        title={""}>
+        <img src={localrotate_model}  />
+        </Embed>
+
+  </TabItem>
+  <TabItem value="... and Rotation around its Origin...">
+<Embed
+modeAware={true}
+figref={figures.localrotate_modelrotate}
+title={""}>
+<img src={localrotate_modelrotate}  />
+</Embed>
+  </TabItem>
+    <TabItem value="... to World Space">
+  <Embed
+  modeAware={true}
+  figref={figures.localrotate_modeltoworld}
+  title={""}>
+  <img src={localrotate_modeltoworld}  />
+  </Embed>
+    </TabItem>
+</Tabs>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotationaroundobjectsorigin_code}
+</CodeBlock>
+
+</details>
+
+
+:::info rotate() in glm and Unity
+The glm library provides the method `GLM_FUNC_DECL mat<4, 4, T, Q> glm::rotate(mat< 4, 4, T, Q > const & m, T angle, vec< 3, T, Q > const & axis)`[^glmrotate].
+ This function internally calculates a rotation matrix $R$ from the given angle and axis and returns the post-multiplied result $\boldsymbol{M} \boldsymbol{R}$. This is the standard method for applying a rotation in the local space of the input/mdoel matrix $\boldsymbol{M}$.
+
+The Unity engine's `Rotate(Vector3 eulers, Space relativeTo = Space.Self)`[^unityrotate] method makes this choice explicit with an optional parameter. The default, `Space.Self`, performs a local rotation (equivalent to $\boldsymbol{M} \boldsymbol{R}$), while `Space.World` performs a world-space rotation (equivalent to $\boldsymbol{R}\ \boldsymbol{M}$).
+:::
+
+[^glmrotate]: https://glm.g-truc.net/0.9.9/api/a00247.html#gaee9e865eaa9776370996da2940873fd4, retrieved 02.09.2025
+[^unityrotate]: https://docs.unity3d.com/ScriptReference/Transform.Rotate.html, retrieved 02.09.2025
 
 --------------------
 
 _Updates_:
+02.09.2025 initial publication
