@@ -4,18 +4,32 @@
         <title>thorsten.suckow-homberg.de Blog</title>
         <link>https://thorsten.suckow-homberg.de/blog</link>
         <description>thorsten.suckow-homberg.de Blog</description>
-        <lastBuildDate>Tue, 26 Aug 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 02 Sep 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[Model Matrix Transformations: A Change-of-Coordinates Perspective]]></title>
+            <title><![CDATA[Model Matrix: Rotation - World vs. Local Origin]]></title>
+            <link>https://thorsten.suckow-homberg.de/blog/model-matrix-rotation-world-vs-lLocal-origin</link>
+            <guid>https://thorsten.suckow-homberg.de/blog/model-matrix-rotation-world-vs-lLocal-origin</guid>
+            <pubDate>Tue, 02 Sep 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Model Matrix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="model-matrix">Model Matrix<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-rotation-world-vs-lLocal-origin#model-matrix" class="hash-link" aria-label="Direct link to Model Matrix" title="Direct link to Model Matrix">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="rotation-world-vs-local-origin">Rotation: World vs. Local Origin<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-rotation-world-vs-lLocal-origin#rotation-world-vs-local-origin" class="hash-link" aria-label="Direct link to Rotation: World vs. Local Origin" title="Direct link to Rotation: World vs. Local Origin">​</a></h4>
+<p>In my latest <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/model-matrix-rotation-world-vs-local-origin">article</a>, I introduce the mathematical foundation for rotation as linear transformations applied to model matrices in 3D computer graphics. The article focuses on the distinction between rotating an object around an external point and rotating it around its own local origin, and derives the necessary transformations from two conceptually different but mathematically equivalent perspectives: Active transformations and passive transformations.</p>
+<p>The article also demonstrates the impact of matrix multiplication order, distinguish between world-space and local-space rotations, and conclude with performance considerations and examples from external libraries and game frameworks.</p>
+<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/model-matrix-rotation-world-vs-local-origin">Continue reading...</a></p>]]></content:encoded>
+            <category>computer graphics</category>
+            <category>linear algebra</category>
+        </item>
+        <item>
+            <title><![CDATA[Model Matrix: Transformations - A Change-of-Coordinates Perspective]]></title>
             <link>https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective</link>
             <guid>https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective</guid>
             <pubDate>Tue, 26 Aug 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[Model Matrix Transformations]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="model-matrix-transformations">Model Matrix Transformations<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective#model-matrix-transformations" class="hash-link" aria-label="Direct link to Model Matrix Transformations" title="Direct link to Model Matrix Transformations">​</a></h2>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="-a-change-of-coordinates-perspective">... A Change-of-Coordinates Perspective<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective#-a-change-of-coordinates-perspective" class="hash-link" aria-label="Direct link to ... A Change-of-Coordinates Perspective" title="Direct link to ... A Change-of-Coordinates Perspective">​</a></h4>
+            <description><![CDATA[Model Matrix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="model-matrix">Model Matrix<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective#model-matrix" class="hash-link" aria-label="Direct link to Model Matrix" title="Direct link to Model Matrix">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="transformations-a-change-of-coordinates-perspective">Transformations: A Change-of-Coordinates Perspective<a href="https://thorsten.suckow-homberg.de/blog/model-matrix-transformations-a-change-of-coordinates-perspective#transformations-a-change-of-coordinates-perspective" class="hash-link" aria-label="Direct link to Transformations: A Change-of-Coordinates Perspective" title="Direct link to Transformations: A Change-of-Coordinates Perspective">​</a></h4>
 <p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/model-matrix-transformations-a-change-of-coordinates-perspective">article</a> examines model matrices through the lens of change-of-coordinates transformations.</p>
 <p>Rather than treating model matrices as mere transformation tools, viewing them as change-of-coordinates matrices reveals why certain algebraic properties hold. Specifically, I demonstrate the mathematical equivalence between two common rotation approaches:</p>
 <ul>
@@ -1091,26 +1105,6 @@ better place to apply the fix, instead of doing this:</p>
             <category>tooling</category>
             <category>javascript</category>
             <category>conjoon</category>
-        </item>
-        <item>
-            <title><![CDATA[Releasing conjoon 1.0.0-beta.0]]></title>
-            <link>https://thorsten.suckow-homberg.de/blog/2022/06/07/releasing-conjoon-1-0-0-beta</link>
-            <guid>https://thorsten.suckow-homberg.de/blog/2022/06/07/releasing-conjoon-1-0-0-beta</guid>
-            <pubDate>Tue, 07 Jun 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[Releasing conjoon 1.0.0-beta.0]]></description>
-            <content:encoded><![CDATA[<p><img decoding="async" loading="lazy" src="https://cdn-images-1.medium.com/max/2736/0*HWdUhNVaz3OI-bRw.png" alt="" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="releasing-conjoon-100-beta0">Releasing conjoon 1.0.0-beta.0<a href="https://thorsten.suckow-homberg.de/blog/2022/06/07/releasing-conjoon-1-0-0-beta#releasing-conjoon-100-beta0" class="hash-link" aria-label="Direct link to Releasing conjoon 1.0.0-beta.0" title="Direct link to Releasing conjoon 1.0.0-beta.0">​</a></h2>
-<p>🎉 5 years after the (almost) <a href="https://github.com/conjoon/conjoon/commit/ca075e548a644011e0d9fbaa3321bcff7aa8f998" target="_blank" rel="noopener noreferrer">first commit</a> to conjoon’s <a href="https://github.com/conjoon/conjoon" target="_blank" rel="noopener noreferrer">new home</a>, I’m happy to announce the immediate availability of the first public pre-release of <a href="https://conjoon.org/" target="_blank" rel="noopener noreferrer">**conjoon</a>**, an open source email client built with JavaScript, PHP and great tools from the open source community.</p>
-<p>To install the latest release on your local machine, type</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">$ npx create-conjoon@latest</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>then follow the instructions on screen.</p>
-<p>Don’t miss out on the <a href="https://www.conjoon.org/docs" target="_blank" rel="noopener noreferrer">documentation</a> for more information about available install and build types.</p>
-<p>While I’m confident that conjoon can take its first steps in a production environment, expect a stable first release to be available in the coming days. Until then, a few additions to the documentation and the <a href="https://www.conjoon.org/docs/category/guides" target="_blank" rel="noopener noreferrer">guides</a> will be made.</p>
-<p>Happy coding! 🎈</p>]]></content:encoded>
-            <category>release</category>
-            <category>conjoon</category>
-            <category>open source</category>
-            <category>email</category>
         </item>
     </channel>
 </rss>
