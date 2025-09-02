@@ -102,4 +102,11 @@ ax.text(0 + 1, 0 + 0.4, r'$\theta$', color=pc, fontsize=14, alpha=0.2)
 ax.text(r_x + 0.2, r_y - 0.2, 'B ', color=rc, fontsize=12)
 ax.text(r_x + 1, r_y + 0.4, r'$\theta$', color=rc, fontsize=14)
 
+# axes through B
+L = 4
+ax.plot([r_x - L, r_x + L], [r_y, r_y], linestyle='-', linewidth=1.0, color='black', alpha=0.7)
+ax.plot([r_x, r_x], [r_y - L, r_y + L], linestyle='-', linewidth=1.0, color='black', alpha=0.7)
+ax.text(r_x + L + 0.05, r_y - 0.1, r'$x_B$', color='0.35', fontsize=11)
+ax.text(r_x - 0.35, r_y + L + 0.05, r'$y_B$', color='0.35', fontsize=11)
+
 plt.show()
