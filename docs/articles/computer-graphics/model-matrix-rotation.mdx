@@ -13,6 +13,8 @@ import {Embed} from "../../../src/components/Embed";
 import CodeBlock from '@theme/CodeBlock';
 
 import rotation_point from "./img/model-matrix-rotation/rotation_point.png";
+import rotation_point_code from '!!raw-loader!./plots/model-matrix-rotation/rotation_point.py?raw';
+
 import localspace from "./img/model-matrix-rotation/localspace.png";
 import modeltimeslocal from "./img/model-matrix-rotation/modeltimeslocal.png";
 import rotatetimesmodel from "./img/model-matrix-rotation/rotatetimesmodel.png";
@@ -21,17 +23,22 @@ import localrotate_model from "./img/model-matrix-rotation/localrotate_model.png
 import localrotate_modelrotate from "./img/model-matrix-rotation/localrotate_modelrotate.png";
 import localrotate_modeltoworld from "./img/model-matrix-rotation/localrotate_modeltoworld.png";
 
-import rotationaroundorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundorigin.py?raw';
-import rotationaroundobjectsorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundobjectsorigin.py?raw';
+import rotatemodel from "./img/model-matrix-rotation/rotatemodel.gif";
+import rotatemodel_code from '!!raw-loader!./plots/model-matrix-rotation/rotatemodel.py?raw';
+import modelrotate from "./img/model-matrix-rotation/modelrotate.gif";
+import modelrotate_code from '!!raw-loader!./plots/model-matrix-rotation/modelrotate.py?raw';
+
 
 export const figures = {
     rotation_point : 1,
-    localspace : 2,
-    modeltimeslocal: 3,
-    rotatetimesmodel: 4,
-    localrotate_model: 5,
-    localrotate_modelrotate: 6,
-    localrotate_modeltoworld: 7
+    rotatemodel: 2,
+    localspace : 3,
+    modeltimeslocal: 4,
+    rotatetimesmodel: 5,
+    modelrotate: 6,
+    localrotate_model: 7,
+    localrotate_modelrotate: 8,
+    localrotate_modeltoworld: 9
 };
 
 We introduce the mathematical foundation for rotation as linear transformations applied to model matrices in 3D computer graphics and focus on the distinction between rotating an object around an external point and rotating it around its own local origin. We derive the necessary transformations from two conceptually different but mathematically equivalent perspectives: Active transformations, which move the object in a fixed coordinate system, and passive transformations, which redefine the coordinate system around a fixed object. Additionally, we demonstrate the impact of matrix multiplication order, distinguish between world-space and local-space rotations, and conclude with performance considerations and examples from external libraries and game frameworks.
@@ -84,9 +91,17 @@ This is illustrated in <Figure idx={figures.rotation_point} />.
 <Embed
 modeAware={true}
 figref={figures.rotation_point}
-title={"Point A is first translated so that the pivot point B is at the origin, then rotated around the origin, and finally translated back to its new position, A'."}>
+title={"Point A is first translated so that the pivot point B is at the origin, then rotated around the origin, and finally translated back to its new position, A'. Axes centered at B indicate the coordinate frame of the pivot."}>
 <img src={rotation_point}  />
 </Embed>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotation_point_code}
+</CodeBlock>
+
+</details>
 
 ### Active Transformation
 
@@ -251,7 +266,7 @@ $$
 
 ### Active Transformation Example
 
-The following example illustrates the effect of the model matrix and the rotation matrix.
+The following example illustrates the effect of the model matrix and the rotation matrix (see <Figure idx={figures.rotatemodel} />).
 
 The first tab <Figure idx={figures.localspace} /> shows $4$ vertices in a local coordinate system.<br />
 In the next tab <Figure idx={figures.modeltimeslocal} />, they are transformed into world coordinates via the matrix-vector multiplication $\boldsymbol{M} \vec{v}_i$.<br />
@@ -260,6 +275,15 @@ The third tab <Figure idx={figures.rotatetimesmodel} /> then generates the resul
 Translation is omitted in this example, as the transformation is relative to the origin.
 
 <Tabs>
+<TabItem value="Animation R*M">
+ <Embed
+        modeAware={true}
+        figref={figures.rotatemodel}
+        title={"The animation illustrates pre-multiplying the model matrix by a rotation."}>
+        <img src={rotatemodel}  />
+        </Embed>
+
+  </TabItem>
 <TabItem value="Local Space...">
  <Embed
         modeAware={true}
@@ -290,7 +314,7 @@ title={""}>
 <summary>Plot-Code (Python)</summary>
 
 <CodeBlock language="python">
-  {rotationaroundorigin_code}
+  {rotatemodel_code}
 </CodeBlock>
 
 </details>
@@ -316,9 +340,19 @@ $$
 
 This new matrix can then be applied to all vertices of the object to achieve the same result more efficiently.
 
-Figure <Figure idx={figures.localspace} /> shows the object from the previous example in its local coordinates. Figure <Figure idx={figures.localrotate_modelrotate} /> then shows the rotation being applied first. Finally, Figure <Figure idx={figures.localrotate_modeltoworld} /> shows the multiplication by the model matrix, which transforms the already-rotated object into world coordinates.
+The animation in <Figure idx={figures.modelrotate} /> shows the transformation, which is broken down in the subsequent figures.
+Figure <Figure idx={figures.localrotate_model} /> shows the object from the previous example in its local coordinates. Figure <Figure idx={figures.localrotate_modelrotate} /> then shows the rotation being applied first. Finally, Figure <Figure idx={figures.localrotate_modeltoworld} /> shows the multiplication by the model matrix, which transforms the already-rotated object into world coordinates.
 
 <Tabs>
+<TabItem value="Animation M*R">
+ <Embed
+        modeAware={true}
+        figref={figures.modelrotate}
+        title={"The animation shows that right-multiplying the model matrix by a rotation applies the rotation in local space (M*R)."}>
+        <img src={modelrotate}  />
+        </Embed>
+
+  </TabItem>
 <TabItem value="Local Space...">
  <Embed
         modeAware={true}
@@ -349,10 +383,11 @@ title={""}>
 <summary>Plot-Code (Python)</summary>
 
 <CodeBlock language="python">
-  {rotationaroundobjectsorigin_code}
+  {modelrotate_code}
 </CodeBlock>
 
 </details>
+
 
 
 :::info rotate() in glm and Unity
