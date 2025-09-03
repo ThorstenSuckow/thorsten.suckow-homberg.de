@@ -17,7 +17,8 @@ const sidebars = {
                         'articles/computer-graphics/dot-product',
                         'articles/computer-graphics/vector-rotation',
                         'articles/computer-graphics/change-of-coordinates',
-                        'articles/computer-graphics/perspective-projection'
+                        'articles/computer-graphics/model-matrix-transformations',
+                        'articles/computer-graphics/model-matrix-rotation'
                     ],
                     "collapsed": false
                 },

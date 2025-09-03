@@ -1,0 +1,371 @@
+---
+title: "Model Matrix: Rotation - World vs. Local Origin"
+slug:  "model-matrix-rotation-world-vs-local-origin"
+description: "Mathematical foundations for model matrices through change-of-coordinates theory, equivalence proofs."
+tags: [computer graphics, linear algebra]
+keywords: [model matrix, OpenGL model matrix, coordinate systems, change of basis, transformation, graphics pipeline]
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {Figure, BibRef, Cite, GlosRef} from "../../../src/components/References";
+import {Embed} from "../../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+import rotation_point from "./img/model-matrix-rotation/rotation_point.png";
+import localspace from "./img/model-matrix-rotation/localspace.png";
+import modeltimeslocal from "./img/model-matrix-rotation/modeltimeslocal.png";
+import rotatetimesmodel from "./img/model-matrix-rotation/rotatetimesmodel.png";
+
+import localrotate_model from "./img/model-matrix-rotation/localrotate_model.png";
+import localrotate_modelrotate from "./img/model-matrix-rotation/localrotate_modelrotate.png";
+import localrotate_modeltoworld from "./img/model-matrix-rotation/localrotate_modeltoworld.png";
+
+import rotationaroundorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundorigin.py?raw';
+import rotationaroundobjectsorigin_code from '!!raw-loader!./plots/model-matrix-rotation/rotationaroundobjectsorigin.py?raw';
+
+export const figures = {
+    rotation_point : 1,
+    localspace : 2,
+    modeltimeslocal: 3,
+    rotatetimesmodel: 4,
+    localrotate_model: 5,
+    localrotate_modelrotate: 6,
+    localrotate_modeltoworld: 7
+};
+
+We introduce the mathematical foundation for rotation as linear transformations applied to model matrices in 3D computer graphics and focus on the distinction between rotating an object around an external point and rotating it around its own local origin. We derive the necessary transformations from two conceptually different but mathematically equivalent perspectives: Active transformations, which move the object in a fixed coordinate system, and passive transformations, which redefine the coordinate system around a fixed object. Additionally, we demonstrate the impact of matrix multiplication order, distinguish between world-space and local-space rotations, and conclude with performance considerations and examples from external libraries and game frameworks.
+
+
+## Introduction
+The effect of a rotation matrix changes significantly depending on the order of matrix multiplication, as this determines the pivot point for the operation. This article addresses two essential scenarios:
+
+ - Rotating an object around an external point[^rodriguesarticle].
+ - Rotating an object around its own local origin.
+
+We will derive the mathematical solutions for both cases. The first scenario will be explored from two distinct but equivalent perspectives: as an active transformation that directly manipulates an object's vertices, and as a passive change of coordinates that reorients the coordinate system itself.
+
+By examining the underlying matrix compositions, we will connect this theory to practical examples in common graphics libraries.
+
+[^rodriguesarticle]: see [Rotations as a Special Case of Vector Transformations](/docs/articles/computer-graphics/rotations-as-a-special-case-of-vector-transformations)
+
+## Rotation of A around B
+The rotation of an object $A$ around another object $B$ can be seen as the rotation of $A$ around an origin defined by $B$. For this to work, $B$ must be treated as the origin.
+
+In the following, let $A, B \in \mathbb{R}^2$ be points represented by the position vectors $\vec{a}$ and $\vec{b}$, respectively.
+
+Obviously, the position vectors from the world origin (0, 0) to these points are:
+
+$$
+\begin{alignat*}{3}
+\vec{b} &= B - 0 \\
+\vec{a} &= A - 0
+\end{alignat*}
+$$
+
+We denote the vector pointing from $B$ to $A$ as $\vec{a}_B$. This vector is calculated as:
+
+$$
+\vec{a}_B = A - B
+$$
+
+By subtracting $B$'s position from $A$'s, we obtain a direction vector $\vec{a}_B$ which is a direction vector from $B$ - the new origin -  to $A$.
+Applying operations to this new vector is equivalent to performing them in a coordinate system where $B$ is the origin.
+
+For this to work, three steps are necessary:
+
+  1. Translation to Origin: The pivot point $B$ is moved to the world origin. This can also be understood as a passive transformation, where the world coordinate system is shifted to align its origin with $B$.
+  2. Rotation: The object $A$ is then rotated relative to $B$, which is now the (temporary) origin of the world coordinate system.
+  3. Translate Back: The initial translation is reversed to move the rotated object to its new position within the original coordinate system.
+
+
+This is illustrated in <Figure idx={figures.rotation_point} />.
+
+<Embed
+modeAware={true}
+figref={figures.rotation_point}
+title={"Point A is first translated so that the pivot point B is at the origin, then rotated around the origin, and finally translated back to its new position, A'."}>
+<img src={rotation_point}  />
+</Embed>
+
+### Active Transformation
+
+Let $\vec{a}$ be the position vector of the point $A$ we want to rotate, and let $\vec{b}$ be the position vector of the pivot point $B$.
+
+
+To rotate $A$ around $B$, we first perform an affine transformation that translates $\vec{a}$ into a new coordinate system where B is the origin. This is achieved by subtracting $\vec{b}$ from $\vec{a}$:
+
+$$
+\vec{a}_B = \vec{a} - \vec{b}
+$$
+
+The resulting vector, $\vec{a}_{B}$, now points from $B$ to $A$. By performing this transformation, we ensure that subsequent operations, such as applying a rotation matrix $\boldsymbol{R}(\theta)$, will rotate $A$ relative to $B$ - as if $B$ were the origin.
+
+The calculation sequence, understanding the affine transformations as matrices, is as follows:
+
+$$
+      \boldsymbol{T}_{\vec{b}}\ \boldsymbol{R}(\theta)\ \boldsymbol{T}_{-\vec{b}}\ \vec{a}
+$$
+
+As usual, we interpret this from right to left:
+
+$$
+ \text{translate the rotated result back}  \leftarrow \text{rotate the result} \leftarrow \text{Translate }\vec{a}\text{ to the origin}
+$$
+
+A model matrix, $\boldsymbol{M}$, typically consists of a composition of scaling, rotation, and translation operations. We can express this as a single $4 \times 4$ affine transformation matrix:
+
+
+$$
+\boldsymbol{M} =
+\begin{bmatrix}
+\boldsymbol{L} & \vec{t} \\
+0 & 1
+\end{bmatrix}
+$$
+
+Here, $\boldsymbol{L}$ is a 3x3 matrix representing the combined linear transformations (scaling and rotation), and $\vec{t}$ is the translation vector.
+
+To transform the object represented by this model matrix so that its pivot point $B$ is at the origin, we pre-multiply its model matrix by a translation matrix $\boldsymbol{T}_{-\vec{b}}$:
+
+$$
+\boldsymbol{T}_{-\vec{b}} = \begin{bmatrix}\boldsymbol{I}_3 & -\vec{b}\\ 0 & 1\end{bmatrix}
+$$
+
+By applying the rotation and corresponding back-translation, we get the final composite matrix, M
+
+$$
+\boldsymbol{M'} = \begin{bmatrix}\boldsymbol{I}_3 & \vec{b}\\ 0 & 1\end{bmatrix} \begin{bmatrix}\boldsymbol{R}_3 & 0\\ 0 & 1\end{bmatrix}  \begin{bmatrix}\boldsymbol{I}_3 & -\vec{b}\\ 0 & 1\end{bmatrix} \begin{bmatrix}\boldsymbol{L} & \vec{t} \\0 & 1\end{bmatrix}
+$$
+
+When a local-space vector $\vec{a}$ is multiplied by this matrix, the transformations are applied from right to left:
+
+$$
+\vec{a'} = \boldsymbol{M'} \vec{a} = \begin{bmatrix}\boldsymbol{I}_3 & \vec{b}\\ 0 & 1\end{bmatrix} \begin{bmatrix}\boldsymbol{R}_3 & 0\\ 0 & 1\end{bmatrix}  \begin{bmatrix}\boldsymbol{I}_3 & -\vec{b}\\ 0 & 1\end{bmatrix} \begin{bmatrix}\boldsymbol{L} & \vec{t} \\0 & 1\end{bmatrix} \ \vec{a}
+$$
+
+This unfolds in the following sequence:
+
+ 1. Model to World: First, the local vector $\vec{a}$ is multiplied by the model matrix $\boldsymbol{M}$ This transforms it into world space, resulting in the vector $\vec{a}_W$
+ 2. Translate to Origin: The world-space vector $\vec{a}_W$ is then multiplied by $\begin{bmatrix}\boldsymbol{I}_3 & -\vec{b}\\ 0 & 1\end{bmatrix}$. This actively moves the vector by $-\vec{b}$. The result is the vector's position relative to the pivot point B, $\vec{a}_B$.
+ 3. Rotate: This translated vector is then multiplied by the rotation matrix $\boldsymbol{R}(\theta)$ yields $\vec{a}_R$, rotating it around the world origin (for $\vec{a}_B$, this is now $B$).
+ 4. Translate Back: Finally, the rotated vector is multiplied by $\begin{bmatrix}\boldsymbol{I}_3 & \vec{b}\\ 0 & 1\end{bmatrix}$. This moves the vector back by $\vec{b}$, placing it in its final rotated position in the world.
+
+Since matrix multiplication is associative, we can pre-multiply all the transformation matrices together to create a single, final matrix $\boldsymbol{M'}$. Applying this single matrix $\boldsymbol{M'}$ to the local vector achieves the same result in one operation.
+
+:::tip Performance Considerations
+When transforming a large number $n$ of vertices, pre-multiplying the transformation matrices into a single matrix is more efficient than applying each matrix to every vector step-by-step. The proof lies in comparing the total number of arithmetic operations.
+
+Let's assume our transformation consists of the four given $4 \times 4$ matrices, and we have a number of $n$ homogenous $4 \times 1$ vertices $\vec{v_i}$. Then, the following holds in our case:
+
+ - A dot product of two vectors $\vec{v}_i$, $\vec{v}_j$  requires $4$ multiplications and $3$ additions: $7$ total operations.
+ - A single matrix-vector multiplication requires $4$ dot products, totaling $16$ multiplications and $12$ additions: $28$ total operations.
+ - A matrix-matrix multiplication requires $16$ dot products, totaling $64$ multiplications and $48$ additions: $112$ total operations.
+
+Comparing a step-by-step transformation vs. pre-multiplying the matrices yields the following:
+
+##### Step-by-Step Transformation
+For each vertex, we perform four matrix-vector multiplications. This results in a cost per vertex of  $4(16+12) = 64+48 = 112$ total operations.
+Hence, for $n$ vertices, this method requires $112n$ operations.
+
+##### Pre-Multiplying the Matrix
+This involves a one-time setup cost due to calculating $\boldsymbol{M}'$. To obtain $\boldsymbol{M}'$ we need to perform $3 ( 4(16+12)) = 3(64+48) = 336$ total operations.
+Each vertex has a cost of $16+12 = 28$ operations, hence, for $n$ vertices, this method requires $336 + (28n)$ operations.
+
+Solving the inequality for $n$ gives us
+
+$$
+336 + (28n) < 112n \Leftrightarrow   4 < n
+$$
+
+Therefore, pre-multiplying the matrices is more computationally efficient than the step-by-step transformation for more than $4$ vertices[^linearcomplexity] $\Box$
+
+[^linearcomplexity]: Since $O$ ignores constant factors, we can conclude that both methods show linear complexity, $O(n)$.
+:::
+
+### Passive Transformation
+
+Conceptually, the transformation can also be expressed using change-of-coordinates matrices[^modelcoordinatesarticle]. In a passive transformation, the vector $\vec{a}$ remains fixed, and its coordinates are expressed in different coordinate systems. To incorporate translations, we represent the vector in homogeneous coordinates, $(a_x, a_y, a_z, 1)^T$, and extend the $3 \times 3$ change-of-basis matrices to $4 \times 4$ affine matrices. We will assume all coordinate systems we consider have orthonormal bases.
+
+First, we create a change-of-basis matrix to express the local vector $[\vec{a}]_A$ in world coordinates:
+
+ $$
+ [\vec{a}]_W  =\underset{W \leftarrow A}{\boldsymbol{P}}\ [\vec{a}]_A
+ $$
+
+Next, we express the world vector $[\vec{a}]_W$ in the coordinate system whose origin is at the pivot point, $B$:
+
+ $$
+  [\vec{a}]_B = \underset{B \leftarrow W}{\boldsymbol{P}}\ [\vec{a}]_W
+ $$
+
+ The rotation is applied as another change of basis. We define a new coordinate system, $R$, whose basis vectors are the columns of the active rotation matrix $\boldsymbol{R}$. This means $\boldsymbol{R} = \underset{W \leftarrow R}{\boldsymbol{P}}$.
+
+Consequently, the inverse matrix, $\boldsymbol{R}^{-1} = \underset{R \leftarrow W}{\boldsymbol{P}}$, is the change-of-coordinates matrix that transforms a vector from world space $W$ into our new rotated space $R$.
+
+Using the transitivity of basis changes, we can construct the required matrix $\underset{R \leftarrow B}{\boldsymbol{P}}$ as a composition of known transformations:
+
+ $$
+ \underset{R \leftarrow W}{\boldsymbol{P}}\   \underset{W \leftarrow B}{\boldsymbol{P}} = \underset{R \leftarrow B}{\boldsymbol{P}}
+ $$
+
+We can now apply this combined matrix to find the coordinates of our vector in the final rotated system:
+
+$$
+   [\vec{a}]_R = \underset{R \leftarrow B}{\boldsymbol{P}} \ [\vec{a}]_B
+$$
+
+By substituting the steps, we can abbreviate the entire transformation chain from the local space $A$ to the final rotated space $R$:
+
+$$
+\begin{alignat*}{3}
+ [\vec{a}]_R &= \underset{R \leftarrow B}{\boldsymbol{P}}\  \underset{B \leftarrow W}{\boldsymbol{P}}\ \underset{W \leftarrow A}{\boldsymbol{P}}\ [\vec{a}]_A\
+\Leftrightarrow\ [\vec{a}]_R &= \underset{R \leftarrow A}{\boldsymbol{P}}  [\vec{a}]_A
+\end{alignat*}
+$$
+
+whereas $\underset{R \leftarrow A}{\boldsymbol{P}}$ must consider all necessary translations.
+
+The coordinates of the final vector in the world basis are obtained by applying the change-of-basis matrix using the $R$-basis expressed in world coordinates[^passivebacktranslation].
+
+
+$$
+[\vec{a}]_W =  \underset{W \leftarrow R}{\boldsymbol{P}} [\vec{a}]_R
+$$
+
+Here, transitivity of operations applies again, so the whole transformation can be expressed by one change-of-basis matrix
+
+$$
+\begin{alignat*}{3}
+ [\vec{a}]_W
+ &= \underset{W \leftarrow R}{\boldsymbol{P}}\ \underset{R \leftarrow B}{\boldsymbol{P}}\  \underset{B \leftarrow W}{\boldsymbol{P}}\ \underset{W \leftarrow A}{\boldsymbol{P}}\ [\vec{a}]_A\
+\Leftrightarrow\
+ [\vec{a}]_W &= \underset{W \leftarrow A}{\boldsymbol{P'}}  [\vec{a}]_A
+\end{alignat*}
+$$
+
+
+[^modelcoordinatesarticle]: see [Passive Rotation and the Composition of Transformations](/docs/articles/computer-graphics/model-matrix-transformations-a-change-of-coordinates-perspective#passive-rotation-and-the-composition-of-transformations)
+
+[^passivebacktranslation]: Read as an active transform, this is identical to translating the vector back after rotation was applied.
+
+### Active Transformation Example
+
+The following example illustrates the effect of the model matrix and the rotation matrix.
+
+The first tab <Figure idx={figures.localspace} /> shows $4$ vertices in a local coordinate system.<br />
+In the next tab <Figure idx={figures.modeltimeslocal} />, they are transformed into world coordinates via the matrix-vector multiplication $\boldsymbol{M} \vec{v}_i$.<br />
+The third tab <Figure idx={figures.rotatetimesmodel} /> then generates the result of $\boldsymbol{R} \boldsymbol{M} \vec{v}_i$ eight times, with each instance rotated by an additional 45 degrees around the origin (i.e., $45\degree$, $90\degree$, $135\degree$, $180\degree$, etc.).
+
+Translation is omitted in this example, as the transformation is relative to the origin.
+
+<Tabs>
+<TabItem value="Local Space...">
+ <Embed
+        modeAware={true}
+        figref={figures.localspace}
+        title={""}>
+        <img src={localspace}  />
+        </Embed>
+
+  </TabItem>
+  <TabItem value="... to World Space...">
+<Embed
+modeAware={true}
+figref={figures.modeltimeslocal}
+title={""}>
+<img src={modeltimeslocal}  />
+</Embed>
+  </TabItem>
+    <TabItem value="... and Rotation around Origin">
+  <Embed
+  modeAware={true}
+  figref={figures.rotatetimesmodel}
+  title={""}>
+  <img src={rotatetimesmodel}  />
+  </Embed>
+    </TabItem>
+</Tabs>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotationaroundorigin_code}
+</CodeBlock>
+
+</details>
+
+## Rotating an object around its own center
+
+If we want to use the object's own center as the pivot point for a rotation, it is sufficient to multiply the model matrix $\boldsymbol{M}$ by the rotation matrix $\boldsymbol{R}$. In this case, a separate translation to a different origin is not necessary.
+
+The effect becomes clear when we apply the operation to a local-space vector, $\vec{v}_\text{local}$.
+
+
+$$
+\vec{v}_\text{world} = \boldsymbol{M}\ (\boldsymbol{R}\ \vec{v}_\text{local})
+$$
+
+Interpreting this from right to left as is conventional, the vector $\vec{v}_\text{local}$ is first rotated within the object's local coordinate system. Then, the model matrix is multiplied by this newly rotated local vector, transforming it into world coordinates as $\vec{v}_\text{world}$.
+
+Since matrix multiplication is associative, we can pre-calculate a new model matrix, $\boldsymbol{M}'$, from the multiplication:
+
+$$
+\boldsymbol{M'}\ = \boldsymbol{M}\ \boldsymbol{R}
+$$
+
+This new matrix can then be applied to all vertices of the object to achieve the same result more efficiently.
+
+Figure <Figure idx={figures.localspace} /> shows the object from the previous example in its local coordinates. Figure <Figure idx={figures.localrotate_modelrotate} /> then shows the rotation being applied first. Finally, Figure <Figure idx={figures.localrotate_modeltoworld} /> shows the multiplication by the model matrix, which transforms the already-rotated object into world coordinates.
+
+<Tabs>
+<TabItem value="Local Space...">
+ <Embed
+        modeAware={true}
+        figref={figures.localrotate_model}
+        title={""}>
+        <img src={localrotate_model}  />
+        </Embed>
+
+  </TabItem>
+  <TabItem value="... and Rotation around its Origin...">
+<Embed
+modeAware={true}
+figref={figures.localrotate_modelrotate}
+title={""}>
+<img src={localrotate_modelrotate}  />
+</Embed>
+  </TabItem>
+    <TabItem value="... to World Space">
+  <Embed
+  modeAware={true}
+  figref={figures.localrotate_modeltoworld}
+  title={""}>
+  <img src={localrotate_modeltoworld}  />
+  </Embed>
+    </TabItem>
+</Tabs>
+<details>
+<summary>Plot-Code (Python)</summary>
+
+<CodeBlock language="python">
+  {rotationaroundobjectsorigin_code}
+</CodeBlock>
+
+</details>
+
+
+:::info rotate() in glm and Unity
+The glm library provides the method `GLM_FUNC_DECL mat<4, 4, T, Q> glm::rotate(mat< 4, 4, T, Q > const & m, T angle, vec< 3, T, Q > const & axis)`[^glmrotate].
+ This function internally calculates a rotation matrix $R$ from the given angle and axis and returns the post-multiplied result $\boldsymbol{M} \boldsymbol{R}$. This is the standard method for applying a rotation in the local space of the input/mdoel matrix $\boldsymbol{M}$.
+
+The Unity engine's `Rotate(Vector3 eulers, Space relativeTo = Space.Self)`[^unityrotate] method makes this choice explicit with an optional parameter. The default, `Space.Self`, performs a local rotation (equivalent to $\boldsymbol{M} \boldsymbol{R}$), while `Space.World` performs a world-space rotation (equivalent to $\boldsymbol{R}\ \boldsymbol{M}$).
+:::
+
+[^glmrotate]: https://glm.g-truc.net/0.9.9/api/a00247.html#gaee9e865eaa9776370996da2940873fd4, retrieved 02.09.2025
+[^unityrotate]: https://docs.unity3d.com/ScriptReference/Transform.Rotate.html, retrieved 02.09.2025
+
+--------------------
+
+_Updates_:
+02.09.2025 initial publication

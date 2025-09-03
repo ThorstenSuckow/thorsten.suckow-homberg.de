@@ -1,0 +1,228 @@
+---
+title: "Model Matrix: Transformations - A Change-of-Coordinates Perspective"
+slug:  "model-matrix-transformations-a-change-of-coordinates-perspective"
+description: "Mathematical foundations for model matrices through change-of-coordinates theory, equivalence proofs."
+tags: [computer graphics, linear algebra]
+keywords: [model matrix, OpenGL model matrix, coordinate systems, change of basis, transformation, graphics pipeline]
+---
+
+import {GlosRef, BibRef, Cite} from "../../../src/components/References";
+import {BackButton} from "../../../src/components/BackButton.js";
+
+The model matrix is a fundamental transformation in computer graphics that converts local object coordinates to world space. We examine the mathematical foundations of model matrices through the lens of change-of-coordinates transformations, with particular focus on rotational components. We demonstrate that rotation transformations can be conceptualized in two equivalent ways: As direct matrix operations on basis vectors, or as coordinate system changes between orthonormal bases.
+
+## Introduction
+
+A model matrix describes the size, position, and orientation of an object relative to world coordinates <Cite name="VB15" pp="139" />. It can be understood as a change-of-coordinates matrix that transforms local coordinates $[\vec{u}]_M$ relative to a local basis $\boldsymbol{M}$ into world coordinates with basis $\boldsymbol{W}$.
+
+In the following, we will elaborate on the relationship between the rotational component of the model matrix and change-of-coordinates matrices.
+We assume that the basis $\boldsymbol{M}$ shares the same origin as $\boldsymbol{W}$. If this is not the case, an additional translation must be applied, which is omitted below for the sake of simplicity.
+
+A model matrix can be understood as a change-of-coordinates matrix:
+
+$$
+\underset{W \leftarrow M}{P} = \begin{bmatrix} [\vec{m_1}]_W & [\vec{m_2}]_W & [\vec{m_3}]_W \end{bmatrix}
+$$
+
+Since we choose the world basis as the standard basis $\varepsilon$, we can simply write the columns as the corresponding world coordinates:
+
+
+$$
+\underset{W \leftarrow M}{P} = \begin{bmatrix} \vec{m_1} & \vec{m_2} & \vec{m_3} \end{bmatrix} (\text{where $\vec{m_i} \equiv [\vec{m_i}]_\varepsilon $})
+$$
+
+This allows us to express any local vector in world coordinates:
+
+$$
+[\vec{u}]_\varepsilon = \underset{W \leftarrow M}{P} [\vec{u}]_M
+$$
+
+If we want to rotate the model - and thus all coordinates expressed relative to it - we use a rotation matrix $\boldsymbol{R}$ (relative to world coordinates).
+When multiplied by a vector $\vec{v}$, we thus obtain a rotated vector
+
+$$
+\vec{v'} = \boldsymbol{R} \vec{v}
+$$
+
+Likewise, the rotation can be applied to the basis vectors of the model matrix, thereby rotating the entire model basis - and thus the model:
+
+
+$$
+\underset{W \leftarrow M_R}{P} = \begin{bmatrix} \boldsymbol{R} \vec{m_1} & \boldsymbol{R} \vec{m_2} & \boldsymbol{R} \vec{m_3} \end{bmatrix}
+$$
+
+Due to linearity (acting column-wise), this results in the shorthand notation:
+
+
+$$
+\underset{W \leftarrow M_R}{P} = \boldsymbol{R} \begin{bmatrix}  m_1 & m_2 & m_3 \end{bmatrix} = \boldsymbol{R} \underset{W \leftarrow M}{P}
+$$
+
+For the transformation of a vector $[\vec{u}]_M$ into world coordinates, the following holds:
+
+$$
+\begin{alignat*}{3}
+[u']_\varepsilon &= \underset{W \leftarrow M_R}{P} [\vec{u}]_M \\
+\\
+&= (R \ \underset{W \leftarrow M}{P}) [\vec{u}]_M \\
+\\
+&= R \ (\underset{W \leftarrow M}{P} [\vec{u}]_M) \\
+\\
+&= R \ [\vec{u}]_\varepsilon
+\end{alignat*}
+$$
+
+This derivation shows an important point that is commonly seen in various software libraries for matrix multiplication (e.g. [glm](https://github.com/g-truc/glm)):
+ - the model matrix is rotated first, and then the vector is transformed
+ - the vector is transformed first, and then rotated.
+
+Due to the associativity of matrix multiplication, both approaches are equivalent and lead to the same result.
+
+## Passive Rotation and the Composition of Transformations
+
+Alternatively, the rotation can also be understood as a change of basis. If $\boldsymbol{R}$ contains the orthonormal basis vectors  $\vec{r_1},\vec{r_2},\vec{r_3}$ as its columns, then the following holds:
+
+$$
+\underset{W \leftarrow R}{P} = \begin{bmatrix} [\vec{r_1}]_\varepsilon & [\vec{r_2}]_\varepsilon & [\vec{r_3}]_\varepsilon  \end{bmatrix} = \boldsymbol{R}
+$$
+
+and
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{R}^{-1} &= (\underset{W \leftarrow R}{P})^{-1} \\
+\\
+&= \underset{R \leftarrow W}{P}\\
+\\
+&= \begin{bmatrix} [\vec{e_1}]_R & [\vec{e_2}]_R & [\vec{e_3}]_R  \end{bmatrix}\\
+\\
+&= \begin{bmatrix}  [\vec{r_1}]^T_\varepsilon \\ [\vec{r_2}]^T_\varepsilon \\ [\vec{r_3}]^T_\varepsilon \end{bmatrix}
+\end{alignat*}
+$$
+
+
+Thus, it holds that
+
+
+$$
+[\vec{u}]_R = \underset{R \leftarrow W}{P} [\vec{u}]_\varepsilon
+$$
+
+Since
+
+$$
+(R^{-1})^{-1} = (\underset{R \leftarrow W}{P})^{-1} = \underset{W \leftarrow R}{P} =  \begin{bmatrix} [\vec{r_1}]_\varepsilon & [\vec{r_2}]_\varepsilon & [\vec{r_3}]_\varepsilon \end{bmatrix} = \boldsymbol{R}
+$$
+
+it follows that
+
+$$
+\begin{alignat*}{3}
+\underset{R \leftarrow W}{P} \ (\underset{W \leftarrow M}{P} \ [\vec{u}]_M) &= \underset{R \leftarrow W}{P} \ [\vec{u}]_\varepsilon \\
+\\
+&= R^{-1}\ [\vec{u}]_\varepsilon \\
+\\
+&= [\vec{u}]_R
+\end{alignat*}
+$$
+
+## Transitivity of Basis Change
+
+It can be shown that the matrix composition[^komposition]
+
+[^komposition]: In this case, the composition of coordinate changes.
+
+$$
+\underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P}
+$$
+
+yields
+
+$$
+\underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P} = \underset{R \leftarrow M}{P}
+$$
+
+
+
+Let[^wnotation]
+
+$$
+\begin{alignat*}{3}
+\underset{W \leftarrow M}{P} &= \begin{bmatrix} [\vec{m_1}]_W & [\vec{m_2}]_W & \ldots & [\vec{m_n}]_W \end{bmatrix},\\
+\\
+\underset{R \leftarrow W}{P} &= \begin{bmatrix} [\vec{w_1}]_R & [\vec{w_2}]_R & \ldots & [\vec{w_n}]_R \end{bmatrix}
+\end{alignat*}
+$$
+
+For orthonormal $\boldsymbol{R}$ we also have[^rtranspose]
+
+[^rtranspose]: The change-of-coordinates matrix $\underset{R \leftarrow W}{P}$ has - as its rows - the transposed basis vectors of $R$ (expressed in $W$-coordinates).
+
+
+$$
+\underset{R \leftarrow W}{P} = \begin{bmatrix}  [\vec{r_1}]^T_\varepsilon \\ [\vec{r_2}]^T_\varepsilon \\ \vdots \\ [\vec{r_n}]^T_\varepsilon \end{bmatrix}
+$$
+
+so that
+
+$$
+\begin{alignat*}{3}
+\underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P} &=  \begin{bmatrix} [\vec{w_1}]_R & [\vec{w_2}]_R & \ldots & [\vec{w_n}]_R \end{bmatrix}\ \cdot\ \begin{bmatrix} [\vec{m_1}]_W & [\vec{m_2}]_W & \ldots & [\vec{m_n}]_W \end{bmatrix} \\
+\\
+&=   \begin{bmatrix} [\vec{r_1}]^T_W  \\ [\vec{r_2}]^T_W \\ \vdots \\  [\vec{r_n}]^T_W \end{bmatrix} \begin{bmatrix} [\vec{m_1}]_W & [\vec{m_2}]_W & \ldots & [\vec{m_n}]_W \end{bmatrix}\\
+\\
+&= \begin{bmatrix}
+[\vec{r_1}]_W \cdot [\vec{m_1}]_W &  [\vec{r_1}]_W \cdot [\vec{m_2}]_W & \ldots & [\vec{r_1}]_W \cdot [\vec{m_n}]_W\\
+\\
+[\vec{r_2}]_W \cdot [\vec{m_1}]_W &  [\vec{r_2}]_W \cdot [\vec{m_2}]_W & \ldots & [\vec{r_2}]_W \cdot [\vec{m_n}]_W\\
+\\
+\vdots & \vdots & \vdots & \vdots \\
+\\
+[\vec{r_n}]_W \cdot [\vec{m_1}]_W &  [\vec{r_n}]_W \cdot [\vec{m_2}]_W & \ldots & [\vec{r_n}]_W \cdot [\vec{m_n}]_W
+\end{bmatrix}
+\end{alignat*}
+$$
+
+from which it follows that the entries of this matrix are the scalar projections of the basis vectors of $\boldsymbol{M}$ onto the basis vectors of $R$ - in matrix form:
+
+$$
+\begin{alignat*}{3}
+\underset{R \leftarrow W}{P} \ \underset{W \leftarrow M}{P} &=  \begin{bmatrix} [\vec{m_1}]_R & [\vec{m_2}]_R & \ldots & [\vec{m_n}]_R \end{bmatrix}\\
+\\
+&= \underset{R \leftarrow M}{P}
+\end{alignat*}
+$$
+
+$\Box$
+[^wnotation]: We intentionally write $W$ instead of $\varepsilon$ to emphasize the general nature of the composition and the associated transitivity.
+
+## Verification by Reconstruction
+
+By
+
+$$
+\begin{alignat*}{3}
+\underset{R \leftarrow M}{P} \ [\vec{u}]_M = [\vec{u}]_R
+\end{alignat*}
+$$
+
+we obtain the coordinate vector $[\vec{u}]_R$, i.e., the coordinates of $\vec{u}$ relative to the basis $\boldsymbol{R}$ - the scalar projections onto the orthonormal basis vectors $\vec{r_1}, \vec{r_2}, \vec{r_3}$ of $\boldsymbol{R}$.
+
+Multiplying this coordinate vector by the basis matrix (a linear combination of its columns) yields the reconstruction in world coordinates:
+
+$$
+\begin{alignat*}{3}
+\boldsymbol{R} \ ([\vec{u}]_R) &=  \boldsymbol{R} \ (R^{-1}\ [\vec{u}]_\varepsilon) \\
+\\
+&=  (\boldsymbol{R} \ \boldsymbol{R}^{-1}) \ [\vec{u}]_\varepsilon \\
+\\
+&= [\vec{u}]_\varepsilon
+\end{alignat*}
+$$
+
+This verifies our coordinate transformation.
+
+--------------------
+
+_Updates_:
+- 26.08.2025 Initial publication.
