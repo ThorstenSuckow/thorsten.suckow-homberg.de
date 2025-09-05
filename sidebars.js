@@ -18,7 +18,8 @@ const sidebars = {
                         'articles/computer-graphics/vector-rotation',
                         'articles/computer-graphics/change-of-coordinates',
                         'articles/computer-graphics/model-matrix-transformations',
-                        'articles/computer-graphics/model-matrix-rotation'
+                        'articles/computer-graphics/model-matrix-rotation',
+                        'articles/computer-graphics/perspective-projection'
                     ],
                     "collapsed": false
                 },
