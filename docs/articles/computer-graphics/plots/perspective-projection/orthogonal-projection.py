@@ -79,8 +79,8 @@ def init():
     ax.text(*to_matplotlib(0, 0, arrow_len*1.1), "+z")
 
     # Change perspective here (world cam)
-    #ax.view_init(elev=15, azim=-25)
-    ax.view_init(elev=0, azim=-90)
+    ax.view_init(elev=15, azim=-25)
+    #ax.view_init(elev=0, azim=-90)
 
 def rays(points, z_target):
         colors = [
