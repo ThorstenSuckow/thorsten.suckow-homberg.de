@@ -20,15 +20,18 @@ import ortho_proj_cube_iso from "./img/perspective-projection/ortho_proj_cube_is
 import ortho_proj_cube_ortho_front from "./img/perspective-projection/ortho_proj_cube_ortho_front_small.gif";
 import ortho_proj_cube_persp_front from "./img/perspective-projection/ortho_proj_cube_persp_front_small.gif";
 
+import unitcube from "./img/perspective-projection/unitcube.png";
+
 
 import orthogonal_projection_code from '!!raw-loader!./plots/perspective-projection/orthogonal-projection.py?raw';
 
 export const figures = {
     camera_obscura: 1,
-    ortho_proj_cube_iso : 2,
-    ortho_proj_cube_ortho_front : 3,
-    ortho_proj_cube_persp_front : 4,
-    railroad_tracks: 5
+    unitcube: 2,
+    ortho_proj_cube_iso : 3,
+    ortho_proj_cube_ortho_front : 4,
+    ortho_proj_cube_persp_front : 5,
+    railroad_tracks: 6
 }
 
 ## Introduction
@@ -71,6 +74,68 @@ However, our projection plane is in front of us. In the following, we’ll deter
 
 
 
+## Excursus: View Space, Clip Space, the Canonical View Volume and NDCs
+In the following, we will give a brief introduction to clipping, which is a process that that discards geometry that lies outside a view volume.
+In short, primitives removed during clipping will not be part of the Canonical View Volume which contains all necessary geometry passed on to the final rasterization and on-screen display stages of the rendering pipeline.<br />
+ Clipping is done by OpenGL with the help of the homogeneous coordinate component $w$. The following introduces the process with the help of orthographic projection, but it can be applied analogously with perspective projection, as we will see later.
+
+In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsymbol{V}$ specify the _clipping planes_ (see <Figure idx={figures.unitcube} />). Roughly speaking, all vertices within the view volume $\boldsymbol{V}$ are considered to be preserved for rendering.
+
+<Embed
+    modeAware={true}
+    figref={figures.unitcube}
+    title={
+        "Visualization of the unit cube U and a generic view volume V to be projected into U. The illustration shows the camera space of the scene. "}>
+    <img src={unitcube}  />
+</Embed>
+
+After multiplying a vertex with the **projection matrix** which represents an orthographic or perspective projection, the homogenous coordinate
+
+<center>
+`gl_Position` = $(x, y, z, w)$
+</center>
+
+of a vertex shader is in **clip space**[^gl_Position].
+
+[^gl_position]: see https://registry.khronos.org/OpenGL-Refpages/gl4/html/gl_Position.xhtml, retrieved 05.09.2025
+
+OpenGL then performs clipping of the primitives against the inequalities
+
+$$
+-w \leq x \leq w \land
+-w \leq y \leq w \land
+-w \leq z \leq w
+$$
+
+<Cite name="KSS17" pp="Figure 5.2, 201" />[^inequalities]. Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="2 96ff." />.
+
+[^inequalities]: "Units normalized such that divide by w leaves visible points between -1.0 to +1.0" (_idb._). Additionally, _de Vries_ provides a good introduction into the coordinate systems used by OpenGL in <Cite name="Vri20" />
+
+Once clipping has finished, the clip coordinates are mapped to Normalized Device Coordinates by the homogeneous divide
+
+$$
+(x_\text{ndc}, y_\text{ndc}, z_\text{ndc}) = (\frac{x}{w}, \frac{y}{w}, \frac{z}{w})
+$$
+
+This yields the coordinates within the **canonical view volume**. Since every surviving clip coordinate $(x, y, z, w)$ satisfies the clipping inequalities (e.g., $-w \leq x \leq w$), every component of the resulting NDC coordinate is guaranteed to lie in the interval [-1, 1][^userdefinedclipping].
+
+[^userdefinedclipping]: Additionally, user-defined clipping is configurable, which allows for custom clipping planes to be added to the scene <Cite name="KSS17" pp="228 f." />.
+
+The **Canonical Unit Cube**, or _canonical view volume_ <Cite name="RTR" pp="94" / >, defined by the interval $[−1,1]$[^floatingpoint] on all three axes, is the space for Normalized Device Coordinates in OpenGL.
+
+[^floatingpoint]: Mathematically, the NDC cube is a continuous space containing an uncountable set of real numbers. These values are represented by a finite set of discrete floating-point numbers (typically IEEE 754 32-bit floats) that approximate the ideal real values.
+
+In the rendering pipeline, NDCs are produced by applying the perspective divide $(\frac{x}{w}, \frac{y}{w},\frac{z}{w})$ to the clip space coordinates that result from the projection transform. With orthographic projection, it follows that $w=1$. The coordinates resulting from this normalization step are then mapped to the user's specific device resolution (see <Cite name="LGK23" pp="Fig. 5.36, 181" / >).
+
+When using orthographic projection, the _clip space_ falls together with the NDCs, as the perspective division by the fourth homogeneous $w$-coordinate is applied, but does not change the $x,y,z$-coordinates (see <Cite name="SWH15" pp="72" />).
+
+:::info NDCs and the Viewing Volume
+In <Cite name="SWH15" pp="40 f." />, _Sellers et al._ note that the practically visible range is described by $z$
+in $[0,1]$, and that this also applies to the NDC $z$-axis. However, other literature explicitly refers to a range of $[-1, 1]$ in all directions (e.g., <Cite name="RTR" pp="94" />, <Cite name="LGK23" pp="174" />).
+
+It can therefore be assumed that the authors may refer to a range controlled by `glClipControl` <Cite name="KSS17" pp="230" />, which allows for changing the NDC depth convention from $[-1, 1]$  to $[0, 1]$.
+:::
+
 ## Orthographic Projection
 When we apply orthographic projection, points are projected onto an arbitratry plane.
 
@@ -109,7 +174,7 @@ $$
  \end{pmatrix} \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix} = \begin{pmatrix} x \\ y \\ 0 \\ 1 \end{pmatrix}
 $$
 
-To project onto an arbitryry z-plane, we use the z-component of the 4 column in the matrix amd construct a trasnformation matrix
+To project onto an arbitryry z-plane, we use the z-component of the 4 column in the matrix and construct a transformation matrix
 
 $$
 \boldsymbol{M_o} =
@@ -194,7 +259,7 @@ The effect of projecting the points of a (wireframed) cube is shown in the anima
 
 ### Affine Transformation
 
-The statement that two parallel vectors $\vec{p}, \vec{q}$ remain parallel after an orthographic projection is applied is a fundamental property of an **affine transformation** <Cite name="VB15" pp="118" />.
+The statement that two parallel vectors $\vec{p}, \vec{q}$ remain parallel  after an orthographic projection is applied is a fundamental property of an **affine transformation** <Cite name="VB15" pp="118" />.
 
 An affine transformation $\boldsymbol{T}$ is a transformation of the form
 
@@ -204,7 +269,7 @@ $$
 
 where $\boldsymbol{L}$ is a linear transformation. Hence, an affine transformaton is simply a linear transformation to which a translation is applied.
 
-Intuitively, we can seethat this statement holds. Given two parallel vectors:
+Intuitively, we can see that this statement holds. Given two parallel vectors:
 
 $$
 \vec{p} = \begin{pmatrix}x \\ y \\ z \end{pmatrix}, \ \vec{q} = \begin{pmatrix}x' \\ y' \\ z' \end{pmatrix}
@@ -236,23 +301,33 @@ $$
 \vec{p'} = \begin{pmatrix}x \\ y\\ z_p \end{pmatrix}, \vec{q'} = \begin{pmatrix}x' \\ y'\\ z_p \end{pmatrix}
 $$
 
-#### Formal Proof
 This intuition can be formalized using the definiton of an affine transformation. We can write our orthographic projection Matrix $\boldsymbol{M_o}$ as an affine transformation $\boldsymbol{T}$ consisting of the sum of a linear combination
 
 
 $$
-\boldsymbol{L}(\vec{v}) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 &0 \end{pmatrix} \vec{v} = \begin{pmatrix} v_0 \\ v_1 \\ 0 \end{pmatrix}
+\boldsymbol{L}(\vec{v}) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 &0 \end{pmatrix} \begin{pmatrix}v_0 \\v_1 \\v_2 \end{pmatrix} = \begin{pmatrix} v_0 \\ v_1 \\ 0 \end{pmatrix}
 $$
 
-and a translation vector $(0, 0, \vec{z_p})^T$
+and a translation vector $\vec{z_p}$. That affine transformations preserve parallelity will be shown for the general case in the next section.
+
+### Proof that Affine Transformations preserve Parallelity
+
+:::note Proof
+Let $\boldsymbol{T}$ be an affine transformation
 
 $$
 \boldsymbol{T}(\vec{v}) = \boldsymbol{L}(\vec{v}) + \vec{z_p}
 $$
 
-Let's define two lines $p_l$, $q_l$ with direction vectors $\vec{p} = P_2 - P_1$ and $\vec{q} = Q_2 - Q1$, where $P_i, Q_i$ are points on the respective lines.
+Let's define two lines $p_l$, $q_l$ with direction vectors $\vec{p} = P_2 - P_1$ and $\vec{q} = Q_2 - Q_1$, where $P_i, Q_i$ are points on the respective lines.
 
-Since the lines are parallel, we can write $\vec{p}$ as the scaled version of $\vec{q}$: $\vec{p} = k \vec{q}$, with $k \in \mathbb{R}$.
+Since the lines are parallel, we can write $\vec{p}$ as the scaled version of $\vec{q}$
+
+$$
+\vec{p} = k \vec{q},\ k \in \mathbb{R}
+$$
+
+
 
 Applying the affine transformation to the points $P_1$ and $P_2$ yields a new vector with direction $\vec{p}''$:
 
@@ -283,9 +358,189 @@ $$
 \vec{p'} = \boldsymbol{L}(\vec{p}) = \boldsymbol{L}(k \vec{q}) = k \boldsymbol{L}(\vec{q}) = k \vec{q'}
 $$
 
-Hence, $\vec{p}'$ is the $\vec{q}'$ scaled by $k$, which shows that they are parallel. This proves that the affine transformation $\boldsymbol{T}$, and therefore our orthographic projection matrix $\boldsymbol{M_o}$, preserves parallelism. $\Box$
+Hence, $\vec{p}'$ is the $\vec{q}'$ scaled by $k$, which shows that they are parallel. This proves that any affine transformation $\boldsymbol{T}$ preserves parallelism. $\Box$
+:::
+
+
+### Deriving the Orthographic Projection Matrix
+
+In the following, we will derive the orthographic projection matrix required to map an arbitrary cubic volume $\boldsymbol{V}$ from view space coordinates[^fromviewspace] to the canonical view volume $\boldsymbol{U}$.
+
+[^fromviewspace]: The projection occures _after_ the view/camera space transformation.
+
+We begin with defining the coordinates of the Volume $\boldsymbol{V}$ to be projected (see <Figure idx={figures.unitcube} />):
+
+$$
+\begin{alignat*}{3}
+l \qquad &(\text{left})\\
+r \qquad &(\text{right})\\
+b \qquad &(\text{bottom})\\
+t \qquad &(\text{top})\\
+n \qquad &(\text{near})\\
+f \qquad &(\text{far})
+\end{alignat*}
+$$
+
+
+
+The naming convention applies _after_ the transformations to camera space. In this space, the camera is located at the origin $(0, 0, 0)$, looking down the negative $z$-axis. $\boldsymbol{V}$ is defined by coordinates relative to the z-axis. <Figure idx={figures.unitcube} /> shows therefore a representation of camera space.
+
+
+Note that $n$, $f$ represent positive distances to the _near_ and _far_ clipping planes. By definition, the near plane is closer to the origin, so $n < f$.
+
+However, in camera space where the view direction is along the negative $z$-axis, these values correspond to negative coordinates. The near plane is located at
+
+$$
+z_\text{near} = -n
+$$
+
+The far plane is located at
+
+$$
+z_\text{far} = -f
+$$
+
+Therefore, the following holds:
+
+$$
+z_\text{near} > z_\text{far}
+$$
+
+
+When deriving the coordinates for the canonical view volume, OpenGL requires a left handed coordinate system, that is, the view direction is along the positive instead of the negative $z$-axis. For our case this means that we have to mirror the $z$-axis at the origin, which will be considered by using a negative $z$-component in the following orthographic projection matrix (see <Cite name="RTR" pp="95" />).
+
+We will first examine the requirements for the affine transformation. Since all vertices of V must fit into the unit cube $[−1,1]^3$, which is - most likely contrary to $\boldsymbol{V}$ - located at the origin,  a translation and a scaling are necessary. Thus, we can directly define a transformation matrix of the form
+
+$$
+\begin{pmatrix}
+    \boldsymbol{S} & \vec{t} \\
+        0           & 1
+\end{pmatrix}
+$$
+
+where  $\boldsymbol{S}$ is the $3 \times 3$ scaling matrix and $\vec{t}$ is the translation vector.
+
+
+We thus obtain the affine transformation that, when multiplied by an arbitrary vertex $(x, y, z, 1)^T$, transforms it into the canonical view volume:
+
+$$
+\begin{pmatrix}
+a_x & 0  &  0 & b_x \\
+0 & a_y  &  0 & b_y \\
+0 & 0  &  -a_z & b_z \\
+0 & 0  &  0 & 1 \\
+\end{pmatrix} \begin{pmatrix} x \\ y\\ z \\ 1 \end{pmatrix} =  \begin{pmatrix} a_xx+b_x \\ a_yy+b_y\\ -a_zz+b_z \\ 1 \end{pmatrix}
+$$
+
+Here, we have negated the $z$-component, as we must mirror the $z$-axis (see above).
+
+From this, we can derive a system of linear equations for which the following conditions must be met:
+
+$$
+\begin{alignat*}{3}
+a_xl + b_x = -1 \ &\land a_xr + b_x = 1 && \qquad (\text{x-Axis})\\
+a_yb + b_y = -1 \ &\land a_yt + b_y = 1 && \qquad (\text{y-Axis}) \\
+-a_z\cdot (-n) + b_z = -1 \ &\land -a_z\cdot (-f) + b_z = 1 && \qquad (\text{z-Axis}) \\
+\end{alignat*}
+$$
+
+We explicitly use $-n$ and $-f$ here because after the view transformation, the _near_ and _far_ values are given to us as positive distances. For the correct derivation, they must therefore be re-inserted as negative values.
+
+Solving for $l$ and $r$, respectively, yields:
+
+$$
+\begin{alignat*}{3}
+a_xl + b_x = -1 & \Leftrightarrow b_x = -1 - a_xl\\
+\\
+a_xr + b_x = 1 & \Leftrightarrow b_x = 1 - a_xr
+\end{alignat*}
+$$
+
+Substituting $b_x$ with $-1 - a_xl$ gives us
+
+$$
+\begin{alignat*}{3}
+a_xr -1 - a_xl = 1 & \Leftrightarrow a_xr - a_xl = 2\\
+\\
+ & \Leftrightarrow a_x = \frac{2}{r - l}
+\end{alignat*}
+$$
+
+Solving analogously for $a_y$ and $a_z$, we obtain
+
+$$
+\begin{alignat*}{3}
+a_x &= \frac{2}{r - l}\\
+\\
+a_y &= \frac{2}{t - b}\\
+\\
+a_z &= \frac{2}{f - n}
+\end{alignat*}
+$$
+
+We can now solve for $b_x, b_y, b_z$. We obtain
+
+$$
+\begin{alignat*}{3}
+b_x &= -\frac{r+l}{r - l}\\
+\\
+b_y &= -\frac{t+b}{t - b}\\
+\\
+b_z &= -\frac{f+n}{f - n}
+\end{alignat*}
+$$
+
+Which results in the orthographic projection matrix
+
+
+$$
+\boldsymbol{T} = \begin{pmatrix}
+\frac{2}{r - l} & 0  &  0 & -\frac{r+l}{r - l} \\
+0 & \frac{2}{t - b}  &  0 & -\frac{t+b}{t - b} \\
+0 & 0  &  -\frac{2}{f - n} & -\frac{f+n}{f - n} \\
+0 & 0  &  0 & 1 \\
+\end{pmatrix}
+$$
+<br />
+
+:::info Where is the Projection Plane?
+The _near_ plane is called the "image plane" by the Red Book: It's the plane closest to the eye and perpendicular to the line of sight (see <Cite name="KSS17" pp="902" />). _Lehn et al._ equally describe the projection plane  identical to the near clipping plane <Cite name="LGK23" pp="167" />.<br />
+ As such, with orthographic projection, rays from vertices of the view volume in camera space intersect the _near_ plane perpendicularly. Then, after the orthographic projection is applied, clip space coordinates are transformed into the Canonical View Volume and NDCs, where the perpendicular relationship is preserved due to the parallelism-preserving properties of affine transformations. Consequently, the projection rays remain perpendicular to the $xy$-plane at $z=-1$ in NDC space.
+:::
+
+
+#### Proof that (l, b, -n, 1) maps (-1, -1, -1, 1)
+
+Let $\vec{v}$ be the homogeneous coordinate $(l, b, -n, 1)$ with $l, b, n \in \mathbb{R}$ (view space coordinates). We can then solve with $\boldsymbol{T}\vec{v}$ for
+
+$$
+\begin{pmatrix}
+\frac{2}{r - l} & 0  &  0 & -\frac{r+l}{r - l} \\
+0 & \frac{2}{t - b}  &  0 & -\frac{t+b}{t - b} \\
+0 & 0  &  -\frac{2}{f - n} & -\frac{f+n}{f - n} \\
+0 & 0  &  0 & 1 \\
+\end{pmatrix} \begin{pmatrix} l \\ b \\ -n \\ 1 \end{pmatrix}
+= \begin{pmatrix}
+\frac{2l}{r - l} -\frac{r+l}{r - l} \\
+\frac{2b}{t - b} -\frac{t+b}{t - b} \\
+-\frac{-2n}{f - n} -\frac{f+n}{f - n} \\
+ 1
+\end{pmatrix} = \begin{pmatrix}
+-\frac{r - l}{r - l}  \\
+-\frac{t-b}{t - b} \\
+-\frac{f-n}{f - n} \\
+1 \end{pmatrix} = \begin{pmatrix} -1 \\ -1 \\ -1 \\ 1 \end{pmatrix}
+$$
+
+$\Box$
+
+We can analogously show that  $(r, t, -f, 1)$ maps $(1, 1, 1, 1)$.
 
 
 ## Perspective Projection
+
+:::warning How the third component is used in NDC
+Depth Test
+:::
 
 -------------
