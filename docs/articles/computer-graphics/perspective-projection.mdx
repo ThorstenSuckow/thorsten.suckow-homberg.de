@@ -89,13 +89,13 @@ In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsy
     <img src={unitcube}  />
 </Embed>
 
-After multiplying a vertex with the **projection matrix** which represents an orthographic or perspective projection, the homogenous coordinate
+After multiplying a vertex with the **projection matrix** which represents an orthographic or perspective projection, the homogeneous coordinate
 
 <center>
 `gl_Position` = $(x, y, z, w)$
 </center>
 
-of a vertex shader is in **clip space**[^gl_Position].
+of a vertex shader is in **clip space**[^gl_position].
 
 [^gl_position]: see https://registry.khronos.org/OpenGL-Refpages/gl4/html/gl_Position.xhtml, retrieved 05.09.2025
 
@@ -137,7 +137,7 @@ It can therefore be assumed that the authors may refer to a range controlled by 
 :::
 
 ## Orthographic Projection
-When we apply orthographic projection, points are projected onto an arbitratry plane.
+When we apply orthographic projection, points are projected onto an arbitrary plane.
 
 Visually, it appears as if we are reducing the vector space by one dimension. A key property is that parallel lines remain parallel, regardless of the camera's orientation, and the perspective component is eliminated.
 
@@ -162,7 +162,7 @@ $$
  \end{pmatrix}
 $$
 
-From this matrix form it immediately folows that any homogenous vector $\vec{v} = (x, y, z, 1)^T$ multiplied with this matrix yields a vector $\vec{v'}$ with its z-component set to $0$:
+From this matrix form it immediately follows that any homogenous vector $\vec{v} = (x, y, z, 1)^T$ multiplied with this matrix yields a vector $\vec{v'}$ with its z-component set to $0$:
 
 
 $$
@@ -174,7 +174,7 @@ $$
  \end{pmatrix} \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix} = \begin{pmatrix} x \\ y \\ 0 \\ 1 \end{pmatrix}
 $$
 
-To project onto an arbitryry z-plane, we use the z-component of the 4 column in the matrix and construct a transformation matrix
+To project onto an arbitrary z-plane, we use the z-component of the 4 column in the matrix and construct a transformation matrix
 
 $$
 \boldsymbol{M_o} =
@@ -201,7 +201,7 @@ $$
   \begin{pmatrix} x \\ y \\ z_p \\ 1 \end{pmatrix}
 $$
 
-We can easily derive that any vector computed by this must be perpendicular to the plane given by the vectors $(x, 0, 0)^T$ and $(0, y, 0)^T$, since their crossproduc yields
+We can easily derive that any vector computed by this must be perpendicular to the plane given by the vectors $(x, 0, 0)^T$ and $(0, y, 0)^T$, since their crossproduct yields
 
 $$
 \begin{pmatrix} x \\ 0 \\ 0 \end{pmatrix} \times \begin{pmatrix} 0 \\ y \\ 0 \end{pmatrix} =
@@ -295,22 +295,22 @@ $$
 \begin{pmatrix} x \\ y \\ 0 \end{pmatrix} \times \begin{pmatrix} x' \\ y' \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\  xy' - x'y = 0 \end{pmatrix} = \vec{0}
 $$
 
-Our intutiotn tells us that since these new vectors are parallel, translating both by an equal amount in the same direction will not change their parallelism. Therefor, adding the same z-component $(0, 0, z_p)^T$ to both vectors yields to parallel vectors
+Our intution tells us that since these new vectors are parallel, translating both by an equal amount in the same direction will not change their parallelism. Therefor, adding the same z-component $(0, 0, z_p)^T$ to both vectors yields to parallel vectors
 
 $$
 \vec{p'} = \begin{pmatrix}x \\ y\\ z_p \end{pmatrix}, \vec{q'} = \begin{pmatrix}x' \\ y'\\ z_p \end{pmatrix}
 $$
 
-This intuition can be formalized using the definiton of an affine transformation. We can write our orthographic projection Matrix $\boldsymbol{M_o}$ as an affine transformation $\boldsymbol{T}$ consisting of the sum of a linear combination
+This intuition can be formalized using the definition of an affine transformation. We can write our orthographic projection Matrix $\boldsymbol{M_o}$ as an affine transformation $\boldsymbol{T}$ consisting of the sum of a linear combination
 
 
 $$
 \boldsymbol{L}(\vec{v}) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 &0 \end{pmatrix} \begin{pmatrix}v_0 \\v_1 \\v_2 \end{pmatrix} = \begin{pmatrix} v_0 \\ v_1 \\ 0 \end{pmatrix}
 $$
 
-and a translation vector $\vec{z_p}$. That affine transformations preserve parallelity will be shown for the general case in the next section.
+and a translation vector $\vec{z_p}$. That affine transformations preserve parallelism will be shown for the general case in the next section.
 
-### Proof that Affine Transformations preserve Parallelity
+### Proof that Affine Transformations preserve Parallelism
 
 :::note Proof
 Let $\boldsymbol{T}$ be an affine transformation
@@ -366,7 +366,7 @@ Hence, $\vec{p}'$ is the $\vec{q}'$ scaled by $k$, which shows that they are par
 
 In the following, we will derive the orthographic projection matrix required to map an arbitrary cubic volume $\boldsymbol{V}$ from view space coordinates[^fromviewspace] to the canonical view volume $\boldsymbol{U}$.
 
-[^fromviewspace]: The projection occures _after_ the view/camera space transformation.
+[^fromviewspace]: The projection occurs _after_ the view/camera space transformation.
 
 We begin with defining the coordinates of the Volume $\boldsymbol{V}$ to be projected (see <Figure idx={figures.unitcube} />):
 
@@ -409,7 +409,7 @@ $$
 
 When deriving the coordinates for the canonical view volume, OpenGL requires a left handed coordinate system, that is, the view direction is along the positive instead of the negative $z$-axis. For our case this means that we have to mirror the $z$-axis at the origin, which will be considered by using a negative $z$-component in the following orthographic projection matrix (see <Cite name="RTR" pp="95" />).
 
-We will first examine the requirements for the affine transformation. Since all vertices of V must fit into the unit cube $[−1,1]^3$, which is - most likely contrary to $\boldsymbol{V}$ - located at the origin,  a translation and a scaling are necessary. Thus, we can directly define a transformation matrix of the form
+We will first examine the requirements for the affine transformation. Since all vertices of V must fit into the unit cube $[−1,1]^3$, which - probably unlike $\boldsymbol{V}$ - is located at the origin,  a translation and a scaling are necessary. Thus, we can directly define a transformation matrix of the form
 
 $$
 \begin{pmatrix}
