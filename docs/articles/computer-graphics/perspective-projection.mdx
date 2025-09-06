@@ -22,8 +22,12 @@ import ortho_proj_cube_persp_front from "./img/perspective-projection/ortho_proj
 
 import unitcube from "./img/perspective-projection/unitcube.png";
 
+import perspectivevsorthographicprojection from "./img/perspective-projection/perspectivevsorthographicprojection.png";
+import perspectivegeometry from "./img/perspective-projection/perspectivegeometry.png";
 
 import orthogonal_projection_code from '!!raw-loader!./plots/perspective-projection/orthogonal-projection.py?raw';
+
+
 
 export const figures = {
     camera_obscura: 1,
@@ -31,7 +35,9 @@ export const figures = {
     ortho_proj_cube_iso : 3,
     ortho_proj_cube_ortho_front : 4,
     ortho_proj_cube_persp_front : 5,
-    railroad_tracks: 6
+    railroad_tracks: 6,
+    perspectivevsorthographicprojection: 7,
+    perspectivegeometry: 8
 }
 
 ## Introduction
@@ -85,7 +91,7 @@ In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsy
     modeAware={true}
     figref={figures.unitcube}
     title={
-        "Visualization of the unit cube U and a generic view volume V to be projected into U. The illustration shows the camera space of the scene. "}>
+        "Visualization of the unit cube U as the target NDC space and a generic view volume V to be projected into U. The illustration shows the camera space of the scene. "}>
     <img src={unitcube}  />
 </Embed>
 
@@ -539,8 +545,98 @@ We can analogously show that  $(r, t, -f, 1)$ maps $(1, 1, 1, 1)$.
 
 ## Perspective Projection
 
-:::warning How the third component is used in NDC
-Depth Test
-:::
+In orthographic projection, the viewer is theoretically at an infinite distance from the projection surface, so that the rays from the impact points of the projected geometry, which are perpendicular to the projection surface, only converge at an infinite distance. For this reason, the effect of depth is absent, because objects farther back in the view volume are mapped exactly onto the projection surface and therefore correspond to their actual dimensions in space[^objectsize].
+
+[^objectsize]: We do not consider the mapping to the canonical view volume in OpenGL here, but instead an orthographic projection onto the xy-plane at z=-n.
+
+Perspective projection, on the other hand, uses the camera position as a center of projection where all projection rays converge, forming a pyramid. The near and far planes _clip_ this pyramid, defining a truncated pyramid known as the view frustum. Due to this pyramid shape, the near plane is necessarily smaller than the far plane - a key difference from orthographic projection, where the view volume is in a rectangular shape (see <Figure idx={figures.perspectivevsorthographicprojection} />).
+
+<Embed
+    modeAware={false}
+    figref={figures.perspectivevsorthographicprojection}
+    title={
+        "Illustration of Orthographic (left) and Perspective (right) Projection. (Source: Based on [LGK23, Fig. 5.25, 168])"}>
+    <img src={perspectivevsorthographicprojection}  />
+</Embed>
+
+
+Even with a View Frustum, the near and far planes are understood as clipping planes. However, the dimension of the far plane is also determined by another parameter, Field-of-View (_fov_), as we will see in the following: This parameter describes the viewer's field of vision, i.e., the area that the viewer can capture.
+
+If the fov is correspondingly large, this affects the dimension of the far plane, and thus the volume of the View Frustum becomes larger, and thus also the amount of objects that can be captured and projected onto the near plane. This affects the size of the projections - intuitively, more objects must be projected onto the limited surface of the near plane. As a result, individual objects must appear smaller to fit within the view.
+
+The distance of the camera from the object also has a direct effect on its projected size.
+
+However, the distance of the near plane from the projection center has no effect on the size of displayed objects, as long as the _fov_ remains constant. We will prove this fact in a later section.
+
+We will also see that with perspective projection, after the conversion to NDC, the property that parallel lines are preserved no longer holds for the general case due to the perspective division.
+
+### Deriving the Perspective Projection Matrix
+<Figure idx={figures.perspectivegeometry} /> shows the geometric relationships between the parameters described in the introductory text. Besides the already mentioned _fov_ $\theta$, the _aspect ratio_ is also shown, which describes the ratio between the width ($w$) and height ($h$) of the projection surface. In the following, we will first assume an aspect ratio of 1:1 and thus an equal $\theta$ in both the vertical and horizontal directions, before we use the field of view only for the vertical direction, while the horizontal is determined by the vertical field-of-view (_fovy_) and the aspect ratio, as is common in OpenGL.
+
+<Embed
+    modeAware={false}
+    figref={figures.perspectivegeometry}
+    title={
+        "(Source: Based on [HDMS+14, Fig. 13.4, 303])"}>
+    <img src={perspectivegeometry}  />
+</Embed>
+
+#### A simple perspective projection
+As with orthographic projection, we can first consider the simple case of projecting onto the $xy$-plane at $z_p$.
+
+The projection of the point $(x, y, z)$ onto the plane $z = z_p$ to $(x', y', z_p)$ can be computed as follows:
+
+According to the _similar triangles theorem_, the following holds:
+
+$$
+\frac{y'}{z_p} = \frac{y}{z} \qquad (= \tan(\alpha_y))
+$$
+
+From this we obtain
+
+$$
+y' = \frac{yz_p}{z}
+$$
+
+Analogously for $x$:
+
+$$
+\frac{x'}{z_p} = \frac{x}{z} \Leftrightarrow x' = \frac{xz_p}{z}  \qquad (= \tan(\alpha_x))
+$$
+
+From this, a transformation matrix can be derived that maps the point $(x, y, z)$ to the point $(x', y', z_p)$:
+
+$$
+\begin{pmatrix}
+x z_p \\ y z_p \\ z z_p \\ z
+\end{pmatrix} = \begin{pmatrix}
+z_p & 0   & 0   & 0 \\
+0   & z_p & 0   & 0 \\
+0   & 0   & z_p & 0 \\
+0   & 0   & 1   & 0
+\end{pmatrix} \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix}
+$$
+
+After the perspective division by the $w$-component of the resulting homogeneous vector, we obtain:
+
+$$
+\begin{pmatrix}
+\frac{x z_p}{z} \\ \frac{y z_p}{z} \\ \frac{z z_p}{z} \\ \frac{z}{z}
+\end{pmatrix}
+$$
+
+and thus the homogeneous vector that represents $(x', y', z_p)$
+
+$$
+\begin{pmatrix}
+\frac{x z_p}{z} \\ \frac{y z_p}{z} \\ \frac{z z_p}{z} \\ \frac{z}{z}
+\end{pmatrix} = \begin{pmatrix}
+                x' \\ y' \\ z_p \\ 1
+                \end{pmatrix}
+$$
+
+
+
+
 
 -------------
