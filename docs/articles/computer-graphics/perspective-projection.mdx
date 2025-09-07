@@ -25,6 +25,9 @@ import unitcube from "./img/perspective-projection/unitcube.png";
 import perspectivevsorthographicprojection from "./img/perspective-projection/perspectivevsorthographicprojection.png";
 import perspectivegeometry from "./img/perspective-projection/perspectivegeometry.png";
 
+import fromperspectivecliptondc from "./img/perspective-projection/fromperspectivecliptondc.png";
+
+
 import orthogonal_projection_code from '!!raw-loader!./plots/perspective-projection/orthogonal-projection.py?raw';
 
 
@@ -37,7 +40,8 @@ export const figures = {
     ortho_proj_cube_persp_front : 5,
     railroad_tracks: 6,
     perspectivevsorthographicprojection: 7,
-    perspectivegeometry: 8
+    perspectivegeometry: 8,
+    fromperspectivecliptondc: 9
 }
 
 ## Introduction
@@ -108,16 +112,18 @@ of a vertex shader is in **clip space**[^gl_position].
 OpenGL then performs clipping of the primitives against the inequalities
 
 $$
--w \leq x \leq w \land
--w \leq y \leq w \land
--w \leq z \leq w
+\begin{alignat*}{3}
+& -w \leq x \leq w  \\
+\land \quad & -w \leq y \leq w \\
+\land \quad & -w \leq z \leq w
+\end{alignat*}
 $$
 
 <Cite name="KSS17" pp="Figure 5.2, 201" />[^inequalities]. Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="2 96ff." />.
 
 [^inequalities]: "Units normalized such that divide by w leaves visible points between -1.0 to +1.0" (_idb._). Additionally, _de Vries_ provides a good introduction into the coordinate systems used by OpenGL in <Cite name="Vri20" />
 
-Once clipping has finished, the clip coordinates are mapped to Normalized Device Coordinates by the homogeneous divide
+Once clipping has finished, the clip coordinates are mapped to Normalized Device Coordinates by the perspective divide
 
 $$
 (x_\text{ndc}, y_\text{ndc}, z_\text{ndc}) = (\frac{x}{w}, \frac{y}{w}, \frac{z}{w})
@@ -134,6 +140,64 @@ The **Canonical Unit Cube**, or _canonical view volume_ <Cite name="RTR" pp="94"
 In the rendering pipeline, NDCs are produced by applying the perspective divide $(\frac{x}{w}, \frac{y}{w},\frac{z}{w})$ to the clip space coordinates that result from the projection transform. With orthographic projection, it follows that $w=1$. The coordinates resulting from this normalization step are then mapped to the user's specific device resolution (see <Cite name="LGK23" pp="Fig. 5.36, 181" / >).
 
 When using orthographic projection, the _clip space_ falls together with the NDCs, as the perspective division by the fourth homogeneous $w$-coordinate is applied, but does not change the $x,y,z$-coordinates (see <Cite name="SWH15" pp="72" />).
+
+:::note Defining the Canonical View Volume in OpenGL
+Let $(x, y, z)$ be a point in view space. This is in homogeneous coordinates
+
+$$
+(x, y, z, 1)
+$$
+
+After transforming into clip space, the point is mapped to
+
+$$
+(x_\text{clip}, y_\text{clip}, z_\text{clip}, w_\text{clip}), \ w_\text{clip} \ne 0
+$$
+
+Let $|x_\text{clip}| \le |w_\text{clip}|$. Then, the following holds:
+
+$$
+|x_\text{clip}| \le |w_\text{clip}| \Leftrightarrow |\frac{x_\text{clip}}{w_\text{clip}}| \le 1
+$$
+
+Obviously, since
+
+$$
+|x_\text{ndc}| = |\frac{x_\text{clip}}{w_\text{clip}}| \le 1
+$$
+
+the inequality
+
+$$
+-w_\text{clip} \leq x_\text{clip} \leq w_\text{clip} \Leftrightarrow -1 \leq x_\text{ndc} \leq 1
+$$
+
+holds.
+
+Applying the same premise and same logic to $y_\text{clip}, z_\text{clip}$ shows that  $(x_\text{ndc}, y_\text{ndc}, z_\text{ndc})$ is  in $[-1, 1]^3$.
+
+Therefor, any point that is not clipped before the perspective divide must satisfy the inequalities
+
+$$
+\begin{alignat*}{3}
+& -w_\text{clip} \leq x_\text{clip} \leq w_\text{clip}  \\
+\land \quad & -w_\text{clip} \leq y_\text{clip} \leq w_\text{clip} \\
+\land \quad & -w_\text{clip} \leq z_\text{clip} \leq w_\text{clip}
+\end{alignat*}
+$$
+
+which yields a point in NDC in the Canonical View Volume in OpenGL that satisfies
+
+$$
+\begin{alignat*}{3}
+& -1 \leq x_\text{ndc} \leq 1  \\
+\land \quad & -1 \leq y_\text{ndc} \leq 1 \\
+\land \quad & -1 \leq z_\text{ndc} \leq 1
+\end{alignat*}
+$$
+
+$\Box$
+:::
 
 :::info NDCs and the Viewing Volume
 In <Cite name="SWH15" pp="40 f." />, _Sellers et al._ note that the practically visible range is described by $z$
@@ -577,7 +641,7 @@ We will also see that with perspective projection, after the conversion to NDC, 
     modeAware={false}
     figref={figures.perspectivegeometry}
     title={
-        "(Source: Based on [HDMS+14, Fig. 13.4, 303])"}>
+        "(Source: Based on [HDMS+14, Figure 13.4, 303])"}>
     <img src={perspectivegeometry}  />
 </Embed>
 
@@ -625,7 +689,7 @@ $$
 \end{pmatrix}
 $$
 
-and thus the homogeneous vector that represents $(x', y', z_p)$
+and thus the homogeneous vector that represents $(x', y', z_p)$:
 
 $$
 \begin{pmatrix}
@@ -635,7 +699,54 @@ $$
                 \end{pmatrix}
 $$
 
+:::info Perspective Division
+As _Lehn et al._ note, the final row of the matrix deviates from the $(0, 0, 0, 1)$ form seen in affine transformation matrices so far. Consequently, a vertex transformed by this matrix results in a clip-space coordinate that is not yet normalized, which is achieved by the _perspective division_ <Cite name="LGK23" pp="176" />. (After this division, the fourth component is discarded, yielding the final coordinates in NDC.)
+:::
 
+
+The matrix notation follows _Lehn et al._ <Cite name="LGK23" pp="171" />. An alternative form is presented by _Akenine-Möller et al._ <Cite name="RTR" pp="96" />:
+
+$$
+\begin{pmatrix}
+1 & 0   & 0   & 0 \\
+0   & 1 & 0   & 0 \\
+0   & 0   & 1 & 0 \\
+0   & 0   & -\frac{1}{z_p}   & 0
+\end{pmatrix}
+$$
+
+The term in the fourth row is set to $-\frac{1}{z_p}$, with $z_p$ being the absolute distance to the projection plane on the negative $z$-axis. This accounts for the convention of looking down the negative $z$-axis in view space and the axis-flip when converting to clip space, as was established during the derivation of the orthographic projection matrix. It is easy to show that both matrices yield the same results when both consider the axis flip.
+
+
+#### Perspective Projection Matrix
+
+Functions like `glm::perspective` create a projection matrix that transform view space coordinates into clip space. The subsequent perspective divide, a step automatically handled by OpenGL, converts these coordinates into NDC. This process creates the illusion of perspective, as dividing by the $w$-component scales each vertex's position relative to its distance from the camera.
+
+Unlike an orthographic projection, the $w$ component od the resulting clip-space coordinate is not $1$. Instead, it is proportional to the absolute depth of the vertex in view space ($z_\text{view}$). During the perspective divide, a larger $w$ for a vertex farther away from the camera result in smaller NDC coordinates, causing the object to appear smaller on screen. Conversely, smaller $w$ contribute to larger NDC coordinates. The effect is illustrated in <Figure idx={figures.fromperspectivecliptondc} />.
+
+
+<Embed
+    modeAware={false}
+    figref={figures.fromperspectivecliptondc}
+    title={
+        "The way the projection lines are spreading out from a single point causes lines closer to the near plane to be magnified, while correspondingly compressing lines closer to the far plane. (Source: Based on [HDMS+14, Figure 13.10, 308])"}>
+    <img src={fromperspectivecliptondc}  />
+</Embed>
+
+
+
+:::warning Changing near plane does not affect projected geometry
+Crucial: this has to be shown AFTER mapping onto the unit cube
+
+With fixed FOV and after mapping to NDC, changing the near-plane distance does not alter the apparent size of objects; it only affects clipping (and depth precision).
+:::
+
+:::warning computing the horizontal fov from fovy and aspect ratio
+:::
+
+:::warning How the third component is used in NDC
+Depth Test
+:::
 
 
 
