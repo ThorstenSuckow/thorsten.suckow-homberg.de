@@ -733,6 +733,43 @@ Unlike an orthographic projection, the $w$ component od the resulting clip-space
     <img src={fromperspectivecliptondc}  />
 </Embed>
 
+:::info Vanishing point and why parallelism is lost
+The vanishing point, characteristic for depth-rendered illustrations, is the _finite_ point on the screen where parallel lines appear to converge. In 3D graphics, this effect is a direct result of the perspective divide.
+
+As derived previously, a simple perspective projection maps a point $(x,y,z)$ to the following coordinates on the projection plane after the perspective divide:
+
+$$
+\begin{pmatrix}
+    \frac{x z_p}{z}\\
+    \frac{y z_p}{z}\\
+    - z_p
+\end{pmatrix}
+$$
+
+To find the vanishing point for lines parallel to the $z$-axis, we can examine the limit of this point as it moves to infinity:
+
+$$
+\underset{z \mapsto \infty}{\lim}\begin{pmatrix}
+    \frac{x z_p}{z}\\
+    \frac{y z_p}{z}\\
+    - z_p
+\end{pmatrix} = \begin{pmatrix}0 \\ 0 \\ - z_p \end{pmatrix}
+$$
+
+This shows that regardless of their initial $x$ and $y$ values, all lines parallel to the $z$-axis converge to the single point
+
+$$
+\begin{pmatrix}
+0\\
+0\\
+-z_p
+\end{pmatrix}
+$$
+
+on the projection plane. This point of convergence is the vanishing point[^vanishingpoint] (see <Cite name="LGK23" pp="172" />).
+:::
+
+[^vanishingpoint]: This is comparable to an orthographic projection, where the center of projection lies at infinity. As a result, the projection rays are parallel to each other (in this case, parallel to the z-axis) - see <Figure idx={figures.perspectivevsorthographicprojection} />.
 
 
 :::warning Changing near plane does not affect projected geometry
