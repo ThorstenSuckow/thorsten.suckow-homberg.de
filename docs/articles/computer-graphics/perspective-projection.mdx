@@ -48,7 +48,7 @@ export const figures = {
 
 This article describes one of the final steps in the rendering pipeline: Projection and perspective transformations.
 
-While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth—in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
+While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth-in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
 
 We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures and an interactive application to show how an orthographic projection affects objects we usually perceive in a perspective manner.
 
@@ -769,7 +769,131 @@ $$
 on the projection plane. This point of convergence is the vanishing point[^vanishingpoint] (see <Cite name="LGK23" pp="172" />).
 :::
 
-[^vanishingpoint]: This is comparable to an orthographic projection, where the center of projection lies at infinity. As a result, the projection rays are parallel to each other (in this case, parallel to the z-axis) - see <Figure idx={figures.perspectivevsorthographicprojection} />.
+[^vanishingpoint]: This is comparable to an orthographic projection, where the center of projection lies at infinity. As a result, the projection rays are parallel to each other (in this case, parallel to the $z$-axis) - see <Figure idx={figures.perspectivevsorthographicprojection} />.
+
+To construct a perspective projection matrix, the following parameters define the view frustum:
+
+ - **Vertical Field of View** $\text{fovy}$: The vertical field of view, denoted as $\theta$.
+ - **Aspect ratio** $r$: The ratio of the viewport's width $w$ and its height $h$, $r = \frac{w}{h}$.
+ - **Near plane distane** $n$: The distance from the camera's origin to the _near clipping plane_.
+ - **Far plane distance** $f$: The distance from the camera's origin to the _far clipping plane_.
+
+The resulting matrix transforms coordinates from camera space into clip space coordinates. Following the matrix multiplication, the subsequent perspective division  maps these coordinates into NDCs.
+
+
+#### Symmetric Frustum
+We begin with the derivation of the projection matrix for a symmetric view frustum, which means that $\angle{zx} = \angle{zy} = \frac{\text{fovy}}{2} = \frac{\theta}{2}$.
+
+For this view frustum, there are 4 extreme frustum points on a plane $z$:
+
+$$
+  \begin{alignat*}{3}
+  &(x_\text{right}, y_\text{top}, z)\\
+  &(x_\text{left}, y_\text{top}, z)\\
+  &(x_\text{right}, y_\text{bottom}, z)\\
+  &(x_\text{left}, y_\text{bottom}, z)\\
+\end{alignat*}
+$$
+
+We begin with the derivation of the $a_1$-component in the first column of the transformation matrix using a point that contains $x_\text{right}$ as its $x$-component and $z < 0$  as its $z$-component.
+
+$$
+\boldsymbol{T}_p =
+\begin{pmatrix}
+a_1 & 0   & 0   & 0 \\
+0   & a_2 & 0   & 0 \\
+0   & 0   & a_3 & b_2 \\
+0   & 0   & -1   & 0 \\
+\end{pmatrix}
+$$
+
+The diaginal entries $a_1, a_2$ scale $x, y$ in clip space.
+$x_\text{right}$ must be scaled such that after the perspective division, it is mapped to  $x= 1$ in the unit cube, which represents the boundary of the maximum display range.
+
+The maximum visible range is determined by the field of view. In this case, since we are dealing with a half-space in the coordinate system of camera space, this angle to the right in camera space is
+
+$$
+\frac{\theta}{2}
+$$
+
+Using the definition of the tangent, which relates the positive lengths of the triangle sides, we can therefore state
+
+$$
+\tan(\frac{\theta}{2}) = \frac{\frac{1}{2} (x_\text{right} - x_\text{left})}{-z}
+$$
+
+Due to the given symmetry, we can note for the triangle:
+
+$$
+ x' = \frac{1}{2} (x_\text{right} - x_\text{left})
+$$
+
+For deriving $\tan$, we consider absolute values. Since $z < 0$, we write:
+
+$$
+\tan(\frac{\theta}{2}) = \frac{x'}{-z} \Leftrightarrow x' = \tan(\frac{\theta}{2})\  (-z)
+$$
+
+
+$x'$ must be mapped to $1$ after the perspective division, so the following must hold:
+
+
+$$
+\frac{a_1 \ x'}{w} = \frac{a_1 \ x'}{-z} = 1
+$$
+
+We rearrange to get:
+
+$$
+a_1=\frac{-z}{x'} = \frac{-z}{\tan(\frac{\theta}{2})\ -z} = \frac{1}{\tan(\frac{\theta}{2})}
+$$
+
+
+The derivation is valid for negative as well as positive $x$ - it can be easily shown that in that case, only the sign of the result is inverted:
+
+Let
+
+$$
+\begin{alignat*}{3}
+ &x'' = \frac{1}{2} (x_\text{left} - x_\text{right}),\ x'' < 0 \\
+ \\
+ &\tan(\frac{\theta}{2}) = \frac{-x''}{-z} \Leftrightarrow x'' = \tan(\frac{\theta}{2})\  z
+\end{alignat*}
+$$
+
+For $x'' < 0$, the following must hold:
+
+$$
+\frac{a_1 \ x''}{w} = \frac{a_1 \ x''}{-z} = -1
+$$
+
+which gives us
+
+$$
+a_1=\frac{-z \cdot -1}{x''} = \frac{z}{\tan(\frac{\theta}{2})\ z} = \frac{1}{\tan(\frac{\theta}{2})}
+$$
+
+Since a symmetric view frustum is assumed, the derivation for $a_2$ and $y_\text{top}$ and $y_\text{bottom}$ is identical.
+
+Bot scaling factors $a_1, a_2$ are identical in a symmetric frustum. We can therefore define a single factor
+
+$$
+f = \frac{1}{\tan{\frac{\theta}{2}}}
+$$
+
+This simplifies $\boldsymbol{T}_p$ to
+
+
+$$
+\boldsymbol{T}_p =
+\begin{pmatrix}
+f & 0   & 0   & 0 \\
+0   & f & 0   & 0 \\
+0   & 0   & a_3 & b_2 \\
+0   & 0   & -1   & 0 \\
+\end{pmatrix}
+$$
+
 
 
 :::warning Changing near plane does not affect projected geometry
