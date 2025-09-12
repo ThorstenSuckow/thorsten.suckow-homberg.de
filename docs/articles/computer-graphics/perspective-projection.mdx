@@ -781,8 +781,8 @@ To construct a perspective projection matrix, the following parameters define th
 The resulting matrix transforms coordinates from camera space into clip space coordinates. Following the matrix multiplication, the subsequent perspective division  maps these coordinates into NDCs.
 
 
-#### Symmetric Frustum
-We begin with the derivation of the projection matrix for a symmetric view frustum, which means that $\angle{zx} = \angle{zy} = \frac{\text{fovy}}{2} = \frac{\theta}{2}$.
+### Aspect Ration 1.0
+The following derivation holds for a symmetric view frustum with an aspect ration of $1.0$, which means that $\angle{zx} = \angle{zy} = \frac{\text{fovy}}{2} = \frac{\theta}{2}$.
 
 For this view frustum, there are 4 extreme frustum points on a plane $z$:
 
@@ -878,7 +878,7 @@ Since a symmetric view frustum is assumed, the derivation for $a_2$ and $y_\text
 Bot scaling factors $a_1, a_2$ are identical in a symmetric frustum. We can therefore define a single factor
 
 $$
-f = \frac{1}{\tan{\frac{\theta}{2}}}
+\varphi = \frac{1}{\tan{\frac{\theta}{2}}}
 $$
 
 This simplifies $\boldsymbol{T}_p$ to
@@ -887,12 +887,133 @@ This simplifies $\boldsymbol{T}_p$ to
 $$
 \boldsymbol{T}_p =
 \begin{pmatrix}
-f & 0   & 0   & 0 \\
-0   & f & 0   & 0 \\
-0   & 0   & a_3 & b_2 \\
+\varphi & 0   & 0   & 0 \\
+0   & \varphi & 0   & 0 \\
+0   & 0   & a_3 & b_1 \\
 0   & 0   & -1   & 0 \\
 \end{pmatrix}
 $$
+
+#### Deriving Scaling and Transformation for the $z$-component
+
+:::info On the role of the bias
+To derive $a_3$ and understand the necessity of $b_1$, we must consider the perspective division.
+Without $b_1$, mapping $-f$ to $1$ and $-n$ to $-1$ would lead to a contradiction
+
+$$
+\begin{alignat*}{3}
+       &\frac{a_3(-n)}{n} = -1 \Leftrightarrow a_3 = 1
+\land  &\frac{a_3(-f)}{f} = 1 \Leftrightarrow a_3 = -1
+\end{alignat*}
+$$
+
+Therefore, considering $b_1$ as a bias is essential - it prevents the $z$-component from simply cancelling out and enables the non-linear mapping of the $z$-coordinate.
+:::
+
+In analogy to the derivation of the components for the orthographic projection matrix, the following conditions must be met to map $-f$ to $1$, taking the perspective division into account. We first determine the resulting vector in Clip Space:
+
+$$
+\boldsymbol{T}_p \begin{pmatrix}x \\ y \\ -f \\ 1 \end{pmatrix} =
+\begin{pmatrix}
+\varphi & 0   & 0   & 0 \\
+0   & \varphi& 0   & 0 \\
+0   & 0   & a_3 & b_1 \\
+0   & 0   & -1   & 0 \\
+\end{pmatrix} \begin{pmatrix}x \\ y \\ -f \\ 1 \end{pmatrix} = \begin{pmatrix} \varphi x \\ \varphi y \\ a_3 (-f) + b_1 \\ f  \end{pmatrix}
+$$
+
+With perspective division, the following must hold:
+
+
+$$
+\begin{alignat*}{3}
+    &\frac{a_3(-f) + b_1}{f} = 1
+\end{alignat*}
+$$
+
+The conditions for the mapping of $-n$ to $-1$ in NDC are analogously:
+
+$$
+\begin{alignat*}{3}
+    &\frac{a_3 (-n) + b_1}{n} = -1
+\end{alignat*}
+$$
+
+Equating and solving yields
+
+$$
+a_3 = -\frac{f + n}{f-n}\\
+b_1 = -\frac{2fn}{f-n}
+$$
+
+Thus we obtain the transformation matrix for a symmetric view frustum:
+
+$$
+\boldsymbol{T}_p  =
+\begin{pmatrix}
+\varphi & 0   & 0   & 0 \\
+0   & \varphi& 0   & 0 \\
+0   & 0   & -\frac{f + n}{f-n} & -\frac{2fn}{f-n} \\
+0   & 0   & -1   & 0 \\
+\end{pmatrix}
+$$
+
+### Arbitrary Aspect Ratio
+
+We now consider the previously introduced _aspect ratio_ $r = \frac{w}{h}$, which describes the ratio between the viewport's width and height. The height is easily derived with the help of the vertical field of view $\theta$ and the distance to the far plane:
+
+$$
+\tan(\frac{\theta}{2}) = \frac{\gamma}{f} \Leftrightarrow \gamma = f \tan(\frac{\theta}{2})
+$$
+
+Hence, $h = 2\gamma$. Given $r$ and $h$, we can easily derive the width of the viewport now:
+
+$$
+r = \frac{w}{h} \Leftrightarrow w = rh
+$$
+
+Corresponding to the derivation of $a_1$ in the case of a symmetric frustum with an aspect ratio of 1.0, we derive $x'$:
+
+$$
+x' = \frac{w}{2}
+$$
+
+The following known condition must hold:
+
+$$
+\frac{a_1 x'}{-(-f)} = 1
+$$
+
+We rearrange to get:
+
+$$
+a_1 = \frac{f}{x'} = \frac{f}{\frac{w}{2}} = 2\frac{f}{w} = 2\frac{f}{rh} = 2\frac{f}{2r\gamma} = \frac{f}{fr\tan(\frac{\theta}{2})} = \frac{1}{r\tan(\frac{\theta}{2})} = \frac{\varphi}{r}
+$$
+
+By the similar-triangles argument, the near plane satisfies the same relation. It is easy to see that the condition
+
+$$
+\frac{a_1 x'}{-(-f)} = -1
+$$
+
+is satisfied for $-x'$:
+
+$$
+\frac{a_1 -x'}{-(-f)} = -1 \Leftrightarrow \frac{a_1 x'}{f} = 1
+$$
+
+Since the aspect ratio affects scaling on the $x$-axis, we derive the final form for the perspective projection matrix as used with OpenGL:
+
+$$
+\boldsymbol{T}_p  =
+\begin{pmatrix}
+\frac{\varphi}{r} & 0   & 0   & 0 \\
+0   & \varphi& 0   & 0 \\
+0   & 0   & -\frac{f + n}{f-n} & -\frac{2fn}{f-n} \\
+0   & 0   & -1   & 0 \\
+\end{pmatrix}
+$$
+
 
 
 
