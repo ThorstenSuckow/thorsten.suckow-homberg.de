@@ -1,9 +1,9 @@
 ---
-title: "Perspective Projection"
-slug: "perspective-projection"
-description: "Derivation of the lookAt view matrix in OpenGL, from linear algebra fundamentals to geometric interpretation of rotational and translational components."
+title: "From Camera to Clip Space - Derivation of the Projection Matrices"
+slug: "from-camera-to-clip-space-derivation-of-the-projection-matrices"
+description: "A detailed mathematical derivation of the orthographic and perspective projection matrices, explaining the transformation from camera space to clip space to NDC in the OpenGL pipeline."
 tags: [computer graphics, linear algebra, opengl]
-keywords: [lookAt matrix, OpenGL view matrix, coordinate systems, change of basis, camera transformation, graphics pipeline]
+keywords: [coordinate systems, change of basis, camera transformation, graphics pipeline, perspective projection, orthographic projection]
 ---
 
 import Tabs from '@theme/Tabs';
@@ -44,18 +44,17 @@ export const figures = {
     fromperspectivecliptondc: 9
 }
 
+We derive the orthographic and perspective projection matrices used in 3D computer graphics, with special emphasis on OpenGL conventions. Starting from camera-space geometry, we construct the projection that maps to clip space, explain clipping via the clip-space inequalities, and show how the subsequent perspective divide produces normalized device coordinates in the canonical view volume. We clarify the roles of the $z$- and $w$-components: Depth in NDC arises from $z_\text{ndc} = \frac{z_\text{clip}}{w_\text{clip}}$, with $w$ carrying the perspective scaling. The result is a compact, implementation-oriented account of Field-of-View, aspect ratio and near-/far-plane parameters.
+
 ## Introduction
 
 This article describes one of the final steps in the rendering pipeline: Projection and perspective transformations.
 
-While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth-in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
+While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth - in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
 
 We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures and an interactive application to show how an orthographic projection affects objects we usually perceive in a perspective manner.
 
-We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width, creates a so-called view frustum that contains the objects visible to the observer. All remaining objects in the world are ignored in the subsequent projection.
-
-The article concludes by summarizing the OpenGL rendering pipeline and closing with a brief derivation of the transformation into normalized device coordinates (NDC) of the perspective projection.
-
+We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width encoded in the _aspect ratio_, creates a so-called view frustum that contains the objects visible to the observer. All remaining objects in the world are ignored in the subsequent projection.
 
 
 ## Projection Planes
@@ -64,13 +63,17 @@ In the final steps of the rendering pipeline, the _perspective divide_ converts 
 
 [^ndc]: A common stumbling block when you’re used to absolute screen pixels: How are you supposed to scale anything when there’s "nothing" to scale against?
 
-Before this happens, a view matrix $\boldsymbol{M}_\text{lookAt}$ is constructed that transforms world coordinates into camera coordinates, defined by a vantage point $\text{eye}_{xyz}$, the observed point  $c$ and a vector  $\vec{up}$  representing the camera’s up direction at camera at $\text{eye}_{xyz}$ looking at $c$.
+Before this happens, a view matrix $\boldsymbol{M}_\text{lookAt}$ is constructed that transforms world coordinates into camera coordinates[^cameraspace], defined by a vantage point $\text{eye}_{xyz}$, the observed point  $c$ and a vector  $\vec{up}$  representing the camera’s up direction at camera at $\text{eye}_{xyz}$ looking at $c$.
 
-Transforming world into camera coordinates isn’t particularly helpful on its own. In a scene graph with hundreds of nodes, we still have to decide which ones should actually appear on screen. Even if we know the viewer’s position and look direction, using a single point as render input yields an almost empty image. And approximating a point cloud with only the device’s height and width doesn’t suffice: it may hint at the aspect ratio, but it tells us nothing about scaling, depth range, or clipping.
+[^cameraspace]: See [Change of Coordinates and Applications to View Matrices](/docs/articles/computer-graphics/change-of-coordinates-and-applications-to-view-matrices)
 
-In general, the camera implicit in computing camera coordinates is a pinhole camera - an idealized model with an infinitesimally small aperture that admits rays and produces an image. We push the abstraction a step further: in computer graphics we don’t capture photons, we trace geometric lines from the scene’s vertices through the pinhole onto a projection plane. If you like the _camera obscura_[^cameraobscura] picture: place a screen behind the pinhole and the projected points meet on that plane, yielding a mirrored, upside-down image (see <Figure idx={figures.camera_obscura} />).
+Transforming world into camera coordinates isn’t particularly helpful on its own. In a scene graph with hundreds of nodes, we still have to decide which ones should actually appear on screen. Even if we know the viewer’s position and look direction, using a single point as render input yields an almost empty image. And approximating a point cloud with only the device’s height and width doesn’t suffice: It may hint at the aspect ratio, but it tells us nothing about scaling, depth range, or clipping.
+
+In general, the camera implicit in computing camera coordinates is a pinhole camera - an idealized model with an infinitesimally small aperture that admits rays and produces an image. We push the abstraction a step further: In computer graphics we don’t capture photons, we trace geometric lines from the scene’s vertices through the pinhole onto a projection plane. Take the _camera obscura_[^cameraobscura] as a figurative example, where we place a screen behind the pinhole and the projected points meet on that plane, yielding a mirrored, upside-down image (see <Figure idx={figures.camera_obscura} />).
 
 [^cameraobscura]: see https://en.wikipedia.org/wiki/Camera_obscura, retrieved 20.08.2025
+
+However, our projection plane is in front of us, and in the following, we’ll determine its size, its distance from our position, and which scene objects fall into the resulting <Wiki name="view frustum" file="computergraphics.viewfrustum" />.
 
 <Embed
     modeAware={false}
@@ -80,16 +83,14 @@ In general, the camera implicit in computing camera coordinates is a pinhole cam
     <img src={camera_obscura}  />
 </Embed>
 
-However, our projection plane is in front of us. In the following, we’ll determine its size, its distance from our position, and which scene objects fall into the resulting <Wiki name="view frustum" file="computergraphics.viewfrustum" />
-
-
 
 ## Excursus: View Space, Clip Space, the Canonical View Volume and NDCs
-In the following, we will give a brief introduction to clipping, which is a process that that discards geometry that lies outside a view volume.
-In short, primitives removed during clipping will not be part of the Canonical View Volume which contains all necessary geometry passed on to the final rasterization and on-screen display stages of the rendering pipeline.<br />
+In the following, we will give a brief introduction to clipping, which is a process that discards geometry outside of a view volume.
+In short, primitives removed during clipping will not be part of the Canonical View Volume which contains all necessary geometry passed on to the final rasterization and on-screen display stages of the rendering pipeline.
+
  Clipping is done by OpenGL with the help of the homogeneous coordinate component $w$. The following introduces the process with the help of orthographic projection, but it can be applied analogously with perspective projection, as we will see later.
 
-In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsymbol{V}$ specify the _clipping planes_ (see <Figure idx={figures.unitcube} />). Roughly speaking, all vertices within the view volume $\boldsymbol{V}$ are considered to be preserved for rendering.
+In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsymbol{V}$ specify the _clipping planes_ (see <Figure idx={figures.unitcube} />). Roughly speaking, all vertices within _this_ view volume $\boldsymbol{V}$ are considered to be preserved for rendering.
 
 <Embed
     modeAware={true}
@@ -99,7 +100,7 @@ In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsy
     <img src={unitcube}  />
 </Embed>
 
-After multiplying a vertex with the **projection matrix** which represents an orthographic or perspective projection, the homogeneous coordinate
+After multiplying a vertex with the **projection matrix** - which represents an orthographic or perspective projection in our case - the homogeneous coordinate
 
 <center>
 `gl_Position` = $(x, y, z, w)$
@@ -139,7 +140,7 @@ The **Canonical Unit Cube**, or _canonical view volume_ <Cite name="RTR" pp="94"
 
 In the rendering pipeline, NDCs are produced by applying the perspective divide $(\frac{x}{w}, \frac{y}{w},\frac{z}{w})$ to the clip space coordinates that result from the projection transform. With orthographic projection, it follows that $w=1$. The coordinates resulting from this normalization step are then mapped to the user's specific device resolution (see <Cite name="LGK23" pp="Fig. 5.36, 181" / >).
 
-When using orthographic projection, the _clip space_ falls together with the NDCs, as the perspective division by the fourth homogeneous $w$-coordinate is applied, but does not change the $x,y,z$-coordinates (see <Cite name="SWH15" pp="72" />).
+When using _orthographic projection_, the _clip space_ falls together with the NDCs, as the perspective division by the fourth homogeneous $w$-coordinate is applied, but does not change the $x,y,z$-coordinates (see <Cite name="SWH15" pp="72" />).
 
 :::note Defining the Canonical View Volume in OpenGL
 Let $(x, y, z)$ be a point in view space. This is in homogeneous coordinates
@@ -477,7 +478,7 @@ z_\text{near} > z_\text{far}
 $$
 
 
-When deriving the coordinates for the canonical view volume, OpenGL requires a left handed coordinate system, that is, the view direction is along the positive instead of the negative $z$-axis. For our case this means that we have to mirror the $z$-axis at the origin, which will be considered by using a negative $z$-component in the following orthographic projection matrix (see <Cite name="RTR" pp="95" />).
+When deriving the coordinates for the canonical view volume, we adopt standard OpenGL convention in form of a left handed coordinate system, that is, the view direction is along the positive instead of the negative $z$-axis. For our case this means that we have to mirror the $z$-axis at the origin, which will be considered by using a negative $z$-component in the following orthographic projection matrix (see <Cite name="RTR" pp="95" />).
 
 We will first examine the requirements for the affine transformation. Since all vertices of V must fit into the unit cube $[−1,1]^3$, which - probably unlike $\boldsymbol{V}$ - is located at the origin,  a translation and a scaling are necessary. Thus, we can directly define a transformation matrix of the form
 
@@ -630,7 +631,7 @@ If the fov is correspondingly large, this affects the dimension of the far plane
 
 The distance of the camera from the object also has a direct effect on its projected size.
 
-However, the distance of the near plane from the projection center has no effect on the size of displayed objects, as long as the _fov_ remains constant. We will prove this fact in a later section.
+However, the distance of the near plane from the projection center has no effect on the size of displayed objects, as long as the _fov_ remains constant. We will come back to this in a later section.
 
 We will also see that with perspective projection, after the conversion to NDC, the property that parallel lines are preserved no longer holds for the general case due to the perspective division.
 
@@ -720,7 +721,9 @@ The term in the fourth row is set to $-\frac{1}{z_p}$, with $z_p$ being the abso
 
 #### Perspective Projection Matrix
 
-Functions like `glm::perspective` create a projection matrix that transform view space coordinates into clip space. The subsequent perspective divide, a step automatically handled by OpenGL, converts these coordinates into NDC. This process creates the illusion of perspective, as dividing by the $w$-component scales each vertex's position relative to its distance from the camera.
+Functions like `glm::perspective`[^glmperspective] create a projection matrix that transform view space coordinates into clip space. The subsequent perspective divide, a step automatically handled by OpenGL, converts these coordinates into NDC. This process creates the illusion of perspective, as dividing by the $w$-component scales each vertex's position relative to its distance from the camera.
+
+[^glmperspective]: https://glm.g-truc.net/0.9.9/api/a00243.html#ga747c8cf99458663dd7ad1bb3a2f07787, retrieved 15.09.2025
 
 Unlike an orthographic projection, the $w$ component od the resulting clip-space coordinate is not $1$. Instead, it is proportional to the absolute depth of the vertex in view space ($z_\text{view}$). During the perspective divide, a larger $w$ for a vertex farther away from the camera result in smaller NDC coordinates, causing the object to appear smaller on screen. Conversely, smaller $w$ contribute to larger NDC coordinates. The effect is illustrated in <Figure idx={figures.fromperspectivecliptondc} />.
 
@@ -781,7 +784,7 @@ To construct a perspective projection matrix, the following parameters define th
 The resulting matrix transforms coordinates from camera space into clip space coordinates. Following the matrix multiplication, the subsequent perspective division  maps these coordinates into NDCs.
 
 
-### Aspect Ration 1.0
+### Square Aspect Ration
 The following derivation holds for a symmetric view frustum with an aspect ration of $1.0$, which means that $\angle{zx} = \angle{zy} = \frac{\text{fovy}}{2} = \frac{\theta}{2}$.
 
 For this view frustum, there are 4 extreme frustum points on a plane $z$:
@@ -1018,19 +1021,48 @@ $$
 
 
 
+:::info Changing n / f does not affect the size of the displayed objects
+In a previous section, we have stated that the distance of the near plane from the projection center has no effect on the size of displayed objects, as long as the _fov_ remains constant. <br />
+With the full derivation of the projection matrix, it is easy to see why this is the case: The _fov_ and _aspect ratio_ exclusively determine the scaling of the $x$- (_width_) and $y$- (_height_) components. In this regard, they function analogously to a _focal length_ <Cite name="LGK23" pp="194" />, defining the zoom and shape of the view.
 
-:::warning Changing near plane does not affect projected geometry
-Crucial: this has to be shown AFTER mapping onto the unit cube
-
-With fixed FOV and after mapping to NDC, changing the near-plane distance does not alter the apparent size of objects; it only affects clipping (and depth precision).
+Conversely, the $n$ and $f$ values affect the terms that calculate the final $z$-coordinate in clip-space: Their purpose is to define the depth boundaries of the view frustum that get mapped into the unit cube, i.e., those parameters control depth clipping and precision, but not the projected size of an object.
 :::
 
-:::warning computing the horizontal fov from fovy and aspect ratio
-:::
+### z-Buffer and z-Fighting
+Although vertices undergo a series of transformation - from clip space in homogeneous coordinates through perspective division, to normalized device coordinates and finally 2D screen coordinates - the z-component remains an important value for any graphics library.
+After the perspective transform, the $z_\text{ndc}$-component becomes $\frac{z_\text{clip}}{w_\text{clip}}$ and is quantized <Cite name="RTR" pp="1014" />.
+During _depth testing_, this $z$-component is used to determine whether a fragment lies before or behind a surface represented by the current $z$-buffer value: If it lies before, it's z-value is used to update the z-buffer, and the computing goes on until all objects were processed <Cite name="LGK23" pp="298" />[^depthfunc].
 
-:::warning How the third component is used in NDC
-Depth Test
-:::
+[^depthfunc]: See <Cite name="SWH15" pp="376 ff." /> for an introdcution to `glDepthFunc()`, which lets you control the comparision function used with depth testing in OpenGL.
+
+Due to the non-linear nature of the perspective projection, depth precision is not uniform - it is highest near the camera and decreases further away, which is easy to show. Given the final form of the perspective projection matrix, the $z_c$-component before perspective division is
+
+$$
+z_\text{clip} = -z\frac{f + n}{f-n}  -\frac{2fn}{f-n}
+$$
+
+After the perspective divide, we obtain
+
+
+$$
+z_\text{ndc} = -z\frac{f + n}{-z(f-n)}  -\frac{2fn}{-z(f-n)} =  \frac{f + n}{f-n}  +\frac{2fn}{z(f-n)}
+$$
+
+which gives us one constant term and a term depending from $z$. The derivative of this term is
+
+$$
+\frac{d}{dz}\begin{pmatrix}\frac{f + n}{f-n}  +\frac{2fn}{z(f-n)}\end{pmatrix} = -\frac{2fn}{z^2(f-n)}
+$$
+
+which shows that this represents a monotonically decreasing function (decreasing towards $-n$, increasing towards $-f$). Furthermore, the rate of change diminishes with distance.
+
+$$
+\underset{z \rightarrow -\infty}{\lim} -\frac{2fn}{z^2(f-n)} = 0
+$$
+
+
+For objects close to the far plane, it is possible that different surfaces are mapped to nearly identical $z$-values with limited floating-point precision, resulting in flickering intersections (_$z$-fighting_) <Cite name="KSS17" pp ="227 f." />. _Akenine-Möller et al._ introduce ways to increase depth precision in <Cite name="RTR" pp="100 f." />.
+
 
 
 
