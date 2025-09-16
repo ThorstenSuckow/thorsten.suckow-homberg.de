@@ -1,0 +1,25 @@
+---
+title: "From Camera to Clip Space - Derivation of the Projection Matrices"
+slug: from-camera-to-clip-space-derivation-of-the-projection-matrices
+tags: [computer graphics, linear algebra]
+enableComments: true
+---
+
+
+import {GlosRef, BibRef} from "../../src/components/References";
+import {BackButton} from "../../src/components/BackButton.js";
+
+
+## From Camera to Clip Space
+
+#### Derivation of the Projection Matrices
+
+My [latest article](/docs/articles/computer-graphics/from-camera-to-clip-space-derivation-of-the-projection-matrices) examines a fundamental step in the 3D rendering pipeline: The transformation from camera space to clip space and ultimately to Normalized Device Coordinates (NDC). In the article, we derive the complete orthographic and perspective projection matrices, with a special emphasis on modern OpenGL conventions.
+
+<!--truncate-->
+We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures to show how an orthographic projection affects objects we usually perceive in a perspective manner.
+
+We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width encoded in the _aspect ratio_, creates a view frustum that contains the objects visible to the observer, while any geometry outside of it is clipped and discarded from the rendering process.
+
+
+[Continue reading...](/docs/articles/computer-graphics/from-camera-to-clip-space-derivation-of-the-projection-matrices)
