@@ -52,9 +52,9 @@ This article describes one of the final steps in the rendering pipeline: Project
 
 While in perspective projection all projection lines converge at a single point - producing the familiar sense of depth - in orthographic projection these lines run parallel to each other. With this projection type, parallel lines therefore remain parallel even after mapping onto the so-called unit cube.
 
-We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures and an interactive application to show how an orthographic projection affects objects we usually perceive in a perspective manner.
+We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures to show how an orthographic projection affects objects we usually perceive in a perspective manner.
 
-We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width encoded in the _aspect ratio_, creates a so-called view frustum that contains the objects visible to the observer. All remaining objects in the world are ignored in the subsequent projection.
+We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width encoded in the _aspect ratio_, creates a so-called view frustum that contains the objects visible to the observer, while any geometry outside of it is clipped and discarded from the rendering process.
 
 
 ## Projection Planes
