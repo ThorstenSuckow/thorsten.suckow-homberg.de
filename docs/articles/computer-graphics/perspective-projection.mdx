@@ -44,7 +44,7 @@ export const figures = {
     fromperspectivecliptondc: 9
 }
 
-We derive the orthographic and perspective projection matrices used in 3D computer graphics, with special emphasis on OpenGL conventions. Starting from camera-space geometry, we construct the projection that maps to clip space, explain clipping via the clip-space inequalities, and show how the subsequent perspective divide produces normalized device coordinates in the canonical view volume. We clarify the roles of the $z$- and $w$-components: Depth in NDC arises from $z_\text{ndc} = \frac{z_\text{clip}}{w_\text{clip}}$, with $w$ carrying the perspective scaling. The result is a compact, implementation-oriented account of Field-of-View, aspect ratio and near-/far-plane parameters.
+We derive the orthographic and perspective projection matrices used in 3D computer graphics, with special emphasis on OpenGL conventions. Starting from camera-space geometry, we construct the projection that maps to clip space, explain clipping via the clip-space inequalities, and show how the subsequent perspective divide produces normalized device coordinates in the canonical view volume. Along the way, we show that affine transformations preserve parallelism. We clarify the roles of the $z$- and $w$-components: Depth in NDC arises from $z_\text{ndc} = \frac{z_\text{clip}}{w_\text{clip}}$, with $w$ carrying the perspective scaling. The result is a compact, implementation-oriented account of Field-of-View, aspect ratio and near-/far-plane parameters.
 
 ## Introduction
 
@@ -73,7 +73,7 @@ In general, the camera implicit in computing camera coordinates is a pinhole cam
 
 [^cameraobscura]: see https://en.wikipedia.org/wiki/Camera_obscura, retrieved 20.08.2025
 
-However, our projection plane is in front of us, and in the following, we’ll determine its size, its distance from our position, and which scene objects fall into the resulting <Wiki name="view frustum" file="computergraphics.viewfrustum" />.
+In the following, we will define the viewing volume for both orthographic and perspective projections. We will determine the size of the projection plane and its distance from the camera and examine how these parameters determine the <Wiki name="view frustum" file="computergraphics.viewfrustum" />, which specifies which objects in the scene are ultimately rendered.
 
 <Embed
     modeAware={false}
@@ -96,21 +96,21 @@ In **camera space**, the six planes $l, r, b, t, n, f$ of a view volume $\boldsy
     modeAware={true}
     figref={figures.unitcube}
     title={
-        "Visualization of the unit cube U as the target NDC space and a generic view volume V to be projected into U. The illustration shows the camera space of the scene. "}>
+        "Visualization of the unit cube U as the target NDC space and a generic view volume V and its contents to be projected into U after the perspective divide. The illustration shows the camera space of the scene."}>
     <img src={unitcube}  />
 </Embed>
 
-After multiplying a vertex with the **projection matrix** - which represents an orthographic or perspective projection in our case - the homogeneous coordinate
+After multiplying a vertex with the **projection matrix**, the  vertex shader's homogeneous coordinate
 
 <center>
 `gl_Position` = $(x, y, z, w)$
 </center>
 
-of a vertex shader is in **clip space**[^gl_position].
+is in **clip space**[^gl_position].
 
 [^gl_position]: see https://registry.khronos.org/OpenGL-Refpages/gl4/html/gl_Position.xhtml, retrieved 05.09.2025
 
-OpenGL then performs clipping of the primitives against the inequalities
+OpenGL then performs clipping of the primitives against the inequalities <Cite name="KSS17" pp="Figure 5.2, 201" />[^inequalities]
 
 $$
 \begin{alignat*}{3}
@@ -120,7 +120,7 @@ $$
 \end{alignat*}
 $$
 
-<Cite name="KSS17" pp="Figure 5.2, 201" />[^inequalities]. Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="2 96ff." />.
+Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="2 96ff." />.
 
 [^inequalities]: "Units normalized such that divide by w leaves visible points between -1.0 to +1.0" (_idb._). Additionally, _de Vries_ provides a good introduction into the coordinate systems used by OpenGL in <Cite name="Vri20" />
 
@@ -400,7 +400,7 @@ $$
 
 
 
-Applying the affine transformation to the points $P_1$ and $P_2$ yields a new vector with direction $\vec{p}''$:
+Applying the affine transformation to the points $P_1$ and $P_2$ yields a new vector with direction $\vec{p}'$:
 
 $$
 \begin{alignat*}{3}
@@ -429,7 +429,7 @@ $$
 \vec{p'} = \boldsymbol{L}(\vec{p}) = \boldsymbol{L}(k \vec{q}) = k \boldsymbol{L}(\vec{q}) = k \vec{q'}
 $$
 
-Hence, $\vec{p}'$ is the $\vec{q}'$ scaled by $k$, which shows that they are parallel. This proves that any affine transformation $\boldsymbol{T}$ preserves parallelism. $\Box$
+Hence, $\vec{p}'$ is $\vec{q}'$ scaled by $k$, which shows that they are parallel. This proves that any affine transformation $\boldsymbol{T}$ preserves parallelism. $\Box$
 :::
 
 
@@ -575,8 +575,8 @@ $$
 <br />
 
 :::info Where is the Projection Plane?
-The _near_ plane is called the "image plane" by the Red Book: It's the plane closest to the eye and perpendicular to the line of sight (see <Cite name="KSS17" pp="902" />). _Lehn et al._ equally describe the projection plane  identical to the near clipping plane <Cite name="LGK23" pp="167" />.<br />
- As such, with orthographic projection, rays from vertices of the view volume in camera space intersect the _near_ plane perpendicularly. Then, after the orthographic projection is applied, clip space coordinates are transformed into the Canonical View Volume and NDCs, where the perpendicular relationship is preserved due to the parallelism-preserving properties of affine transformations. Consequently, the projection rays remain perpendicular to the $xy$-plane at $z=-1$ in NDC space.
+The _near_ plane is called the "image plane" by the Red Book: It's the plane closest to the eye and perpendicular to the line of sight (see <Cite name="KSS17" pp="902" />). _Lehn et al._ equally describe the projection plane  identical to the near clipping plane <Cite name="LGK23" pp="166" />.<br />
+ As such, with orthographic projection, rays from vertices of the view volume in camera space intersect the projection plane - that is usually between the near and far plane - perpendicularly. Then, after the orthographic projection is applied, clip space coordinates are transformed into the Canonical View Volume and NDCs, where the perpendicular relationship is preserved due to the parallelism-preserving properties of affine transformations. Consequently, the projection rays remain perpendicular to any $xy$-plane at $z \in [-1, 1]$ in NDC space. Think of the projection plane at $z=0$ in the final image _on screen_, where the $z$-component of the NDC coordinates is only used for depth testing.
 :::
 
 
@@ -617,7 +617,7 @@ In orthographic projection, the viewer is theoretically at an infinite distance 
 Perspective projection, on the other hand, uses the camera position as a center of projection where all projection rays converge, forming a pyramid. The near and far planes _clip_ this pyramid, defining a truncated pyramid known as the view frustum. Due to this pyramid shape, the near plane is necessarily smaller than the far plane - a key difference from orthographic projection, where the view volume is in a rectangular shape (see <Figure idx={figures.perspectivevsorthographicprojection} />).
 
 <Embed
-    modeAware={false}
+    modeAware={true}
     figref={figures.perspectivevsorthographicprojection}
     title={
         "Illustration of Orthographic (left) and Perspective (right) Projection. (Source: Based on [LGK23, Fig. 5.25, 168])"}>
@@ -627,7 +627,7 @@ Perspective projection, on the other hand, uses the camera position as a center 
 
 Even with a View Frustum, the near and far planes are understood as clipping planes. However, the dimension of the far plane is also determined by another parameter, Field-of-View (_fov_), as we will see in the following: This parameter describes the viewer's field of vision, i.e., the area that the viewer can capture.
 
-If the fov is correspondingly large, this affects the dimension of the far plane, and thus the volume of the View Frustum becomes larger, and thus also the amount of objects that can be captured and projected onto the near plane. This affects the size of the projections - intuitively, more objects must be projected onto the limited surface of the near plane. As a result, individual objects must appear smaller to fit within the view.
+If the _fov_ is correspondingly large, this affects the dimension of the far plane, and thus the volume of the View Frustum becomes larger, and thus also the amount of objects that can be captured and projected onto the near plane. This affects the size of the projections - intuitively, more objects must be projected onto the limited surface of the near plane. As a result, individual objects must appear smaller to fit within the view.
 
 The distance of the camera from the object also has a direct effect on its projected size.
 
@@ -639,10 +639,10 @@ We will also see that with perspective projection, after the conversion to NDC, 
 <Figure idx={figures.perspectivegeometry} /> shows the geometric relationships between the parameters described in the introductory text. Besides the already mentioned _fov_ $\theta$, the _aspect ratio_ is also shown, which describes the ratio between the width ($w$) and height ($h$) of the projection surface. In the following, we will first assume an aspect ratio of 1:1 and thus an equal $\theta$ in both the vertical and horizontal directions, before we use the field of view only for the vertical direction, while the horizontal is determined by the vertical field-of-view (_fovy_) and the aspect ratio, as is common in OpenGL.
 
 <Embed
-    modeAware={false}
+    modeAware={true}
     figref={figures.perspectivegeometry}
     title={
-        "(Source: Based on [HDMS+14, Figure 13.4, 303])"}>
+        "Camera-space perspective frustum. The eye is at the origin and looks down the negative z-axis. Width w and height h encode the aspect ratio w/h. (Source: Based on [HDMS+14, Figure 13.4, 303])"}>
     <img src={perspectivegeometry}  />
 </Embed>
 
@@ -729,7 +729,7 @@ Unlike an orthographic projection, the $w$ component od the resulting clip-space
 
 
 <Embed
-    modeAware={false}
+    modeAware={true}
     figref={figures.fromperspectivecliptondc}
     title={
         "The way the projection lines are spreading out from a single point causes lines closer to the near plane to be magnified, while correspondingly compressing lines closer to the far plane. (Source: Based on [HDMS+14, Figure 13.10, 308])"}>
