@@ -187,7 +187,10 @@ $$
 \end{alignat*}
 $$
 
-which yields a point in NDC in the Canonical View Volume in OpenGL that satisfies
+which yields a point in NDC in the Canonical View Volume in OpenGL[^ndcsandviewvolume] that satisfies
+
+[^ndcsandviewvolume]: In <Cite name="SWH15" pp="40 f." />, _Sellers et al._ note that the practically visible range is described by $z$
+in $[0,1]$, and that this also applies to the NDC $z$-axis. However, other literature explicitly refers to a range of $[-1, 1]$ in all directions (e.g., <Cite name="RTR" pp="94" />, <Cite name="LGK23" pp="174" />). It can therefore be assumed that the authors may refer to a range controlled by `glClipControl` <Cite name="KSS17" pp="230" />, which allows for changing the NDC depth convention from $[-1, 1]$  to $[0, 1]$.
 
 $$
 \begin{alignat*}{3}
@@ -200,12 +203,6 @@ $$
 $\Box$
 :::
 
-:::info NDCs and the Viewing Volume
-In <Cite name="SWH15" pp="40 f." />, _Sellers et al._ note that the practically visible range is described by $z$
-in $[0,1]$, and that this also applies to the NDC $z$-axis. However, other literature explicitly refers to a range of $[-1, 1]$ in all directions (e.g., <Cite name="RTR" pp="94" />, <Cite name="LGK23" pp="174" />).
-
-It can therefore be assumed that the authors may refer to a range controlled by `glClipControl` <Cite name="KSS17" pp="230" />, which allows for changing the NDC depth convention from $[-1, 1]$  to $[0, 1]$.
-:::
 
 ## Orthographic Projection
 When we apply orthographic projection, points are projected onto an arbitrary plane.
@@ -1067,3 +1064,6 @@ For objects close to the far plane, it is possible that different surfaces are m
 
 
 -------------
+
+_Updates_:
+- 17.09.2025 Initial publication.
