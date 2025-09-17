@@ -120,7 +120,7 @@ $$
 \end{alignat*}
 $$
 
-Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="2 96ff." />.
+Primitives outside clip space are discarded, while the visible portion of intersecting primitives is rasterized  <Cite name="SWH15" pp="pp. 296" />.
 
 [^inequalities]: "Units normalized such that divide by w leaves visible points between -1.0 to +1.0" (_idb._). Additionally, _de Vries_ provides a good introduction into the coordinate systems used by OpenGL in <Cite name="Vri20" />
 
@@ -132,7 +132,7 @@ $$
 
 This yields the coordinates within the **canonical view volume**. Since every surviving clip coordinate $(x, y, z, w)$ satisfies the clipping inequalities (e.g., $-w \leq x \leq w$), every component of the resulting NDC coordinate is guaranteed to lie in the interval [-1, 1][^userdefinedclipping].
 
-[^userdefinedclipping]: Additionally, user-defined clipping is configurable, which allows for custom clipping planes to be added to the scene <Cite name="KSS17" pp="228 f." />.
+[^userdefinedclipping]: Additionally, user-defined clipping is configurable, which allows for custom clipping planes to be added to the scene <Cite name="KSS17" pp="pp. 228" />.
 
 The **Canonical Unit Cube**, or _canonical view volume_ <Cite name="RTR" pp="94" / >, defined by the interval $[−1,1]$[^floatingpoint] on all three axes, is the space for Normalized Device Coordinates in OpenGL.
 
@@ -189,7 +189,7 @@ $$
 
 which yields a point in NDC in the Canonical View Volume in OpenGL[^ndcsandviewvolume] that satisfies
 
-[^ndcsandviewvolume]: In <Cite name="SWH15" pp="40 f." />, _Sellers et al._ note that the practically visible range is described by $z$
+[^ndcsandviewvolume]: In <Cite name="SWH15" pp="pp. 40" />, _Sellers et al._ note that the practically visible range is described by $z$
 in $[0,1]$, and that this also applies to the NDC $z$-axis. However, other literature explicitly refers to a range of $[-1, 1]$ in all directions (e.g., <Cite name="RTR" pp="94" />, <Cite name="LGK23" pp="174" />). It can therefore be assumed that the authors may refer to a range controlled by `glClipControl` <Cite name="KSS17" pp="230" />, which allows for changing the NDC depth convention from $[-1, 1]$  to $[0, 1]$.
 
 $$
@@ -1030,7 +1030,7 @@ Although vertices undergo a series of transformation - from clip space in homoge
 After the perspective transform, the $z_\text{ndc}$-component becomes $\frac{z_\text{clip}}{w_\text{clip}}$ and is quantized <Cite name="RTR" pp="1014" />.
 During _depth testing_, this $z$-component is used to determine whether a fragment lies before or behind a surface represented by the current $z$-buffer value: If it lies before, it's z-value is used to update the z-buffer, and the computing goes on until all objects were processed <Cite name="LGK23" pp="298" />[^depthfunc].
 
-[^depthfunc]: See <Cite name="SWH15" pp="376 ff." /> for an introdcution to `glDepthFunc()`, which lets you control the comparision function used with depth testing in OpenGL.
+[^depthfunc]: See <Cite name="SWH15" pp="pp. 376" /> for an introdcution to `glDepthFunc()`, which lets you control the comparision function used with depth testing in OpenGL.
 
 Due to the non-linear nature of the perspective projection, depth precision is not uniform - it is highest near the camera and decreases further away, which is easy to show. Given the final form of the perspective projection matrix, the $z_c$-component before perspective division is
 
@@ -1058,7 +1058,7 @@ $$
 $$
 
 
-For objects close to the far plane, it is possible that different surfaces are mapped to nearly identical $z$-values with limited floating-point precision, resulting in flickering intersections (_$z$-fighting_) <Cite name="KSS17" pp ="227 f." />. _Akenine-Möller et al._ introduce ways to increase depth precision in <Cite name="RTR" pp="100 f." />.
+For objects close to the far plane, it is possible that different surfaces are mapped to nearly identical $z$-values with limited floating-point precision, resulting in flickering intersections (_$z$-fighting_) <Cite name="KSS17" pp ="pp. 227" />. _Akenine-Möller et al._ introduce ways to increase depth precision in <Cite name="RTR" pp="pp. 100" />.
 
 
 
