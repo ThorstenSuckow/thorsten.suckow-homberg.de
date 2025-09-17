@@ -2,11 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://thorsten.suckow-homberg.de/blog</id>
     <title>thorsten.suckow-homberg.de Blog</title>
-    <updated>2025-09-02T00:00:00.000Z</updated>
+    <updated>2025-09-17T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://thorsten.suckow-homberg.de/blog"/>
     <subtitle>thorsten.suckow-homberg.de Blog</subtitle>
     <icon>https://thorsten.suckow-homberg.de/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[From Camera to Clip Space - Derivation of the Projection Matrices]]></title>
+        <id>https://thorsten.suckow-homberg.de/blog/from-camera-to-clip-space-derivation-of-the-projection-matrices</id>
+        <link href="https://thorsten.suckow-homberg.de/blog/from-camera-to-clip-space-derivation-of-the-projection-matrices"/>
+        <updated>2025-09-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[From Camera to Clip Space]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="from-camera-to-clip-space">From Camera to Clip Space<a href="https://thorsten.suckow-homberg.de/blog/from-camera-to-clip-space-derivation-of-the-projection-matrices#from-camera-to-clip-space" class="hash-link" aria-label="Direct link to From Camera to Clip Space" title="Direct link to From Camera to Clip Space">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="derivation-of-the-projection-matrices">Derivation of the Projection Matrices<a href="https://thorsten.suckow-homberg.de/blog/from-camera-to-clip-space-derivation-of-the-projection-matrices#derivation-of-the-projection-matrices" class="hash-link" aria-label="Direct link to Derivation of the Projection Matrices" title="Direct link to Derivation of the Projection Matrices">​</a></h4>
+<p>My <a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/from-camera-to-clip-space-derivation-of-the-projection-matrices">latest article</a> examines the transformation from camera space to clip space and ultimately to Normalized Device Coordinates (NDC). In the article, we derive the complete orthographic and perspective projection matrices, with a special emphasis on OpenGL conventions.</p>
+<p>We begin with the orthographic projection and derive a projection matrix that maps an arbitrary view volume onto the so-called unit cube. Along the way, we use figures to show how an orthographic projection affects objects we usually perceive in a perspective manner.</p>
+<p>We then derive the perspective projection and show how choosing a near and a far viewing plane, as well as a height and a width encoded in the <em>aspect ratio</em>, creates a view frustum that contains the objects visible to the observer, while any geometry outside of it is clipped and discarded from the rendering process.</p>
+<p><a href="https://thorsten.suckow-homberg.de/docs/articles/computer-graphics/from-camera-to-clip-space-derivation-of-the-projection-matrices">Continue reading...</a></p>]]></content>
+        <category label="computer graphics" term="computer graphics"/>
+        <category label="linear algebra" term="linear algebra"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Model Matrix: Rotation - World vs. Local Origin]]></title>
         <id>https://thorsten.suckow-homberg.de/blog/model-matrix-rotation-world-vs-lLocal-origin</id>
@@ -1084,29 +1099,5 @@ better place to apply the fix, instead of doing this:</p>
         <category label="social" term="social"/>
         <category label="internet" term="internet"/>
         <category label="javascript" term="javascript"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[conjoon installer updates]]></title>
-        <id>https://thorsten.suckow-homberg.de/blog/2022/06/08/conjoon-installer-updates</id>
-        <link href="https://thorsten.suckow-homberg.de/blog/2022/06/08/conjoon-installer-updates"/>
-        <updated>2022-06-08T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[conjoon installer updates]]></summary>
-        <content type="html"><![CDATA[<p><img decoding="async" loading="lazy" src="https://cdn-images-1.medium.com/max/2186/1*jfdWSDOHVoTAkKJmlsSYqQ.gif" alt="" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="conjoon-installer-updates">conjoon installer updates<a href="https://thorsten.suckow-homberg.de/blog/2022/06/08/conjoon-installer-updates#conjoon-installer-updates" class="hash-link" aria-label="Direct link to conjoon installer updates" title="Direct link to conjoon installer updates">​</a></h2>
-<p>Creating a custom labeled version of <a href="https://conjoon.org/" target="_blank" rel="noopener noreferrer">conjoon</a> has never been easier.</p>
-<p>The installer (i.e. <a href="https://docs.npmjs.com/cli/v8/commands/npm-init" target="_blank" rel="noopener noreferrer">initializer</a>) for conjoon received an update to make setting up a local installation of the frontend more convenient and more intuitive.</p>
-<p>The installer requires <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">Node.js</a> 16.14 or above and is started by typing</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">$ npx create-conjoon@latest</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>on the command line. Additionally, you have the option to initiate the <a href="https://www.conjoon.org/assets/files/create-conjoon-ceb95c48fd2585e918c38d15f61bebca.md#install-type" target="_blank" rel="noopener noreferrer">quick install</a> right away by providing the name and the target directory for the installation:</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">$ npx create-conjoon@latest "my webmail" ~/webmail</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>The <em>quick install</em> will continue the installation process by picking <strong>the latest release</strong> from the package registry (**including **pre-releases) and configure the installation with fake endpoints returning demo data. You can still connect to production systems later on by using appropriate settings.</p>
-<blockquote>
-<p><em>If you prefer a guided installation for configuring endpoints for existing <a href="https://www.conjoon.org/assets/files/overview-8db4359943e06906e553f7195535e9dd.md" target="_blank" rel="noopener noreferrer">backends</a> right away, you can omit any of the arguments. The installer will then present various options to make sure your requirements are met!</em></p>
-</blockquote>
-<p>In both cases, target directory will contain the files required for developing conjoon and a production build available in the build folder, which is served by typing npm run stage in the target directory.</p>]]></content>
-        <category label="npm" term="npm"/>
-        <category label="tooling" term="tooling"/>
-        <category label="javascript" term="javascript"/>
-        <category label="conjoon" term="conjoon"/>
     </entry>
 </feed>
