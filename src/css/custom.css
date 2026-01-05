@@ -180,15 +180,39 @@ main .projectHeader {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(180deg, #ffffff, #e8f4fc);
+}
+
+.col.projectCol .tile:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(53, 186, 246, 0.15);
+  border-color: #35baf6;
+}
+
+[data-theme="dark"] .col.projectCol .tile {
+  background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+  border-color: #333;
+}
+
+[data-theme="dark"] .col.projectCol .tile:hover {
+  box-shadow: 0 20px 40px rgba(162, 255, 0, 0.1);
+  border-color: #a2ff00;
 }
 
 .col.projectCol .tile .header {
-  height: 60%;
+  height: 200px;
+  min-height: 200px;
   display: flex;
 }
 
 [data-theme="light"] .col.projectCol .tile .header {
-  background: linear-gradient(360deg, #ffffff, #35baf6);
+  background: #35baf6;
+}
+
+[data-theme="dark"] .col.projectCol .tile .header {
+  background: #2a2a2a;
 }
 
 .col.projectCol .tile .header div {
@@ -203,15 +227,35 @@ main .projectHeader {
 }
 .col.projectCol .tile .header .logo img {
   max-width:25%;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
+
+.col.projectCol .tile:hover .header .logo img {
+  transform: scale(1.1);
+}
+
 .col.projectCol .tile .body {
-  flex:1
+  flex:1;
+  padding: 0.5rem 0;
 }
 
 .col.projectCol .tile .body .titleWrap {
   margin: 0 0 0 2rem;
 }
 
+.col.projectCol .tile .body .titleWrap p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-right: 1rem;
+}
+
+[data-theme="dark"] .col.projectCol .tile .body .titleWrap p {
+  color: #aaa;
+}
 
 .col.projectCol .tile .body .title  {
   display:flex;
@@ -220,11 +264,34 @@ main .projectHeader {
 
 .col.projectCol .tile .body .title h4  {
   margin-right:12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.col.projectCol .tile .body .resources {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .col.projectCol .tile .body .resources li a,
 .col.projectCol .tile .body .resources li  {
   color:#35baf6;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.col.projectCol .tile .body .resources li a:hover {
+  color: #44406d;
+  text-decoration: underline;
+}
+
+[data-theme="dark"] .col.projectCol .tile .body .resources li a:hover {
+  color: #a2ff00;
 }
 
 .col.projectCol .tile .body .title .badgeWrap {
