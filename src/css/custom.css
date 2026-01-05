@@ -205,14 +205,7 @@ main .projectHeader {
   height: 200px;
   min-height: 200px;
   display: flex;
-}
-
-[data-theme="light"] .col.projectCol .tile .header {
-  background: #35baf6;
-}
-
-[data-theme="dark"] .col.projectCol .tile .header {
-  background: #2a2a2a;
+  background: transparent;
 }
 
 .col.projectCol .tile .header div {
