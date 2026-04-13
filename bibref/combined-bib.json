@@ -1965,5 +1965,13 @@
     "address": "Netherlands",
     "language": "en",
     "_original": "@BOOK{Vri20,\n  title     = \"Learn {OpenGL}\",\n  author    = \"de Vries, Joey\",\n  publisher = \"Kendall \\& Wells\",\n  month     =  jun,\n  year      =  2020,\n  address   = \"Netherlands\",\n  language  = \"en\"\n}"
+  },
+  "fab18": {
+    "title": "Data-oriented Design: Software Engineering for Limited Resources and Short Schedules",
+    "author": "Fabian, R.",
+    "isbn": "9781916478701",
+    "year": "2018",
+    "publisher": "Richard Fabian",
+    "_original": "@book{Fab18,\n    title={Data-oriented Design: Software Engineering for Limited Resources and Short Schedules},\n    author={Fabian, R.},\n    isbn={9781916478701},\n    year={2018},\n    publisher={Richard Fabian}\n}"
   }
 }

@@ -2,11 +2,51 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://thorsten.suckow-homberg.de/blog</id>
     <title>thorsten.suckow-homberg.de Blog</title>
-    <updated>2026-01-05T00:00:00.000Z</updated>
+    <updated>2026-04-13T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://thorsten.suckow-homberg.de/blog"/>
     <subtitle>thorsten.suckow-homberg.de Blog</subtitle>
     <icon>https://thorsten.suckow-homberg.de/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[helios - Exploratory Development of an ECS-based Game Engine]]></title>
+        <id>https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine</id>
+        <link href="https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine"/>
+        <updated>2026-04-13T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A look into the architectural evolution of helios, a C++ game engine that gradually moved away from classical OOP towards a data-oriented ECS-based design.]]></summary>
+        <content type="html"><![CDATA[<p>My software project <a href="https://helios.garagecraft.games/" target="_blank" rel="noopener noreferrer"><strong>helios</strong></a> is a game engine written in C++, originally conceived as a simple framework for a <strong>Geometry Wars</strong> clone.
+The project quickly shifted away from its initially intended focus on gameplay and graphics implementation toward a deeper engagement with engine architectures.
+The result breaks with classical OOP paradigms: In <a href="https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine" target="_blank" rel="noopener noreferrer">my report</a>, I document this transition from deep inheritance hierarchies to a data-oriented (DOD) system.</p>
+<div style="display:flex;justify-content:center"><div style="text-align:center;margin:20px"><a name="fig_1"></a><div class=""><img src="https://thorsten.suckow-homberg.de/assets/images/scoring_demo-aaa43b4c0a45ac754ff7c4c92021a80e.png"></div><div style="text-align:center"><sup><b>Figure 1</b> <span>Title screen of the Scoring Demo, which contains all requested gameplay mechanics of the clone. UI elements are also part of the GameWorld as GameObjects.</span></sup></div></div></div>
+<p>After completing my project work at <a href="https://www.hochschule-trier.de/en/" target="_blank" rel="noopener noreferrer">Trier University of Applied Sciences</a> in March 2026, <strong>helios</strong> rests on an architecture that has grown far beyond the <a href="https://www.researchgate.net/publication/397330329_helios_Konzeption_und_prototypische_Umsetzung_eines_C_Game_Frameworks" target="_blank" rel="noopener noreferrer">original tracer-bullet approach</a>.
+As the demands of integrating runtime systems and gameplay mechanics grew, the classical OOP mental model gave rise to a complexity that could no longer meet the requirements of a clean architecture.
+The associated <strong>Array-of-Structures</strong> modeling <a href="https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine#bibref-fab18">[<span class="bibRef">📖<!-- -->Fab18</span>]</a> and the resulting scattered memory layouts also failed to make effective use of CPU-adjacent caches.</p>
+<div style="display:flex;justify-content:center"><div style="text-align:center;margin:20px"><a name="fig_2"></a><div class="umlImg"><img src="https://thorsten.suckow-homberg.de/assets/images/benchmark_durchsatz_desktop-4f0f75143409aeec93aa362236e21e50.png"></div><div style="text-align:center"><sup><b>Figure 2</b> <span>Throughput of central ECS operations. Despite technical debt in early layers and missing draw call optimizations, helios achieves a remarkable efficiency for the agreed project goals. The chart compares the OOD approach from Milestone 3 (MS3) with the current DOD ECS implementations from Milestone 5 (MS5).</span></sup></div></div></div>
+<p>The focus therefore shifted to implementing an Entity-Component System (ECS) that treats components as information carriers and systems as behavior carriers.
+The tension between the developer's familiar hierarchical mental model and the demands of cache-line optimization that emerged from this data-oriented approach is likewise examined in <a href="https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine" target="_blank" rel="noopener noreferrer">my report</a>.</p>
+<p>Despite unoptimized draw calls, the faster test system<sup><a href="https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine#user-content-fn-test-d6e5eb" id="user-content-fnref-test-d6e5eb" data-footnote-ref="true" aria-describedby="footnote-label">1</a></sup> rendered 10,000 animated objects at a stable 60 FPS - far exceeding the original requirements.
+The data-oriented system also achieves better scaling under increasing load.</p>
+<div style="display:flex;justify-content:center"><div style="text-align:center;margin:20px"><a name="fig_3"></a><div class=""><img src="https://thorsten.suckow-homberg.de/assets/images/5000-c283bdd8cc17f4a8682f330f9c4ba8b4.png"></div><div style="text-align:center"><sup><b>Figure 3</b> <span>Visualization of 5,000 entities at ~110 FPS. The switch to ECS made this level of scaling possible in the first place.</span></sup></div></div></div>
+<p>The insights gained from this work I intend to carry forward into a next phase, where I plan to explore a type-safe, domain-specific runtime model for more complex, concurrent game engine architectures.</p>
+<!-- -->
+<section data-footnotes="true" class="footnotes"><h2 class="anchor anchorWithStickyNavbar_LWe7 sr-only" id="footnote-label">Footnotes<a href="https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine#footnote-label" class="hash-link" aria-label="Direct link to Footnotes" title="Direct link to Footnotes">​</a></h2>
+<ol>
+<li id="user-content-fn-test-d6e5eb">
+<p>Desktop: Ryzen 9 9950X3D, 64 GB DDR5 RAM, RTX 5090. Laptop: Intel Core i7-8750H, 16 GB RAM, GTX 1070 Max-Q. All tests were conducted on Windows 11. <a href="https://thorsten.suckow-homberg.de/blog/exploratory-development-of-an-ecs-based-game-engine#user-content-fnref-test-d6e5eb" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+</li>
+</ol>
+</section><hr><section class="footnotes"><h2>References</h2><ol><li id="ref-Fab18"><a id="bibref-fab18"></a>[<!-- -->Fab18<!-- -->]:<!-- --> <span><strong>Fabian, R.<!-- -->: </strong><em>Data-oriented Design: Software Engineering for Limited Resources and Short Schedules</em><span> (<!-- -->2018<!-- -->)</span><span>, <!-- -->Richard Fabian</span></span> <a href="data:text/plain;charset=utf-8,%40book%7BFab18%2C%0A%20%20%20%20title%3D%7BData-oriented%20Design%3A%20Software%20Engineering%20for%20Limited%20Resources%20and%20Short%20Schedules%7D%2C%0A%20%20%20%20author%3D%7BFabian%2C%20R.%7D%2C%0A%20%20%20%20isbn%3D%7B9781916478701%7D%2C%0A%20%20%20%20year%3D%7B2018%7D%2C%0A%20%20%20%20publisher%3D%7BRichard%20Fabian%7D%0A%7D" download="Fab18.bib" style="margin-left:0.5rem;font-size:0.8em">[BibTeX]</a></li></ol></section>]]></content>
+        <author>
+            <name>Thorsten Suckow-Homberg</name>
+            <uri>https://thorsten.suckow-homberg.de</uri>
+        </author>
+        <category label="devlog" term="devlog"/>
+        <category label="helios" term="helios"/>
+        <category label="architecture" term="architecture"/>
+        <category label="game-loop" term="game-loop"/>
+        <category label="ecs" term="ecs"/>
+        <category label="data-oriented-design" term="data-oriented-design"/>
+        <category label="cpp" term="cpp"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[helios - A High-Level Overview of the Game Loop Architecture]]></title>
         <id>https://thorsten.suckow-homberg.de/blog/high-level-overview-of-the-game-loop-architecture</id>
@@ -1101,39 +1141,5 @@ better place to apply the fix, instead of doing this:</p>
         <category label="javascript" term="javascript"/>
         <category label="sencha" term="sencha"/>
         <category label="extjs" term="extjs"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Releasing conjoon V1.0]]></title>
-        <id>https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0</id>
-        <link href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0"/>
-        <updated>2022-11-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Releasing conjoon V1.0]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="releasing-conjoon-v10">Releasing conjoon V1.0<a href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0#releasing-conjoon-v10" class="hash-link" aria-label="Direct link to Releasing conjoon V1.0" title="Direct link to Releasing conjoon V1.0">​</a></h2>
-<p>I’m happy to announce conjoon 1.0, the very first major release of the Open Source JavaScript Email client.</p>
-<p>For updating to the latest version, simply use our <a href="https://www.conjoon.org/blog/2022/11/14/docs/api/misc/@conjoon/create-conjoon" target="_blank" rel="noopener noreferrer">installer</a>. It will let you select the latest release when opting for the version to install.</p>
-<p><img decoding="async" loading="lazy" src="https://cdn-images-1.medium.com/max/3126/0*0A2MPF6zRkH3ks2E.png" alt="" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://www.conjoon.org/blog/2022/11/14/1.0.0-release#highlights" target="_blank" rel="noopener noreferrer">​</a><a href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0#highlights" class="hash-link" aria-label="Direct link to highlights" title="Direct link to highlights">​</a></h2>
-<p>v1.0.0 marks the first major release for our JavaScript Email frontend, over 100 tickets related to <a href="https://github.com/orgs/conjoon/projects/3" target="_blank" rel="noopener noreferrer">bugfixes, optimizations and minor features</a> across all projects where closed.</p>
-<p>This release focuses on providing a stable frontend in conjunction with <a href="https://www.conjoon.org/docs/api/backends/@conjoon/lumen-app-email" target="_blank" rel="noopener noreferrer">lumen-app-email</a>.</p>
-<p>Besides the features already introduced with the release candidates, the following features have been added:</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="plugins">Plugins<a href="https://www.conjoon.org/blog/2022/11/14/1.0.0-release#plugins" target="_blank" rel="noopener noreferrer">​</a><a href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0#plugins" class="hash-link" aria-label="Direct link to plugins" title="Direct link to plugins">​</a></h3>
-<ul>
-<li>Plugin <a href="https://www.conjoon.org/docs/api/plugins/@conjoon/extjs-app-webmail/mail-internal-mailtohandler" target="_blank" rel="noopener noreferrer">mail-internal-mailtohandler</a>: Plugin for registering conjoon as the protocol handler for mailto-links</li>
-</ul>
-<p><img decoding="async" loading="lazy" src="https://cdn-images-1.medium.com/max/2004/0*iehzFekzIAWO5vfh.png" alt="" class="img_ev3q"></p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="installer-and-cli-actions-for-lumen-app-email">Installer and CLI actions for lumen-app-email<a href="https://www.conjoon.org/blog/2022/11/14/1.0.0-release#installer-and-cli-actions-for-lumen-app-email" target="_blank" rel="noopener noreferrer">​</a><a href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0#installer-and-cli-actions-for-lumen-app-email" class="hash-link" aria-label="Direct link to installer-and-cli-actions-for-lumen-app-email" title="Direct link to installer-and-cli-actions-for-lumen-app-email">​</a></h3>
-<p>The installation for lumen-app-email has been simplified with the help of Artisan and CLI commands. To get an instance of lumen-app-email running, use</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">    $ composer create-project conjoon/lumen-app-email {targetDir} {version}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>which will start the installation process. For more information, refer to the <a href="https://www.conjoon.org/docs/api/backends/@conjoon/lumen-app-email#installation-1" target="_blank" rel="noopener noreferrer">official guide</a>.</p>
-<p><img decoding="async" loading="lazy" src="https://cdn-images-1.medium.com/max/3218/0*X1lMoQ8gvmbMwhAF.png" alt="" class="img_ev3q"></p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="docker-container">Docker Container<a href="https://www.conjoon.org/blog/2022/11/14/1.0.0-release#docker-container" target="_blank" rel="noopener noreferrer">​</a><a href="https://thorsten.suckow-homberg.de/blog/Releasing-conjoon-V1.0#docker-container" class="hash-link" aria-label="Direct link to docker-container" title="Direct link to docker-container">​</a></h3>
-<p><a href="https://www.conjoon.org/docs/api/backends/@conjoon/ddev-ms-email" target="_blank" rel="noopener noreferrer">ddev-ms-email</a> has been updated to utilize the installer of lumen-app-email and additionally provides integration options for conjoon so that the container can be used for serving both the backend and the frontend.</p>
-<p>$ ddev create-conjoon</p>
-<p>will start the installation of conjoon. For more information, refer to the <a href="https://www.conjoon.org/docs/api/backends/@conjoon/ddev-ms-email" target="_blank" rel="noopener noreferrer">official guide</a>.</p>
-<p>Happy coding! 🎈</p>]]></content>
-        <category label="release" term="release"/>
-        <category label="conjoon" term="conjoon"/>
-        <category label="open source" term="open source"/>
-        <category label="email" term="email"/>
     </entry>
 </feed>
