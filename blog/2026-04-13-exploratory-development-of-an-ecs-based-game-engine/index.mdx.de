@@ -1,0 +1,69 @@
+---
+title: "helios - Exploratory Development of an ECS-based Game Engine"
+description: "A look into the architectural evolution of helios, a C++ game engine that gradually moved away from classical OOP towards a data-oriented ECS-based design."
+date: "2026-04-13"
+slug: "/exploratory-development-of-an-ecs-based-game-engine"
+tags: [devlog, helios, architecture, game-loop, ecs, data-oriented-design, cpp]
+keywords: [cpp, game engine, architecture, ecs, data-oriented-design, determinism, frame lifecycle]
+authors: [thorstensuckow]
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+import perf5000 from "./img/5000.png";
+import throughput from "./img/benchmark_durchsatz_desktop.png";
+import scoring_demo from "./img/scoring_demo.png";
+
+export const figures = {
+    benchmark_durchsatz_desktop: 2,
+    perf5000: 3,
+    scoring_demo : 1
+}
+
+
+Mein Software-Projekt [**helios**](https://helios.garagecraft.games) ist eine in C++ geschriebene Game Engine, die ursprünglich als einfaches Framework für einen **Geometry Wars**-Klon startete.
+Das Projekt wechselte dabei schnell von dem ursprünglich angedachten Fokus auf Gameplay-/Grafikimplementierung hin zu einer Auseinandersetzung mit Engine-Architekturen.
+Das daraus entstandene Ergebnis bricht mit dem klassischen OOP-Paradigma: In [meiner Arbeit](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine) dokumentiere ich diesen Übergang von tiefen Vererbungshierarchien hin zu einem datenorientierten (DOD) System.
+
+<!--truncate-->
+
+<Embed
+    modeAware={false}
+    figref={figures.scoring_demo}
+    title={
+        "Titelbildschirm der Scoring Demo, die alle angeforderten Gameplay-Mechaniken des Klons enthält. Auch die UI-Elemente sind als GameObjects Bestandteil der GameWorld."}>
+    <img src={scoring_demo}  />
+</Embed>
+
+Nach Abschluss meiner Projektarbeit an der [Hochschule Trier](https://www.hochschule-trier.de/en/) im März 2026 liegt **helios** eine Architektur zugrunde, die weit über den [ursprünglichen Tracer-Bullet-Ansatz](https://www.researchgate.net/publication/397330329_helios_Konzeption_und_prototypische_Umsetzung_eines_C_Game_Frameworks) hinausgewachsen ist.
+Mit steigenden Anforderungen an die zu integrierenden Laufzeitsysteme und Gameplay-Mechaniken führte das klassische OOP-Mental-Model zu einer Komplexität, die den Anforderungen an eine saubere Architektur nicht mehr gerecht werden konnte.
+Die damit verbundene **Array-of-Structures**-Modellierung  <Cite name="Fab18" /> und die daraus resultierenden verstreuten Speicherlayouts nutzten außerdem die CPU-nahen Caches nicht optimal aus.
+
+<Embed
+    modeAware={true}
+    figref={figures.benchmark_durchsatz_desktop}
+    title={
+        "Durchsatz zentraler ECS-Operationen. Trotz technischer Schulden in frühen Schichten und fehlender Draw-Call-Optimierung erreicht helios eine für die vereinbarten Projektziele beachtliche Effizienz. Die Grafik stellt die Implementierungen des OOD-Ansatzes aus Meilenstein 3 (MS3) mit den aktuellen DOD ECS-Implementierungen des Meilensteins 5 (MS5) gegenüber."}>
+    <img src={throughput}  />
+</Embed>
+
+Der Fokus verschob sich daher auf die Implementierung eines Entity-Component-Systems (ECS), das Komponenten als Informationsträger und Systeme als Verhaltensträger betrachtet.
+Das durch diesen datenorientierten Ansatz entstandene Spannungsfeld zwischen dem gewohnten hierarchischen Mental Model des Entwicklers und der Optimierung der Cache-Lines betrachte ich hierbei ebenfalls in [meiner Arbeit](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine).
+
+Trotz unoptimierter Draw Calls konnten auf dem schnelleren Testsystem[^test] 10.000 animierte Objekte bei stabilen 60 FPS dargestellt werden, was die ursprünglichen Anforderungen bei weitem übertraf.
+Zudem erreiche ich bei zunehmender Last eine bessere Skalierung durch das datenorientierte System.
+
+<Embed
+    modeAware={false}
+    figref={figures.perf5000}
+    title={
+        "Visualisierung von 5000 Entitäten bei ~110 FPS. Der Wechsel zum ECS ermöglichte diese Skalierung erst."}>
+    <img src={perf5000}  />
+</Embed>
+
+Die gewonnenen Erkenntnisse möchte ich in einer nächsten Phase einbauen und mich dabei mit einem typsicheren, domänenspezifischen Laufzeitmodell für komplexere, nebenläufige Game Engine-Architekturen beschäftigen.
+
+[^test]: Desktop: Ryzen 9 9850X3D, 64 GB DDR5 RAM, RTX 5090. Laptop: Intel Core i7-8750H, 16 GB RAM, GTX 1070 Max-Q. Alle Tests wurden unter Windows 11 durchgeführt.
