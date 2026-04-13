@@ -1,10 +1,10 @@
 ---
 title: "helios - Exploratory Development of an ECS-based Game Engine"
-description: "A deep dive into the architectural separation of concerns in helios. This post outlines how deterministic world mutations are handled via bare-metal Commands and Managers, while decoupled communication relies on a mix of double-buffered and immediate Event Buses to ensure both thread safety and low-latency feedback."
+description: "A look into the architectural evolution of helios, a C++ game engine that gradually moved away from classical OOP towards a data-oriented ECS-based design."
 date: "2026-04-13"
 slug: "/exploratory-development-of-an-ecs-based-game-engine"
-tags: [devlog, helios, architecture, game-loop, events, commands, double-buffering, data-oriented-design]
-keywords: [cpp, game engine, architecture, command pattern, event bus, immediate mode, batch processing, determinism, frame lifecycle]
+tags: [devlog, helios, architecture, game-loop, ecs, data-oriented-design, cpp]
+keywords: [cpp, game engine, architecture, ecs, data-oriented-design, determinism, frame lifecycle]
 authors: [thorstensuckow]
 ---
 
@@ -15,47 +15,55 @@ import CodeBlock from '@theme/CodeBlock';
 
 import perf5000 from "./img/5000.png";
 import throughput from "./img/benchmark_durchsatz_desktop.png";
-
+import scoring_demo from "./img/scoring_demo.png";
 
 export const figures = {
-    benchmark_durchsatz_desktop: 1,
-    perf5000: 2,
-
+    benchmark_durchsatz_desktop: 2,
+    perf5000: 3,
+    scoring_demo : 1
 }
 
-Mein Software-Projekt [**helios**](https://helios.garagecraft.games) ist eine in C++ geschriebene Game Engine.
- Ursprünglich mit [mit dem Ziel entwickelt]((https://garagecraft.games/helios/)), als Framework zur Umsetzung eines **Geometry Wars**-Klons zu dienen, entstand im Laufe der Zeit eine Engine, die mit dem klassischen OOP Paradigma bricht.
 
-In [meiner Arbeit](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine) gehe ich auf die Weiterentwicklung des [vorangegangenen Prototypen](https://www.researchgate.net/publication/397445662_helios_Design_and_prototypical_implementation_of_a_C_game_framework) ein und die damit verbundene Konzeption der Kernarchitektur.
-
-Ich analysiere dabei kritisch die Anforderungen, welche die ursprünglichen Architekturentscheidungen infrage gestellt haben, und dokumentiere den Übergang von einem objektorientierten hin zu einem datenorientierten System.
-Dabei werden die Vorteile der neu implementierten Lösung vorangegangenen Zwischenständen gegenübergestellt und innerhalb des ECS-Paradigmas begründet.
+My software project [**helios**](https://helios.garagecraft.games) is a game engine written in C++, originally conceived as a simple framework for a **Geometry Wars** clone.
+The project quickly shifted away from its initially intended focus on gameplay and graphics implementation toward a deeper engagement with engine architectures.
+The result breaks with classical OOP paradigms: In [my report](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine), I document this transition from deep inheritance hierarchies to a data-oriented (DOD) system.
 
 <!--truncate-->
 
-Ende März 2026 habe ich meine Projektarbeit an der [Trier University of Applied Sciences](https://www.hochschule-trier.de/en/), die ursprünglich zum Ziel hatte, ein **Geometry Wars**-Klon zu programmieren, abgeschlossen. Herausgekommen ist eine Projekt, die sich mit der datenorientierten Implementierung einer Spiele-Engine auseinandersetzt und dabei unter BErücksichtigung des klassischen OOP Ansatz Laufzeitmessungen  gegenüberstellt und dabei Vorteile dicht gepackter Speicherlayouts für hochperformante Echtzeitanwendungen hervorhebt.
+<Embed
+    modeAware={false}
+    figref={figures.scoring_demo}
+    title={
+        "Title screen of the Scoring Demo, which contains all requested gameplay mechanics of the clone. UI elements are also part of the GameWorld as GameObjects."}>
+    <img src={scoring_demo}  />
+</Embed>
+
+After completing my project work at [Trier University of Applied Sciences](https://www.hochschule-trier.de/en/) in March 2026, **helios** rests on an architecture that has grown far beyond the [original tracer-bullet approach](https://www.researchgate.net/publication/397330329_helios_Konzeption_und_prototypische_Umsetzung_eines_C_Game_Frameworks).
+As the demands of integrating runtime systems and gameplay mechanics grew, the classical OOP mental model gave rise to a complexity that could no longer meet the requirements of a clean architecture.
+The associated **Array-of-Structures** modeling <Cite name="Fab18" /> and the resulting scattered memory layouts also failed to make effective use of CPU-adjacent caches.
 
 <Embed
     modeAware={true}
-    figref={figures.throughput}
+    figref={figures.benchmark_durchsatz_desktop}
     title={
-        "Durchsatz zentraler ECS Operationen Darstellung von 5000 gleichzeitig animierten Objekten bei ~110 Hz mit helios. Die Implementierung berücksichtigt noch keine Optimierung der Draw Calls."}>
+        "Throughput of central ECS operations. Despite technical debt in early layers and missing draw call optimizations, helios achieves a remarkable efficiency for the agreed project goals. The chart compares the OOD approach from Milestone 3 (MS3) with the current DOD ECS implementations from Milestone 5 (MS5)."}>
     <img src={throughput}  />
 </Embed>
 
+The focus therefore shifted to implementing an Entity-Component System (ECS) that treats components as information carriers and systems as behavior carriers.
+The tension between the developer's familiar hierarchical mental model and the demands of cache-line optimization that emerged from this data-oriented approach is likewise examined in [my report](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine).
 
-Die Arbeit befasst sich mit dem Tracer Bullet Devwelopment  des Spiels und zeigt den notwendigen Bruch mit dem klassischen OOP Ansatz durch das vermerhte Aufkommen der unterschiedlichen fachlichen Anforderunegn und der Erkenntnis, das ein OO Ansaz zu tiefen Vererbungshierarchien und steigender KOmplexität der notwendigen Modelle führt im Spannungsfeld des Mental Models des Entwicklers und der Optimierung der Implementierung in Hinsicht auf schnellen Zugriff der Cachel Lines in den CPU nahen Speichern.
-
-Hierbei hatte ich die Möglichkeit, die Ergebnisse der verschiedenen Meilensteine mit der Laufzet-Optimierten[^1] DOD zu vergleichen und kontte trotz technical debts früherer Schichten sowie keine Optimierung der Draw Calls noch 10.000 Objekte bei 60 Hz darstellen, was weit über dir ursprünglich Anforderungen herausging.
-
+Despite unoptimized draw calls, the faster test system[^test] rendered 10,000 animated objects at a stable 60 FPS - far exceeding the original requirements.
+The data-oriented system also achieves better scaling under increasing load.
 
 <Embed
     modeAware={false}
     figref={figures.perf5000}
     title={
-        "Darstellung von 5000 gleichzeitig animierten Objekten bei ~110 Hz mit helios. Die Implementierung berücksichtigt noch keine Optimierung der Draw Calls."}>
+        "Visualization of 5,000 entities at ~110 FPS. The switch to ECS made this level of scaling possible in the first place."}>
     <img src={perf5000}  />
 </Embed>
 
+The insights gained from this work I intend to carry forward into a next phase, where I plan to explore a type-safe, domain-specific runtime model for more complex, concurrent game engine architectures.
 
-[^1]: Als Testsysteme kamen ein Desktop-PC mit einem AMD Ryzen 9 9850X3D, 64 GB DDR5 RAM, und einer NVIDIA GeForce RTX 5090 zum Einsatz, sowie ein Laptop mit einem Intel Core i7-8750H, 16 GB RAM, und einer NVIDIA GeForce GTX 1070 Max-Q. Alle Messungen wurden unter Windows 11 durchgeführt. Die Desktop-Tests wurden durch die max. darstellbare Framerate auf max 240 FPS begrenzt.
+[^test]: Desktop: Ryzen 9 9950X3D, 64 GB DDR5 RAM, RTX 5090. Laptop: Intel Core i7-8750H, 16 GB RAM, GTX 1070 Max-Q. All tests were conducted on Windows 11.
