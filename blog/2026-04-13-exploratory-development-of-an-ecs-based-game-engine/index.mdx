@@ -1,0 +1,61 @@
+---
+title: "helios - Exploratory Development of an ECS-based Game Engine"
+description: "A deep dive into the architectural separation of concerns in helios. This post outlines how deterministic world mutations are handled via bare-metal Commands and Managers, while decoupled communication relies on a mix of double-buffered and immediate Event Buses to ensure both thread safety and low-latency feedback."
+date: "2026-04-13"
+slug: "/exploratory-development-of-an-ecs-based-game-engine"
+tags: [devlog, helios, architecture, game-loop, events, commands, double-buffering, data-oriented-design]
+keywords: [cpp, game engine, architecture, command pattern, event bus, immediate mode, batch processing, determinism, frame lifecycle]
+authors: [thorstensuckow]
+---
+
+import {BackButton} from "../../src/components/BackButton.js";
+import {Figure, BibRef, GlosRef, Wiki, Cite} from "../../src/components/References";
+import {Embed} from "../../src/components/Embed";
+import CodeBlock from '@theme/CodeBlock';
+
+import perf5000 from "./img/5000.png";
+import throughput from "./img/benchmark_durchsatz_desktop.png";
+
+
+export const figures = {
+    benchmark_durchsatz_desktop: 1,
+    perf5000: 2,
+
+}
+
+Mein Software-Projekt [**helios**](https://helios.garagecraft.games) ist eine in C++ geschriebene Game Engine.
+ Ursprünglich mit [mit dem Ziel entwickelt]((https://garagecraft.games/helios/)), als Framework zur Umsetzung eines **Geometry Wars**-Klons zu dienen, entstand im Laufe der Zeit eine Engine, die mit dem klassischen OOP Paradigma bricht.
+
+In [meiner Arbeit](https://www.researchgate.net/publication/403758780_helios_Explorative_Entwicklung_einer_ECS-basierten_Game_Engine) gehe ich auf die Weiterentwicklung des [vorangegangenen Prototypen](https://www.researchgate.net/publication/397445662_helios_Design_and_prototypical_implementation_of_a_C_game_framework) ein und die damit verbundene Konzeption der Kernarchitektur.
+
+Ich analysiere dabei kritisch die Anforderungen, welche die ursprünglichen Architekturentscheidungen infrage gestellt haben, und dokumentiere den Übergang von einem objektorientierten hin zu einem datenorientierten System.
+Dabei werden die Vorteile der neu implementierten Lösung vorangegangenen Zwischenständen gegenübergestellt und innerhalb des ECS-Paradigmas begründet.
+
+<!--truncate-->
+
+Ende März 2026 habe ich meine Projektarbeit an der [Trier University of Applied Sciences](https://www.hochschule-trier.de/en/), die ursprünglich zum Ziel hatte, ein **Geometry Wars**-Klon zu programmieren, abgeschlossen. Herausgekommen ist eine Projekt, die sich mit der datenorientierten Implementierung einer Spiele-Engine auseinandersetzt und dabei unter BErücksichtigung des klassischen OOP Ansatz Laufzeitmessungen  gegenüberstellt und dabei Vorteile dicht gepackter Speicherlayouts für hochperformante Echtzeitanwendungen hervorhebt.
+
+<Embed
+    modeAware={true}
+    figref={figures.throughput}
+    title={
+        "Durchsatz zentraler ECS Operationen Darstellung von 5000 gleichzeitig animierten Objekten bei ~110 Hz mit helios. Die Implementierung berücksichtigt noch keine Optimierung der Draw Calls."}>
+    <img src={throughput}  />
+</Embed>
+
+
+Die Arbeit befasst sich mit dem Tracer Bullet Devwelopment  des Spiels und zeigt den notwendigen Bruch mit dem klassischen OOP Ansatz durch das vermerhte Aufkommen der unterschiedlichen fachlichen Anforderunegn und der Erkenntnis, das ein OO Ansaz zu tiefen Vererbungshierarchien und steigender KOmplexität der notwendigen Modelle führt im Spannungsfeld des Mental Models des Entwicklers und der Optimierung der Implementierung in Hinsicht auf schnellen Zugriff der Cachel Lines in den CPU nahen Speichern.
+
+Hierbei hatte ich die Möglichkeit, die Ergebnisse der verschiedenen Meilensteine mit der Laufzet-Optimierten[^1] DOD zu vergleichen und kontte trotz technical debts früherer Schichten sowie keine Optimierung der Draw Calls noch 10.000 Objekte bei 60 Hz darstellen, was weit über dir ursprünglich Anforderungen herausging.
+
+
+<Embed
+    modeAware={false}
+    figref={figures.perf5000}
+    title={
+        "Darstellung von 5000 gleichzeitig animierten Objekten bei ~110 Hz mit helios. Die Implementierung berücksichtigt noch keine Optimierung der Draw Calls."}>
+    <img src={perf5000}  />
+</Embed>
+
+
+[^1]: Als Testsysteme kamen ein Desktop-PC mit einem AMD Ryzen 9 9850X3D, 64 GB DDR5 RAM, und einer NVIDIA GeForce RTX 5090 zum Einsatz, sowie ein Laptop mit einem Intel Core i7-8750H, 16 GB RAM, und einer NVIDIA GeForce GTX 1070 Max-Q. Alle Messungen wurden unter Windows 11 durchgeführt. Die Desktop-Tests wurden durch die max. darstellbare Framerate auf max 240 FPS begrenzt.
